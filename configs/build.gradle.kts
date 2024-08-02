@@ -1,0 +1,27 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
+plugins {
+    alias(libs.plugins.jetbrainsKotlinJvm)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.jsonSerialization)
+}
+
+dependencies {
+
+    Dependencies.Compose.getAll().forEach(::implementation)
+    Dependencies.Voyager.getAll().forEach(::implementation)
+    Dependencies.HapiFhir.getAll().forEach(::implementation)
+    Dependencies.TreeView.getAll().forEach(::implementation)
+    Dependencies.SqlDelight.getAll().forEach(::implementation)
+
+    implementation(Dependencies.koin)
+    implementation(Dependencies.KotlinX.serializationJson)
+    implementation(Dependencies.json)
+    implementation(Dependencies.prettyTime)
+    implementation(Dependencies.fileKitCompose)
+
+    implementation(project(":engine"))
+    implementation(project(":database"))
+    implementation(project(":logcat"))
+}

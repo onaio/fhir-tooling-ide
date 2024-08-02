@@ -1,0 +1,42 @@
+package org.smartregister.fct.configs.domain.model.view.property
+
+import androidx.compose.foundation.layout.Arrangement
+import kotlinx.serialization.Serializable
+import org.smartregister.fct.configs.domain.model.ViewType
+import org.smartregister.fct.configs.util.extension.interpolate
+
+@Serializable
+data class RowProperties(
+    override val viewType: ViewType? = null,
+    override val weight: Float? = null,
+    override val backgroundColor: String? = null,
+    override val padding: Int? = null,
+    override val borderRadius: Int? = null,
+    override val alignment: ViewAlignment? = null,
+    override val fillMaxWidth: Boolean? = null,
+    override val fillMaxHeight: Boolean? = null,
+    override val clickable: String? = null,
+    override val visible: String? = null,
+    val spacedBy: Int? = null,
+    val arrangement: RowArrangement? = null,
+    val wrapContent: Boolean? = null,
+    val children: List<ViewProperties>? = null,
+    val actions: List<org.smartregister.fct.configs.domain.model.ActionConfig>? = null,
+) : ViewProperties() {
+    override fun interpolate(computedValuesMap: Map<String, Any>): RowProperties {
+        return this.copy(
+            backgroundColor = backgroundColor?.interpolate(computedValuesMap),
+            visible = (visible ?: "true").interpolate(computedValuesMap),
+            clickable = (clickable ?: "false").interpolate(computedValuesMap),
+        )
+    }
+}
+
+enum class RowArrangement(val position: Arrangement.Horizontal) {
+    SPACE_BETWEEN(Arrangement.SpaceBetween),
+    SPACE_AROUND(Arrangement.SpaceAround),
+    SPACE_EVENLY(Arrangement.SpaceEvenly),
+    CENTER(Arrangement.Center),
+    START(Arrangement.Start),
+    END(Arrangement.End),
+}
