@@ -1,4 +1,4 @@
-package org.smartregister.fct.adb.domain.model
+package org.smartregister.fct.adb.domain.program
 
 import java.util.LinkedList
 import java.util.Queue

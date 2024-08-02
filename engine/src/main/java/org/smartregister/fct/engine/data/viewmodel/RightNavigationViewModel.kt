@@ -8,12 +8,21 @@ import kotlinx.coroutines.launch
 
 class RightNavigationViewModel {
     private val openLogWindow = MutableStateFlow(false)
+    private val openDeviceManagerWindow = MutableStateFlow(false)
 
     fun getLogWindowState(): StateFlow<Boolean> = openLogWindow
 
     fun toggleLogWindow() {
         CoroutineScope(Dispatchers.IO).launch {
             openLogWindow.emit(!openLogWindow.value)
+        }
+    }
+
+    fun getDeviceManagerWindowState(): StateFlow<Boolean> = openDeviceManagerWindow
+
+    fun toggleDeviceManagerWindow() {
+        CoroutineScope(Dispatchers.IO).launch {
+            openDeviceManagerWindow.emit(!openDeviceManagerWindow.value)
         }
     }
 }

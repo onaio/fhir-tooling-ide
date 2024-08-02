@@ -59,7 +59,7 @@ object FCTLogger {
         }
     }
 
-    fun applyFilter(logFilter: LogFilter) {
+    fun addFilter(logFilter: LogFilter) {
         FCTLogger.logFilter = logFilter
     }
 

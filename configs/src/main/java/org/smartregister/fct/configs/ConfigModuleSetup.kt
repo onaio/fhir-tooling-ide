@@ -1,6 +1,6 @@
 package org.smartregister.fct.configs
 
-import org.koin.core.context.startKoin
+import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.configs.data.repository.ConfigRepository
 import org.smartregister.fct.configs.data.source.ConfigDataSource
@@ -18,8 +18,6 @@ class ConfigModuleSetup : ModuleSetup {
     }
 
     override fun setup() {
-        startKoin {
-            modules(configModule)
-        }
+        GlobalContext.get().loadModules(listOf(configModule))
     }
 }

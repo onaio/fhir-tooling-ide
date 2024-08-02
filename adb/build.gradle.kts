@@ -13,5 +13,7 @@ java {
 dependencies {
     implementation(Dependencies.kScriptTool)
     implementation(Dependencies.KotlinX.coroutine)
+    implementation(Dependencies.koin)
+    implementation(project(":engine"))
     implementation(project(":logcat"))
 }

@@ -109,7 +109,7 @@ fun App() {
                     bottom.linkTo(bottomWindow.top)
                     height = Dimension.preferredWrapContent
                 }) {
-                    RightWindow()
+                    RightWindow(rightNavViewModel)
                 }
 
                 Row(modifier = Modifier.background(MaterialTheme.colorScheme.background).constrainAs(rightNavBar){

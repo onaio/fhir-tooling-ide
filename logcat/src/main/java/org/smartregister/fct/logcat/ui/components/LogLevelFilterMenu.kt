@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.logcat.domain.model.LogLevel
@@ -60,7 +62,8 @@ internal fun LogLevelFilterMenu() {
             singleLine = true,
             textStyle = LocalTextStyle.current.copy(
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                lineHeight = TextUnit(10f, TextUnitType.Sp)
             ),
             enabled = false,
             modifier = Modifier.menuAnchor().fillMaxWidth().height(32.dp)

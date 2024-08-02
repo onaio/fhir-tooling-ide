@@ -37,7 +37,7 @@ fun RightNavigation() {
             HeightSpacer(12.dp)
             MenuButton(
                 icon = Icons.Rounded.PhoneAndroid,
-                onClick = {}
+                onClick = { viewModel.toggleDeviceManagerWindow() }
             )
         }
         Column {
