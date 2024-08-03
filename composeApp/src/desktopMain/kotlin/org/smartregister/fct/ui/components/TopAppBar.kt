@@ -98,16 +98,24 @@ fun TopAppBar() {
 @Composable
 private fun DeviceSelectionMenu() {
 
-    val deviceResult by GetAllDevices.getAll().collectAsState(initial = null)
+    val devices by GetAllDevices.getAll().collectAsState(initial = listOf(null))
     var expanded by remember { mutableStateOf(false) }
+    var selectedValue by remember { mutableStateOf(devices[0]) }
 
-    val options = deviceResult
-        ?.takeIf { it.isSuccess }
-        ?.getOrNull()
-        ?: listOf<Device?>(null)
-
-    var selectedValue by remember { mutableStateOf(options[0]) }
-    selectedValue = if(selectedValue == null) options[0] else selectedValue
+    if (devices[0] == null) {
+        selectedValue = null
+        GetAllDevices.setActiveDevice(null)
+    } else {
+        devices.filterNotNull()
+            .map {
+                it.getDeviceInfo().id
+            }.run {
+                if(selectedValue?.getDeviceInfo()?.id !in this) {
+                    selectedValue = devices[0]
+                    GetAllDevices.setActiveDevice(selectedValue)
+                }
+            }
+    }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -173,7 +181,7 @@ private fun DeviceSelectionMenu() {
                 expanded = false
             }
         ) {
-            options.forEach { selectionOption ->
+            devices.forEach { selectionOption ->
                 DropdownMenuItem(
                     text = {
                         Text(text = selectionOption.getOptionName())

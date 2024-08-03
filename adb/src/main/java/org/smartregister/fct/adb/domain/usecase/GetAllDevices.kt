@@ -20,7 +20,7 @@ import org.smartregister.fct.logcat.FCTLogger
 object GetAllDevices : KoinComponent {
 
     private val controller: ADBController by inject()
-    private val devices = MutableSharedFlow<Result<List<Device>>>()
+    private val devices = MutableSharedFlow<List<Device?>>()
     private var activeDevice: Device? = null
 
     init {
@@ -43,7 +43,8 @@ object GetAllDevices : KoinComponent {
                             it.deviceInfo = deviceInfo.getOrThrow()
                         }
                     }
-                    devices.emit(deviceList)
+
+                    devices.emit(deviceList.getOrDefault(listOf(null)))
                 } catch (ex: Throwable) {
                     FCTLogger.e(ex)
                 }
@@ -60,11 +61,10 @@ object GetAllDevices : KoinComponent {
         return runBlocking {
             devices
                 .firstOrNull()
-                ?.getOrNull()
                 ?.let { activeDevice in it }
                 ?.let { if(it) activeDevice else null }
         }
     }
 
-    fun getAll(): Flow<Result<List<Device>>> = devices
+    fun getAll(): Flow<List<Device?>> = devices
 }

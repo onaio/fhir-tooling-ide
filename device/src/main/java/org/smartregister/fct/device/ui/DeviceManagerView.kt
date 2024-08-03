@@ -43,7 +43,7 @@ fun DeviceManagerView() {
         Header()
         HorizontalDivider()
 
-        devices?.takeIf { it.isSuccess }?.getOrNull()?.takeIf { it.isNotEmpty() }?.run {
+        devices?.takeIf { it.isNotEmpty() }?.filterNotNull()?.run {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
 
                 items(this@run) { device ->
