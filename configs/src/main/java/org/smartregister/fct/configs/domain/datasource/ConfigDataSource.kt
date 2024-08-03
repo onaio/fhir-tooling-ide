@@ -1,4 +1,4 @@
-package org.smartregister.fct.configs.data.source
+package org.smartregister.fct.configs.domain.datasource
 
 import kotlinx.coroutines.flow.Flow
 import org.smartregister.fct.configs.domain.model.ConfigWrapper

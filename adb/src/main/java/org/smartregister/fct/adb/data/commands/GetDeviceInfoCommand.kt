@@ -1,20 +1,19 @@
 package org.smartregister.fct.adb.data.commands
 
 import org.smartregister.fct.adb.data.enums.DeviceType
-import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.model.DeviceInfo
+import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.CommandConstants
-import org.smartregister.fct.adb.utils.asResult
+import org.smartregister.fct.adb.utils.resultAsCommandException
+import org.smartregister.fct.adb.utils.takeIfNotError
 import java.util.Queue
 
 class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
 
-    override fun process(result: Result<String>, dependentResult: Queue<Result<*>>): Result<DeviceInfo> {
+    override fun process(result: String, dependentResult: Queue<Result<*>>): Result<DeviceInfo> {
 
         return result
-            .takeIf { result.isSuccess }
-            ?.getOrNull()
-            ?.takeUnless { it.contains("error: ") }
+            .takeIfNotError()
             ?.split("\n")
             ?.associate {
                 val row = it
@@ -28,7 +27,7 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
             ?.let { map ->
 
                 val deviceType = map[CommandConstants.DEVICE_TYPE]
-                    ?.let { if(it.contains("generic")) DeviceType.Virtual else DeviceType.Physical }
+                    ?.let { if (it.contains("generic")) DeviceType.Virtual else DeviceType.Physical }
                     ?: DeviceType.Unknown
 
                 DeviceInfo(
@@ -43,9 +42,7 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
             }
             ?.let {
                 Result.success(it)
-            } ?: result
-                .exceptionOrNull()
-                .asResult()
+            } ?: result.resultAsCommandException()
 
     }
 

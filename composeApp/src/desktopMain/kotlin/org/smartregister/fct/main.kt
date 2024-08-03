@@ -21,6 +21,7 @@ import org.smartregister.fct.configs.util.extension.flowAsState
 import org.smartregister.fct.engine.ModuleSetup
 import org.smartregister.fct.engine.data.locals.LocalFCTTheme
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
+import org.smartregister.fct.pm.PMModuleSetup
 import org.smartregister.fct.ui.App
 import org.smartregister.fct.ui.components.BottomBar
 import org.smartregister.fct.ui.components.TopAppBar
@@ -72,6 +73,7 @@ fun main() = application {
 fun initSubModules() {
     listOf(
         ConfigModuleSetup(),
-        ADBModuleSetup()
+        ADBModuleSetup(),
+        PMModuleSetup()
     ).forEach { it.setup() }
 }

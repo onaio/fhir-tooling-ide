@@ -10,7 +10,7 @@ import org.smartregister.fct.engine.data.enums.RightWindowState
 
 
 class WindowViewModel {
-    private val rightWindowState = MutableStateFlow<RightWindowState?>(null)
+    private val rightWindowState = MutableStateFlow<RightWindowState?>(RightWindowState.PackageManager)
     private val bottomWindowState = MutableStateFlow<BottomWindowState?>(null)
 
     fun getRightWindowState(): StateFlow<RightWindowState?> = rightWindowState

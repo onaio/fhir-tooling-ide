@@ -2,12 +2,11 @@ package org.smartregister.fct.configs.data.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.configs.data.repository.ConfigRepository
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
-import org.smartregister.fct.configs.util.extension.uuid
+import org.smartregister.fct.engine.util.uuid
 import sqldelight.Config
 
 class ConfigManagerViewModel : ScreenModel, KoinComponent {

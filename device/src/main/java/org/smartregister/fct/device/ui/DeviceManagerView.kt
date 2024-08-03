@@ -24,19 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import org.smartregister.fct.adb.domain.usecase.GetAllDevices
+import org.smartregister.fct.adb.domain.usecase.DeviceManager
 
 @Composable
-fun DeviceManagerView() {
+fun DeviceManagerWindow() {
 
-    val devices by GetAllDevices.getAll().collectAsState(initial = null)
+    val devices by DeviceManager.getAllDevices().collectAsState(initial = null)
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f)).padding(8.dp)) {
             Text("Device Manager",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleSmall
             )
         }
         HorizontalDivider()

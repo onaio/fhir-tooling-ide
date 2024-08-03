@@ -29,6 +29,7 @@ kotlin {
             implementation(project(":adb"))
             implementation(project(":logcat"))
             implementation(project(":device"))
+            implementation(project(":pm"))
         }
 
         desktopMain.dependencies {

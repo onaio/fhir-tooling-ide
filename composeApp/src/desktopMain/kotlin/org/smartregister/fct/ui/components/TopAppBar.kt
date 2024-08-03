@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Chip
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DropdownMenuItem
@@ -47,10 +49,15 @@ import fct.composeapp.generated.resources.fhir
 import fct.composeapp.generated.resources.github_icon
 import org.jetbrains.compose.resources.painterResource
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.adb.domain.usecase.GetAllDevices
+import org.smartregister.fct.adb.domain.usecase.DeviceManager
+import org.smartregister.fct.engine.data.enums.RightWindowState
+import org.smartregister.fct.engine.data.locals.LocalWindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
 
 @Composable
 fun TopAppBar() {
+    val windowViewModel = LocalWindowViewModel.current
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 0.dp),
@@ -68,6 +75,8 @@ fun TopAppBar() {
                 )
                 Spacer(Modifier.width(18.dp))
                 DeviceSelectionMenu()
+                Spacer(Modifier.width(10.dp))
+                ActivePackageButton(windowViewModel = windowViewModel)
             }
             Row {
                 Box(
@@ -98,13 +107,13 @@ fun TopAppBar() {
 @Composable
 private fun DeviceSelectionMenu() {
 
-    val devices by GetAllDevices.getAll().collectAsState(initial = listOf(null))
+    val devices by DeviceManager.getAllDevices().collectAsState(initial = listOf(null))
     var expanded by remember { mutableStateOf(false) }
     var selectedValue by remember { mutableStateOf(devices[0]) }
 
     if (devices[0] == null) {
         selectedValue = null
-        GetAllDevices.setActiveDevice(null)
+        DeviceManager.setActiveDevice(null)
     } else {
         devices.filterNotNull()
             .map {
@@ -112,7 +121,7 @@ private fun DeviceSelectionMenu() {
             }.run {
                 if(selectedValue?.getDeviceInfo()?.id !in this) {
                     selectedValue = devices[0]
-                    GetAllDevices.setActiveDevice(selectedValue)
+                    DeviceManager.setActiveDevice(selectedValue)
                 }
             }
     }
@@ -189,12 +198,30 @@ private fun DeviceSelectionMenu() {
                     onClick = {
                         selectedValue = selectionOption
                         expanded = false
-                        GetAllDevices.setActiveDevice(selectedValue)
+                        DeviceManager.setActiveDevice(selectedValue)
                     }
                 )
             }
         }
 
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun ActivePackageButton(windowViewModel: WindowViewModel) {
+
+    val activePackage by DeviceManager.getActivePackage().collectAsState(initial = null)
+
+    Chip(
+        onClick = {
+            windowViewModel.setRightWindowState(RightWindowState.PackageManager)
+        }
+    ) {
+        Text(
+            text = activePackage?.name ?: activePackage?.packageId ?: "Select Package",
+            style = MaterialTheme.typography.titleSmall
+        )
     }
 }
 

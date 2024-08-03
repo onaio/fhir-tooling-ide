@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import org.smartregister.fct.engine.ui.components.MiddleEllipsisText
 import org.smartregister.fct.logcat.domain.model.Log
 import org.smartregister.fct.logcat.domain.model.LogLevel
 

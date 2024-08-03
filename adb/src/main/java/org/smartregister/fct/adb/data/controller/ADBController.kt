@@ -3,6 +3,7 @@ package org.smartregister.fct.adb.data.controller
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.logcat.FCTLogger
+import java.lang.Exception
 import java.util.LinkedList
 import java.util.Queue
 
@@ -57,6 +58,16 @@ class ADBController(private val shellProgram: ShellProgram) {
         val result = shellProgram.run(commandList.joinToString(" ")
             .also { FCTLogger.d(it, tag = command.javaClass.simpleName) }
         )
-        return command.process(result, dependentResult)
+
+       return if (result.isSuccess) {
+           try {
+               command.process(result.getOrThrow(), dependentResult)
+           } catch (t: Throwable) {
+               FCTLogger.e(t)
+               result
+           }
+        } else {
+            result
+        }
     }
 }

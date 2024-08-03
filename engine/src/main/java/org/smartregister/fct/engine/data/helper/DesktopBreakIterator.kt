@@ -1,4 +1,4 @@
-package org.smartregister.fct.logcat.data.helper
+package org.smartregister.fct.engine.data.helper
 
 internal class DesktopBreakIterator : BreakIterator {
   private val instance = org.jetbrains.skia.BreakIterator.makeCharacterInstance()

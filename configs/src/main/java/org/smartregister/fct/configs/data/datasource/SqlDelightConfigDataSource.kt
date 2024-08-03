@@ -1,4 +1,4 @@
-package org.smartregister.fct.configs.data.source
+package org.smartregister.fct.configs.data.datasource
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.json.JSONObject
+import org.smartregister.fct.configs.domain.datasource.ConfigDataSource
 import org.smartregister.fct.configs.domain.model.ConfigType
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration

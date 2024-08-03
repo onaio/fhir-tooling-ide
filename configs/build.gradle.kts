@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.jetbrainsKotlinJvm)
@@ -13,8 +12,8 @@ dependencies {
     Dependencies.Voyager.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
     Dependencies.TreeView.getAll().forEach(::implementation)
-    Dependencies.SqlDelight.getAll().forEach(::implementation)
 
+    implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.koin)
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.json)

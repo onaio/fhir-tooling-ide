@@ -1,4 +1,4 @@
-package org.smartregister.fct.logcat.data.helper
+package org.smartregister.fct.engine.data.helper
 
 interface BreakIterator {
   fun next(): Int

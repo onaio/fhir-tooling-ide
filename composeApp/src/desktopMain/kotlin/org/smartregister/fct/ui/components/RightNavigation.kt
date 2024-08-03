@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ListAlt
+import androidx.compose.material.icons.outlined.Ballot
 import androidx.compose.material.icons.outlined.ConnectedTv
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
@@ -38,8 +41,13 @@ fun RightNavigation() {
         Column {
             HeightSpacer(12.dp)
             MenuButton(
-                icon = Icons.Rounded.PhoneAndroid,
+                icon = Icons.Outlined.PhoneAndroid,
                 onClick = { viewModel.setRightWindowState(RightWindowState.DeviceManager) }
+            )
+            HeightSpacer(18.dp)
+            MenuButton(
+                icon = Icons.AutoMirrored.Outlined.ListAlt,
+                onClick = { viewModel.setRightWindowState(RightWindowState.PackageManager) }
             )
         }
         Column {

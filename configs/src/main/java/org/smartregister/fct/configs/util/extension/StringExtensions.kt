@@ -20,10 +20,6 @@ const val DEFAULT_PLACEHOLDER_SUFFIX = "}"
 const val BLACK_COLOR_HEX_CODE = "#000000"
 const val TRUE = "true"
 
-fun uuid(): String {
-    return UUID.randomUUID().toString();
-}
-
 fun String.compress(): String {
     val byteStream = ByteArrayOutputStream()
     GZIPOutputStream(byteStream).bufferedWriter().use { it.write(this) }

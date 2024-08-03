@@ -3,8 +3,8 @@ package org.smartregister.fct.configs
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.configs.data.repository.ConfigRepository
-import org.smartregister.fct.configs.data.source.ConfigDataSource
-import org.smartregister.fct.configs.data.source.SqlDelightConfigDataSource
+import org.smartregister.fct.configs.domain.datasource.ConfigDataSource
+import org.smartregister.fct.configs.data.datasource.SqlDelightConfigDataSource
 import org.smartregister.fct.database.Database
 import org.smartregister.fct.engine.ModuleSetup
 

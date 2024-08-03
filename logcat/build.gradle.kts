@@ -7,4 +7,5 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     implementation(Dependencies.apacheCommonCollection)
+    implementation(project(":engine"))
 }

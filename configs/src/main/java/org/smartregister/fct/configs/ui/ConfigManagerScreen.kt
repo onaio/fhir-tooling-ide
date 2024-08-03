@@ -48,8 +48,6 @@ import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.smartregister.fct.configs.data.repository.ConfigRepository
-import org.smartregister.fct.configs.data.source.SqlDelightConfigDataSource
 import org.smartregister.fct.configs.data.viewmodel.ConfigManagerViewModel
 import org.smartregister.fct.configs.data.viewmodel.ConfigTabViewModelContainer
 import org.smartregister.fct.configs.data.viewmodel.RegisterConfigViewModel
@@ -58,8 +56,6 @@ import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.ui.components.ConfigTab
 import org.smartregister.fct.configs.util.extension.compress
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.database.Database
-import sqldelight.ConfigQueries
 
 class ConfigManagerScreen : Screen {
 

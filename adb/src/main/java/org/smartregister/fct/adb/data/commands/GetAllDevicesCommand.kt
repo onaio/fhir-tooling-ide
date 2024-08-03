@@ -1,19 +1,16 @@
 package org.smartregister.fct.adb.data.commands
 
-import org.smartregister.fct.adb.data.exception.CommandException
-import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.model.Device
+import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.CommandConstants
-import org.smartregister.fct.adb.utils.asResult
+import org.smartregister.fct.adb.utils.resultAsCommandException
 import java.util.Queue
 
 class GetAllDevicesCommand() : ADBCommand<List<Device>> {
 
-    override fun process(result: Result<String>, dependentResult: Queue<Result<*>>): Result<List<Device>> {
+    override fun process(result: String, dependentResult: Queue<Result<*>>): Result<List<Device>> {
         return result
-            .takeIf { it.isSuccess }
-            ?.getOrNull()
-            ?.takeIf { it.contains("\t") }
+            .takeIf { it.contains("\t") }
             ?.split("\n")
             ?.filter { it.contains("\t") }
             ?.filterNot { it.contains("offline") }
@@ -24,7 +21,7 @@ class GetAllDevicesCommand() : ADBCommand<List<Device>> {
             }
             ?.toList()
             ?.let { Result.success(it) }
-            ?: result.exceptionOrNull().asResult(CommandException("No Device found"))
+            ?: result.resultAsCommandException()
     }
 
     override fun build(): List<String> {

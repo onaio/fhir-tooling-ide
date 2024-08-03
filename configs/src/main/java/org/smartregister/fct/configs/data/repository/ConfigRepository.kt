@@ -1,7 +1,7 @@
 package org.smartregister.fct.configs.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.smartregister.fct.configs.data.source.ConfigDataSource
+import org.smartregister.fct.configs.domain.datasource.ConfigDataSource
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import sqldelight.Config
 
