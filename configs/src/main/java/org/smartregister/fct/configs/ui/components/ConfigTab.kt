@@ -48,7 +48,7 @@ import org.smartregister.fct.configs.data.viewmodel.ConfigTabViewModelContainer
 import org.smartregister.fct.configs.domain.model.ConfigType
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration
-import org.smartregister.fct.configs.util.extension.encodeJson
+import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
 import org.smartregister.fct.engine.ui.components.ButtonWithIcon
 

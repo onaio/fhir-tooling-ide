@@ -62,11 +62,11 @@ val DarkColorScheme = darkColorScheme(
 
 @Composable
 fun FCTTheme(
-    isLightMode: Boolean = true,
+    isDarkModel: Boolean = false,
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = if (isLightMode) LightColorScheme else DarkColorScheme,
+        colorScheme = if (isDarkModel) DarkColorScheme else LightColorScheme,
         typography = UbuntuTypography()
     ) {
         content()

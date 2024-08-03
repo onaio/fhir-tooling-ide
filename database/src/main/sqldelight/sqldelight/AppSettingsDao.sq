@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS `app_setting` (
+    `settings` TEXT NOT NULL
+);
+
+INSERT INTO `app_setting` (`settings`) VALUES ('{}');
+
+select:
+SELECT * FROM `app_setting` LIMIT 1;
+
+update:
+UPDATE `app_setting`
+SET `settings` = ?;

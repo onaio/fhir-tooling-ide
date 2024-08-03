@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import org.smartregister.fct.configs.ui.ConfigManagerScreen
-import org.smartregister.fct.engine.data.locals.LocalFCTTheme
+import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.ui.screen.structure_map.StructureMapScreen
 
 @Composable
@@ -87,13 +87,18 @@ private fun NavigationBar(mainNavigator: Navigator?) {
 
 @Composable
 private fun ThemeChangerButton() {
-    val themeViewModel = LocalFCTTheme.current
+    val appSettingViewModel = LocalAppSettingViewModel.current
+    val appSetting = appSettingViewModel.appSetting
+
     IconButton(
         onClick = {
-            themeViewModel.switchTheme()
+            appSettingViewModel.appSetting = appSetting.copy(
+                isDarkTheme = !appSetting.isDarkTheme
+            )
+            appSettingViewModel.update()
         }
     ) {
-        val icon = if (themeViewModel.isLightTheme()) Icons.Rounded.DarkMode else Icons.Rounded.LightMode
+        val icon = if (appSetting.isDarkTheme) Icons.Rounded.DarkMode else Icons.Rounded.LightMode
         Icon(icon, contentDescription = null)
     }
 }

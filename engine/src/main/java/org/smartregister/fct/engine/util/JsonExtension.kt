@@ -1,8 +1,7 @@
-package org.smartregister.fct.configs.util.extension
+package org.smartregister.fct.engine.util
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.smartregister.fct.logcat.FCTLogger
 
 val json = Json {
     encodeDefaults = true
@@ -29,8 +28,7 @@ inline fun <reified T> String.decodeJson(jsonInstance: Json? = null): T =
  * @return the decoded object of type [T]
  */
 inline fun <reified T> String.tryDecodeJson(jsonInstance: Json? = null): T? =
-    kotlin.runCatching { this.decodeJson<T>(jsonInstance) }
-        .onFailure { FCTLogger.e("Failed to decode json") }.getOrNull()
+    kotlin.runCatching { this.decodeJson<T>(jsonInstance) }.getOrNull()
 
 /**
  * Encode the type [T] into a Json string

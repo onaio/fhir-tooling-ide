@@ -46,6 +46,8 @@ object Dependencies {
     object KotlinX {
         const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.kotlinXCoroutine}"
         const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Version.kotlinXSerializationJson}"
+
+        fun getAll(): List<String> = listOf(coroutine, serializationJson)
     }
 
     object Compose {
