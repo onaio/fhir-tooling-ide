@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +15,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import org.hl7.fhir.r4.model.ResourceType
 import org.smartregister.fct.configs.data.helper.ConfigComponentState
@@ -50,6 +55,7 @@ import org.smartregister.fct.configs.domain.model.RegisterConfiguration
 import org.smartregister.fct.configs.domain.model.ResourceConfig
 import org.smartregister.fct.configs.util.extension.flowAsState
 import org.smartregister.fct.engine.ui.components.ButtonWithIcon
+import org.smartregister.fct.engine.ui.components.MiddleEllipsisText
 import org.smartregister.fct.logcat.FCTLogger
 
 @Composable
@@ -152,23 +158,19 @@ fun ResourceContainer(initialState: ConfigComponentState, navigator: ComponentNa
         ) {
 
             Box(
-                modifier = Modifier.fillMaxWidth().height(65.dp)
+                modifier = Modifier.fillMaxWidth().height(50.dp)
                     .background(MaterialTheme.colorScheme.secondary)
-                    .padding(12.dp),
+                    .padding(horizontal = 12.dp),
             ) {
 
                 if (viewStateHistory.size > 1) {
-                    IconButton(
+                    SmallIconButton(
+                        modifier = Modifier.align(Alignment.CenterStart),
+                        icon = Icons.AutoMirrored.Rounded.ArrowBack,
                         onClick = {
                             navigator.popState()
                         }
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Rounded.ArrowBack,
-                            tint = MaterialTheme.colorScheme.onSecondary,
-                            contentDescription = null
-                        )
-                    }
+                    )
                 }
 
                 Row(
@@ -184,8 +186,9 @@ fun ResourceContainer(initialState: ConfigComponentState, navigator: ComponentNa
                             color = MaterialTheme.colorScheme.onSecondary,
                             style = MaterialTheme.typography.titleMedium
                         )
-                        Text(
-                            viewStateHistory.joinToString(" > ") { it.title },
+                        MiddleEllipsisText(
+                            modifier = Modifier.padding(horizontal = 40.dp),
+                            text = viewStateHistory.joinToString(" > ") { it.title },
                             color = MaterialTheme.colorScheme.onSecondary,
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -197,20 +200,14 @@ fun ResourceContainer(initialState: ConfigComponentState, navigator: ComponentNa
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    IconButton(
+                    SmallIconButton(
+                        modifier = Modifier.rotate(rotationState),
+                        icon = Icons.Default.ArrowDropUp,
                         onClick = {
                             expanded = !expanded
                             navigator.setContainerExpanded(expanded)
                         }
-                    ) {
-                        Box(modifier = Modifier.rotate(rotationState)) {
-                            Icon(
-                                Icons.Default.ArrowDropUp,
-                                tint = MaterialTheme.colorScheme.onSecondary,
-                                contentDescription = null
-                            )
-                        }
-                    }
+                    )
                 }
             }
 
@@ -449,5 +446,31 @@ fun CreateButton(
         ),
         onClick = onClick
     )
+}
+
+@Composable
+private fun SmallIconButton(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            //.minimumInteractiveComponentSize()
+            .height(22.dp)
+            .width(22.dp)
+            .clickable(
+                onClick = onClick,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(bounded = false, radius = 18.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            modifier = Modifier.width(22.dp),
+            imageVector = icon,
+            contentDescription = null
+        )
+    }
 }
 

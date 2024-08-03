@@ -21,11 +21,10 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -56,12 +55,13 @@ import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.ui.components.ConfigTab
 import org.smartregister.fct.configs.util.extension.compress
 import org.smartregister.fct.configs.util.extension.flowAsState
+import org.smartregister.fct.engine.ui.components.Tab
+import org.smartregister.fct.engine.ui.components.TabRow
 
 class ConfigManagerScreen : Screen {
 
     @Composable
     override fun Content() {
-
 
         val viewModel = rememberScreenModel { ConfigManagerViewModel() }
         val configTabViewModelList = ConfigTabViewModelContainer.tabViewModels
@@ -109,16 +109,15 @@ class ConfigManagerScreen : Screen {
                 configs.value.forEachIndexed { index, tabConfig ->
 
                     Tab(
-                        modifier = Modifier.background(if (tabIndex == index) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface),
                         text = {
                             Row(
-                                modifier = Modifier.fillMaxWidth().height(35.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
                                     tabConfig.title,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Box(
                                     modifier = Modifier
@@ -150,7 +149,12 @@ class ConfigManagerScreen : Screen {
                 }
 
                 Tab(
-                    text = { Text("Upload New Config") },
+                    text = {
+                        Text(
+                            text = "Upload New Config",
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
                     selected = false,
                     onClick = {
                         launcher.launch()

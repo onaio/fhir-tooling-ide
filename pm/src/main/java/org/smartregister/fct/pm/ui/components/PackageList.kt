@@ -31,8 +31,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -59,6 +57,8 @@ import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
 import org.smartregister.fct.engine.ui.components.MiddleEllipsisText
+import org.smartregister.fct.engine.ui.components.Tab
+import org.smartregister.fct.engine.ui.components.TabRow
 import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.pm.domain.usecase.DeletePackage
 import org.smartregister.fct.pm.domain.usecase.GetAllPackages
@@ -78,12 +78,10 @@ internal fun PackageTabs(device: Device?) {
             ) {
                 listOf("Saved Packages", "All Packages").forEachIndexed { index, title ->
                     Tab(
-                        modifier = Modifier.height(35.dp).background(if (tabIndex == index) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface),
                         text = {
                             Text(
-                                modifier = Modifier.height(22.dp),
                                 text = title,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         },
                         selected = index == tabIndex,
@@ -116,9 +114,7 @@ private fun SavedPackageListContainer() {
 }
 
 @Composable
-private fun AppPackageListContainer(
-    device: Device
-) {
+private fun AppPackageListContainer(device: Device) {
 
     val getAllPackage = KoinJavaComponent.getKoin().get<GetAllPackages>()
     val allPackages by getAllPackage(device).collectAsState(initial = listOf())

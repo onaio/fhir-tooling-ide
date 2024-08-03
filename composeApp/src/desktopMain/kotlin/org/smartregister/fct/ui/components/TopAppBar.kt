@@ -1,6 +1,7 @@
 package org.smartregister.fct.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.minimumInteractiveComponentSize
@@ -25,6 +27,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -40,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -58,7 +62,7 @@ import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
 fun TopAppBar() {
     val windowViewModel = LocalWindowViewModel.current
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface).fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -76,7 +80,7 @@ fun TopAppBar() {
                 Spacer(Modifier.width(18.dp))
                 DeviceSelectionMenu()
                 Spacer(Modifier.width(10.dp))
-                ActivePackageButton(windowViewModel = windowViewModel)
+                ActivePackageChip(windowViewModel = windowViewModel)
             }
             Row {
                 Box(
@@ -99,7 +103,9 @@ fun TopAppBar() {
                 }
             }
         }
-        Divider()
+        HorizontalDivider(
+           // color = MaterialTheme.colorScheme.background
+        )
     }
 }
 
@@ -209,18 +215,24 @@ private fun DeviceSelectionMenu() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ActivePackageButton(windowViewModel: WindowViewModel) {
+private fun ActivePackageChip(windowViewModel: WindowViewModel) {
 
     val activePackage by DeviceManager.getActivePackage().collectAsState(initial = null)
 
     Chip(
         onClick = {
             windowViewModel.setRightWindowState(RightWindowState.PackageManager)
-        }
+        },
+        colors = ChipDefaults.chipColors(
+            backgroundColor = MaterialTheme.colorScheme.tertiary
+        )
     ) {
         Text(
             text = activePackage?.name ?: activePackage?.packageId ?: "Select Package",
-            style = MaterialTheme.typography.titleSmall
+            style = TextStyle(
+                color = MaterialTheme.colorScheme.onTertiary,
+                fontSize = MaterialTheme.typography.titleSmall.fontSize
+            )
         )
     }
 }

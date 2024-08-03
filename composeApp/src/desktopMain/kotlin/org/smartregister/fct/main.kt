@@ -18,6 +18,7 @@ import org.smartregister.fct.configs.ConfigModuleSetup
 import org.smartregister.fct.configs.util.extension.flowAsState
 import org.smartregister.fct.engine.EngineModuleSetup
 import org.smartregister.fct.engine.data.helper.AppSettingProvide
+import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
 import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.pm.PMModuleSetup
@@ -39,7 +40,7 @@ fun main() = application {
         height = (screenHeight - 200).dp
     )
 
-    startKoin {  }
+    startKoin { }
 
     initSubModules()
 
@@ -50,6 +51,7 @@ fun main() = application {
     ) {
 
         val appSetting by AppSettingProvide.getAppSetting().flowAsState(initial = AppSetting())
+        LocalAppSettingViewModel.current.appSetting = appSetting
 
         FCTTheme(
             isDarkModel = appSetting.isDarkTheme

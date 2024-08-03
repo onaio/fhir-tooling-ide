@@ -98,7 +98,7 @@ private fun ThemeChangerButton() {
             appSettingViewModel.update()
         }
     ) {
-        val icon = if (appSetting.isDarkTheme) Icons.Rounded.DarkMode else Icons.Rounded.LightMode
+        val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
         Icon(icon, contentDescription = null)
     }
 }
