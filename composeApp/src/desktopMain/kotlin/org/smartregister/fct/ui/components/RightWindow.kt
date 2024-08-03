@@ -1,11 +1,5 @@
 package org.smartregister.fct.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
@@ -16,18 +10,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.device.ui.DeviceManagerView
-import org.smartregister.fct.engine.data.viewmodel.RightNavigationViewModel
+import org.smartregister.fct.engine.data.enums.RightWindowState
+import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
+import org.smartregister.fct.logcat.FCTLogger
 
 @Composable
-fun RightWindow(rightNavViewModel: RightNavigationViewModel) {
-    Row(modifier = Modifier.fillMaxHeight()) {
+fun RightWindow(viewModel: WindowViewModel) {
 
-        val showDeviceManagerWindow by rightNavViewModel.getDeviceManagerWindowState().collectAsState(initial = false)
-        if(showDeviceManagerWindow) {
-            Row(modifier = Modifier.width(400.dp).fillMaxHeight()) {
-                VerticalDivider()
-                DeviceManagerView()
+    val windowState by viewModel.getRightWindowState().collectAsState(initial = null)
+    if (windowState != null) {
+        Row(modifier = Modifier.width(400.dp).fillMaxHeight()) {
+            VerticalDivider()
+            when (windowState) {
+                RightWindowState.DeviceManager -> DeviceManagerView()
+                else -> FCTLogger.e(IllegalStateException("Unknown State"))
             }
         }
     }
+
 }

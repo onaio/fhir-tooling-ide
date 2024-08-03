@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.engine.data.locals.LocalRightNavigationViewModel
+import org.smartregister.fct.engine.data.enums.BottomWindowState
+import org.smartregister.fct.engine.data.enums.RightWindowState
+import org.smartregister.fct.engine.data.locals.LocalWindowViewModel
 
 @Composable
 fun RightNavigation() {
-    val viewModel = LocalRightNavigationViewModel.current
+    val viewModel = LocalWindowViewModel.current
     VerticalDivider()
     Column(
         modifier = Modifier.width(45.dp)
@@ -37,13 +39,13 @@ fun RightNavigation() {
             HeightSpacer(12.dp)
             MenuButton(
                 icon = Icons.Rounded.PhoneAndroid,
-                onClick = { viewModel.toggleDeviceManagerWindow() }
+                onClick = { viewModel.setRightWindowState(RightWindowState.DeviceManager) }
             )
         }
         Column {
             MenuButton(
                 icon = Icons.Outlined.ConnectedTv,
-                onClick = { viewModel.toggleLogWindow() }
+                onClick = { viewModel.setBottomWindowState(BottomWindowState.Logcat) }
             )
             HeightSpacer(12.dp)
         }

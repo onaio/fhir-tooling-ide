@@ -16,7 +16,6 @@ fun LogcatWindow(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        HorizontalDivider()
         TopBar(
             onClose = onClose
         )
