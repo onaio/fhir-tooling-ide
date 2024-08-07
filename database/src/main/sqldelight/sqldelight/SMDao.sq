@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `sm` (
+    `id` TEXT PRIMARY KEY NOT NULL,
+    `title` TEXT NOT NULL,
+    `body` TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM `sm`;
+
+insert:
+INSERT INTO `sm` (`id`, `title`, `body`)
+VALUES (?, ?, ?);
+
+update:
+UPDATE `sm`
+SET `title` = ?, `body` = ?
+WHERE `id` = ?;
+
+delete:
+DELETE FROM `sm`
+WHERE `id` = ?;
