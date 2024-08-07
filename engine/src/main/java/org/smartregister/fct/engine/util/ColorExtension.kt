@@ -1,8 +1,8 @@
-package org.smartregister.fct.logcat.utils
+package org.smartregister.fct.engine.util
 
 import androidx.compose.ui.graphics.Color
 
-internal fun String.hexToColor(): Color {
+fun String.hexToColor(): Color {
     if (this[0] == '#') {
         var color = substring(1).toLong(16)
         if (length == 7) {

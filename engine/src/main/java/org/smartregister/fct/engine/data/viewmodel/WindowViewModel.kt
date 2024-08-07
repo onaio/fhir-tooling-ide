@@ -6,13 +6,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.smartregister.fct.engine.data.enums.BottomWindowState
+import org.smartregister.fct.engine.data.enums.LeftWindowState
 import org.smartregister.fct.engine.data.enums.RightWindowState
 
 
 class WindowViewModel {
 
+    private val leftWindowState = MutableStateFlow<LeftWindowState?>(null)
     private val rightWindowState = MutableStateFlow<RightWindowState?>(null)
     private val bottomWindowState = MutableStateFlow<BottomWindowState?>(null)
+
+    fun getLeftWindowState(): StateFlow<LeftWindowState?> = leftWindowState
+
+    fun setLeftWindowState(state: LeftWindowState?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            leftWindowState.emit(state)
+        }
+    }
 
     fun getRightWindowState(): StateFlow<RightWindowState?> = rightWindowState
 
