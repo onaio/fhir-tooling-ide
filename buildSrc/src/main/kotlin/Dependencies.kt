@@ -79,7 +79,7 @@ object Dependencies {
     }
 
     object Voyager {
-        val voyagerVersion = "1.1.0-beta02"
+        const val voyagerVersion = "1.1.0-beta02"
 
         const val navigator = "cafe.adriel.voyager:voyager-navigator:${Version.voyager}"
         const val screenModel = "cafe.adriel.voyager:voyager-screenmodel:${Version.voyager}"

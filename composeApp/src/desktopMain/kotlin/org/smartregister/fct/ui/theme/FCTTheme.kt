@@ -4,7 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import org.smartregister.fct.util.extension.hexToColor
+import org.smartregister.fct.engine.util.hexToColor
 
 val LightColorScheme = lightColorScheme(
     primary = "#74739A".hexToColor(),

@@ -2,7 +2,6 @@ package org.smartregister.fct.engine.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
@@ -15,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.TabRow as MaterialTabRow
 import androidx.compose.material3.Tab as MaterialTab
+import androidx.compose.material3.TabRow as MaterialTabRow
 
 @Composable
 fun TabRow(

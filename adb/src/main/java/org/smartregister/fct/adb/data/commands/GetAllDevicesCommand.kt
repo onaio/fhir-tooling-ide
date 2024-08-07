@@ -6,7 +6,7 @@ import org.smartregister.fct.adb.utils.CommandConstants
 import org.smartregister.fct.adb.utils.resultAsCommandException
 import java.util.Queue
 
-class GetAllDevicesCommand() : ADBCommand<List<Device>> {
+class GetAllDevicesCommand : ADBCommand<List<Device>> {
 
     override fun process(result: String, dependentResult: Queue<Result<*>>): Result<List<Device>> {
         return result

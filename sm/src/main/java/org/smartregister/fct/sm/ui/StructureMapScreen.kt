@@ -62,7 +62,6 @@ val LocalSMTabViewModelProvider = staticCompositionLocalOf { SMTabViewModelProvi
 
 class StructureMapScreen : Screen {
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
 

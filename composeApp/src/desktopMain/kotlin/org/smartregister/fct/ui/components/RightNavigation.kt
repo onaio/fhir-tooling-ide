@@ -3,7 +3,9 @@ package org.smartregister.fct.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ListAlt
@@ -31,12 +33,12 @@ fun RightNavigation() {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            HeightSpacer(12.dp)
+            Spacer(Modifier.height(12.dp))
             SmallIconButton(
                 icon = Icons.Outlined.PhoneAndroid,
                 onClick = { viewModel.setRightWindowState(RightWindowState.DeviceManager) }
             )
-            HeightSpacer(18.dp)
+            Spacer(Modifier.height(18.dp))
             SmallIconButton(
                 icon = Icons.AutoMirrored.Outlined.ListAlt,
                 onClick = { viewModel.setRightWindowState(RightWindowState.PackageManager) }
@@ -47,7 +49,7 @@ fun RightNavigation() {
                 icon = Icons.Outlined.ConnectedTv,
                 onClick = { viewModel.setBottomWindowState(BottomWindowState.Logcat) }
             )
-            HeightSpacer(12.dp)
+            Spacer(Modifier.height(12.dp))
         }
     }
 }

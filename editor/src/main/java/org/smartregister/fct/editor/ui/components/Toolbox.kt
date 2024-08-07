@@ -103,11 +103,11 @@ internal fun Toolbox(
                         contentPadding = PaddingValues(3.dp),
                         container = {
                             OutlinedTextFieldDefaults.ContainerBox(
-                                true,
-                                false,
-                                interactionSource,
-                                TextFieldDefaults.colors(),
-                                RoundedCornerShape(4.dp)
+                                enabled = true,
+                                isError = false,
+                                interactionSource = interactionSource,
+                                colors = TextFieldDefaults.colors(),
+                                shape = RoundedCornerShape(4.dp)
                             )
                         }
                     )

@@ -3,7 +3,6 @@ package org.smartregister.fct.adb.data.controller
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.logcat.FCTLogger
-import java.lang.Exception
 import java.util.LinkedList
 import java.util.Queue
 
