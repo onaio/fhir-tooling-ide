@@ -3,34 +3,16 @@ package org.smartregister.fct.configs.util.extension
 import org.apache.commons.text.CaseUtils
 import org.apache.commons.text.StringSubstitutor
 import org.smartregister.fct.logcat.FCTLogger
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
-import java.util.Base64
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 import java.util.regex.Pattern
-import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream
 
 const val DEFAULT_PLACEHOLDER_PREFIX = "@{"
 const val DEFAULT_PLACEHOLDER_SUFFIX = "}"
 const val BLACK_COLOR_HEX_CODE = "#000000"
 const val TRUE = "true"
-
-fun String.compress(): String {
-    val byteStream = ByteArrayOutputStream()
-    GZIPOutputStream(byteStream).bufferedWriter().use { it.write(this) }
-    return Base64.getEncoder().encodeToString(byteStream.toByteArray())
-}
-
-fun String.decompress(): String {
-    val compressedBytes = Base64.getDecoder().decode(this)
-    val byteArrayInputStream = ByteArrayInputStream(compressedBytes)
-    return GZIPInputStream(byteArrayInputStream).bufferedReader().use { it.readText() }
-}
 
 /**
  * Sample template string: { "saveFamilyButtonText" : {{ family.button.save }} } Sample properties

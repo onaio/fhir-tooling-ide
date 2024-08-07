@@ -30,6 +30,7 @@ kotlin {
             implementation(project(":logcat"))
             implementation(project(":device"))
             implementation(project(":pm"))
+            implementation(project(":sm"))
         }
 
         desktopMain.dependencies {

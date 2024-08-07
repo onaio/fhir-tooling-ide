@@ -22,6 +22,7 @@ import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
 import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.pm.PMModuleSetup
+import org.smartregister.fct.sm.SMModuleSetup
 import org.smartregister.fct.ui.App
 import org.smartregister.fct.ui.components.BottomBar
 import org.smartregister.fct.ui.components.TopAppBar
@@ -76,6 +77,7 @@ fun initSubModules() {
         EngineModuleSetup(),
         ConfigModuleSetup(),
         ADBModuleSetup(),
-        PMModuleSetup()
+        PMModuleSetup(),
+        SMModuleSetup()
     ).forEach { it.setup() }
 }

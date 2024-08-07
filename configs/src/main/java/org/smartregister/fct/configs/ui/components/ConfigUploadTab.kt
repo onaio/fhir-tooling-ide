@@ -30,7 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.smartregister.fct.configs.data.viewmodel.ConfigManagerViewModel
-import org.smartregister.fct.configs.util.extension.compress
+import org.smartregister.fct.engine.util.compress
 
 @Composable
 fun ConfigUploadTab(viewModel: ConfigManagerViewModel) {

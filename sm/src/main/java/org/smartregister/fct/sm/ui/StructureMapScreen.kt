@@ -1,5 +1,6 @@
-package org.smartregister.fct.configs.ui
+package org.smartregister.fct.sm.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -28,11 +29,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,59 +45,58 @@ import cafe.adriel.voyager.core.screen.Screen
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.smartregister.fct.configs.data.viewmodel.ConfigManagerViewModel
-import org.smartregister.fct.configs.data.viewmodel.ConfigTabViewModelContainer
-import org.smartregister.fct.configs.data.viewmodel.RegisterConfigViewModel
-import org.smartregister.fct.configs.domain.model.ConfigType
-import org.smartregister.fct.configs.domain.model.ConfigWrapper
-import org.smartregister.fct.configs.ui.components.ConfigTab
-import org.smartregister.fct.configs.util.extension.flowAsState
+import org.smartregister.fct.editor.data.controller.CodeController
+import org.smartregister.fct.editor.data.enums.CodeStyle
+import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.engine.ui.components.Tab
 import org.smartregister.fct.engine.ui.components.TabRow
 import org.smartregister.fct.engine.util.compress
+import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.sm.data.provider.SMTabViewModelProvider
+import org.smartregister.fct.sm.data.viewmodel.SMScreenViewModel
+import org.smartregister.fct.sm.data.viewmodel.SMTabViewModel
+import org.smartregister.fct.sm.domain.model.SMDetail
 
-class ConfigManagerScreen : Screen {
+val LocalSMTabViewModelProvider = staticCompositionLocalOf { SMTabViewModelProvider() }
 
+class StructureMapScreen : Screen {
+
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
 
-        val viewModel = rememberScreenModel { ConfigManagerViewModel() }
-        val configTabViewModelList = ConfigTabViewModelContainer.tabViewModels
+        val scope = rememberCoroutineScope()
+        val viewModel = rememberScreenModel { SMScreenViewModel(scope) }
+        val smTabViewModelProvider = LocalSMTabViewModelProvider.current.tabViewModels
         var tabIndex by remember { mutableStateOf(0) }
 
-        val configs = viewModel.getAllConfigs().flowAsState(viewModel.toString(), listOf())
+        val smDetailList = viewModel.getAllSMList().collectAsState(initial = listOf())
 
-        var showCreateConfigDialog by remember { mutableStateOf<String?>(null) }
-        var showConfigDeleteDialog by remember { mutableStateOf<ConfigWrapper?>(null) }
+        var showCreateSMDialog by remember { mutableStateOf<String?>(null) }
+        var showDeleteSMDialog by remember { mutableStateOf<SMDetail?>(null) }
 
-        LaunchedEffect(configs.value.size) {
+        /*LaunchedEffect(smDetailList.value.size) {
             if (!viewModel.isFirstTimeComposition) {
                 tabIndex = if (configs.value.isNotEmpty()) configs.value.size - 1 else 0
             }
-        }
+        }*/
 
         val launcher = rememberFilePickerLauncher(
             type = PickerType.File(),
             mode = PickerMode.Single
         ) {
-            CoroutineScope(Dispatchers.IO).launch {
+            scope.launch {
                 it?.readBytes()?.inputStream()?.bufferedReader()?.use { reader ->
-                    val encryptedJson = reader.readText().compress()
-                    showCreateConfigDialog = encryptedJson
+                    val encryptedData = reader.readText().compress()
+                    showCreateSMDialog = encryptedData
                 }
             }
         }
 
-        configs.value.forEachIndexed { index, config ->
-            if (!configTabViewModelList.containsKey(config.uuid)) {
-                when (config.config.configType) {
-                    ConfigType.Register.name -> configTabViewModelList[config.uuid] =
-                        RegisterConfigViewModel(config)
-                }
-
+        smDetailList.value.forEach { smDetail ->
+            if (!smTabViewModelProvider.containsKey(smDetail.id)) {
+                smTabViewModelProvider[smDetail.id] = SMTabViewModel(scope)
             }
         }
 
@@ -104,7 +106,7 @@ class ConfigManagerScreen : Screen {
                 modifier = Modifier.fillMaxWidth(),
                 selectedTabIndex = tabIndex,
             ) {
-                configs.value.forEachIndexed { index, tabConfig ->
+                smDetailList.value.forEachIndexed { index, smDetail ->
 
                     Tab(
                         text = {
@@ -114,14 +116,14 @@ class ConfigManagerScreen : Screen {
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    tabConfig.title,
+                                    smDetail.title,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Box(
                                     modifier = Modifier
                                         .minimumInteractiveComponentSize()
                                         .clickable(
-                                            onClick = { showConfigDeleteDialog = tabConfig },
+                                            onClick = { showDeleteSMDialog = smDetail },
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = rememberRipple(
                                                 bounded = false,
@@ -149,7 +151,7 @@ class ConfigManagerScreen : Screen {
                 Tab(
                     text = {
                         Text(
-                            text = "Upload New Config",
+                            text = "Upload New Structure Map",
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     },
@@ -160,28 +162,37 @@ class ConfigManagerScreen : Screen {
                 )
             }
 
-            if (configs.value.isNotEmpty() && tabIndex < configs.value.size) {
-                ConfigTabViewModelContainer.activeViewModel =
-                    ConfigTabViewModelContainer.tabViewModels[configs.value[tabIndex].uuid]!!
-                ConfigTab(configs.value[tabIndex])
+            if (smDetailList.value.isNotEmpty() && tabIndex < smDetailList.value.size) {
+                /*  ConfigTabViewModelContainer.activeViewModel =
+                      ConfigTabViewModelContainer.tabViewModels[configs.value[tabIndex].uuid]!!*/
+                //ConfigTab(configs.value[tabIndex])
+
+                val controller = remember { mutableStateOf(CodeController()) }
+                CodeEditor(
+                    value = smDetailList.value[tabIndex].body,
+                    codeStyle = CodeStyle.StructureMap,
+                    controller = controller.value
+                )
+                val data = controller.value.getTextAsFlow().collectAsState()
+                println(data.value)
             }
         }
 
-        if (showCreateConfigDialog != null) {
+        if (showCreateSMDialog != null) {
             Dialog(
                 onDismissRequest = {}
             ) {
 
-                var configTitle by remember { mutableStateOf("") }
+                var smTitle by remember { mutableStateOf("") }
                 Surface(
                     modifier = Modifier.width(300.dp),
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Column(modifier = Modifier.padding(12.dp).fillMaxWidth()) {
                         TextField(
-                            value = configTitle,
+                            value = smTitle,
                             onValueChange = {
-                                configTitle = it
+                                smTitle = it
                             }
                         )
                         Spacer(modifier = Modifier.height(20.dp))
@@ -191,7 +202,7 @@ class ConfigManagerScreen : Screen {
                         ) {
                             Button(
                                 onClick = {
-                                    showCreateConfigDialog = null
+                                    showCreateSMDialog = null
                                 }
                             ) {
                                 Text("Cancel")
@@ -199,9 +210,15 @@ class ConfigManagerScreen : Screen {
                             Spacer(modifier = Modifier.width(12.dp))
                             Button(
                                 onClick = {
-                                    viewModel.insertConfig(configTitle, showCreateConfigDialog!!)
-                                    viewModel.isFirstTimeComposition = false
-                                    showCreateConfigDialog = null
+                                    viewModel.insert(
+                                        SMDetail(
+                                            id = uuid(),
+                                            title = smTitle,
+                                            body = showCreateSMDialog!!
+                                        )
+                                    )
+                                    //viewModel.isFirstTimeComposition = false
+                                    showCreateSMDialog = null
 
                                 }
                             ) {
@@ -213,24 +230,24 @@ class ConfigManagerScreen : Screen {
             }
         }
 
-        if (showConfigDeleteDialog != null) {
+        if (showDeleteSMDialog != null) {
             AlertDialog(
                 icon = {
                     Icon(Icons.Filled.Warning, contentDescription = null)
                 },
                 title = {
-                    Text("Delete Config")
+                    Text("Delete Structure Map")
                 },
                 text = {
-                    Text("Are you sure you want to delete ${showConfigDeleteDialog!!.title} config")
+                    Text("Are you sure you want to delete ${showDeleteSMDialog!!.title} structure map")
                 },
-                onDismissRequest = { showConfigDeleteDialog = null },
+                onDismissRequest = { showDeleteSMDialog = null },
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            configTabViewModelList.remove(showConfigDeleteDialog!!.uuid)
-                            viewModel.deleteConfig(showConfigDeleteDialog!!.uuid)
-                            showConfigDeleteDialog = null
+                            smTabViewModelProvider.remove(showDeleteSMDialog!!.id)
+                            viewModel.delete(showDeleteSMDialog!!.id)
+                            showDeleteSMDialog = null
                         }
                     ) {
                         Text("Confirm")
@@ -239,7 +256,7 @@ class ConfigManagerScreen : Screen {
                 dismissButton = {
                     TextButton(
                         onClick = {
-                            showConfigDeleteDialog = null
+                            showDeleteSMDialog = null
                         }
                     ) {
                         Text("Dismiss")

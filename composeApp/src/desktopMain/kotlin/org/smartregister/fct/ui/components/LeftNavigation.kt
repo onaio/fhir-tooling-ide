@@ -35,7 +35,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import org.smartregister.fct.configs.ui.ConfigManagerScreen
 import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
-import org.smartregister.fct.ui.screen.structure_map.StructureMapScreen
+import org.smartregister.fct.engine.data.locals.LocalWindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
+import org.smartregister.fct.sm.ui.StructureMapScreen
 
 @Composable
 fun LeftNavigation(
@@ -57,6 +59,8 @@ fun LeftNavigation(
 
 @Composable
 private fun NavigationBar(mainNavigator: Navigator?) {
+    val windowViewModel = LocalWindowViewModel.current
+
     Column(
         modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface.copy(alpha = 0.2f)).fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,7 +69,7 @@ private fun NavigationBar(mainNavigator: Navigator?) {
         Column {
             var selectedNav by remember { mutableStateOf(0) }
             HeightSpacer(12.dp)
-            navigationMenu.forEachIndexed { index, navButton ->
+            navigationMenu(windowViewModel).forEachIndexed { index, navButton ->
                 IconButton(
                     enabled = selectedNav != index,
                     onClick = {
@@ -103,37 +107,43 @@ private fun ThemeChangerButton() {
     }
 }
 
-private val navigationMenu = listOf(
-    NavigationButton(
-        title = "Manage Configuration",
-        icon = Icons.Rounded.Widgets,
-        onClick = {
-            it.popUntilRoot()
-        }
-    ),
-    NavigationButton(
-        title = "Structure Map Transformation",
-        icon = Icons.Rounded.Cyclone,
-        onClick = {
-            it.replaceUntilRoot(StructureMapScreen())
-        }
-    ),
-    NavigationButton(
-        title = "CQL Transformation",
-        icon = Icons.Rounded.MoveDown,
-        onClick = {}
-    ),
-    NavigationButton(
-        title = "Database",
-        icon = Icons.Rounded.Dataset,
-        onClick = {}
-    ),
-    NavigationButton(
-        title = "Insights",
-        icon = Icons.Rounded.Insights,
-        onClick = {}
+
+private fun navigationMenu(windowViewModel: WindowViewModel): List<NavigationButton> {
+
+    return listOf(
+        NavigationButton(
+            title = "Manage Configuration",
+            icon = Icons.Rounded.Widgets,
+            onClick = {
+                //windowViewModel.setLeftWindowState(LeftWindowState.Configs)
+                it.popUntilRoot()
+            }
+        ),
+        NavigationButton(
+            title = "Structure Map Transformation",
+            icon = Icons.Rounded.Cyclone,
+            onClick = {
+                //windowViewModel.setLeftWindowState(LeftWindowState.StructureMap)
+                it.replaceUntilRoot(StructureMapScreen())
+            }
+        ),
+        NavigationButton(
+            title = "CQL Transformation",
+            icon = Icons.Rounded.MoveDown,
+            onClick = {}
+        ),
+        NavigationButton(
+            title = "Database",
+            icon = Icons.Rounded.Dataset,
+            onClick = {}
+        ),
+        NavigationButton(
+            title = "Insights",
+            icon = Icons.Rounded.Insights,
+            onClick = {}
+        )
     )
-)
+}
 
 data class NavigationButton(
     val title: String,

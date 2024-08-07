@@ -1,6 +1,5 @@
 package org.smartregister.fct.ui.theme
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -25,7 +24,7 @@ val LightColorScheme = lightColorScheme(
     surface = "#F9F9F9".hexToColor(),
     surfaceContainer = "#EBEBEB".hexToColor(),
     onSurface = "#1c1b20".hexToColor(),
-    surfaceVariant = "#ddd8e0".hexToColor(),
+    surfaceVariant = "#DADADA".hexToColor(),
     onSurfaceVariant = "#47464f".hexToColor(),
     error = "#ba1a1a".hexToColor(),
     onError = "#ffffff".hexToColor(),
