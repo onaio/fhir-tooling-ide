@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.smartregister.fct.engine.util.decompress
+import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
 import org.smartregister.fct.sm.domain.model.SMDetail
 import sqldelight.SMDaoQueries
@@ -19,11 +20,20 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
             .mapToList(Dispatchers.Default)
             .map {
                 it.map { sm ->
-                    SMDetail(
-                        id = sm.id,
-                        title = sm.title,
-                        body = sm.body.decompress()
-                    )
+                    try {
+                        SMDetail(
+                            id = sm.id,
+                            title = sm.title,
+                            body = sm.body.decompress()
+                        )
+                    } catch (t: Throwable) {
+                        FCTLogger.e(t)
+                        SMDetail(
+                            id = sm.id,
+                            title = "Error",
+                            body = t.toString()
+                        )
+                    }
                 }
             }
     }

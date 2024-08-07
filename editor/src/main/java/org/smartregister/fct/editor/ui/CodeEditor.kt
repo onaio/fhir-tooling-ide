@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,7 +51,14 @@ import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 
 
 @Composable
+fun rememberCodeController(): CodeController {
+    val controller by remember { mutableStateOf(CodeController()) }
+    return controller
+}
+
+@Composable
 fun CodeEditor(
+    modifier: Modifier = Modifier,
     value: String,
     codeStyle: CodeStyle,
     controller: CodeController? = null
@@ -64,7 +72,7 @@ fun CodeEditor(
     val focusRequester = FocusRequester()
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().then(modifier)
     ) {
         val horizontalScrollState = rememberScrollState()
         val verticalScrollState = rememberScrollState()

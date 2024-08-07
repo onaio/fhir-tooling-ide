@@ -50,7 +50,7 @@ import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.java.KoinJavaComponent
+import org.koin.java.KoinJavaComponent.getKoin
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
@@ -102,7 +102,7 @@ internal fun PackageTabs(device: Device?) {
 @Composable
 private fun SavedPackageListContainer() {
 
-    val getSavedPackages = KoinJavaComponent.getKoin().get<GetSavedPackages>()
+    val getSavedPackages = getKoin().get<GetSavedPackages>()
     val allPackages by getSavedPackages().collectAsState(initial = listOf())
     val searchText = remember { mutableStateOf("") }
     val filteredPackages = allPackages.filter { it.packageId.contains(searchText.value) }
@@ -115,7 +115,7 @@ private fun SavedPackageListContainer() {
 @Composable
 private fun AppPackageListContainer(device: Device) {
 
-    val getAllPackage = KoinJavaComponent.getKoin().get<GetAllPackages>()
+    val getAllPackage = getKoin().get<GetAllPackages>()
     val allPackages by getAllPackage(device).collectAsState(initial = listOf())
     val searchText = remember { mutableStateOf("") }
     val filteredPackages = allPackages.filter { it.packageId.contains(searchText.value) }
@@ -144,8 +144,8 @@ private fun PackageList(
 ) {
 
     val snackbarHost = LocalSnackbarHost.current
-    val saveNewPackage = KoinJavaComponent.getKoin().get<SaveNewPackage>()
-    val deletePackage = KoinJavaComponent.getKoin().get<DeletePackage>()
+    val saveNewPackage = getKoin().get<SaveNewPackage>()
+    val deletePackage = getKoin().get<DeletePackage>()
     val state = rememberLazyListState()
     var savePackageId by remember { mutableStateOf<String?>(null) }
 
