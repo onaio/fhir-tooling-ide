@@ -8,7 +8,7 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
 fun uuid(): String {
-    return UUID.randomUUID().toString();
+    return UUID.randomUUID().toString()
 }
 
 fun String.compress(): String {
