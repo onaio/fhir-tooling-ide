@@ -11,13 +11,14 @@ dependencies {
     Dependencies.HapiFhir.getAll().forEach(::implementation)
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
-    implementation(Dependencies.koin)
+    implementation(Dependencies.ApacheCommon.compress)
+    implementation(Dependencies.gson)
+    //implementation(Dependencies.koin)
     implementation(Dependencies.KotlinX.serializationJson)
-    implementation(Dependencies.fileKitCompose)
+    //implementation(Dependencies.fileKitCompose)
 
     implementation(project(":engine"))
     implementation(project(":database"))
-    implementation(project(":logcat"))
     implementation(project(":editor"))
     implementation(project(":upload"))
 }

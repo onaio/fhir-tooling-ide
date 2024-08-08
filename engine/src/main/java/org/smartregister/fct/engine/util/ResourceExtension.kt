@@ -1,4 +1,4 @@
-package org.smartregister.fct.configs.util.extension
+package org.smartregister.fct.engine.util
 
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.parser.IParser
@@ -20,7 +20,8 @@ import java.util.Locale
 
 const val REFERENCE = "reference"
 const val PARTOF = "part-of"
-private val fhirR4JsonParser = FhirContext.forR4Cached().getCustomJsonParser()
+
+private val fhirR4JsonParser = FhirContext.forR4Cached().newJsonParser()
 
 fun Base?.valueToString(datePattern: String = "dd-MMM-yyyy"): String {
     return when {

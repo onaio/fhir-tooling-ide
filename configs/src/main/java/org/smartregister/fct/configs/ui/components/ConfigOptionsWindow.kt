@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.engine.ui.components.ButtonWithIcon
+import org.smartregister.fct.radiance.ui.components.Button
 
 @Composable
 fun ConfigOptionsWindow() {
@@ -42,8 +42,8 @@ fun ConfigOptionsWindow() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                ButtonWithIcon(
-                    text = "Run",
+                Button(
+                    label = "Run",
                     icon = Icons.Rounded.RocketLaunch,
                     onClick = {}
                 )

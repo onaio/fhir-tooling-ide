@@ -1,15 +1,14 @@
 package org.smartregister.fct.logcat.domain.model
 
 import androidx.compose.ui.graphics.Color
-import org.smartregister.fct.engine.util.hexToColor
 
 enum class LogLevel(val value: String, val color: Color) {
 
-    VERBOSE("V", "#91BE61".hexToColor()),
-    DEBUG("D", "#86B1FF".hexToColor()),
-    INFO("I", "#91BE61".hexToColor()),
-    WARNING("W", "#DEA834".hexToColor()),
-    ERROR("E", "#EB5F00".hexToColor()),
-    ASSERT("A", "#91BE61".hexToColor()),
+    VERBOSE("V", Color(0xFF91BE61)),
+    DEBUG("D", Color(0xFF86B1FF)),
+    INFO("I", Color(0xFF91BE61)),
+    WARNING("W", Color(0xFFDEA834)),
+    ERROR("E", Color(0xFFEB5F00)),
+    ASSERT("A", Color(0xFF91BE61)),
 }
 

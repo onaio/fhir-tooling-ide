@@ -1,23 +1,19 @@
 package org.smartregister.fct.editor.data.controller
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
-class CodeController {
+class CodeController(initialText: String = "") {
 
-    private var text: String = ""
-    private val textFlow = MutableStateFlow("")
+    private var text: String = initialText
+    private val textFlow = MutableStateFlow(initialText)
 
     fun getText() = text
 
     fun getTextAsFlow(): StateFlow<String> = textFlow
 
-    internal fun setText(scope: CoroutineScope, text: String) {
+    suspend fun setText(text: String) {
         this.text = text
-        scope.launch {
-            textFlow.emit(text)
-        }
+        textFlow.emit(text)
     }
 }

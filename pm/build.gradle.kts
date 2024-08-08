@@ -12,6 +12,5 @@ dependencies {
     implementation(project(":engine"))
     implementation(project(":database"))
     implementation(project(":adb"))
-    implementation(project(":logcat"))
 }
 

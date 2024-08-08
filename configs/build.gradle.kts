@@ -22,5 +22,4 @@ dependencies {
 
     implementation(project(":engine"))
     implementation(project(":database"))
-    implementation(project(":logcat"))
 }

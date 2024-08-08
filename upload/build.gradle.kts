@@ -10,10 +10,8 @@ dependencies {
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.koin)
-    implementation(Dependencies.fileKitCompose)
-
+    api(Dependencies.fileKitCompose)
     implementation(project(":engine"))
-    implementation(project(":logcat"))
     implementation(project(":editor"))
 }
 

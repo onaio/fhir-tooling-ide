@@ -82,8 +82,8 @@ private fun NavigationBar(mainNavigator: Navigator?) {
                         selectedNav = index
                     },
                     colors = if (selectedNav == index) IconButtonDefaults.iconButtonColors(
-                        disabledContainerColor = MaterialTheme.colorScheme.background,
-                        disabledContentColor = MaterialTheme.colorScheme.onBackground
+                        disabledContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        disabledContentColor = MaterialTheme.colorScheme.onTertiaryContainer
                     ) else IconButtonDefaults.iconButtonColors()
                 ) {
                     Icon(navButton.icon, contentDescription = null)

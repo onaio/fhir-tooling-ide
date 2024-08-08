@@ -22,8 +22,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -53,15 +51,15 @@ import org.smartregister.fct.configs.domain.model.FhirResourceConfig
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration
 import org.smartregister.fct.configs.domain.model.ResourceConfig
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.engine.ui.components.ButtonWithIcon
 import org.smartregister.fct.engine.ui.components.MiddleEllipsisText
 import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.radiance.ui.components.Button
 
 @Composable
 fun RegisterConfigTab(config: RegisterConfiguration) {
 
     val viewModel = ConfigTabViewModelContainer.get<RegisterConfigViewModel>()
-    val fhirResourceNavigator =  viewModel.fhirResourceNavigator
+    val fhirResourceNavigator = viewModel.fhirResourceNavigator
     val secondaryResourcesNavigator = viewModel.secondaryResourcesNavigator
 
     LazyColumn(
@@ -78,9 +76,10 @@ fun RegisterConfigTab(config: RegisterConfiguration) {
                         config.fhirResource = FhirResourceConfig()
                         fhirResourceNavigator.updateCurrentState(
                             ConfigComponentState.FhirResource(
-                            fhirResourceConfig = config.fhirResource,
-                            navigator = fhirResourceNavigator
-                        ))
+                                fhirResourceConfig = config.fhirResource,
+                                navigator = fhirResourceNavigator
+                            )
+                        )
                     }
                 }
 
@@ -106,7 +105,11 @@ fun RegisterConfigTab(config: RegisterConfiguration) {
 }
 
 @Composable
-fun FhirResourceContainer(fhirResourceConfig: FhirResourceConfig?, navigator: ComponentNavigator, onAdd: () -> Unit) {
+fun FhirResourceContainer(
+    fhirResourceConfig: FhirResourceConfig?,
+    navigator: ComponentNavigator,
+    onAdd: () -> Unit
+) {
     ResourceContainer(
         initialState = navigator.getLastStateFromHistory() ?: ConfigComponentState.FhirResource(
             fhirResourceConfig = fhirResourceConfig,
@@ -118,19 +121,28 @@ fun FhirResourceContainer(fhirResourceConfig: FhirResourceConfig?, navigator: Co
 }
 
 @Composable
-fun SecondaryResourcesContainer(secondaryResources: MutableList<FhirResourceConfig>?, navigator: ComponentNavigator, onAdd: () -> Unit) {
+fun SecondaryResourcesContainer(
+    secondaryResources: MutableList<FhirResourceConfig>?,
+    navigator: ComponentNavigator,
+    onAdd: () -> Unit
+) {
     ResourceContainer(
-        initialState = navigator.getLastStateFromHistory() ?: ConfigComponentState.SecondaryResources(
-            secondaryResources = secondaryResources,
-            navigator = navigator
-        ),
+        initialState = navigator.getLastStateFromHistory()
+            ?: ConfigComponentState.SecondaryResources(
+                secondaryResources = secondaryResources,
+                navigator = navigator
+            ),
         navigator = navigator,
         onAdd = onAdd
     )
 }
 
 @Composable
-fun ResourceContainer(initialState: ConfigComponentState, navigator: ComponentNavigator, onAdd: () -> Unit) {
+fun ResourceContainer(
+    initialState: ConfigComponentState,
+    navigator: ComponentNavigator,
+    onAdd: () -> Unit
+) {
 
     val viewStateHistory = navigator.getStateHistory()
     val currentState = navigator.getState()
@@ -140,7 +152,7 @@ fun ResourceContainer(initialState: ConfigComponentState, navigator: ComponentNa
         navigator.pushState(initialState)
     }
 
-    val check = if(viewStateHistory.size > 1) true else currentState.value?.config != null
+    val check = if (viewStateHistory.size > 1) true else currentState.value?.config != null
 
     if (currentState.value != null && check) {
 
@@ -216,9 +228,17 @@ fun ResourceContainer(initialState: ConfigComponentState, navigator: ComponentNa
                 Spacer(Modifier.height(8.dp))
                 Column(modifier = Modifier.fillMaxWidth().padding(12.dp)) {
                     when (val state = currentState.value) {
-                        is ConfigComponentState.FhirResource -> FhirResourceView(state.fhirResourceConfig!!, state.navigator)
+                        is ConfigComponentState.FhirResource -> FhirResourceView(
+                            state.fhirResourceConfig!!,
+                            state.navigator
+                        )
+
                         is ConfigComponentState.BaseResource -> BaseResourceView(state.baseResource)
-                        is ConfigComponentState.SecondaryResources -> SecondaryResourcesView(state.secondaryResources!!, state.navigator)
+                        is ConfigComponentState.SecondaryResources -> SecondaryResourcesView(
+                            state.secondaryResources!!,
+                            state.navigator
+                        )
+
                         else -> FCTLogger.e("state $state is not valid")
                     }
                 }
@@ -255,20 +275,25 @@ fun FhirResourceView(fhirResourceConfig: FhirResourceConfig, navigator: Componen
 }
 
 @Composable
-fun BaseResourceViewButton(config: FhirResourceConfig, navigator: ComponentNavigator, modifier: Modifier = Modifier) {
+fun BaseResourceViewButton(
+    config: FhirResourceConfig,
+    navigator: ComponentNavigator,
+    modifier: Modifier = Modifier
+) {
 
     config.baseResource?.let {
         Button(
+            label = "Base Resource",
             modifier = modifier,
             onClick = {
-                navigator.pushState(ConfigComponentState.BaseResource(
-                    baseResource = config.baseResource,
-                    navigator = navigator
-                ))
+                navigator.pushState(
+                    ConfigComponentState.BaseResource(
+                        baseResource = config.baseResource,
+                        navigator = navigator
+                    )
+                )
             }
-        ) {
-            Text("Base Resource")
-        }
+        )
     } ?: run {
         CreateButton(
             modifier = modifier,
@@ -277,10 +302,12 @@ fun BaseResourceViewButton(config: FhirResourceConfig, navigator: ComponentNavig
                 config.baseResource = ResourceConfig(
                     resource = ResourceType.Patient
                 )
-                navigator.pushState(ConfigComponentState.BaseResource(
-                    baseResource = config.baseResource,
-                    navigator = navigator
-                ))
+                navigator.pushState(
+                    ConfigComponentState.BaseResource(
+                        baseResource = config.baseResource,
+                        navigator = navigator
+                    )
+                )
             }
         )
     }
@@ -290,11 +317,10 @@ fun BaseResourceViewButton(config: FhirResourceConfig, navigator: ComponentNavig
 fun RelatedResourceListView(resourceConfig: ResourceConfig?, modifier: Modifier = Modifier) {
 
     Button(
+        label = "Related Resource List",
         modifier = modifier,
         onClick = {}
-    ) {
-        Text("Related Resource List")
-    }
+    )
 }
 
 @Composable
@@ -327,7 +353,10 @@ fun BaseResourceView(baseResource: ResourceConfig?) {
 }
 
 @Composable
-fun SecondaryResourcesView(secondaryResources: MutableList<FhirResourceConfig>, navigator: ComponentNavigator) {
+fun SecondaryResourcesView(
+    secondaryResources: MutableList<FhirResourceConfig>,
+    navigator: ComponentNavigator
+) {
 
     val tempList = mutableListOf<FhirResourceConfig>().apply {
         secondaryResources.forEach { add(it) }
@@ -337,16 +366,17 @@ fun SecondaryResourcesView(secondaryResources: MutableList<FhirResourceConfig>, 
     localSecondaryResources.forEachIndexed { index, item ->
         Button(
             modifier = Modifier.fillMaxWidth(),
+            label = "${index + 1} - Fhir Resource Config",
             onClick = {
-                navigator.pushState(ConfigComponentState.FhirResource(
-                    title = "${index + 1} - Fhir Resource",
-                    fhirResourceConfig = item,
-                    navigator = navigator
-                ))
+                navigator.pushState(
+                    ConfigComponentState.FhirResource(
+                        title = "${index + 1} - Fhir Resource",
+                        fhirResourceConfig = item,
+                        navigator = navigator
+                    )
+                )
             }
-        ) {
-            Text("${index + 1} - Fhir Resource Config")
-        }
+        )
         Spacer(Modifier.height(6.dp))
     }
 
@@ -435,14 +465,14 @@ fun CreateButton(
     text: String,
     onClick: () -> Unit
 ) {
-    ButtonWithIcon(
+    Button(
         modifier = modifier,
-        text = text,
+        label = text,
         icon = Icons.Filled.Add,
-        colors = ButtonDefaults.buttonColors(
+        /*colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.onSecondary
-        ),
+        ),*/
         onClick = onClick
     )
 }

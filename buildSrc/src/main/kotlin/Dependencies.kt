@@ -33,6 +33,8 @@ object Dependencies {
         const val json = "20240303"
         const val prettyTime = "5.0.9.Final"
         const val apacheCommonCollection = "4.5.0-M2"
+        const val apacheCommonCompress = "1.26.2"
+        const val gson = "2.11.0"
     }
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
@@ -41,7 +43,8 @@ object Dependencies {
     const val napier = "io.github.aakira:napier:${Version.napier}"
     const val json = "org.json:json:${Version.json}"
     const val prettyTime = "org.ocpsoft.prettytime:prettytime:${Version.prettyTime}"
-    const val apacheCommonCollection = "org.apache.commons:commons-collections4:${Version.apacheCommonCollection}"
+    const val gson = "com.google.code.gson:gson:${Version.gson}"
+
 
     object KotlinX {
         const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.kotlinXCoroutine}"
@@ -110,8 +113,11 @@ object Dependencies {
             "ca.uhn.hapi.fhir:hapi-fhir-structures-dstu2:${Version.fhirVersion}"
         const val fhirR4 = "ca.uhn.hapi.fhir:org.hl7.fhir.r4:${Version.hapiFhirCore}"
         const val fhirR4B = "ca.uhn.hapi.fhir:org.hl7.fhir.r4b:${Version.hapiFhirCore}"
+        const val validation = "ca.uhn.hapi.fhir:hapi-fhir-validation:${Version.fhirVersion}"
+        const val fhirCoreUtilsModule = "ca.uhn.hapi.fhir:org.hl7.fhir.utilities:${Version.hapiFhirCore}"
+        const val guavaCachingModule = "ca.uhn.hapi.fhir:hapi-fhir-caching-guava:${Version.fhirVersion}"
 
-        fun getAll() = listOf(base, structuresR4, client, structuresDstu2, fhirR4, fhirR4B)
+        fun getAll() = listOf(base, structuresR4, client, structuresDstu2, fhirR4, fhirR4B, validation)
     }
 
     object TreeView {
@@ -126,6 +132,14 @@ object Dependencies {
         const val coroutineExtension = "app.cash.sqldelight:coroutines-extensions:${Version.sqlDelight}"
 
         fun getAll() = listOf(sqliteDriver, coroutineExtension)
+    }
+
+    object ApacheCommon {
+
+        const val collection = "org.apache.commons:commons-collections4:${Version.apacheCommonCollection}"
+        const val compress = "org.apache.commons:commons-compress:${Version.apacheCommonCompress}"
+
+        fun getAll() = listOf(collection, compress)
     }
 }
 

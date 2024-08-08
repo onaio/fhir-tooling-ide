@@ -50,7 +50,7 @@ import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration
 import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
-import org.smartregister.fct.engine.ui.components.ButtonWithIcon
+import org.smartregister.fct.radiance.ui.components.Button
 
 @Composable
 fun ConfigTab(configWrapper: ConfigWrapper) {
@@ -96,8 +96,8 @@ fun ConfigTab(configWrapper: ConfigWrapper) {
                     json = configWrapper.get<RegisterConfiguration>().encodeJson()
                 })
                 Spacer(Modifier.width(12.dp))
-                ButtonWithIcon(
-                    text = "Save",
+                Button(
+                    label = "Save",
                     icon = Icons.Rounded.Save,
                     onClick = {}
                 )
@@ -188,8 +188,8 @@ private fun CopyJsonButton(configWrapper: ConfigWrapper) {
     val snackbarHost = LocalSnackbarHost.current
     val scope = rememberCoroutineScope()
 
-    ButtonWithIcon(
-        text = "Copy JSON",
+    Button(
+        label = "Copy JSON",
         icon = Icons.Rounded.CopyAll,
         onClick = {
             clipboard.setText(AnnotatedString(configWrapper.encodeConfig()))
@@ -202,8 +202,8 @@ private fun CopyJsonButton(configWrapper: ConfigWrapper) {
 
 @Composable
 private fun ViewJSON(onClick: () -> Unit) {
-    ButtonWithIcon(
-        text = "View JSON",
+    Button(
+        label = "View JSON",
         icon = Icons.Rounded.DataObject,
         onClick = onClick
     )

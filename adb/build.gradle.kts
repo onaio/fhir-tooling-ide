@@ -15,5 +15,4 @@ dependencies {
     implementation(Dependencies.KotlinX.coroutine)
     implementation(Dependencies.koin)
     implementation(project(":engine"))
-    implementation(project(":logcat"))
 }

@@ -27,7 +27,6 @@ kotlin {
             implementation(project(":engine"))
             implementation(project(":configs"))
             implementation(project(":adb"))
-            implementation(project(":logcat"))
             implementation(project(":device"))
             implementation(project(":pm"))
             implementation(project(":sm"))

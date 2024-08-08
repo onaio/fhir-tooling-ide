@@ -24,7 +24,10 @@ import kotlinx.coroutines.launch
 import org.smartregister.fct.editor.data.enums.CodeStyle
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.editor.ui.rememberCodeController
-import org.smartregister.fct.engine.ui.components.ButtonWithIcon
+import org.smartregister.fct.radiance.ui.components.Button
+import org.smartregister.fct.radiance.ui.components.ButtonType
+import org.smartregister.fct.radiance.ui.components.OutlinedButton
+import org.smartregister.fct.radiance.ui.components.TextButton
 import org.smartregister.fct.upload.domain.model.FileResult
 
 private val supportedExtension = listOf("json", "map")
@@ -59,21 +62,37 @@ fun rememberFilePicker(
 fun UploadButton(
     modifier: Modifier = Modifier,
     text: String = "Upload",
-    icon: ImageVector = Icons.Outlined.Upload,
+    icon: ImageVector? = null,
     extensions: List<String> = supportedExtension,
+    buttonType: ButtonType = ButtonType.Button,
     onResult: (FileResult) -> Unit
 ) {
 
     val filePicker = rememberFilePicker(extensions, onResult)
+    val buttonClick = { filePicker.launch() }
 
-    ButtonWithIcon(
-        modifier = modifier,
-        text = text,
-        icon = icon,
-        onClick = {
-            filePicker.launch()
-        }
-    )
+    when (buttonType) {
+        ButtonType.Button -> Button(
+            modifier = modifier,
+            label = text,
+            icon = icon,
+            onClick = buttonClick
+        )
+
+        ButtonType.TextButton -> TextButton(
+            modifier = modifier,
+            label = text,
+            icon = icon,
+            onClick = buttonClick
+        )
+
+        ButtonType.OutlineButton -> OutlinedButton(
+            modifier = modifier,
+            label = text,
+            icon = icon,
+            onClick = buttonClick
+        )
+    }
 }
 
 @Composable
@@ -101,7 +120,6 @@ fun UploadFromInputFieldWithFab(
         Box(modifier = Modifier.padding(it)) {
             CodeEditor(
                 modifier = modifier,
-                value = "",
                 codeStyle = codeStyle,
                 controller = controller
             )
@@ -112,22 +130,36 @@ fun UploadFromInputFieldWithFab(
 @Composable
 fun UploadFromInputFieldButtonWithDialog(
     modifier: Modifier = Modifier,
-    text: String = "Upload",
-    icon: ImageVector = Icons.Outlined.Upload,
+    label: String = "Upload",
+    icon: ImageVector? = Icons.Outlined.Upload,
     codeStyle: CodeStyle,
+    buttonType: ButtonType = ButtonType.Button,
     onResult: (String) -> Unit
 ) {
 
     val isShowDialog = remember { mutableStateOf(false) }
+    val clickShowDialog = { isShowDialog.value = true }
 
-    ButtonWithIcon(
-        modifier = modifier,
-        text = text,
-        icon = icon,
-        onClick = {
-            isShowDialog.value = true
-        }
-    )
+    when (buttonType) {
+        ButtonType.Button -> Button(
+            modifier = modifier,
+            label = label,
+            icon = icon,
+            onClick = clickShowDialog
+        )
+        ButtonType.TextButton -> TextButton(
+            modifier = modifier,
+            label = label,
+            icon = icon,
+            onClick = clickShowDialog
+        )
+        ButtonType.OutlineButton -> OutlinedButton(
+            modifier = modifier,
+            label = label,
+            icon = icon,
+            onClick = clickShowDialog
+        )
+    }
 
     if (isShowDialog.value) {
         Dialog(

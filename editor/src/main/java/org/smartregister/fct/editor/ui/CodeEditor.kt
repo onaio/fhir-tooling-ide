@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.smartregister.fct.editor.data.controller.CodeController
@@ -48,6 +50,7 @@ import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
 import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
+import org.smartregister.fct.engine.util.uuid
 
 
 @Composable
@@ -59,14 +62,14 @@ fun rememberCodeController(): CodeController {
 @Composable
 fun CodeEditor(
     modifier: Modifier = Modifier,
-    value: String,
     codeStyle: CodeStyle,
-    controller: CodeController? = null
+    controller: CodeController,
+    key: String = uuid()
 ) {
 
     val showToolbox = remember { mutableStateOf(false) }
     val isDarkTheme = LocalAppSettingViewModel.current.appSetting.isDarkTheme
-    val textFieldValue = remember { mutableStateOf(TextFieldValue(AnnotatedString(value))) }
+    val textFieldValue = remember(key) { mutableStateOf(TextFieldValue(AnnotatedString(controller.getText()))) }
     val searchText = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val focusRequester = FocusRequester()
@@ -85,7 +88,9 @@ fun CodeEditor(
                 value = textFieldValue.value,
                 onValueChange = {
                     textFieldValue.value = it
-                    controller?.setText(scope, it.text)
+                    scope.launch(Dispatchers.IO) {
+                        controller?.setText(it.text)
+                    }
                 },
                 modifier = Modifier
                     .fillMaxSize()

@@ -46,6 +46,7 @@ fun App(subWindowViewModel: SubWindowViewModel) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     bottom.linkTo(bottomWindow.top)
+                    height = Dimension.preferredWrapContent
                 }) {
                     LeftWindow(subWindowViewModel)
                 }

@@ -1,4 +1,4 @@
-package org.smartregister.fct.configs.util.extension
+package org.smartregister.fct.engine.util
 
 import org.hl7.fhir.r4.model.DateTimeType
 import org.hl7.fhir.r4.model.DateType

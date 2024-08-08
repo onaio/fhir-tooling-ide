@@ -51,15 +51,15 @@ class StructureMapScreen : Screen {
     @Composable
     override fun Content() {
 
-        val scope = rememberCoroutineScope()
-        val smTabViewModelsMap = getKoin().get<SMTabViewModelProvider>().tabViewModels
+        val smTabViewModelProvider = getKoin().get<SMTabViewModelProvider>()
+        val smTabViewModelsMap = smTabViewModelProvider.tabViewModels
         val viewModel = getKoin().get<SMViewModel>()
         var tabIndex by remember { mutableStateOf(0) }
         val smDetailList = viewModel.getAllSMList().collectAsState(initial = listOf())
 
         smDetailList.value.forEach { smDetail ->
             if (!smTabViewModelsMap.containsKey(smDetail.id)) {
-                smTabViewModelsMap[smDetail.id] = SMTabViewModel(scope)
+                smTabViewModelsMap[smDetail.id] = SMTabViewModel(smDetail)
             }
         }
 
@@ -120,6 +120,7 @@ class StructureMapScreen : Screen {
                         },
                         selected = index == tabIndex,
                         onClick = {
+                            smTabViewModelProvider.updateActiveTabIndex(index)
                             tabIndex = index
                         }
                     )
@@ -127,15 +128,12 @@ class StructureMapScreen : Screen {
             }
 
             if (smDetailList.value.isNotEmpty() && tabIndex < smDetailList.value.size) {
-                /*  ConfigTabViewModelContainer.activeViewModel =
-                      ConfigTabViewModelContainer.tabViewModels[configs.value[tabIndex].uuid]!!*/
-                //ConfigTab(configs.value[tabIndex])
 
-                val controller = remember { mutableStateOf(CodeController()) }
+                val smTabViewModel = smTabViewModelsMap[smDetailList.value[tabIndex].id]!!
+
                 CodeEditor(
-                    value = smDetailList.value[tabIndex].body,
                     codeStyle = CodeStyle.StructureMap,
-                    controller = controller.value
+                    controller = smTabViewModel.codeController
                 )
             } else {
 
