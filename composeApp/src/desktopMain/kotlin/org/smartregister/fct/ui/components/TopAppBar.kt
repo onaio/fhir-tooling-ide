@@ -54,12 +54,10 @@ import org.jetbrains.compose.resources.painterResource
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.data.locals.LocalWindowViewModel
-import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 
 @Composable
-fun TopAppBar() {
-    val windowViewModel = LocalWindowViewModel.current
+fun TopAppBar(subWindowViewModel: SubWindowViewModel) {
 
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface).fillMaxWidth()) {
         Row(
@@ -73,13 +71,14 @@ fun TopAppBar() {
                 Image(
                     modifier = Modifier.padding(start = 12.dp),
                     painter = painterResource(
-                        Res.drawable.fhir),
+                        Res.drawable.fhir
+                    ),
                     contentDescription = null
                 )
                 Spacer(Modifier.width(18.dp))
                 DeviceSelectionMenu()
                 Spacer(Modifier.width(10.dp))
-                ActivePackageChip(windowViewModel = windowViewModel)
+                ActivePackageChip(subWindowViewModel = subWindowViewModel)
             }
             Row {
                 Box(
@@ -95,7 +94,8 @@ fun TopAppBar() {
                     Image(
                         modifier = Modifier.size(20.dp),
                         painter = painterResource(
-                        Res.drawable.github_icon),
+                            Res.drawable.github_icon
+                        ),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                         contentDescription = null
                     )
@@ -103,7 +103,7 @@ fun TopAppBar() {
             }
         }
         HorizontalDivider(
-           // color = MaterialTheme.colorScheme.background
+            // color = MaterialTheme.colorScheme.background
         )
     }
 }
@@ -124,7 +124,7 @@ private fun DeviceSelectionMenu() {
             .map {
                 it.getDeviceInfo().id
             }.run {
-                if(selectedValue?.getDeviceInfo()?.id !in this) {
+                if (selectedValue?.getDeviceInfo()?.id !in this) {
                     selectedValue = devices[0]
                     DeviceManager.setActiveDevice(selectedValue)
                 }
@@ -214,13 +214,13 @@ private fun DeviceSelectionMenu() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ActivePackageChip(windowViewModel: WindowViewModel) {
+private fun ActivePackageChip(subWindowViewModel: SubWindowViewModel) {
 
     val activePackage by DeviceManager.getActivePackage().collectAsState(initial = null)
 
     Chip(
         onClick = {
-            windowViewModel.setRightWindowState(RightWindowState.PackageManager)
+            subWindowViewModel.setRightWindowState(RightWindowState.PackageManager)
         },
         colors = ChipDefaults.chipColors(
             backgroundColor = MaterialTheme.colorScheme.tertiary
@@ -242,8 +242,8 @@ private fun Device?.getOptionName(): String {
 
 private fun Device?.getInfo(): String {
     return this
-    ?.getDeviceInfo()
-    ?.let {
-        "${it.model} (${it.id}) Android ${it.version}, API ${it.apiLevel}"
-    } ?: "No Device"
+        ?.getDeviceInfo()
+        ?.let {
+            "${it.model} (${it.id}) Android ${it.version}, API ${it.apiLevel}"
+        } ?: "No Device"
 }

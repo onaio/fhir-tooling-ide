@@ -1,6 +1,7 @@
 package org.smartregister.fct.ui.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -65,10 +66,12 @@ fun FCTTheme(
     isDarkModel: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val typography = UbuntuTypography()
+
     MaterialTheme(
         colorScheme = if (isDarkModel) DarkColorScheme else LightColorScheme,
-        typography = UbuntuTypography()
+        typography = typography
     ) {
-        content()
+        ProvideTextStyle(value = typography.bodyMedium, content = content)
     }
 }

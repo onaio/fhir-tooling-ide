@@ -36,19 +36,21 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import org.smartregister.fct.configs.ui.ConfigManagerScreen
+import org.smartregister.fct.engine.data.enums.LeftWindowState
 import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
-import org.smartregister.fct.engine.data.locals.LocalWindowViewModel
-import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
+import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 import org.smartregister.fct.sm.ui.StructureMapScreen
 
 @Composable
 fun LeftNavigation(
     mainNavigator: Navigator?
 ) {
-    Box(modifier = Modifier
-        .width(60.dp)
-        .fillMaxHeight()
-        .background(MaterialTheme.colorScheme.surfaceContainer)
+    Box(
+        modifier = Modifier
+            .width(60.dp)
+            .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
         Row(
             modifier = Modifier.fillMaxSize()
@@ -61,10 +63,11 @@ fun LeftNavigation(
 
 @Composable
 private fun NavigationBar(mainNavigator: Navigator?) {
-    val windowViewModel = LocalWindowViewModel.current
+    val windowViewModel = LocalSubWindowViewModel.current
 
     Column(
-        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface.copy(alpha = 0.2f)).fillMaxHeight(),
+        modifier = Modifier.fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.2f)).fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -78,10 +81,10 @@ private fun NavigationBar(mainNavigator: Navigator?) {
                         navButton.onClick(mainNavigator!!)
                         selectedNav = index
                     },
-                    colors = if(selectedNav == index) IconButtonDefaults.iconButtonColors(
+                    colors = if (selectedNav == index) IconButtonDefaults.iconButtonColors(
                         disabledContainerColor = MaterialTheme.colorScheme.background,
                         disabledContentColor = MaterialTheme.colorScheme.onBackground
-                    ) else  IconButtonDefaults.iconButtonColors()
+                    ) else IconButtonDefaults.iconButtonColors()
                 ) {
                     Icon(navButton.icon, contentDescription = null)
                 }
@@ -110,14 +113,14 @@ private fun ThemeChangerButton() {
 }
 
 
-private fun navigationMenu(windowViewModel: WindowViewModel): List<NavigationButton> {
+private fun navigationMenu(subWindowViewModel: SubWindowViewModel): List<NavigationButton> {
 
     return listOf(
         NavigationButton(
             title = "Manage Configuration",
             icon = Icons.Rounded.Widgets,
             onClick = {
-                //windowViewModel.setLeftWindowState(LeftWindowState.Configs)
+                subWindowViewModel.setLeftWindowState(null)
                 it.popUntilRoot()
             }
         ),
@@ -125,7 +128,7 @@ private fun navigationMenu(windowViewModel: WindowViewModel): List<NavigationBut
             title = "Structure Map Transformation",
             icon = Icons.Rounded.Cyclone,
             onClick = {
-                //windowViewModel.setLeftWindowState(LeftWindowState.StructureMap)
+                subWindowViewModel.setLeftWindowState(LeftWindowState.StructureMap)
                 it.replaceUntilRoot(StructureMapScreen())
             }
         ),

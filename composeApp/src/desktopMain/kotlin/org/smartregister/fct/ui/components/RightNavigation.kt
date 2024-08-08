@@ -19,12 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.engine.data.enums.BottomWindowState
 import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.data.locals.LocalWindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 import org.smartregister.fct.engine.ui.components.SmallIconButton
 
 @Composable
-fun RightNavigation() {
-    val viewModel = LocalWindowViewModel.current
+fun RightNavigation(subWindowViewModel: SubWindowViewModel) {
+
     VerticalDivider()
     Column(
         modifier = Modifier.width(45.dp)
@@ -36,18 +36,18 @@ fun RightNavigation() {
             Spacer(Modifier.height(12.dp))
             SmallIconButton(
                 icon = Icons.Outlined.PhoneAndroid,
-                onClick = { viewModel.setRightWindowState(RightWindowState.DeviceManager) }
+                onClick = { subWindowViewModel.setRightWindowState(RightWindowState.DeviceManager) }
             )
             Spacer(Modifier.height(18.dp))
             SmallIconButton(
                 icon = Icons.AutoMirrored.Outlined.ListAlt,
-                onClick = { viewModel.setRightWindowState(RightWindowState.PackageManager) }
+                onClick = { subWindowViewModel.setRightWindowState(RightWindowState.PackageManager) }
             )
         }
         Column {
             SmallIconButton(
                 icon = Icons.Outlined.ConnectedTv,
-                onClick = { viewModel.setBottomWindowState(BottomWindowState.Logcat) }
+                onClick = { subWindowViewModel.setBottomWindowState(BottomWindowState.Logcat) }
             )
             Spacer(Modifier.height(12.dp))
         }

@@ -20,6 +20,7 @@ import org.smartregister.fct.engine.EngineModuleSetup
 import org.smartregister.fct.engine.data.helper.AppSettingProvide
 import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
+import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
 import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.pm.PMModuleSetup
 import org.smartregister.fct.sm.SMModuleSetup
@@ -53,6 +54,7 @@ fun main() = application {
 
         val appSetting by AppSettingProvide.getAppSetting().flowAsState(initial = AppSetting())
         LocalAppSettingViewModel.current.appSetting = appSetting
+        val subWindowViewModel = LocalSubWindowViewModel.current
 
         FCTTheme(
             isDarkModel = appSetting.isDarkTheme
@@ -61,11 +63,11 @@ fun main() = application {
                 snackbarHost = {
                     SnackbarHost(LocalSnackbarHost.current)
                 },
-                topBar = { TopAppBar() },
+                topBar = { TopAppBar(subWindowViewModel) },
                 bottomBar = { BottomBar() }
             ) {
                 Box(modifier = Modifier.padding(it)) {
-                    App()
+                    App(subWindowViewModel)
                 }
             }
         }

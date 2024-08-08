@@ -11,14 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.device.ui.DeviceManagerWindow
 import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.pm.ui.PackageManagerWindow
 
 @Composable
-fun RightWindow(viewModel: WindowViewModel) {
+fun RightWindow(subWindowViewModel: SubWindowViewModel) {
 
-    val windowState by viewModel.getRightWindowState().collectAsState(initial = null)
+    val windowState by subWindowViewModel.getRightWindowState().collectAsState(initial = null)
     if (windowState != null) {
         Row(modifier = Modifier.width(400.dp).fillMaxHeight()) {
             VerticalDivider()

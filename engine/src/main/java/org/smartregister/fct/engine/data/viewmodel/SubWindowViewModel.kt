@@ -10,7 +10,7 @@ import org.smartregister.fct.engine.data.enums.LeftWindowState
 import org.smartregister.fct.engine.data.enums.RightWindowState
 
 
-class WindowViewModel {
+class SubWindowViewModel {
 
     private val leftWindowState = MutableStateFlow<LeftWindowState?>(null)
     private val rightWindowState = MutableStateFlow<RightWindowState?>(null)

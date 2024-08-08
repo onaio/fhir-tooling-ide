@@ -10,27 +10,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.engine.data.enums.BottomWindowState
-import org.smartregister.fct.engine.data.viewmodel.WindowViewModel
+import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.logcat.ui.LogcatWindow
 
 @Composable
-fun BottomWindow(viewModel: WindowViewModel) {
+fun BottomWindow(subWindowViewModel: SubWindowViewModel) {
 
-    val windowState by viewModel.getBottomWindowState().collectAsState(initial = null)
+    val windowState by subWindowViewModel.getBottomWindowState().collectAsState(initial = null)
 
     if (windowState != null) {
         Column(modifier = Modifier.height(200.dp).fillMaxWidth()) {
             HorizontalDivider()
 
-            when(windowState) {
+            when (windowState) {
                 BottomWindowState.Logcat -> {
-                    LogcatWindow(
-                        onClose = {
-                            viewModel.setBottomWindowState(BottomWindowState.Logcat)
-                        }
-                    )
+                    LogcatWindow(onClose = {
+                        subWindowViewModel.setBottomWindowState(BottomWindowState.Logcat)
+                    })
                 }
+
                 else -> FCTLogger.e(IllegalStateException("Unknown State"))
             }
         }
