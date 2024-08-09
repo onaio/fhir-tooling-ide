@@ -1,23 +1,30 @@
 package org.smartregister.fct.sm.data.provider
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.smartregister.fct.sm.data.viewmodel.SMTabViewModel
+import org.smartregister.fct.sm.domain.model.SMDetail
 
 class SMTabViewModelProvider {
-    private var activeTabIndex = 0
-    val tabViewModels = mutableMapOf<String, SMTabViewModel>()
 
-    fun updateActiveTabIndex(tabIndex: Int) {
-        activeTabIndex = tabIndex
+    private val activeSMTabViewModel = MutableStateFlow<SMTabViewModel?>(null)
+    private val tabViewModels = mutableMapOf<String, SMTabViewModel>()
+
+    fun addSMTabViewModel(smDetail: SMDetail) {
+        if (!tabViewModels.containsKey(smDetail.id)) {
+            tabViewModels[smDetail.id] = SMTabViewModel(smDetail)
+        }
     }
 
-    fun getActiveSMTabViewModel() : SMTabViewModel? {
-        return tabViewModels
-            .entries
-            .mapIndexed { index, mutableEntry ->
-                if (index == activeTabIndex) {
-                    mutableEntry.value
-                } else null
-            }
-            .firstOrNull()
+    fun getSMTabViewModelsMap () : Map<String, SMTabViewModel> = tabViewModels
+
+    fun removeSMTabViewModel(id: String) {
+        tabViewModels.remove(id)
     }
+
+    suspend fun updateActiveSMTabViewModel (id: String) {
+        activeSMTabViewModel.emit(tabViewModels[id])
+    }
+
+    fun getActiveSMTabViewModel() : StateFlow<SMTabViewModel?> = activeSMTabViewModel
 }

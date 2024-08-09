@@ -33,15 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.getKoin
-import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.CodeStyle
 import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.engine.ui.components.Tab
-import org.smartregister.fct.engine.ui.components.TabRow
-import org.smartregister.fct.engine.ui.components.rememberConfirmationDialog
+import org.smartregister.fct.radiance.ui.components.Tab
+import org.smartregister.fct.radiance.ui.components.TabRow
+import org.smartregister.fct.radiance.ui.components.dialog.rememberConfirmationDialog
 import org.smartregister.fct.sm.data.provider.SMTabViewModelProvider
-import org.smartregister.fct.sm.data.viewmodel.SMTabViewModel
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.ui.components.SMUploadButton
@@ -51,15 +50,19 @@ class StructureMapScreen : Screen {
     @Composable
     override fun Content() {
 
-        val smTabViewModelProvider = getKoin().get<SMTabViewModelProvider>()
-        val smTabViewModelsMap = smTabViewModelProvider.tabViewModels
+        val scope = rememberCoroutineScope()
         val viewModel = getKoin().get<SMViewModel>()
+        val smTabViewModelProvider = getKoin().get<SMTabViewModelProvider>()
         var tabIndex by remember { mutableStateOf(0) }
         val smDetailList = viewModel.getAllSMList().collectAsState(initial = listOf())
 
-        smDetailList.value.forEach { smDetail ->
-            if (!smTabViewModelsMap.containsKey(smDetail.id)) {
-                smTabViewModelsMap[smDetail.id] = SMTabViewModel(smDetail)
+        smDetailList.value.forEachIndexed { index, smDetail ->
+            smTabViewModelProvider.addSMTabViewModel(smDetail)
+
+            LaunchedEffect(null) {
+                if (index == 0) {
+                    smTabViewModelProvider.updateActiveSMTabViewModel(smDetail.id)
+                }
             }
         }
 
@@ -68,7 +71,7 @@ class StructureMapScreen : Screen {
             message = "Are you sure you want to delete this structure-map?"
         ) { smDetail ->
             smDetail?.run {
-                smTabViewModelsMap.remove(smDetail.id)
+                smTabViewModelProvider.removeSMTabViewModel(smDetail.id)
                 viewModel.delete(smDetail.id)
             }
         }
@@ -120,48 +123,52 @@ class StructureMapScreen : Screen {
                         },
                         selected = index == tabIndex,
                         onClick = {
-                            smTabViewModelProvider.updateActiveTabIndex(index)
-                            tabIndex = index
+                            scope.launch {
+                                smTabViewModelProvider.updateActiveSMTabViewModel(smDetail.id)
+                                tabIndex = index
+                            }
                         }
                     )
                 }
             }
 
-            if (smDetailList.value.isNotEmpty() && tabIndex < smDetailList.value.size) {
+            val activeSMTabViewModel by smTabViewModelProvider.getActiveSMTabViewModel().collectAsState()
 
-                val smTabViewModel = smTabViewModelsMap[smDetailList.value[tabIndex].id]!!
-
-                CodeEditor(
-                    codeStyle = CodeStyle.StructureMap,
-                    controller = smTabViewModel.codeController
-                )
-            } else {
-
-                var showButton by remember { mutableStateOf(false) }
-
-                AnimatedVisibility(
-                    modifier = Modifier.fillMaxSize(),
-                    visible = showButton,
-                    enter = fadeIn(
-                        animationSpec = tween(
-                            durationMillis = 1000,
-                            easing = LinearEasing
-                        )
+            activeSMTabViewModel
+                ?.let { smTabViewModel ->
+                    CodeEditor(
+                        codeStyle = CodeStyle.StructureMap,
+                        controller = smTabViewModel.codeController
                     )
-                ) {
-                    Box(Modifier.fillMaxSize()) {
-                        SMUploadButton(
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                }
-
-                LaunchedEffect(showButton) {
-                    delay(300)
-                    showButton = true
-                }
-            }
+            } ?: SMUploadButton()
         }
     }
 
+}
+
+@Composable
+private fun UploadSMButton() {
+    var showButton by remember { mutableStateOf(false) }
+
+    AnimatedVisibility(
+        modifier = Modifier.fillMaxSize(),
+        visible = showButton,
+        enter = fadeIn(
+            animationSpec = tween(
+                durationMillis = 1000,
+                easing = LinearEasing
+            )
+        )
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            SMUploadButton(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    }
+
+    LaunchedEffect(showButton) {
+        delay(300)
+        showButton = true
+    }
 }

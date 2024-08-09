@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import org.smartregister.fct.engine.data.enums.BottomWindowState
 import org.smartregister.fct.engine.data.enums.RightWindowState
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
-import org.smartregister.fct.engine.ui.components.SmallIconButton
+import org.smartregister.fct.radiance.ui.components.SmallIconButton
 
 @Composable
 fun RightNavigation(subWindowViewModel: SubWindowViewModel) {

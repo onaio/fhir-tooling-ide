@@ -8,4 +8,6 @@ plugins {
 
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
+
+    api("io.github.alexzhirkevich:compottie:2.0.0-beta02")
 }

@@ -48,13 +48,15 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import fct.composeapp.generated.resources.Res
-import fct.composeapp.generated.resources.fhir
 import fct.composeapp.generated.resources.github_icon
+import io.github.alexzhirkevich.compottie.Compottie
+import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import org.jetbrains.compose.resources.painterResource
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.engine.data.enums.RightWindowState
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
+import org.smartregister.fct.radiance.ui.components.getLottieFireComposition
 
 @Composable
 fun TopAppBar(subWindowViewModel: SubWindowViewModel) {
@@ -68,13 +70,16 @@ fun TopAppBar(subWindowViewModel: SubWindowViewModel) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Image(
-                    modifier = Modifier.padding(start = 12.dp),
-                    painter = painterResource(
-                        Res.drawable.fhir
+                    modifier = Modifier.height(24.dp).padding(start = 12.dp),
+                    painter = rememberLottiePainter(
+                        composition = getLottieFireComposition(),
+                        iterations = Compottie.IterateForever
                     ),
                     contentDescription = null
                 )
+
                 Spacer(Modifier.width(18.dp))
                 DeviceSelectionMenu()
                 Spacer(Modifier.width(10.dp))

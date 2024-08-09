@@ -9,10 +9,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.koin.java.KoinJavaComponent.getKoin
-import org.smartregister.fct.engine.ui.components.rememberSingleFieldDialog
 import org.smartregister.fct.engine.util.compress
 import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.radiance.ui.components.ButtonType
+import org.smartregister.fct.radiance.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.model.SMDetail
 

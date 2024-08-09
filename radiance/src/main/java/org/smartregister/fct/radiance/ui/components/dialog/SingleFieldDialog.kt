@@ -1,9 +1,8 @@
-package org.smartregister.fct.engine.ui.components
+package org.smartregister.fct.radiance.ui.components.dialog
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -17,14 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.smartregister.fct.engine.domain.model.ConfirmationDialogResult
-import org.smartregister.fct.engine.domain.model.SingleFieldDialogResult
-import org.smartregister.fct.engine.util.uuid
-
+import org.smartregister.fct.radiance.domain.model.SingleFieldDialogResult
+import java.util.UUID
 
 @Composable
 fun rememberSingleFieldDialog(
@@ -35,7 +31,7 @@ fun rememberSingleFieldDialog(
     isCancellable: Boolean = true,
     placeholder: String = "",
     maxLength: Int = 40,
-    key: Any? = uuid(),
+    key: Any? = UUID.randomUUID().toString(),
     onResult: suspend CoroutineScope.(String) -> Unit
 ): SingleFieldDialogResult {
 
@@ -73,7 +69,7 @@ internal fun SingleFieldDialog(
     isCancellable: Boolean = true,
     placeholder: String = "",
     maxLength: Int = 40,
-    key: Any? = uuid(),
+    key: Any? = UUID.randomUUID().toString(),
     onResult: suspend CoroutineScope.(String) -> Unit
 ) {
 
@@ -140,102 +136,4 @@ internal fun SingleFieldDialog(
             focusResult.requestFocus()
         }
     }
-}
-
-@Composable
-fun <T> rememberConfirmationDialog(
-    modifier: Modifier = Modifier,
-    title: String? = null,
-    message: String,
-    confirmButtonLabel: String = "Yes",
-    cancelButtonLabel: String = "No",
-    isCancellable: Boolean = true,
-    icon: ImageVector? = null,
-    onConfirmed: suspend CoroutineScope.(T?) -> Unit
-): ConfirmationDialogResult<T> {
-
-    val isShowDialog = remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-
-    val confirmationDialogResult = remember {
-        ConfirmationDialogResult<T> {
-            isShowDialog.value = true
-        }
-    }
-
-    ConfirmationDialog(
-        isShowDialog = isShowDialog,
-        modifier = modifier,
-        title = title,
-        message = message,
-        confirmButtonLabel = confirmButtonLabel,
-        cancelButtonLabel = cancelButtonLabel,
-        isCancellable = isCancellable,
-        icon = icon,
-        onConfirmed = {
-            scope.launch {
-                onConfirmed(confirmationDialogResult.extra)
-            }
-        }
-    )
-
-    return confirmationDialogResult
-}
-
-@Composable
-internal fun ConfirmationDialog(
-    isShowDialog: MutableState<Boolean>,
-    modifier: Modifier = Modifier,
-    title: String? = null,
-    message: String,
-    confirmButtonLabel: String = "Yes",
-    cancelButtonLabel: String = "No",
-    isCancellable: Boolean = true,
-    icon: ImageVector? = null,
-    onConfirmed: () -> Unit
-) {
-
-    if (isShowDialog.value) {
-        AlertDialog(
-            modifier = modifier,
-            icon = {
-                icon?.run {
-                    Icon(this, contentDescription = null)
-                }
-
-            },
-            title = {
-                title?.run {
-                    Text(this)
-                }
-
-            },
-            text = {
-                Text(message)
-            },
-            onDismissRequest = { isShowDialog.value = !isCancellable },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        isShowDialog.value = false
-                        onConfirmed()
-                    }
-                ) {
-                    Text(confirmButtonLabel)
-                }
-            },
-            dismissButton = {
-                if (isCancellable) {
-                    TextButton(
-                        onClick = {
-                            isShowDialog.value = false
-                        }
-                    ) {
-                        Text(cancelButtonLabel)
-                    }
-                }
-            }
-        )
-    }
-
 }

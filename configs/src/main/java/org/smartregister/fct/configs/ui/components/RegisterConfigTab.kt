@@ -51,7 +51,7 @@ import org.smartregister.fct.configs.domain.model.FhirResourceConfig
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration
 import org.smartregister.fct.configs.domain.model.ResourceConfig
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.engine.ui.components.MiddleEllipsisText
+import org.smartregister.fct.radiance.ui.components.MiddleEllipsisText
 import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.radiance.ui.components.Button
 

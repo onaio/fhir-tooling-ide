@@ -52,8 +52,8 @@ import org.smartregister.fct.configs.domain.model.ConfigType
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.ui.components.ConfigTab
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.engine.ui.components.Tab
-import org.smartregister.fct.engine.ui.components.TabRow
+import org.smartregister.fct.radiance.ui.components.Tab
+import org.smartregister.fct.radiance.ui.components.TabRow
 import org.smartregister.fct.engine.util.compress
 
 class ConfigManagerScreen : Screen {

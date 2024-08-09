@@ -1,4 +1,4 @@
-package org.smartregister.fct.engine.ui.components
+package org.smartregister.fct.radiance.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource

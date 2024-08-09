@@ -1,7 +1,5 @@
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.FloatingActionButton
@@ -9,13 +7,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import io.github.vinceglb.filekit.compose.PickerResultLauncher
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
@@ -28,6 +24,7 @@ import org.smartregister.fct.radiance.ui.components.Button
 import org.smartregister.fct.radiance.ui.components.ButtonType
 import org.smartregister.fct.radiance.ui.components.OutlinedButton
 import org.smartregister.fct.radiance.ui.components.TextButton
+import org.smartregister.fct.radiance.ui.components.dialog.rememberDialogController
 import org.smartregister.fct.upload.domain.model.FileResult
 
 private val supportedExtension = listOf("json", "map")
@@ -98,17 +95,20 @@ fun UploadButton(
 @Composable
 fun UploadFromInputFieldWithFab(
     modifier: Modifier = Modifier,
+    initial: String = "",
     codeStyle: CodeStyle,
     onResult: (String) -> Unit
 ) {
 
-    val controller = rememberCodeController()
+    val controller = rememberCodeController(initial)
 
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onResult(controller.getText()) },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Upload,
@@ -130,15 +130,33 @@ fun UploadFromInputFieldWithFab(
 @Composable
 fun UploadFromInputFieldButtonWithDialog(
     modifier: Modifier = Modifier,
+    title: String,
     label: String = "Upload",
     icon: ImageVector? = Icons.Outlined.Upload,
+    initial: String = "",
     codeStyle: CodeStyle,
     buttonType: ButtonType = ButtonType.Button,
+    dialogWidth: Dp = 1200.dp,
+    dialogHeight: Dp = 700.dp,
     onResult: (String) -> Unit
 ) {
 
-    val isShowDialog = remember { mutableStateOf(false) }
-    val clickShowDialog = { isShowDialog.value = true }
+    val dialogController = rememberDialogController(
+        title = title,
+        width = dialogWidth,
+        height = dialogHeight,
+    ) {controller ->
+
+        UploadFromInputFieldWithFab(
+            initial = initial,
+            codeStyle = codeStyle,
+        ) {
+            controller.hide()
+            onResult(it)
+        }
+    }
+
+    val clickShowDialog = { dialogController.show() }
 
     when (buttonType) {
         ButtonType.Button -> Button(
@@ -161,20 +179,4 @@ fun UploadFromInputFieldButtonWithDialog(
         )
     }
 
-    if (isShowDialog.value) {
-        Dialog(
-            onDismissRequest = {
-                isShowDialog.value = false
-            },
-        ) {
-            UploadFromInputFieldWithFab(
-                modifier = modifier.border(1.dp, MaterialTheme.colorScheme.primary)
-                    .size(width = 1000.dp, height = 600.dp),
-                codeStyle = codeStyle,
-            ) {
-                isShowDialog.value = false
-                onResult(it)
-            }
-        }
-    }
 }

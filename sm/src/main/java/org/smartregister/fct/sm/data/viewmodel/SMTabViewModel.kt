@@ -10,6 +10,6 @@ import org.smartregister.fct.sm.domain.model.SMDetail
 class SMTabViewModel(
     var smDetail: SMDetail,
     val codeController: CodeController = CodeController(smDetail.body),
-    var inputResource: Resource? = null
+    val inputResource: MutableStateFlow<Resource?> = MutableStateFlow(null)
 ) {
 }

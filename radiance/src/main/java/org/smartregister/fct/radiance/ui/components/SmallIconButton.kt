@@ -1,4 +1,4 @@
-package org.smartregister.fct.engine.ui.components
+package org.smartregister.fct.radiance.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,11 +15,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SmallIconButton(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     onClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             //.minimumInteractiveComponentSize()
             .width(22.dp)
             .clickable(

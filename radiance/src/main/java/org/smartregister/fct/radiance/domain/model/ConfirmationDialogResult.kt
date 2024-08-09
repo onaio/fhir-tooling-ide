@@ -1,4 +1,4 @@
-package org.smartregister.fct.engine.domain.model
+package org.smartregister.fct.radiance.domain.model
 
 class ConfirmationDialogResult<T>(internal val onShow: (extra: T?) -> Unit) {
 

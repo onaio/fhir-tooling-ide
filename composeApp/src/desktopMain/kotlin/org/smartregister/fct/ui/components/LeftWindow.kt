@@ -26,7 +26,7 @@ fun LeftWindow(subWindowViewModel: SubWindowViewModel) {
     if (windowState != null) {
         Row(
             modifier = Modifier
-                .width(190.dp)
+                .width(200.dp)
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f))
         ) {
