@@ -11,6 +11,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.configs.ui.components.ConfigOptionsWindow
@@ -24,7 +25,7 @@ fun LeftWindow(subWindowViewModel: SubWindowViewModel) {
 
     val windowState by subWindowViewModel.getLeftWindowState().collectAsState(initial = null)
     if (windowState != null) {
-        Row(
+        Box(
             modifier = Modifier
                 .width(200.dp)
                 .fillMaxHeight()
@@ -37,7 +38,7 @@ fun LeftWindow(subWindowViewModel: SubWindowViewModel) {
                     else -> FCTLogger.e(IllegalStateException("Unknown State"))
                 }
             }
-            VerticalDivider()
+            VerticalDivider(modifier = Modifier.align(Alignment.CenterEnd))
         }
     }
 

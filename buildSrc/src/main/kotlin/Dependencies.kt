@@ -23,27 +23,26 @@ object Dependencies {
         const val voyager = "1.1.0-beta02"
         const val fhirVersion = "6.8.0"
         const val hapiFhirCore = "6.0.22"
-        const val bonsai = "1.2.0"
         const val koin = "3.6.0-Beta5"
         const val sqlDelight = "2.0.2"
         const val fileKitCompose = "0.7.0"
         const val kScriptTool = "1.0.22"
         const val constraintLayoutCompose = "0.4.0"
-        const val napier = "2.7.1"
         const val json = "20240303"
         const val prettyTime = "5.0.9.Final"
         const val apacheCommonCollection = "4.5.0-M2"
         const val apacheCommonCompress = "1.26.2"
         const val gson = "2.11.0"
+        const val compottie = "2.0.0-beta02"
     }
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
     const val kScriptTool = "com.sealwu:kscript-tools:${Version.kScriptTool}"
     const val koin = "io.insert-koin:koin-core:${Version.koin}"
-    const val napier = "io.github.aakira:napier:${Version.napier}"
     const val json = "org.json:json:${Version.json}"
     const val prettyTime = "org.ocpsoft.prettytime:prettytime:${Version.prettyTime}"
     const val gson = "com.google.code.gson:gson:${Version.gson}"
+    const val compottie = "io.github.alexzhirkevich:compottie:${Version.compottie}"
 
 
     object KotlinX {
@@ -118,13 +117,6 @@ object Dependencies {
         const val guavaCachingModule = "ca.uhn.hapi.fhir:hapi-fhir-caching-guava:${Version.fhirVersion}"
 
         fun getAll() = listOf(base, structuresR4, client, structuresDstu2, fhirR4, fhirR4B, validation)
-    }
-
-    object TreeView {
-        const val core = "cafe.adriel.bonsai:bonsai-core:${Version.bonsai}"
-        const val json = "cafe.adriel.bonsai:bonsai-json:${Version.bonsai}"
-
-        fun getAll() = listOf(core, json)
     }
 
     object SqlDelight {

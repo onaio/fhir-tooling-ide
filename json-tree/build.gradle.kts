@@ -4,9 +4,10 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinJvm)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jsonSerialization)
 }
 
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
-    api(Dependencies.compottie)
+    implementation(Dependencies.KotlinX.serializationJson)
 }

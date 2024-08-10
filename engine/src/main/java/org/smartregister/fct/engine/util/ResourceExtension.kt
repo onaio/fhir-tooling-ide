@@ -21,7 +21,7 @@ import java.util.Locale
 const val REFERENCE = "reference"
 const val PARTOF = "part-of"
 
-private val fhirR4JsonParser = FhirContext.forR4Cached().newJsonParser()
+private val fhirR4JsonParser = FhirContext.forR4Cached().newJsonParser().setPrettyPrint(true)
 
 fun Base?.valueToString(datePattern: String = "dd-MMM-yyyy"): String {
     return when {

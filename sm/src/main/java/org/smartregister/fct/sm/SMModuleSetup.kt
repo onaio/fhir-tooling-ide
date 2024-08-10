@@ -5,7 +5,6 @@ import org.koin.dsl.module
 import org.smartregister.fct.database.Database
 import org.smartregister.fct.engine.ModuleSetup
 import org.smartregister.fct.sm.data.datasource.SMSqlDelightDataSource
-import org.smartregister.fct.sm.data.provider.SMTabViewModelProvider
 import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository
 import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
@@ -26,7 +25,6 @@ class SMModuleSetup : ModuleSetup {
         single<UpdateSM> { UpdateSM(get()) }
         single<DeleteSM> { DeleteSM(get()) }
         single<SMViewModel> { SMViewModel() }
-        single<SMTabViewModelProvider> { SMTabViewModelProvider() }
         single<SMTransformService> { SMTransformService() }
     }
 

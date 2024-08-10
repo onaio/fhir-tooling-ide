@@ -2,9 +2,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Upload
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,6 +19,7 @@ import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.editor.ui.rememberCodeController
 import org.smartregister.fct.radiance.ui.components.Button
 import org.smartregister.fct.radiance.ui.components.ButtonType
+import org.smartregister.fct.radiance.ui.components.FloatingActionIconButton
 import org.smartregister.fct.radiance.ui.components.OutlinedButton
 import org.smartregister.fct.radiance.ui.components.TextButton
 import org.smartregister.fct.radiance.ui.components.dialog.rememberDialogController
@@ -105,16 +103,10 @@ fun UploadFromInputFieldWithFab(
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(
+            FloatingActionIconButton(
+                icon = Icons.Outlined.Upload,
                 onClick = { onResult(controller.getText()) },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Upload,
-                    contentDescription = null
-                )
-            }
+            )
         }
     ) {
         Box(modifier = Modifier.padding(it)) {
@@ -145,7 +137,7 @@ fun UploadFromInputFieldButtonWithDialog(
         title = title,
         width = dialogWidth,
         height = dialogHeight,
-    ) {controller ->
+    ) { controller ->
 
         UploadFromInputFieldWithFab(
             initial = initial,
@@ -165,12 +157,14 @@ fun UploadFromInputFieldButtonWithDialog(
             icon = icon,
             onClick = clickShowDialog
         )
+
         ButtonType.TextButton -> TextButton(
             modifier = modifier,
             label = label,
             icon = icon,
             onClick = clickShowDialog
         )
+
         ButtonType.OutlineButton -> OutlinedButton(
             modifier = modifier,
             label = label,

@@ -34,7 +34,8 @@ fun SMUploadButton(
             SMDetail(
                 id = uuid(),
                 title = title,
-                body = smData.value.compress()
+                body = smData.value,
+                source = ""
             )
         )
         smData.value = ""

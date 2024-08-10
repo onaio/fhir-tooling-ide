@@ -10,6 +10,7 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
+    //Dependencies.TreeView.getAll().forEach(::api)
 
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.SqlDelight.coroutineExtension)
@@ -19,4 +20,5 @@ dependencies {
     api(Dependencies.koin)
     api(project(":logcat"))
     api(project(":radiance"))
+    api(project(":json-tree"))
 }

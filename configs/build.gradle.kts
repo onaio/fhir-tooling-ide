@@ -11,7 +11,6 @@ dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     Dependencies.Voyager.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
-    Dependencies.TreeView.getAll().forEach(::implementation)
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.koin)

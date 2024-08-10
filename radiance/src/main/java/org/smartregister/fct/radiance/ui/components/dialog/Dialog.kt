@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -85,7 +86,7 @@ internal fun Dialog(
             ) {
                 Box(
                     modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(12.dp)
+                        .padding(horizontal = 14.dp, vertical = 10.dp)
                         .fillMaxWidth(),
                 ) {
                     Text(
@@ -96,12 +97,13 @@ internal fun Dialog(
 
                     if (cancelable) {
                         SmallIconButton(
-                            modifier = Modifier.align(Alignment.CenterEnd),
+                            modifier = Modifier.width(18.dp).align(Alignment.CenterEnd),
                             icon = Icons.Outlined.Close,
                             onClick = { isShowDialog.value = false }
                         )
                     }
                 }
+                HorizontalDivider()
 
                 var bodyModifier = Modifier.background(MaterialTheme.colorScheme.background).fillMaxWidth()
                 if (height != null) bodyModifier = bodyModifier.height(height)

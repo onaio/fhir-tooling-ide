@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import cafe.adriel.bonsai.core.Bonsai
-import cafe.adriel.bonsai.json.JsonBonsaiStyle
-import cafe.adriel.bonsai.json.JsonTree
+import org.smartregister.fct.json.JsonTreeView
+import org.smartregister.fct.json.JsonStyle
+import org.smartregister.fct.json.JsonTree
 import kotlinx.coroutines.launch
 import org.smartregister.fct.configs.data.viewmodel.ConfigTabViewModelContainer
 import org.smartregister.fct.configs.domain.model.ConfigType
@@ -120,10 +120,10 @@ fun ConfigTab(configWrapper: ConfigWrapper) {
             },
             text = {
                 if(treeSwitch) {
-                    Bonsai(
+                    JsonTreeView(
                         modifier = Modifier.fillMaxSize(),
                         tree = jsonTree,
-                        style = JsonBonsaiStyle()
+                        style = JsonStyle(MaterialTheme.colorScheme)
                     )
                     LaunchedEffect(null) {
                         jsonTree.expandRoot()

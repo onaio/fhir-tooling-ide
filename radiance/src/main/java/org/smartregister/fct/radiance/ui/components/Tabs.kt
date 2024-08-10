@@ -14,8 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.Tab as MaterialTab
-import androidx.compose.material3.TabRow as MaterialTabRow
+import androidx.compose.material3.Tab as Mat3Tab
+import androidx.compose.material3.TabRow as Mat3TabRow
+import androidx.compose.material3.ScrollableTabRow as Mat3ScrollableTabRow
 
 @Composable
 fun TabRow(
@@ -37,7 +38,38 @@ fun TabRow(
     },
     tabs: @Composable () -> Unit
 ) {
-    MaterialTabRow(
+    Mat3TabRow(
+        selectedTabIndex = selectedTabIndex,
+        modifier = modifier,
+        containerColor = containerColor,
+        contentColor = contentColor,
+        indicator = indicator,
+        divider = divider,
+        tabs = tabs
+    )
+}
+
+@Composable
+fun ScrollableTabRow(
+    selectedTabIndex: Int,
+    modifier: Modifier = Modifier,
+    containerColor: Color = TabRowDefaults.primaryContainerColor,
+    contentColor: Color = TabRowDefaults.primaryContentColor,
+    indicator: @Composable (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
+        if (selectedTabIndex < tabPositions.size) {
+            TabRowDefaults.SecondaryIndicator(
+                Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                color = MaterialTheme.colorScheme.primary,
+                height = 2.dp
+            )
+        }
+    },
+    divider: @Composable () -> Unit = @Composable {
+        HorizontalDivider()
+    },
+    tabs: @Composable () -> Unit
+) {
+    Mat3ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
         modifier = modifier,
         containerColor = containerColor,
@@ -60,7 +92,7 @@ fun Tab(
     unselectedContentColor: Color = selectedContentColor,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    MaterialTab(
+    Mat3Tab(
         selected = selected,
         onClick = onClick,
         modifier = modifier.height(40.dp).background(if (selected) MaterialTheme.colorScheme.surfaceContainer else MaterialTheme.colorScheme.surface),
