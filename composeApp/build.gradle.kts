@@ -27,9 +27,9 @@ kotlin {
             implementation(project(":engine"))
             implementation(project(":configs"))
             implementation(project(":adb"))
-            implementation(project(":device"))
-            implementation(project(":pm"))
-            implementation(project(":sm"))
+            implementation(project(":device-manager"))
+            implementation(project(":package-manager"))
+            implementation(project(":structure-map"))
         }
 
         desktopMain.dependencies {

@@ -29,15 +29,14 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-include(":device")
+include(":device-manager")
 include(":adb")
 include(":logcat")
 include(":configs")
 include(":database")
 include(":engine")
-include(":pm")
-include(":pm")
-include(":sm")
+include(":package-manager")
+include(":structure-map")
 include(":editor")
 include(":upload")
 include(":radiance")
