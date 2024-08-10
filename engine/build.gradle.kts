@@ -19,6 +19,6 @@ dependencies {
 
     api(Dependencies.koin)
     api(project(":logcat"))
-    api(project(":radiance"))
+    api(project(":aurora"))
     api(project(":json-tree"))
 }

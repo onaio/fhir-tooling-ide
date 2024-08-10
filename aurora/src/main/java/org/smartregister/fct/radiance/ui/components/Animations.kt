@@ -2,7 +2,7 @@ package org.smartregister.fct.radiance.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import fct.radiance.generated.resources.Res
+import fct.aurora.generated.resources.Res
 import io.github.alexzhirkevich.compottie.LottieComposition
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
