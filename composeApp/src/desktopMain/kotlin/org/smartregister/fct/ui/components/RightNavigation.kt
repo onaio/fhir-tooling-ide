@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ListAlt
 import androidx.compose.material.icons.outlined.ConnectedTv
+import androidx.compose.material.icons.outlined.Insights
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
@@ -42,6 +43,11 @@ fun RightNavigation(subWindowViewModel: SubWindowViewModel) {
             SmallIconButton(
                 icon = Icons.AutoMirrored.Outlined.ListAlt,
                 onClick = { subWindowViewModel.setRightWindowState(RightWindowState.PackageManager) }
+            )
+            Spacer(Modifier.height(18.dp))
+            SmallIconButton(
+                icon = Icons.Outlined.Insights,
+                onClick = {  }
             )
         }
         Column {

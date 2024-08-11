@@ -12,14 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Cyclone
+import androidx.compose.material.icons.outlined.Cyclone
+import androidx.compose.material.icons.outlined.DataObject
+import androidx.compose.material.icons.outlined.Dataset
+import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.MoveDown
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Token
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.rounded.DarkMode
-import androidx.compose.material.icons.rounded.Dataset
-import androidx.compose.material.icons.rounded.Insights
 import androidx.compose.material.icons.rounded.LightMode
-import androidx.compose.material.icons.rounded.MoveDown
-import androidx.compose.material.icons.rounded.Widgets
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +42,7 @@ import org.smartregister.fct.engine.data.enums.LeftWindowState
 import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
+import org.smartregister.fct.radiance.ui.components.Icon
 import org.smartregister.fct.sm.ui.StructureMapScreen
 
 @Composable
@@ -86,7 +89,8 @@ private fun NavigationBar(mainNavigator: Navigator?) {
                         disabledContentColor = MaterialTheme.colorScheme.onTertiaryContainer
                     ) else IconButtonDefaults.iconButtonColors()
                 ) {
-                    Icon(navButton.icon, contentDescription = null)
+                    Icon(icon = navButton.icon)
+
                 }
             }
         }
@@ -108,7 +112,7 @@ private fun ThemeChangerButton() {
         }
     ) {
         val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
-        Icon(icon, contentDescription = null)
+        Icon(icon = icon)
     }
 }
 
@@ -118,7 +122,7 @@ private fun navigationMenu(subWindowViewModel: SubWindowViewModel): List<Navigat
     return listOf(
         NavigationButton(
             title = "Manage Configuration",
-            icon = Icons.Rounded.Widgets,
+            icon = Icons.Outlined.Widgets,
             onClick = {
                 subWindowViewModel.setLeftWindowState(null)
                 it.popUntilRoot()
@@ -126,25 +130,40 @@ private fun navigationMenu(subWindowViewModel: SubWindowViewModel): List<Navigat
         ),
         NavigationButton(
             title = "Structure Map Transformation",
-            icon = Icons.Rounded.Cyclone,
+            icon = Icons.Outlined.MoveDown,
             onClick = {
                 subWindowViewModel.setLeftWindowState(LeftWindowState.StructureMap)
                 it.replaceUntilRoot(StructureMapScreen())
             }
         ),
         NavigationButton(
+            title = "Careplan Generation",
+            icon = Icons.Outlined.Cyclone,
+            onClick = {}
+        ),
+        NavigationButton(
             title = "CQL Transformation",
-            icon = Icons.Rounded.MoveDown,
+            icon = Icons.Outlined.Token,
+            onClick = {}
+        ),
+        NavigationButton(
+            title = "File Manager",
+            icon = Icons.Outlined.Folder,
             onClick = {}
         ),
         NavigationButton(
             title = "Database",
-            icon = Icons.Rounded.Dataset,
+            icon = Icons.Outlined.Dataset,
             onClick = {}
         ),
         NavigationButton(
-            title = "Insights",
-            icon = Icons.Rounded.Insights,
+            title = "FHIR Path Expression",
+            icon = Icons.Outlined.DataObject,
+            onClick = {}
+        ),
+        NavigationButton(
+            title = "Settings",
+            icon = Icons.Outlined.Settings,
             onClick = {}
         )
     )
