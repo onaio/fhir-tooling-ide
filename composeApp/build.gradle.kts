@@ -30,6 +30,7 @@ kotlin {
             implementation(project(":device-manager"))
             implementation(project(":package-manager"))
             implementation(project(":structure-map"))
+            implementation(project(":file-manager"))
         }
 
         desktopMain.dependencies {
