@@ -11,6 +11,9 @@ dependencies {
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.Squareup.okio)
 
+    implementation("com.cheonjaeung.compose.grid:grid:2.0.0")
+    implementation("io.github.ltttttttttttt:ComposeViews:1.6.11.4")
+
     implementation(project(":engine"))
     implementation(project(":database"))
     implementation(project(":editor"))

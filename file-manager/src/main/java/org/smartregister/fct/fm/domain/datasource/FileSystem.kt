@@ -18,6 +18,7 @@ internal interface FileSystem {
     fun music() = "${home()}${File.separator}Music".toPath()
     fun pictures() = "${home()}${File.separator}Pictures".toPath()
     fun videos() = "${home()}${File.separator}Videos".toPath()
+    fun defaultActivePath() = home()
 
     fun commonDirs(): List<Directory> = listOf(
         Directory(
