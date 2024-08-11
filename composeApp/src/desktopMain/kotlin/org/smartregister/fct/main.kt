@@ -12,6 +12,9 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import fct.composeapp.generated.resources.Res
+import fct.composeapp.generated.resources.app_icon
+import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import org.smartregister.fct.adb.ADBModuleSetup
 import org.smartregister.fct.configs.ConfigModuleSetup
@@ -50,7 +53,8 @@ fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         title = "FhirCore Toolkit",
-        state = windowState
+        state = windowState,
+        icon = painterResource(Res.drawable.app_icon)
     ) {
 
         val appSetting by AppSettingProvide.getAppSetting().flowAsState(initial = AppSetting())

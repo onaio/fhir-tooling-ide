@@ -47,6 +47,18 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.smartregister.fct"
             packageVersion = "1.0.0"
+
+            macOS {
+                iconFile.set(project.file("/icon/app_icon.icns"))
+            }
+
+            windows {
+                iconFile.set(project.file("/icon/app_icon.ico"))
+            }
+
+            linux {
+                iconFile.set(project.file("icon/app_icon.png"))
+            }
         }
     }
 }
