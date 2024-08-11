@@ -1,4 +1,4 @@
-rootProject.name = "FCT"
+rootProject.name = "fct"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
