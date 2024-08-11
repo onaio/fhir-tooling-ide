@@ -1,4 +1,4 @@
-package org.smartregister.fct.fm.ui
+package org.smartregister.fct.fm.ui.components
 
 import androidx.compose.runtime.Composable
 

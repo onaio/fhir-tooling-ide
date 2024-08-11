@@ -34,6 +34,7 @@ object Dependencies {
         const val apacheCommonCompress = "1.26.2"
         const val gson = "2.11.0"
         const val compottie = "2.0.0-beta02"
+        const val okio = "3.9.0"
     }
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
@@ -132,6 +133,10 @@ object Dependencies {
         const val compress = "org.apache.commons:commons-compress:${Version.apacheCommonCompress}"
 
         fun getAll() = listOf(collection, compress)
+    }
+
+    object Squareup {
+        const val okio = "com.squareup.okio:okio:${Version.okio}"
     }
 }
 

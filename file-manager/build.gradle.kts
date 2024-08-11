@@ -9,8 +9,7 @@ dependencies {
     Dependencies.Voyager.getAll().forEach(::implementation)
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
-    implementation("ca.gosyer:kotlin-multiplatform-appdirs:1.1.1")
-    implementation("com.squareup.okio:okio:3.9.0")
+    implementation(Dependencies.Squareup.okio)
 
     implementation(project(":engine"))
     implementation(project(":database"))
