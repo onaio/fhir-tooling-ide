@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,23 +18,29 @@ import androidx.compose.ui.unit.dp
 fun SmallIconButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
+    enable: Boolean = true,
     onClick: () -> Unit
 ) {
+
+    var mainModifier = modifier.width(22.dp)
+
+    if (enable) {
+        mainModifier = mainModifier.clickable(
+            onClick = onClick,
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(bounded = false, radius = 18.dp)
+        )
+    }
+
     Box(
-        modifier = modifier
-            //.minimumInteractiveComponentSize()
-            .width(22.dp)
-            .clickable(
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(bounded = false, radius = 18.dp)
-            ),
+        modifier = mainModifier,
         contentAlignment = Alignment.Center
     ) {
         Icon(
             modifier = Modifier.width(22.dp),
             imageVector = icon,
-            contentDescription = null
+            contentDescription = null,
+            tint = if(enable) LocalContentColor.current else LocalContentColor.current.copy(alpha = 0.3f)
         )
     }
 }

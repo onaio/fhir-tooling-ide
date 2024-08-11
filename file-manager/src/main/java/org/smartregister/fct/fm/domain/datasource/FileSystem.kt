@@ -10,7 +10,7 @@ import okio.Path.Companion.toPath
 import org.smartregister.fct.fm.domain.model.Directory
 import java.io.File
 
-internal interface FileSystem {
+interface FileSystem {
 
     fun home() = System.getProperty("user.home").toPath()
     fun downloads() = "${home()}${File.separator}Downloads".toPath()
