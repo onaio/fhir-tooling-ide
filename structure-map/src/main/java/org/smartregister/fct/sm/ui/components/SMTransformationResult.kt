@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,9 +29,9 @@ import org.smartregister.fct.engine.util.logicalId
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
 import org.smartregister.fct.json.JsonTreeView
-import org.smartregister.fct.radiance.ui.components.ExtendedFloatingActionButton
-import org.smartregister.fct.radiance.ui.components.ScrollableTabRow
-import org.smartregister.fct.radiance.ui.components.Tab
+import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
+import org.smartregister.fct.aurora.ui.components.ScrollableTabRow
+import org.smartregister.fct.aurora.ui.components.Tab
 import org.smartregister.fct.sm.data.enums.ResultType
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 

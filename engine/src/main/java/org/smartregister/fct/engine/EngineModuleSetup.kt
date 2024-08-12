@@ -12,7 +12,7 @@ class EngineModuleSetup : ModuleSetup {
         single<GetAppSetting> { GetAppSetting(Database.getDatabase().appSettingsDaoQueries) }
         single<UpdateAppSetting> { UpdateAppSetting(Database.getDatabase().appSettingsDaoQueries) }
     }
-    override fun setup() {
+    override suspend fun setup() {
         GlobalContext.get().loadModules(listOf(engineModule))
     }
 }

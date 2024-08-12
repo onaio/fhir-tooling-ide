@@ -1,4 +1,4 @@
-package org.smartregister.fct.radiance.ui.components
+package org.smartregister.fct.aurora.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
@@ -19,6 +20,7 @@ fun SmallIconButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     enable: Boolean = true,
+    tint: Color? = null,
     onClick: () -> Unit
 ) {
 
@@ -40,7 +42,7 @@ fun SmallIconButton(
             modifier = Modifier.width(22.dp),
             imageVector = icon,
             contentDescription = null,
-            tint = if(enable) LocalContentColor.current else LocalContentColor.current.copy(alpha = 0.3f)
+            tint = if(enable) tint ?: LocalContentColor.current else LocalContentColor.current.copy(alpha = 0.3f)
         )
     }
 }

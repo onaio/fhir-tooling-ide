@@ -17,7 +17,7 @@ class ConfigModuleSetup : ModuleSetup {
         single<ConfigRepository> { ConfigRepository(get()) }
     }
 
-    override fun setup() {
+    override suspend fun setup() {
         GlobalContext.get().loadModules(listOf(configModule))
     }
 }

@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.radiance.ui.components.Button
+import org.smartregister.fct.aurora.ui.components.Button
 
 @Composable
 fun ConfigOptionsWindow() {

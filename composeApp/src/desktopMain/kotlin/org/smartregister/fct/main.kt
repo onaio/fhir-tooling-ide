@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,6 +15,8 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import fct.composeapp.generated.resources.Res
 import fct.composeapp.generated.resources.app_icon
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import org.smartregister.fct.adb.ADBModuleSetup
@@ -39,6 +42,7 @@ fun main() = application {
     val screenSize = Toolkit.getDefaultToolkit().screenSize
     val screenWidth = screenSize.width
     val screenHeight = screenSize.height
+    val scope = rememberCoroutineScope()
 
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
@@ -48,7 +52,9 @@ fun main() = application {
 
     startKoin { }
 
-    initSubModules()
+    scope.launch(Dispatchers.IO) {
+        initSubModules()
+    }
 
     Window(
         onCloseRequest = ::exitApplication,
@@ -79,7 +85,7 @@ fun main() = application {
     }
 }
 
-fun initSubModules() {
+suspend fun initSubModules() {
     listOf(
         EngineModuleSetup(),
         ConfigModuleSetup(),

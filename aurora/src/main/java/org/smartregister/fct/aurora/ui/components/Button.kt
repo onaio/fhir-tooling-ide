@@ -1,19 +1,13 @@
-package org.smartregister.fct.radiance.ui.components
+package org.smartregister.fct.aurora.ui.components
 
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -67,10 +61,11 @@ fun TextButton(
 ) {
 
     val content: @Composable (RowScope.() -> Unit) = {
+        val alpha = if(enable) 1f else 0.5f
         icon?.let {
             Icon(
                 icon = icon,
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha)
             )
 
             Spacer(Modifier.width(8.dp))
@@ -80,13 +75,13 @@ fun TextButton(
             Text(
                 modifier = Modifier.weight(1f),
                 text = label,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
                 textAlign = textAlign
             )
         } else {
             Text(
                 text = label,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
             )
         }
     }

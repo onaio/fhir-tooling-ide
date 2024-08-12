@@ -17,12 +17,12 @@ import kotlinx.coroutines.launch
 import org.smartregister.fct.editor.data.enums.CodeStyle
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.editor.ui.rememberCodeController
-import org.smartregister.fct.radiance.ui.components.Button
-import org.smartregister.fct.radiance.ui.components.ButtonType
-import org.smartregister.fct.radiance.ui.components.FloatingActionIconButton
-import org.smartregister.fct.radiance.ui.components.OutlinedButton
-import org.smartregister.fct.radiance.ui.components.TextButton
-import org.smartregister.fct.radiance.ui.components.dialog.rememberDialogController
+import org.smartregister.fct.aurora.ui.components.Button
+import org.smartregister.fct.aurora.ui.components.ButtonType
+import org.smartregister.fct.aurora.ui.components.FloatingActionIconButton
+import org.smartregister.fct.aurora.ui.components.OutlinedButton
+import org.smartregister.fct.aurora.ui.components.TextButton
+import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
 import org.smartregister.fct.upload.domain.model.FileResult
 
 private val supportedExtension = listOf("json", "map")
@@ -133,7 +133,7 @@ fun UploadFromInputFieldButtonWithDialog(
     onResult: (String) -> Unit
 ) {
 
-    val dialogController = rememberDialogController(
+    val dialogController = rememberDialog(
         title = title,
         width = dialogWidth,
         height = dialogHeight,

@@ -1,4 +1,4 @@
-package org.smartregister.fct.radiance.data.helper
+package org.smartregister.fct.aurora.data.helper
 
 internal class DesktopBreakIterator : BreakIterator {
   private val instance = org.jetbrains.skia.BreakIterator.makeCharacterInstance()

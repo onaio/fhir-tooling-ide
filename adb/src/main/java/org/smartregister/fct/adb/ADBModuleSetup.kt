@@ -19,7 +19,7 @@ class ADBModuleSetup : ModuleSetup {
         single<ADBController> { ADBController(get()) }
     }
 
-    override fun setup() {
+    override suspend fun setup() {
         GlobalContext.get().loadModules(listOf(adbModule))
         FCTLogger.addFilter(ADBCommandFilter())
     }

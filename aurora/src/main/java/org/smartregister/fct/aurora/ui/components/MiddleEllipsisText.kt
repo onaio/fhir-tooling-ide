@@ -1,4 +1,4 @@
-package org.smartregister.fct.radiance.ui.components
+package org.smartregister.fct.aurora.ui.components
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.TextUnit
-import org.smartregister.fct.radiance.data.helper.BreakIterator
-import org.smartregister.fct.radiance.data.helper.DesktopBreakIterator
+import org.smartregister.fct.aurora.data.helper.BreakIterator
+import org.smartregister.fct.aurora.data.helper.DesktopBreakIterator
 
 @Composable
 fun MiddleEllipsisText(

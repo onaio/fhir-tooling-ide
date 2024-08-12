@@ -56,7 +56,7 @@ import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.engine.data.enums.RightWindowState
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
-import org.smartregister.fct.radiance.ui.components.getLottieFireComposition
+import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
 
 @Composable
 fun TopAppBar(subWindowViewModel: SubWindowViewModel) {

@@ -1,173 +1,104 @@
 package org.smartregister.fct.fm.ui.components
 
-import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import okio.Path
-import org.smartregister.fct.engine.data.helper.AppSettingProvide
-import org.smartregister.fct.fm.ui.viewmodel.SystemFileManagerViewModel
-import org.smartregister.fct.radiance.ui.components.LabelledCheckBox
-import org.smartregister.fct.radiance.ui.components.SmallIconButton
+import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
+import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
+import org.smartregister.fct.aurora.ui.components.dialog.DialogType
+import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
+import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.aurora.util.newFolderNameValidation
 
 @Composable
-fun InAppFileManager() {
+fun InAppFileManager(viewModel: InAppFileManagerViewModel = getKoin().get()) {
 
-    val viewModel = AppSettingProvide.getKoin().get<SystemFileManagerViewModel>()
-    val activeDir by viewModel.getActivePath().collectAsState()
+    val activePath by viewModel.getActivePath().collectAsState()
+    val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Title("App File Manager")
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
-            CommonNavigation(viewModel, activeDir)
-            Content(viewModel, activeDir)
+            CommonNavigation(
+                activePath = activePath,
+                commonDirs = viewModel.getCommonDirs(),
+                onDirectoryClick = { activePath ->
+                    scope.launch {
+                        viewModel.setActivePath(activePath)
+                    }
+                },
+            )
+            Content(viewModel) {
+                DefaultContentOptions(viewModel)
+            }
         }
     }
+
 }
 
-@Composable
-private fun CommonNavigation(viewModel: SystemFileManagerViewModel, activePath: Path) {
-    val scope = rememberCoroutineScope()
 
-    Box(
-        Modifier.width(150.dp).fillMaxHeight()
-            .background(MaterialTheme.colorScheme.surfaceContainer).alpha(0.8f)
+@Composable
+private fun DefaultContentOptions(viewModel: InAppFileManagerViewModel) {
+
+    ContentOptions(
+        viewModel = viewModel
     ) {
-        Column(Modifier.padding(top = 4.dp)) {
-
-            viewModel.getCommonDirs().forEach {
-                NavigationItem(
-                    directory = it,
-                    selected = it.path.toString() == activePath.toString(),
-                    onClick = { selectedDir ->
-                        scope.launch {
-                            viewModel.setActivePath(selectedDir.path)
-                        }
-                    }
-                )
-            }
-
-            viewModel.getRootDirs().takeIf { it.isNotEmpty() }?.let { dirs ->
-                Spacer(Modifier.height(4.dp))
-                HorizontalDivider(Modifier)
-                Spacer(Modifier.height(4.dp))
-                dirs.forEach {
-                    NavigationItem(
-                        directory = it,
-                        selected = it.path.toString() == activePath.toString(),
-                        onClick = {  selectedDir ->
-                            scope.launch {
-                                viewModel.setActivePath(selectedDir.path)
-                            }
-                        }
-                    )
-                }
-            }
-        }
-
-        VerticalDivider(Modifier.align(Alignment.CenterEnd))
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun Content(viewModel: SystemFileManagerViewModel, activePath: Path) {
-    val activePathContent by viewModel.getActivePathContent().collectAsState()
-    val verticalScrollState = rememberScrollState()
-    Column(Modifier.fillMaxSize()) {
-        ContentOptions(viewModel, activePath)
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(verticalScrollState),
-            ) {
-                Spacer(Modifier.height(12.dp))
-                FlowRow(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    activePathContent.forEach { path ->
-                        ContentItem(path, viewModel)
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
-            }
-
-            VerticalScrollbar(
-                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                adapter = rememberScrollbarAdapter(
-                    scrollState = verticalScrollState
-                )
-            )
-        }
-    }
-}
-
-@Composable
-private fun ContentOptions(viewModel: SystemFileManagerViewModel, activePath: Path) {
-    val scope = rememberCoroutineScope()
-    Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.4f))) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            SmallIconButton(
-                modifier = Modifier,
-                icon = Icons.AutoMirrored.Outlined.ArrowBack,
-                enable = activePath.toString() !in viewModel.getCommonDirs().map { it.path.toString() },
-                onClick = {
-                    scope.launch {
-                        activePath.parent?.let {
-                            viewModel.setActivePath(it)
-                        }
-                    }
-                }
-            )
-
-            val showHiddenFile by viewModel.getShowHiddenFile().collectAsState()
-
-            LabelledCheckBox(
-                checked = showHiddenFile,
-                label = "Show Hidden Files",
-                onCheckedChange = {
-                    scope.launch {
-                        viewModel.setShowHiddenFile(it)
-                    }
-                }
-            )
+            CreateNewFolder(viewModel)
         }
+    }
+}
 
-        HorizontalDivider(Modifier.align(Alignment.BottomCenter))
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun CreateNewFolder(viewModel: InAppFileManagerViewModel) {
+
+    val alertDialog = rememberAlertDialog("Error") {
+        Text(it.getExtra<String>() ?: "Error on creating new folder")
+    }
+
+    val newFolderDialog = rememberSingleFieldDialog(
+        title = "Create New Folder",
+        validations = listOf(newFolderNameValidation)
+    ) {
+        val result = viewModel.createNewFolder(it)
+        if (result.isFailure) {
+            alertDialog.show(result.exceptionOrNull()?.message, DialogType.Error)
+        }
+    }
+
+    Chip(
+        modifier = Modifier.height(30.dp),
+        colors = ChipDefaults.chipColors(
+            backgroundColor = MaterialTheme.colorScheme.surface
+        ),
+        onClick = {
+            newFolderDialog.show()
+        },
+    ) {
+        Text(
+            text = "New Folder",
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }

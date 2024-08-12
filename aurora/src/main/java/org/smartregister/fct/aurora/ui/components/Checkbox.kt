@@ -1,4 +1,4 @@
-package org.smartregister.fct.radiance.ui.components
+package org.smartregister.fct.aurora.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

@@ -53,10 +53,10 @@ import org.smartregister.fct.engine.util.decodeResourceFromString
 import org.smartregister.fct.engine.util.encodeResourceToString
 import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.logcat.FCTLogger
-import org.smartregister.fct.radiance.ui.components.ButtonType
-import org.smartregister.fct.radiance.ui.components.OutlinedButton
-import org.smartregister.fct.radiance.ui.components.dialog.rememberDialogController
-import org.smartregister.fct.radiance.ui.components.dialog.rememberLoaderDialogController
+import org.smartregister.fct.aurora.ui.components.ButtonType
+import org.smartregister.fct.aurora.ui.components.OutlinedButton
+import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
+import org.smartregister.fct.aurora.ui.components.dialog.rememberLoaderDialogController
 import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.data.viewmodel.SMTabViewModel
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
@@ -98,7 +98,7 @@ fun SMOptionWindow() {
         ) {
             Column {
                 Column(Modifier.padding(8.dp)) {
-                    TransformButtonWithAction(scope, activeSMTabViewModel)
+                    TransformButtonWithAction(scope, activeSMTabViewModel, viewModel)
                     InputResourceButton(scope, activeSMTabViewModel)
 
                 }
@@ -117,7 +117,7 @@ fun SMOptionWindow() {
 }
 
 @Composable
-private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMTabViewModel?) {
+private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMTabViewModel?, viewModel: SMViewModel) {
     val inputResource by smTabViewModel?.inputResource?.collectAsState()
         ?: remember { mutableStateOf<Resource?>(null) }
     val smTransformService = getKoin().get<SMTransformService>()
@@ -125,7 +125,7 @@ private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMT
 
     val loaderController = rememberLoaderDialogController()
 
-    val errorDialogController = rememberDialogController(
+    val errorDialogController = rememberDialog(
         title = "Transformation Error",
     ) {
         Text(
@@ -135,11 +135,12 @@ private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMT
         )
     }
 
-    val resultDialogController = rememberDialogController(
+    val resultDialogController = rememberDialog(
         title = "Transformation Result",
         width = 1200.dp,
         height = 800.dp,
     ) {
+        viewModel.clearAllSMResultTabViewModel()
         SMTransformationResult(it.getExtra<Bundle>()!!)
     }
 
@@ -179,7 +180,7 @@ private fun InputResourceButton(scope: CoroutineScope, smTabViewModel: SMTabView
     val inputResource by smTabViewModel?.inputResource?.collectAsState()
         ?: remember { mutableStateOf<Resource?>(null) }
 
-    val dialogController = rememberDialogController(
+    val dialogController = rememberDialog(
         title = "Parsing Error",
         width = 300.dp,
     ) {

@@ -43,7 +43,7 @@ import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 import org.smartregister.fct.fm.ui.screen.FileManagerScreen
-import org.smartregister.fct.radiance.ui.components.Icon
+import org.smartregister.fct.aurora.ui.components.Icon
 import org.smartregister.fct.sm.ui.StructureMapScreen
 
 @Composable

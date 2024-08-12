@@ -1,26 +1,27 @@
-package org.smartregister.fct.radiance.ui.components.dialog
+package org.smartregister.fct.aurora.ui.components.dialog
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.smartregister.fct.radiance.domain.model.SingleFieldDialogResult
+import org.smartregister.fct.aurora.domain.controller.SingleFieldDialogController
+import org.smartregister.fct.aurora.ui.components.TextButton
 import java.util.UUID
+
+typealias TextFieldValidation = (String) -> Pair<Boolean, String>
 
 @Composable
 fun rememberSingleFieldDialog(
@@ -31,20 +32,24 @@ fun rememberSingleFieldDialog(
     isCancellable: Boolean = true,
     placeholder: String = "",
     maxLength: Int = 40,
+    validations: List<TextFieldValidation> = listOf(),
     key: Any? = UUID.randomUUID().toString(),
     onResult: suspend CoroutineScope.(String) -> Unit
-): SingleFieldDialogResult {
+): SingleFieldDialogController {
 
     val isShowDialog = remember { mutableStateOf(false) }
+    val input = remember(key) { mutableStateOf("") }
 
-    val singleFieldDialogResult = remember {
-        SingleFieldDialogResult {
+    val singleFieldDialogController = remember {
+        SingleFieldDialogController {
+            input.value = ""
             isShowDialog.value = true
         }
     }
 
     SingleFieldDialog(
         isShowDialog = isShowDialog,
+        input = input,
         modifier = modifier,
         title = title,
         okButtonLabel = okButtonLabel,
@@ -52,16 +57,18 @@ fun rememberSingleFieldDialog(
         isCancellable = isCancellable,
         placeholder = placeholder,
         maxLength = maxLength,
+        validations = validations,
         key = key,
         onResult = onResult
     )
 
-    return singleFieldDialogResult
+    return singleFieldDialogController
 }
 
 @Composable
 internal fun SingleFieldDialog(
     isShowDialog: MutableState<Boolean>,
+    input: MutableState<String>,
     modifier: Modifier = Modifier,
     title: String? = null,
     okButtonLabel: String = "OK",
@@ -69,12 +76,13 @@ internal fun SingleFieldDialog(
     isCancellable: Boolean = true,
     placeholder: String = "",
     maxLength: Int = 40,
+    validations: List<TextFieldValidation>,
     key: Any? = UUID.randomUUID().toString(),
     onResult: suspend CoroutineScope.(String) -> Unit
 ) {
 
-    var isError by remember(key) { mutableStateOf(false) }
-    var value by remember(key) { mutableStateOf("") }
+    val isError = remember(key) { mutableStateOf(false) }
+    val errorText = remember(key) { mutableStateOf("") }
     val focusResult = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
 
@@ -89,12 +97,28 @@ internal fun SingleFieldDialog(
             text = {
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth().focusRequester(focusResult),
-                    value = value,
+                    value = input.value,
                     onValueChange = {
-                        if (it.length <= maxLength) value = it
-                        isError = value.isEmpty()
+                        if (it.length <= maxLength) input.value = it
+                        isError.value = false
+                        errorText.value = ""
+                        checkErrors(
+                            text = input.value,
+                            validations = validations,
+                            isError = isError,
+                            errorText = errorText,
+                        )
                     },
-                    isError = isError,
+                    isError = isError.value,
+                    supportingText = {
+                        if (isError.value) {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = errorText.value,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
                     singleLine = true,
                     placeholder = {
                         Text(placeholder)
@@ -106,29 +130,24 @@ internal fun SingleFieldDialog(
             },
             confirmButton = {
                 TextButton(
+                    label = okButtonLabel,
+                    enable = input.value.isNotEmpty() && errorText.value.isEmpty() && !isError.value,
                     onClick = {
-                        if (value.trim().isEmpty()) {
-                            isError = true
-                        } else {
-                            isShowDialog.value = false
-                            scope.launch {
-                                onResult(value)
-                            }
+                        isShowDialog.value = false
+                        scope.launch {
+                            onResult(input.value)
                         }
                     }
-                ) {
-                    Text(okButtonLabel)
-                }
+                )
             },
             dismissButton = {
                 if (isCancellable) {
                     TextButton(
+                        label = cancelButtonLabel,
                         onClick = {
                             isShowDialog.value = false
                         }
-                    ) {
-                        Text(cancelButtonLabel)
-                    }
+                    )
                 }
             }
         )
@@ -137,3 +156,23 @@ internal fun SingleFieldDialog(
         }
     }
 }
+
+private fun checkErrors(
+    text: String,
+    validations: List<TextFieldValidation>,
+    errorText: MutableState<String>,
+    isError: MutableState<Boolean>
+) {
+    if (text.isNotEmpty()) {
+
+        validations.forEach { validation ->
+            val result = validation(text)
+            if (!result.first) {
+                errorText.value = result.second
+                isError.value = true
+                return@forEach
+            }
+        }
+    }
+}
+

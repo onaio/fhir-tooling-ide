@@ -1,4 +1,4 @@
-package org.smartregister.fct.radiance.ui.components.dialog
+package org.smartregister.fct.aurora.ui.components.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.smartregister.fct.radiance.domain.model.ConfirmationDialogResult
+import org.smartregister.fct.aurora.domain.controller.ConfirmationDialogController
 
 @Composable
 fun <T> rememberConfirmationDialog(
@@ -25,13 +25,13 @@ fun <T> rememberConfirmationDialog(
     isCancellable: Boolean = true,
     icon: ImageVector? = null,
     onConfirmed: suspend CoroutineScope.(T?) -> Unit
-): ConfirmationDialogResult<T> {
+): ConfirmationDialogController<T> {
 
     val isShowDialog = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    val confirmationDialogResult = remember {
-        ConfirmationDialogResult<T> {
+    val confirmationDialogController = remember {
+        ConfirmationDialogController<T> {
             isShowDialog.value = true
         }
     }
@@ -47,12 +47,12 @@ fun <T> rememberConfirmationDialog(
         icon = icon,
         onConfirmed = {
             scope.launch {
-                onConfirmed(confirmationDialogResult.extra)
+                onConfirmed(confirmationDialogController.extra)
             }
         }
     )
 
-    return confirmationDialogResult
+    return confirmationDialogController
 }
 
 @Composable

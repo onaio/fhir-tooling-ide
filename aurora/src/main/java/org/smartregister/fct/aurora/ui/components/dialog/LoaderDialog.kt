@@ -1,8 +1,6 @@
-package org.smartregister.fct.radiance.ui.components.dialog
+package org.smartregister.fct.aurora.ui.components.dialog
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -21,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
-import org.smartregister.fct.radiance.domain.model.LoaderDialogController
-import org.smartregister.fct.radiance.ui.components.getLottieFireComposition
+import org.smartregister.fct.aurora.domain.controller.LoaderDialogController
+import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
 import androidx.compose.ui.window.Dialog as MatDialog
 
 @Composable

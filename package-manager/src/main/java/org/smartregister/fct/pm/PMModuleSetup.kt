@@ -26,7 +26,7 @@ class PMModuleSetup : ModuleSetup {
         single<DeletePackage> { DeletePackage(get()) }
     }
 
-    override fun setup() {
+    override suspend fun setup() {
         GlobalContext.get().loadModules(listOf(pmModule))
     }
 }

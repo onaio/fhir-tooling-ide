@@ -28,7 +28,7 @@ class SMModuleSetup : ModuleSetup {
         single<SMTransformService> { SMTransformService() }
     }
 
-    override fun setup() {
+    override suspend fun setup() {
         GlobalContext.get().loadModules(listOf(smModule))
     }
 }

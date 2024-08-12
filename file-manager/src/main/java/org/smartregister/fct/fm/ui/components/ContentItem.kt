@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.Path
-import org.smartregister.fct.fm.ui.viewmodel.SystemFileManagerViewModel
+import org.smartregister.fct.fm.ui.viewmodel.FileManagerViewModel
 import org.smartregister.fct.fm.util.getFileTypeImage
-import org.smartregister.fct.radiance.ui.components.Icon
+import org.smartregister.fct.aurora.ui.components.Icon
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun ContentItem(path: Path, viewModel: SystemFileManagerViewModel) {
+internal fun ContentItem(path: Path, viewModel: FileManagerViewModel) {
     val scope = rememberCoroutineScope()
 
     Column(

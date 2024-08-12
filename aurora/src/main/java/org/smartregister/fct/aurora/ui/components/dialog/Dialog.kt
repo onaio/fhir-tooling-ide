@@ -1,5 +1,6 @@
-package org.smartregister.fct.radiance.ui.components.dialog
+package org.smartregister.fct.aurora.ui.components.dialog
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,15 +21,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import org.smartregister.fct.radiance.domain.model.DialogController
-import org.smartregister.fct.radiance.ui.components.SmallIconButton
+import org.smartregister.fct.aurora.domain.controller.DialogController
+import org.smartregister.fct.aurora.ui.components.SmallIconButton
 import androidx.compose.ui.window.Dialog as MatDialog
 
+enum class DialogType {
+    Default, Error
+}
+
 @Composable
-fun rememberDialogController(
+fun rememberDialog(
     title: String,
     width: Dp = 300.dp,
     height: Dp? = null,
@@ -37,10 +43,14 @@ fun rememberDialogController(
 ): DialogController {
 
     val isShowDialog = remember { mutableStateOf(false) }
+    var dialogType = remember { DialogType.Default }
 
     val dialogController = remember {
         DialogController(
-            onShow = { isShowDialog.value = true },
+            onShow = {
+                dialogType = it
+                isShowDialog.value = true
+            },
             onHide = { isShowDialog.value = false }
         )
     }
@@ -48,6 +58,7 @@ fun rememberDialogController(
     Dialog(
         dialogController = dialogController,
         isShowDialog = isShowDialog,
+        dialogType = dialogType,
         title = title,
         width = width,
         height = height,
@@ -62,6 +73,7 @@ fun rememberDialogController(
 internal fun Dialog(
     dialogController: DialogController,
     isShowDialog: MutableState<Boolean>,
+    dialogType: DialogType,
     title: String,
     width: Dp,
     height: Dp?,
@@ -69,8 +81,12 @@ internal fun Dialog(
     content: @Composable (ColumnScope.(DialogController) -> Unit)
 ) {
 
-
     if (isShowDialog.value) {
+
+        val borderColor = if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surface
+        val titleBackground = if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surfaceContainer
+        val titleForeground = if (dialogType == DialogType.Error) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.onSecondaryContainer
+
         MatDialog(
             properties = DialogProperties(
                 usePlatformDefaultWidth = false
@@ -82,23 +98,31 @@ internal fun Dialog(
             if (height != null) rootModifier = rootModifier.height(height)
 
             Card(
-                modifier = rootModifier
+                modifier = rootModifier,
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = borderColor
+                )
             ) {
                 Box(
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(horizontal = 14.dp, vertical = 10.dp)
+                    modifier = Modifier.background(titleBackground)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
                         .fillMaxWidth(),
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         text = title,
-                        style = MaterialTheme.typography.titleMedium
+                        style = TextStyle(
+                            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                            color = titleForeground
+                        )
                     )
 
                     if (cancelable) {
                         SmallIconButton(
                             modifier = Modifier.width(18.dp).align(Alignment.CenterEnd),
                             icon = Icons.Outlined.Close,
+                            tint = titleForeground,
                             onClick = { isShowDialog.value = false }
                         )
                     }

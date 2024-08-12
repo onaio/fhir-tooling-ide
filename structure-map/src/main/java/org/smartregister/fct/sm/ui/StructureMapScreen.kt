@@ -36,10 +36,10 @@ import org.koin.java.KoinJavaComponent.getKoin
 import org.smartregister.fct.editor.data.enums.CodeStyle
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
-import org.smartregister.fct.radiance.ui.components.SmallFloatingActionIconButton
-import org.smartregister.fct.radiance.ui.components.Tab
-import org.smartregister.fct.radiance.ui.components.TabRow
-import org.smartregister.fct.radiance.ui.components.dialog.rememberConfirmationDialog
+import org.smartregister.fct.aurora.ui.components.SmallFloatingActionIconButton
+import org.smartregister.fct.aurora.ui.components.Tab
+import org.smartregister.fct.aurora.ui.components.TabRow
+import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.ui.components.UploadSMButton
