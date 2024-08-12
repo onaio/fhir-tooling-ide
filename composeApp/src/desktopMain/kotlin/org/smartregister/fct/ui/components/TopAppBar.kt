@@ -47,11 +47,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import fct.composeapp.generated.resources.Res
-import fct.composeapp.generated.resources.github_icon
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import org.jetbrains.compose.resources.painterResource
+import org.smartregister.composeapp.generated.resources.Res
+import org.smartregister.composeapp.generated.resources.github_icon
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.engine.data.enums.RightWindowState

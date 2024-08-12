@@ -12,10 +12,10 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import fct.composeapp.generated.resources.Res
-import fct.composeapp.generated.resources.app_icon
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
+import org.smartregister.composeapp.generated.resources.Res
+import org.smartregister.composeapp.generated.resources.app_icon
 import org.smartregister.fct.adb.ADBModuleSetup
 import org.smartregister.fct.configs.ConfigModuleSetup
 import org.smartregister.fct.configs.util.extension.flowAsState

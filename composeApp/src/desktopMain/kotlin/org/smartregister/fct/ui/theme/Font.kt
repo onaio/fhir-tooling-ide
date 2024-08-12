@@ -4,12 +4,12 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import fct.composeapp.generated.resources.Res
-import fct.composeapp.generated.resources.Ubuntu_Bold
-import fct.composeapp.generated.resources.Ubuntu_Light
-import fct.composeapp.generated.resources.Ubuntu_Medium
-import fct.composeapp.generated.resources.Ubuntu_Regular
 import org.jetbrains.compose.resources.Font
+import org.smartregister.composeapp.generated.resources.Res
+import org.smartregister.composeapp.generated.resources.Ubuntu_Bold
+import org.smartregister.composeapp.generated.resources.Ubuntu_Light
+import org.smartregister.composeapp.generated.resources.Ubuntu_Medium
+import org.smartregister.composeapp.generated.resources.Ubuntu_Regular
 
 @Composable
 fun UbuntuFontFamily() = FontFamily(
