@@ -21,6 +21,7 @@ fun SmallIconButton(
     icon: ImageVector,
     enable: Boolean = true,
     tint: Color? = null,
+    alpha: Float = 1f,
     onClick: () -> Unit
 ) {
 
@@ -39,10 +40,10 @@ fun SmallIconButton(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            modifier = Modifier.width(22.dp),
+            modifier = Modifier.align(Alignment.Center).width(22.dp),
             imageVector = icon,
             contentDescription = null,
-            tint = if(enable) tint ?: LocalContentColor.current else LocalContentColor.current.copy(alpha = 0.3f)
+            tint = if(enable) tint?.copy(alpha = alpha) ?: LocalContentColor.current.copy(alpha = alpha) else LocalContentColor.current.copy(alpha = 0.3f)
         )
     }
 }

@@ -1,11 +1,13 @@
 package org.smartregister.fct.engine.data.helper
 
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.smartregister.fct.database.Database
 import org.smartregister.fct.engine.domain.usecase.GetAppSetting
 import org.smartregister.fct.engine.domain.usecase.UpdateAppSetting
 
 object AppSettingProvide : KoinComponent {
-    val getAppSetting: GetAppSetting by inject()
-    val updateAppSetting: UpdateAppSetting by inject()
+
+    private val dataSource = Database.getDatabase().appSettingsDaoQueries
+    val getAppSetting: GetAppSetting = GetAppSetting(dataSource)
+    val updateAppSetting: UpdateAppSetting = UpdateAppSetting(dataSource)
 }

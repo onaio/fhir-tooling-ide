@@ -59,15 +59,15 @@ import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
 import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
 
 @Composable
-fun TopAppBar(subWindowViewModel: SubWindowViewModel) {
+fun TitleBar(subWindowViewModel: SubWindowViewModel) {
 
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface).fillMaxWidth()) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 0.dp),
-            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-           /* Row(
+            Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
@@ -84,32 +84,8 @@ fun TopAppBar(subWindowViewModel: SubWindowViewModel) {
                 DeviceSelectionMenu()
                 Spacer(Modifier.width(10.dp))
                 ActivePackageChip(subWindowViewModel = subWindowViewModel)
-            }*/
-            Row {
-                Box(
-                    modifier = Modifier
-                        .minimumInteractiveComponentSize()
-                        .clickable(
-                            onClick = {},
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false, radius = 20.dp)
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(
-                            Res.drawable.github_icon
-                        ),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                        contentDescription = null
-                    )
-                }
             }
         }
-        HorizontalDivider(
-            // color = MaterialTheme.colorScheme.background
-        )
     }
 }
 
@@ -136,10 +112,12 @@ private fun DeviceSelectionMenu() {
             }
     }
 
+    val dropdownModifier = if (selectedValue == null) Modifier.width(200.dp) else Modifier.wrapContentSize()
+
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = Modifier.wrapContentSize().padding(0.dp).pointerHoverIcon(PointerIcon.Hand)
+        modifier = dropdownModifier.padding(0.dp).pointerHoverIcon(PointerIcon.Hand)
     ) {
 
         val colors = OutlinedTextFieldDefaults.colors()
@@ -156,7 +134,7 @@ private fun DeviceSelectionMenu() {
                 lineHeight = TextUnit(10f, TextUnitType.Sp)
             ),
             enabled = false,
-            modifier = Modifier.menuAnchor().wrapContentSize().height(32.dp)
+            modifier = dropdownModifier.menuAnchor().height(32.dp)
                 .pointerHoverIcon(PointerIcon.Hand),
             decorationBox = @Composable { innerTextField ->
                 OutlinedTextFieldDefaults.DecorationBox(
