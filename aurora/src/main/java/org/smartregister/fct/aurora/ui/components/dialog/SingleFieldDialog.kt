@@ -34,11 +34,11 @@ fun rememberSingleFieldDialog(
     maxLength: Int = 40,
     validations: List<TextFieldValidation> = listOf(),
     key: Any? = UUID.randomUUID().toString(),
-    onResult: suspend CoroutineScope.(String) -> Unit
+    onResult: suspend CoroutineScope.(String, SingleFieldDialogController) -> Unit
 ): SingleFieldDialogController {
 
     val isShowDialog = remember { mutableStateOf(false) }
-    val input = remember(key) { mutableStateOf("") }
+    val input = remember { mutableStateOf("") }
 
     val singleFieldDialogController = remember {
         SingleFieldDialogController {
@@ -48,6 +48,7 @@ fun rememberSingleFieldDialog(
     }
 
     SingleFieldDialog(
+        singleFieldDialogController = singleFieldDialogController,
         isShowDialog = isShowDialog,
         input = input,
         modifier = modifier,
@@ -67,6 +68,7 @@ fun rememberSingleFieldDialog(
 
 @Composable
 internal fun SingleFieldDialog(
+    singleFieldDialogController: SingleFieldDialogController,
     isShowDialog: MutableState<Boolean>,
     input: MutableState<String>,
     modifier: Modifier = Modifier,
@@ -78,11 +80,11 @@ internal fun SingleFieldDialog(
     maxLength: Int = 40,
     validations: List<TextFieldValidation>,
     key: Any? = UUID.randomUUID().toString(),
-    onResult: suspend CoroutineScope.(String) -> Unit
+    onResult: suspend CoroutineScope.(String, SingleFieldDialogController) -> Unit
 ) {
 
-    val isError = remember(key) { mutableStateOf(false) }
-    val errorText = remember(key) { mutableStateOf("") }
+    val isError = remember { mutableStateOf(false) }
+    val errorText = remember { mutableStateOf("") }
     val focusResult = remember { FocusRequester() }
     val scope = rememberCoroutineScope()
 
@@ -100,7 +102,7 @@ internal fun SingleFieldDialog(
                     value = input.value,
                     onValueChange = {
                         if (it.length <= maxLength) input.value = it
-                        isError.value = false
+                        isError.value = input.value.trim().isEmpty()
                         errorText.value = ""
                         checkErrors(
                             text = input.value,
@@ -135,7 +137,7 @@ internal fun SingleFieldDialog(
                     onClick = {
                         isShowDialog.value = false
                         scope.launch {
-                            onResult(input.value)
+                            onResult(input.value, singleFieldDialogController)
                         }
                     }
                 )

@@ -1,7 +1,12 @@
 package org.smartregister.fct.aurora.domain.controller
 
 class SingleFieldDialogController(private val onShow: () -> Unit) {
-    fun show() {
+    private var extra: Any? = null
+
+    fun show(extra: Any? = null) {
+        this.extra = extra
         onShow()
     }
+
+    fun<T> getExtra() : T? = extra as T?
 }

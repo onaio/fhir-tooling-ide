@@ -28,7 +28,7 @@ fun SMUploadButton(
     val singleFieldDialog = rememberSingleFieldDialog(
         title = "Structure Map Title",
         maxLength = 30
-    ) { title ->
+    ) { title, _ ->
         smViewModel.insert(
             SMDetail(
                 id = uuid(),

@@ -1,15 +1,11 @@
 package org.smartregister.fct.sm.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -18,10 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
+import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
+import org.smartregister.fct.aurora.ui.components.ScrollableTabs
 import org.smartregister.fct.editor.data.enums.CodeStyle
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
@@ -29,9 +26,6 @@ import org.smartregister.fct.engine.util.logicalId
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
 import org.smartregister.fct.json.JsonTreeView
-import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
-import org.smartregister.fct.aurora.ui.components.ScrollableTabRow
-import org.smartregister.fct.aurora.ui.components.Tab
 import org.smartregister.fct.sm.data.enums.ResultType
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 
@@ -40,7 +34,7 @@ internal fun SMTransformationResult(bundle: Bundle) {
 
     val scope = rememberCoroutineScope()
     val viewModel = getKoin().get<SMViewModel>()
-    var tabIndex by remember { mutableStateOf(0) }
+    //var tabIndex by remember { mutableStateOf(0) }
 
     bundle.entry.forEachIndexed { index, entry ->
         viewModel.addSMResultTabViewModel(entry.resource)
@@ -54,35 +48,15 @@ internal fun SMTransformationResult(bundle: Bundle) {
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        ScrollableTabRow(
-            modifier = Modifier.fillMaxWidth(),
-            selectedTabIndex = tabIndex,
-        ) {
-            bundle.entry.forEachIndexed { index, entry ->
-
-                Tab(
-                    text = {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                entry.resource.resourceType.name,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    },
-                    selected = index == tabIndex,
-                    onClick = {
-                        scope.launch {
-                            viewModel.updateActiveSMResultTabViewModel(entry.resource.logicalId)
-                            tabIndex = index
-                        }
-                    }
-                )
+        ScrollableTabs<Bundle.BundleEntryComponent>(
+            tabs = bundle.entry,
+            title = { it.resource.resourceType.name },
+            onSelected = { _, item ->
+                scope.launch {
+                    viewModel.updateActiveSMResultTabViewModel(item.resource.logicalId)
+                }
             }
-        }
+        )
 
         val activeSMResultTabViewModel by viewModel.getActiveSMResultTabViewModel().collectAsState()
 
@@ -131,7 +105,6 @@ internal fun SMTransformationResult(bundle: Bundle) {
                         }
                     }
                 }
-
             }
     }
 }

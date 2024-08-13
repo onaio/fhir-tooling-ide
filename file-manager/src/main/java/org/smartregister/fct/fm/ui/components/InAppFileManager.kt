@@ -80,8 +80,8 @@ fun CreateNewFolder(viewModel: InAppFileManagerViewModel) {
     val newFolderDialog = rememberSingleFieldDialog(
         title = "Create New Folder",
         validations = listOf(newFolderNameValidation)
-    ) {
-        val result = viewModel.createNewFolder(it)
+    ) { folderName, _ ->
+        val result = viewModel.createNewFolder(folderName)
         if (result.isFailure) {
             alertDialog.show(result.exceptionOrNull()?.message, DialogType.Error)
         }

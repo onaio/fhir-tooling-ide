@@ -56,6 +56,10 @@ class SMViewModel : KoinComponent {
         resultTabViewModels.clear()
     }
 
+    suspend fun clearActiveSMTabViewModel() {
+        activeSMTabViewModel.emit(null)
+    }
+
     suspend fun updateActiveSMTabViewModel(id: String) {
         activeSMTabViewModel.emit(tabViewModels[id])
     }
