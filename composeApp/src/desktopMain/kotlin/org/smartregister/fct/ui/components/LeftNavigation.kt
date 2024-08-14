@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,13 +38,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import org.smartregister.fct.configs.ui.ConfigManagerScreen
-import org.smartregister.fct.engine.data.enums.LeftWindowState
-import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
-import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
-import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
-import org.smartregister.fct.fm.ui.screen.FileManagerScreen
+import kotlinx.coroutines.CoroutineScope
+import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.ui.components.Icon
+import org.smartregister.fct.configs.ui.ConfigManagerScreen
+import org.smartregister.fct.engine.ui.viewmodel.AppSettingViewModel
+import org.smartregister.fct.fm.ui.screen.FileManagerScreen
 import org.smartregister.fct.sm.ui.StructureMapScreen
 
 @Composable
@@ -51,9 +51,7 @@ fun LeftNavigation(
     mainNavigator: Navigator?
 ) {
     Box(
-        modifier = Modifier
-            .width(60.dp)
-            .fillMaxHeight()
+        modifier = Modifier.width(60.dp).fillMaxHeight()
             .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
         Row(
@@ -67,7 +65,6 @@ fun LeftNavigation(
 
 @Composable
 private fun NavigationBar(mainNavigator: Navigator?) {
-    val windowViewModel = LocalSubWindowViewModel.current
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -77,15 +74,14 @@ private fun NavigationBar(mainNavigator: Navigator?) {
     ) {
         Column {
             var selectedNav by remember { mutableStateOf(0) }
+            val scope = rememberCoroutineScope()
             Spacer(Modifier.height(12.dp))
-            navigationMenu(windowViewModel).forEachIndexed { index, navButton ->
+            navigationMenu().forEachIndexed { index, navButton ->
                 IconButton(
-                    enabled = selectedNav != index,
-                    onClick = {
-                        navButton.onClick(mainNavigator!!)
+                    enabled = selectedNav != index, onClick = {
+                        navButton.onClick(scope, mainNavigator!!)
                         selectedNav = index
-                    },
-                    colors = if (selectedNav == index) IconButtonDefaults.iconButtonColors(
+                    }, colors = if (selectedNav == index) IconButtonDefaults.iconButtonColors(
                         disabledContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
                         disabledContentColor = MaterialTheme.colorScheme.onTertiaryContainer
                     ) else IconButtonDefaults.iconButtonColors()
@@ -101,82 +97,51 @@ private fun NavigationBar(mainNavigator: Navigator?) {
 
 @Composable
 private fun ThemeChangerButton() {
-    val appSettingViewModel = LocalAppSettingViewModel.current
-    val appSetting = appSettingViewModel.appSetting
+    val appSettingViewModel = koinInject<AppSettingViewModel>()
+    var appSetting = appSettingViewModel.appSetting
 
-    IconButton(
-        onClick = {
-            appSettingViewModel.appSetting = appSetting.copy(
-                isDarkTheme = !appSetting.isDarkTheme
-            )
-            appSettingViewModel.update()
-        }
-    ) {
+    IconButton(onClick = {
+        appSetting = appSetting.copy(
+            isDarkTheme = !appSetting.isDarkTheme
+        )
+        appSettingViewModel.setAndUpdate(appSetting)
+    }) {
         val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
         Icon(icon = icon)
     }
 }
 
 
-private fun navigationMenu(subWindowViewModel: SubWindowViewModel): List<NavigationButton> {
+private fun navigationMenu(): List<NavigationButton> {
 
-    return listOf(
-        NavigationButton(
-            title = "Manage Configuration",
-            icon = Icons.Outlined.Widgets,
-            onClick = {
-                subWindowViewModel.setLeftWindowState(null)
-                it.popUntilRoot()
-            }
-        ),
-        NavigationButton(
-            title = "Structure Map Transformation",
+    return listOf(NavigationButton(title = "Manage Configuration",
+        icon = Icons.Outlined.Widgets,
+        onClick = {
+            it.popUntilRoot()
+        }),
+        NavigationButton(title = "Structure Map Transformation",
             icon = Icons.Outlined.MoveDown,
             onClick = {
-                subWindowViewModel.setLeftWindowState(LeftWindowState.StructureMap)
                 it.replaceUntilRoot(StructureMapScreen())
-            }
-        ),
-        NavigationButton(
-            title = "Careplan Generation",
+            }),
+        NavigationButton(title = "Careplan Generation",
             icon = Icons.Outlined.Cyclone,
-            onClick = {}
-        ),
-        NavigationButton(
-            title = "CQL Transformation",
-            icon = Icons.Outlined.Token,
-            onClick = {}
-        ),
-        NavigationButton(
-            title = "File Manager",
-            icon = Icons.Outlined.Folder,
-            onClick = {
-                subWindowViewModel.setLeftWindowState(null)
-                it.replaceUntilRoot(FileManagerScreen())
-            }
-        ),
-        NavigationButton(
-            title = "Database",
-            icon = Icons.Outlined.Dataset,
-            onClick = {}
-        ),
-        NavigationButton(
-            title = "FHIR Path Expression",
+            onClick = {}),
+        NavigationButton(title = "CQL Transformation", icon = Icons.Outlined.Token, onClick = {}),
+        NavigationButton(title = "File Manager", icon = Icons.Outlined.Folder, onClick = {
+            it.replaceUntilRoot(FileManagerScreen())
+        }),
+        NavigationButton(title = "Database", icon = Icons.Outlined.Dataset, onClick = {}),
+        NavigationButton(title = "FHIR Path Expression",
             icon = Icons.Outlined.DataObject,
-            onClick = {}
-        ),
-        NavigationButton(
-            title = "Settings",
-            icon = Icons.Outlined.Settings,
-            onClick = {}
-        )
-    )
+            onClick = {}),
+        NavigationButton(title = "Settings", icon = Icons.Outlined.Settings, onClick = {}))
 }
 
 data class NavigationButton(
     val title: String,
     val icon: ImageVector,
-    val onClick: (navigator: Navigator) -> Unit
+    val onClick: CoroutineScope.(navigator: Navigator) -> Unit
 )
 
 fun Navigator.replaceUntilRoot(screen: Screen) {

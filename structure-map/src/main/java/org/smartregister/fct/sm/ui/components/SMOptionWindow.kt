@@ -26,11 +26,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -56,6 +58,7 @@ import org.smartregister.fct.aurora.ui.components.dialog.rememberLoaderDialogCon
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.engine.util.encodeResourceToString
 import org.smartregister.fct.engine.util.listOfAllFhirResources
+import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.fm.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.transformation.SMTransformService
@@ -76,8 +79,14 @@ fun SMOptionWindow() {
         val smText by activeSMTabViewModel?.codeController?.getTextAsFlow()?.collectAsState()
             ?: remember { mutableStateOf("") }
 
-        val totalGroups = getTotalGroups(smText)
-        val outputResources = getOutputResources(smText)
+        var totalGroups by remember { mutableStateOf(listOf<String>()) }
+        var outputResources by remember { mutableStateOf(listOf<String>()) }
+
+        LaunchedEffect(smText.length) {
+            totalGroups = getTotalGroups(smText)
+            outputResources = getOutputResources(smText)
+        }
+
 
         Box(
             Modifier.fillMaxWidth().height(40.dp)
@@ -124,7 +133,6 @@ private fun TransformButtonWithAction(
 ) {
     val inputResource by smTabViewModel?.inputResource?.collectAsState()
         ?: remember { mutableStateOf<Resource?>(null) }
-    val smTransformService = getKoin().get<SMTransformService>()
 
 
     val loaderController = rememberLoaderDialogController()
@@ -158,22 +166,13 @@ private fun TransformButtonWithAction(
             smTabViewModel?.let { smTabViewModel ->
                 loaderController.show()
                 scope.launch(Dispatchers.IO) {
-                    delay(500)
-                    try {
-                        FCTLogger.i("Start transforming the structure-map ${smTabViewModel.smDetail.title}")
+                    val result = viewModel.applyTransformation(smTabViewModel, inputResource)
+                    loaderController.hide()
 
-                        val bundle = smTransformService.transform(
-                            smTabViewModel.codeController.getText(),
-                            inputResource?.encodeResourceToString()
-                        )
-
-                        loaderController.hide()
-                        resultDialogController.show(bundle)
-
-                    } catch (t: Throwable) {
-                        loaderController.hide()
-                        errorDialogController.show(t.message)
-                        FCTLogger.e(t)
+                    if (result.isSuccess) {
+                        resultDialogController.show(result.getOrThrow())
+                    } else {
+                        errorDialogController.show(result.exceptionOrNull()?.message)
                     }
                 }
             }
@@ -214,9 +213,11 @@ private fun InputResourceButton(scope: CoroutineScope, smTabViewModel: SMTabView
         label = inputResource?.resourceType?.name ?: "Add Source",
         enable = smTabViewModel != null,
         onClick = {
-            val title = inputResource?.resourceType?.name ?: "Source"
-            val initialData = inputResource?.encodeResourceToString() ?: ""
-            filePickerDialog.show(title, initialData)
+            scope.launch {
+                val title = inputResource?.resourceType?.name ?: "Source"
+                val initialData = inputResource?.prettyJson() ?: ""
+                filePickerDialog.show(title, initialData)
+            }
         }
     )
 }

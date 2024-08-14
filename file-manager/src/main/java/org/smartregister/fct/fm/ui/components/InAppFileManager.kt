@@ -25,7 +25,7 @@ fun InAppFileManager(
     mode: FileManagerMode = FileManagerMode.Edit
 ) {
 
-    val viewModel: InAppFileManagerViewModel = koinInject<InAppFileManagerViewModel> { parametersOf(mode) }
+    val viewModel: InAppFileManagerViewModel = koinInject()
     viewModel.setMode(mode)
 
     val scope = rememberCoroutineScope()

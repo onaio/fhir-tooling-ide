@@ -7,7 +7,7 @@ import org.smartregister.fct.adb.data.commands.GetDeviceInfoCommand
 import org.smartregister.fct.adb.data.controller.ADBController
 import org.smartregister.fct.adb.data.shell.KScriptShellProgram
 import org.smartregister.fct.adb.domain.program.ShellProgram
-import org.smartregister.fct.engine.ModuleSetup
+import org.smartregister.fct.engine.domain.mdoule.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.logger.model.Log
 import org.smartregister.fct.logger.model.LogFilter
@@ -20,8 +20,10 @@ class ADBModuleSetup : ModuleSetup {
     }
 
     override suspend fun setup() {
+        FCTLogger.d("Loading... ADB Module")
         GlobalContext.get().loadModules(listOf(adbModule))
         FCTLogger.addFilter(ADBCommandFilter())
+        FCTLogger.d("ADB Module Loaded")
     }
 
     private class ADBCommandFilter : LogFilter {

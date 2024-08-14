@@ -3,7 +3,8 @@ package org.smartregister.fct.pm
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.database.Database
-import org.smartregister.fct.engine.ModuleSetup
+import org.smartregister.fct.engine.domain.mdoule.ModuleSetup
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.pm.data.datasource.SqlDelightPackageDataSource
 import org.smartregister.fct.pm.data.repository.SqlDelightPackageRepository
 import org.smartregister.fct.pm.domain.datasource.PackageDataSource
@@ -27,6 +28,8 @@ class PMModuleSetup : ModuleSetup {
     }
 
     override suspend fun setup() {
+        FCTLogger.d("Loading... Package Manager Module")
         GlobalContext.get().loadModules(listOf(pmModule))
+        FCTLogger.d("Package Manager Module Loaded")
     }
 }

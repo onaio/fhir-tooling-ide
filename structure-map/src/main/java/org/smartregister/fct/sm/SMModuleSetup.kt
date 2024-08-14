@@ -1,13 +1,11 @@
 package org.smartregister.fct.sm
 
-import org.koin.compose.getKoin
-import org.koin.compose.koinInject
-import org.koin.core.component.KoinComponent
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.database.Database
-import org.smartregister.fct.engine.ModuleSetup
+import org.smartregister.fct.engine.domain.mdoule.ModuleSetup
 import org.smartregister.fct.engine.util.getKoinInstance
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.datasource.SMSqlDelightDataSource
 import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository
 import org.smartregister.fct.sm.data.transformation.SMTransformService
@@ -33,7 +31,10 @@ class SMModuleSetup : ModuleSetup {
     }
 
     override suspend fun setup() {
+        FCTLogger.d("Loading... Structure Map Module")
         GlobalContext.get().loadModules(listOf(smModule))
+        getKoinInstance<SMTransformService>().init()
         getKoinInstance<SMViewModel>().init()
+        FCTLogger.d("Structure Map Module Loaded")
     }
 }

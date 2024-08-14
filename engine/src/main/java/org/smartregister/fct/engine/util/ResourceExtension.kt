@@ -105,6 +105,10 @@ val Resource.logicalId: String
         return this.idElement?.idPart.orEmpty()
     }
 
+suspend fun Resource.prettyJson() : String {
+    return encodeResourceToString().prettyJson()
+}
+
 val listOfAllFhirResources = listOf(
     "CapabilityStatement",
     "StructureDefinition",

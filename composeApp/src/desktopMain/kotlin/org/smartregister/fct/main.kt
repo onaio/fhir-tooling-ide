@@ -77,15 +77,16 @@ fun main() = application {
 
 private fun initSubModules(scope: CoroutineScope) {
 
-    scope.launch(Dispatchers.IO) {
-        listOf(
-            EngineModuleSetup(),
-            EngineModuleSetup(),
-            ConfigModuleSetup(),
-            ADBModuleSetup(),
-            PMModuleSetup(),
-            SMModuleSetup(),
-            FileManagerModuleSetup()
-        ).forEach { it.setup() }
+    listOf(
+        EngineModuleSetup(),
+        ConfigModuleSetup(),
+        ADBModuleSetup(),
+        PMModuleSetup(),
+        FileManagerModuleSetup(),
+        SMModuleSetup()
+    ).forEach {
+        scope.launch(Dispatchers.IO) {
+            it.setup()
+        }
     }
 }

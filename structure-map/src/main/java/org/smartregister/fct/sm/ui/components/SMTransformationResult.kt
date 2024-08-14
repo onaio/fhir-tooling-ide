@@ -17,11 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
+import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
 import org.smartregister.fct.aurora.ui.components.ScrollableTabs
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
 import org.smartregister.fct.engine.util.logicalId
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
@@ -33,8 +33,7 @@ import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 internal fun SMTransformationResult(bundle: Bundle) {
 
     val scope = rememberCoroutineScope()
-    val viewModel = getKoin().get<SMViewModel>()
-    //var tabIndex by remember { mutableStateOf(0) }
+    val viewModel = koinInject<SMViewModel>()
 
     bundle.entry.forEachIndexed { index, entry ->
         viewModel.addSMResultTabViewModel(entry.resource)

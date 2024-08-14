@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.device.ui.DeviceManagerWindow
 import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
+import org.smartregister.fct.engine.ui.viewmodel.SubWindowViewModel
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.pm.ui.PackageManagerWindow
 

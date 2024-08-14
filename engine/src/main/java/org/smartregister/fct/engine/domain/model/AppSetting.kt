@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AppSetting(
-    val isDarkTheme: Boolean = false
+    val isDarkTheme: Boolean = false,
+    val codeEditorConfig: CodeEditorConfig = CodeEditorConfig()
 )

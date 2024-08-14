@@ -25,6 +25,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.getKoin
+import org.smartregister.fct.aurora.ui.components.ScreenContainer
 import org.smartregister.fct.aurora.ui.components.SmallFloatingActionIconButton
 import org.smartregister.fct.aurora.ui.components.Tabs
 import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
@@ -34,6 +35,7 @@ import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.ui.components.CreateNewSMButton
+import org.smartregister.fct.sm.ui.components.SMOptionWindow
 
 class StructureMapScreen : Screen {
     @Composable
@@ -48,7 +50,7 @@ class StructureMapScreen : Screen {
 
             viewModel.clearActiveSMTabViewModel()
             smDetailList.forEachIndexed { index, smDetail ->
-                viewModel.addSMTabViewModel(smDetail)
+                launch { viewModel.addSMTabViewModel(smDetail) }
 
                 if (index == 0) {
                     viewModel.updateActiveSMTabViewModel(smDetail.id)
@@ -65,51 +67,55 @@ class StructureMapScreen : Screen {
             }
         }
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        ScreenContainer(
+            leftWindow = { SMOptionWindow() }
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-            Tabs(
-                tabs = smDetailList,
-                title = { it.title },
-                onClose = {
-                    smDeleteConfirmDialogController.show(it)
-                },
-                onSelected = { _, smDetail ->
-                    scope.launch {
-                        viewModel.updateActiveSMTabViewModel(smDetail.id)
+                Tabs(
+                    tabs = smDetailList,
+                    title = { it.title },
+                    onClose = {
+                        smDeleteConfirmDialogController.show(it)
+                    },
+                    onSelected = { _, smDetail ->
+                        scope.launch {
+                            viewModel.updateActiveSMTabViewModel(smDetail.id)
+                        }
                     }
-                }
-            )
+                )
 
-            val activeSMTabViewModel by viewModel.getActiveSMTabViewModel()
-                .collectAsState()
+                val activeSMTabViewModel by viewModel.getActiveSMTabViewModel()
+                    .collectAsState()
 
-            activeSMTabViewModel
-                ?.let { smTabViewModel ->
-                    Scaffold(
-                        floatingActionButton = {
-                            SmallFloatingActionIconButton(
-                                icon = Icons.Outlined.Save,
-                                onClick = {
-                                    scope.launch {
-                                        viewModel.update(
-                                            smTabViewModel.smDetail.copy(
-                                                body = smTabViewModel.codeController.getText()
+                activeSMTabViewModel
+                    ?.let { smTabViewModel ->
+                        Scaffold(
+                            floatingActionButton = {
+                                SmallFloatingActionIconButton(
+                                    icon = Icons.Outlined.Save,
+                                    onClick = {
+                                        scope.launch {
+                                            viewModel.update(
+                                                smTabViewModel.smDetail.copy(
+                                                    body = smTabViewModel.codeController.getText()
+                                                )
                                             )
-                                        )
-                                        snackbarHostState.showSnackbar("${smTabViewModel.smDetail.title} has been updated.")
+                                            snackbarHostState.showSnackbar("${smTabViewModel.smDetail.title} has been updated.")
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
+                        ) {
+                            Box(Modifier.padding(it)) {
+                                CodeEditor(
+                                    fileType = FileType.StructureMap,
+                                    controller = smTabViewModel.codeController
+                                )
+                            }
                         }
-                    ) {
-                        Box(Modifier.padding(it)) {
-                            CodeEditor(
-                                fileType = FileType.StructureMap,
-                                controller = smTabViewModel.codeController
-                            )
-                        }
-                    }
-                } ?: CreateNewStructureMap()
+                    } ?: CreateNewStructureMap()
+            }
         }
 
     }

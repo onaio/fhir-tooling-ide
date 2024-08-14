@@ -46,7 +46,7 @@ import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
 import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
+import org.smartregister.fct.engine.ui.viewmodel.SubWindowViewModel
 
 @Composable
 fun TitleBar(subWindowViewModel: SubWindowViewModel) {

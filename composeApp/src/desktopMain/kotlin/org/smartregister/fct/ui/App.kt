@@ -17,15 +17,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.FadeTransition
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.smartregister.fct.configs.ui.ConfigManagerScreen
-import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
-import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
+import org.smartregister.fct.engine.ui.viewmodel.SubWindowViewModel
 import org.smartregister.fct.ui.components.BottomWindow
 import org.smartregister.fct.ui.components.LeftNavigation
-import org.smartregister.fct.ui.components.LeftWindow
 import org.smartregister.fct.ui.components.RightNavigation
 import org.smartregister.fct.ui.components.RightWindow
 
@@ -40,54 +38,51 @@ fun App(subWindowViewModel: SubWindowViewModel) {
             LeftNavigation(mainNavigator)
             VerticalDivider()
             ConstraintLayout {
-                val (leftWindow, body, rightWindow, rightNavBar, bottomWindow) = createRefs()
-
-                Row(modifier = Modifier.background(MaterialTheme.colorScheme.background).constrainAs(leftWindow){
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    bottom.linkTo(bottomWindow.top)
-                    height = Dimension.preferredWrapContent
-                }) {
-                    LeftWindow(subWindowViewModel)
-                }
+                val (body, rightWindow, rightNavBar, bottomWindow) = createRefs()
 
                 Box(modifier = Modifier.fillMaxSize().constrainAs(body) {
-                        start.linkTo(leftWindow.end)
-                        top.linkTo(parent.top)
-                        end.linkTo(rightWindow.start)
-                        bottom.linkTo(bottomWindow.top)
-                        width = Dimension.preferredWrapContent
-                        height = Dimension.preferredWrapContent
-                    }) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    end.linkTo(rightWindow.start)
+                    bottom.linkTo(bottomWindow.top)
+                    width = Dimension.preferredWrapContent
+                    height = Dimension.preferredWrapContent
+                }) {
                     Navigator(ConfigManagerScreen()) {
                         mainNavigator = it
-                        CurrentScreen()
+                        FadeTransition(it)
                     }
                 }
 
-                Row(modifier = Modifier.background(MaterialTheme.colorScheme.background).constrainAs(rightWindow){
-                    top.linkTo(parent.top)
-                    end.linkTo(rightNavBar.start)
-                    bottom.linkTo(bottomWindow.top)
-                    height = Dimension.preferredWrapContent
-                }) {
+                Row(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                        .constrainAs(rightWindow) {
+                            top.linkTo(parent.top)
+                            end.linkTo(rightNavBar.start)
+                            bottom.linkTo(bottomWindow.top)
+                            height = Dimension.preferredWrapContent
+                        }) {
                     RightWindow(subWindowViewModel)
                 }
 
-                Row(modifier = Modifier.background(MaterialTheme.colorScheme.background).constrainAs(rightNavBar){
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }) {
+                Row(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                        .constrainAs(rightNavBar) {
+                            top.linkTo(parent.top)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                        }) {
                     RightNavigation(subWindowViewModel)
                 }
 
-                Column(modifier = Modifier.fillMaxWidth().wrapContentHeight().constrainAs(bottomWindow) {
-                        start.linkTo(parent.start)
-                        end.linkTo(rightNavBar.start)
-                        bottom.linkTo(parent.bottom)
-                        width = Dimension.preferredWrapContent
-                    }) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                        .constrainAs(bottomWindow) {
+                            start.linkTo(parent.start)
+                            end.linkTo(rightNavBar.start)
+                            bottom.linkTo(parent.bottom)
+                            width = Dimension.preferredWrapContent
+                        }) {
                     BottomWindow(subWindowViewModel)
                 }
             }

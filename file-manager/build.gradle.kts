@@ -12,7 +12,6 @@ dependencies {
     implementation(Dependencies.Squareup.okio)
     implementation(Dependencies.ApacheCommon.io)
 
-    //implementation("com.cheonjaeung.compose.grid:grid:2.0.0")
     implementation("io.github.ltttttttttttt:ComposeViews:1.6.11.4")
 
     implementation(project(":engine"))

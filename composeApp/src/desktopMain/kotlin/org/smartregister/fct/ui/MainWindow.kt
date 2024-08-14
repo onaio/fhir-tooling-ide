@@ -20,14 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.Window
@@ -35,10 +31,10 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import org.koin.compose.koinInject
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.engine.data.helper.AppSettingProvide
-import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
 import org.smartregister.fct.engine.domain.model.AppSetting
+import org.smartregister.fct.engine.ui.viewmodel.AppSettingViewModel
 import org.smartregister.fct.ui.components.WindowsActionButtons
 import org.smartregister.fct.ui.theme.FCTTheme
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
@@ -182,8 +178,10 @@ fun CustomWindow(
             LocalWindowState provides state,
         ) {
 
-            val appSetting by AppSettingProvide.getAppSetting().flowAsState(initial = AppSetting())
-            LocalAppSettingViewModel.current.appSetting = appSetting
+            val appSettingViewModel: AppSettingViewModel = koinInject()
+            val appSetting by appSettingViewModel.getAppSettingFlow()
+                .flowAsState(initial = AppSetting())
+            appSettingViewModel.setAppSetting(appSetting)
 
             FCTTheme(
                 isDarkModel = appSetting.isDarkTheme

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -12,10 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import org.koin.core.parameter.parametersOf
-import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
 import org.smartregister.fct.fm.domain.model.FileManagerMode
-import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
 import org.smartregister.fct.fm.ui.viewmodel.SystemFileManagerViewModel
 
 @Composable
@@ -23,7 +19,7 @@ fun SystemFileManager(
     mode: FileManagerMode = FileManagerMode.Edit
 ) {
 
-    val viewModel: SystemFileManagerViewModel = koinInject<SystemFileManagerViewModel> { parametersOf(mode) }
+    val viewModel: SystemFileManagerViewModel = koinInject()
     viewModel.setMode(mode)
 
     val scope = rememberCoroutineScope()

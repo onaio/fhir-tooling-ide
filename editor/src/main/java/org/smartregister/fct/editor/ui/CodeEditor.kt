@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,11 +27,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
@@ -45,15 +45,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
-import org.smartregister.fct.engine.data.locals.LocalAppSettingViewModel
+import org.smartregister.fct.engine.domain.model.AppSetting
+import org.smartregister.fct.engine.ui.viewmodel.AppSettingViewModel
+import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.engine.util.uuid
 
 
@@ -71,14 +74,15 @@ fun CodeEditor(
     key: String = uuid()
 ) {
 
+    val appSetting: AppSetting = koinInject<AppSettingViewModel>().appSetting
     val showToolbox = remember { mutableStateOf(false) }
-    val isDarkTheme = LocalAppSettingViewModel.current.appSetting.isDarkTheme
+    val isDarkTheme = appSetting.isDarkTheme
     val textFieldValue =
         remember(key) { mutableStateOf(TextFieldValue(AnnotatedString(controller.getText()))) }
     val searchText = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    val focusRequester = FocusRequester()
     var lineNumbers by remember { mutableStateOf("") }
+
 
     LaunchedEffect(key) {
         lineNumbers = getLineNumbers(controller.getText())
@@ -98,10 +102,10 @@ fun CodeEditor(
                 modifier = Modifier.widthIn(min = 30.dp).fillMaxHeight()
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
                     .padding(horizontal = 5.dp, vertical = 4.dp).constrainAs(lineNoColumn) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(toolboxRef.top)
-                }
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(toolboxRef.top)
+                    }
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.TopStart)
@@ -127,7 +131,6 @@ fun CodeEditor(
                     .fillMaxSize()
                     .padding(horizontal = 5.dp, vertical = 3.dp)
                     .pointerHoverIcon(PointerIcon.Text)
-                    .focusRequester(focusRequester)
                     .onPreviewKeyEvent { keyEvent ->
                         when {
                             keyEvent.isCtrlPressed && keyEvent.key == Key.F && keyEvent.type == KeyEventType.KeyUp -> {
@@ -135,13 +138,13 @@ fun CodeEditor(
                                 true
                             }
 
-                            keyEvent.key == Key.Escape && keyEvent.type == KeyEventType.KeyUp -> {
-                                searchText.value = ""
-                                showToolbox.value = false
-                                scope.launch {
-                                    delay(1000)
-                                    focusRequester.requestFocus()
-                                }
+                            keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.L && keyEvent.type == KeyEventType.KeyUp -> {
+                                formatStyle(
+                                    scope = scope,
+                                    controller = controller,
+                                    textFieldValue = textFieldValue,
+                                    fileType = fileType,
+                                )
                                 true
                             }
 
@@ -224,5 +227,22 @@ private fun getTransformation(
     return when (fileType) {
         FileType.StructureMap -> SMTextTransformation(searchText, isDarkTheme, colorScheme)
         FileType.Json -> JsonTransformation(searchText, isDarkTheme, colorScheme)
+    }
+}
+
+private fun formatStyle(
+    scope: CoroutineScope,
+    controller: CodeController,
+    textFieldValue: MutableState<TextFieldValue>,
+    fileType: FileType
+) {
+    scope.launch(Dispatchers.IO) {
+        if (fileType == FileType.Json) {
+            val prettyJson = controller.getText().prettyJson()
+            controller.setText(prettyJson)
+            textFieldValue.value = textFieldValue.value.copy(
+                text = prettyJson
+            )
+        }
     }
 }
