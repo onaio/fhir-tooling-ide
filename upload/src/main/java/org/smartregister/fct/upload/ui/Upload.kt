@@ -14,7 +14,7 @@ import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
-import org.smartregister.fct.editor.data.enums.CodeStyle
+import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.editor.ui.rememberCodeController
 import org.smartregister.fct.aurora.ui.components.Button
@@ -94,7 +94,7 @@ fun UploadButton(
 fun UploadFromInputFieldWithFab(
     modifier: Modifier = Modifier,
     initial: String = "",
-    codeStyle: CodeStyle,
+    fileType: FileType,
     onResult: (String) -> Unit
 ) {
 
@@ -112,7 +112,7 @@ fun UploadFromInputFieldWithFab(
         Box(modifier = Modifier.padding(it)) {
             CodeEditor(
                 modifier = modifier,
-                codeStyle = codeStyle,
+                fileType = fileType,
                 controller = controller
             )
         }
@@ -126,7 +126,7 @@ fun UploadFromInputFieldButtonWithDialog(
     label: String = "Upload",
     icon: ImageVector? = Icons.Outlined.Upload,
     initial: String = "",
-    codeStyle: CodeStyle,
+    fileType: FileType,
     buttonType: ButtonType = ButtonType.Button,
     dialogWidth: Dp = 1200.dp,
     dialogHeight: Dp = 700.dp,
@@ -141,7 +141,7 @@ fun UploadFromInputFieldButtonWithDialog(
 
         UploadFromInputFieldWithFab(
             initial = initial,
-            codeStyle = codeStyle,
+            fileType = fileType,
         ) {
             controller.hide()
             onResult(it)

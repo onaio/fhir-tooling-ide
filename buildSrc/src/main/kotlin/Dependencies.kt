@@ -23,7 +23,7 @@ object Dependencies {
         const val voyager = "1.1.0-beta02"
         const val fhirVersion = "6.8.0"
         const val hapiFhirCore = "6.0.22"
-        const val koin = "3.6.0-Beta5"
+        const val koin = "4.0.0-RC1"
         const val sqlDelight = "2.0.2"
         const val fileKitCompose = "0.7.0"
         const val kScriptTool = "1.0.22"
@@ -32,6 +32,7 @@ object Dependencies {
         const val prettyTime = "5.0.9.Final"
         const val apacheCommonCollection = "4.5.0-M2"
         const val apacheCommonCompress = "1.26.2"
+        const val apacheCommonIO = "2.16.1"
         const val gson = "2.11.0"
         const val compottie = "2.0.0-beta02"
         const val okio = "3.9.0"
@@ -39,12 +40,19 @@ object Dependencies {
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
     const val kScriptTool = "com.sealwu:kscript-tools:${Version.kScriptTool}"
-    const val koin = "io.insert-koin:koin-core:${Version.koin}"
+
     const val json = "org.json:json:${Version.json}"
     const val prettyTime = "org.ocpsoft.prettytime:prettytime:${Version.prettyTime}"
     const val gson = "com.google.code.gson:gson:${Version.gson}"
     const val compottie = "io.github.alexzhirkevich:compottie:${Version.compottie}"
 
+
+    object Koin {
+        const val core = "io.insert-koin:koin-core:${Version.koin}"
+        const val compose = "io.insert-koin:koin-compose:${Version.koin}"
+
+        fun getAll(): List<String> = listOf(core, compose)
+    }
 
     object KotlinX {
         const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.kotlinXCoroutine}"
@@ -131,8 +139,9 @@ object Dependencies {
 
         const val collection = "org.apache.commons:commons-collections4:${Version.apacheCommonCollection}"
         const val compress = "org.apache.commons:commons-compress:${Version.apacheCommonCompress}"
+        const val io = "commons-io:commons-io:${Version.apacheCommonIO}"
 
-        fun getAll() = listOf(collection, compress)
+        fun getAll() = listOf(collection, compress, io)
     }
 
     object Squareup {

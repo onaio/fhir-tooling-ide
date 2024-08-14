@@ -1,8 +1,11 @@
 package org.smartregister.fct.sm.data.viewmodel
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.Resource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -24,6 +27,21 @@ class SMViewModel : KoinComponent {
     private val tabViewModels = mutableMapOf<String, SMTabViewModel>()
     private val activeSMResultTabViewModel = MutableStateFlow<SMResultTabViewModel?>(null)
     private val resultTabViewModels = mutableMapOf<String, SMResultTabViewModel>()
+
+    suspend fun init() {
+        withContext(Dispatchers.IO) {
+            getAllSMList().collectLatest { allSMs ->
+                clearActiveSMTabViewModel()
+                allSMs.forEachIndexed { index, smDetail ->
+                    addSMTabViewModel(smDetail)
+
+                    if (index == 0) {
+                        updateActiveSMTabViewModel(smDetail.id)
+                    }
+                }
+            }
+        }
+    }
 
     fun getAllSMList(): Flow<List<SMDetail>> = getAllSM()
 

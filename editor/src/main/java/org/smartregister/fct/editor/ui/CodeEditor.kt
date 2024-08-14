@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -50,7 +49,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.smartregister.fct.editor.data.controller.CodeController
-import org.smartregister.fct.editor.data.enums.CodeStyle
+import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
@@ -67,7 +66,7 @@ fun rememberCodeController(initial: String = ""): CodeController {
 @Composable
 fun CodeEditor(
     modifier: Modifier = Modifier,
-    codeStyle: CodeStyle,
+    fileType: FileType,
     controller: CodeController,
     key: String = uuid()
 ) {
@@ -160,7 +159,7 @@ fun CodeEditor(
                         height = Dimension.preferredWrapContent
                     },
                 visualTransformation = getTransformation(
-                    codeStyle = codeStyle,
+                    fileType = fileType,
                     searchText = searchText.value,
                     isDarkTheme = isDarkTheme,
                     colorScheme = MaterialTheme.colorScheme
@@ -216,14 +215,14 @@ private fun getLineNumbers(text: String): String {
 }
 
 private fun getTransformation(
-    codeStyle: CodeStyle,
+    fileType: FileType,
     searchText: String,
     isDarkTheme: Boolean,
     colorScheme: ColorScheme
 ): VisualTransformation {
 
-    return when (codeStyle) {
-        CodeStyle.StructureMap -> SMTextTransformation(searchText, isDarkTheme, colorScheme)
-        CodeStyle.Json -> JsonTransformation(searchText, isDarkTheme, colorScheme)
+    return when (fileType) {
+        FileType.StructureMap -> SMTextTransformation(searchText, isDarkTheme, colorScheme)
+        FileType.Json -> JsonTransformation(searchText, isDarkTheme, colorScheme)
     }
 }

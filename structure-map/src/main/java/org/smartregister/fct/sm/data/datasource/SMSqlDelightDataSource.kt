@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.smartregister.fct.engine.util.compress
 import org.smartregister.fct.engine.util.decompress
-import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
 import org.smartregister.fct.sm.domain.model.SMDetail
 import sqldelight.SMDaoQueries

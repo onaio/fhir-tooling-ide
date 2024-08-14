@@ -10,15 +10,15 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
-    //Dependencies.TreeView.getAll().forEach(::api)
+    Dependencies.Koin.getAll().forEach(::api)
 
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.prettyTime)
     implementation(project(":database"))
 
-    api(Dependencies.koin)
-    api(project(":logcat"))
+
+    api(project(":logger"))
     api(project(":aurora"))
     api(project(":json-tree"))
 }

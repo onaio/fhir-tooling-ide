@@ -1,28 +1,36 @@
 package org.smartregister.fct.fm.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
 import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
+import org.smartregister.fct.fm.domain.model.FileManagerMode
+import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
 import org.smartregister.fct.fm.ui.viewmodel.SystemFileManagerViewModel
-import org.smartregister.fct.aurora.ui.components.LabelledCheckBox
 
 @Composable
-fun SystemFileManager(viewModel: SystemFileManagerViewModel = getKoin().get()) {
+fun SystemFileManager(
+    mode: FileManagerMode = FileManagerMode.Edit
+) {
 
-    val activePath by viewModel.getActivePath().collectAsState()
+    val viewModel: SystemFileManagerViewModel = koinInject<SystemFileManagerViewModel> { parametersOf(mode) }
+    viewModel.setMode(mode)
+
     val scope = rememberCoroutineScope()
+    val activePath by viewModel.getActivePath().collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Title("System File Manager")
+        if (mode is FileManagerMode.Edit) Title("System File Manager")
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -36,38 +44,22 @@ fun SystemFileManager(viewModel: SystemFileManagerViewModel = getKoin().get()) {
                     }
                 },
             )
-            Content(
-                viewModel = viewModel,
-            ) {
-                DefaultContentOptions(viewModel)
-            }
-        }
-    }
-}
 
-@Composable
-private fun DefaultContentOptions(
-    viewModel: SystemFileManagerViewModel
-) {
-    val scope = rememberCoroutineScope()
-    ContentOptions(
-        viewModel = viewModel
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            val showHiddenFile by viewModel.getShowHiddenFile().collectAsState()
+            ConstraintLayout {
+                val (contentRef, pathRef) = createRefs()
 
-            LabelledCheckBox(
-                checked = showHiddenFile,
-                label = "Hidden Files",
-                onCheckedChange = {
-                    scope.launch {
-                        viewModel.setShowHiddenFile(it)
-                    }
+                Content(
+                    pathRef = pathRef,
+                    contentRef = contentRef,
+                    viewModel = viewModel,
+                ) {
+                    ContentOptions(viewModel)
                 }
-            )
+
+                Breadcrumb(pathRef, activePath)
+            }
+
+
         }
     }
 }

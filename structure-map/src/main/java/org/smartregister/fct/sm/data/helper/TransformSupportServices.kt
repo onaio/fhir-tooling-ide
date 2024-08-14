@@ -37,7 +37,7 @@ import org.hl7.fhir.r4.model.Task
 import org.hl7.fhir.r4.model.Timing
 import org.hl7.fhir.r4.terminologies.ConceptMapEngine
 import org.hl7.fhir.r4.utils.StructureMapUtilities.ITransformerServices
-import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.logger.FCTLogger
 
 /**
  * Copied from

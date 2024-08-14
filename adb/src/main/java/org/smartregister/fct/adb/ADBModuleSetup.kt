@@ -8,9 +8,9 @@ import org.smartregister.fct.adb.data.controller.ADBController
 import org.smartregister.fct.adb.data.shell.KScriptShellProgram
 import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.engine.ModuleSetup
-import org.smartregister.fct.logcat.FCTLogger
-import org.smartregister.fct.logcat.domain.model.Log
-import org.smartregister.fct.logcat.domain.model.LogFilter
+import org.smartregister.fct.logger.FCTLogger
+import org.smartregister.fct.logger.model.Log
+import org.smartregister.fct.logger.model.LogFilter
 
 class ADBModuleSetup : ModuleSetup {
 

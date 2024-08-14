@@ -1,7 +1,7 @@
 package org.smartregister.fct.configs.util.extension
 
 import org.apache.commons.text.StringSubstitutor
-import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.logger.FCTLogger
 import java.util.regex.Pattern
 
 const val DEFAULT_PLACEHOLDER_PREFIX = "@{"

@@ -1,4 +1,4 @@
-package org.smartregister.fct.logcat.domain.model
+package org.smartregister.fct.logger.model
 
 data class Log(
     val dateTime: String,

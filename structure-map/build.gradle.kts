@@ -21,5 +21,6 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":editor"))
     implementation(project(":upload"))
+    implementation(project(":file-manager"))
 }
 

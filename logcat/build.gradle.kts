@@ -7,7 +7,6 @@ plugins {
 
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
-    implementation(Dependencies.ApacheCommon.collection)
-    implementation(project(":aurora"))
+    implementation(project(":engine"))
 }
 

@@ -1,4 +1,4 @@
-package org.smartregister.fct.logcat.domain.model
+package org.smartregister.fct.logger.model
 
 interface LogFilter {
     fun isLoggable(log: Log): Boolean

@@ -52,8 +52,8 @@ import org.smartregister.fct.configs.domain.model.RegisterConfiguration
 import org.smartregister.fct.configs.domain.model.ResourceConfig
 import org.smartregister.fct.configs.util.extension.flowAsState
 import org.smartregister.fct.aurora.ui.components.MiddleEllipsisText
-import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.aurora.ui.components.Button
+import org.smartregister.fct.logger.FCTLogger
 
 @Composable
 fun RegisterConfigTab(config: RegisterConfiguration) {

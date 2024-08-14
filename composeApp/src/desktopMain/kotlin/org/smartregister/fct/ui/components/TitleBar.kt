@@ -2,10 +2,8 @@ package org.smartregister.fct.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,20 +11,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.minimumInteractiveComponentSize
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -39,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.TextStyle
@@ -47,16 +40,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import fct.composeapp.generated.resources.Res
-import fct.composeapp.generated.resources.github_icon
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
-import org.jetbrains.compose.resources.painterResource
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
+import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
 import org.smartregister.fct.engine.data.enums.RightWindowState
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
-import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
 
 @Composable
 fun TitleBar(subWindowViewModel: SubWindowViewModel) {
@@ -112,7 +102,8 @@ private fun DeviceSelectionMenu() {
             }
     }
 
-    val dropdownModifier = if (selectedValue == null) Modifier.width(200.dp) else Modifier.wrapContentSize()
+    val dropdownModifier =
+        if (selectedValue == null) Modifier.width(200.dp) else Modifier.wrapContentSize()
 
     ExposedDropdownMenuBox(
         expanded = expanded,

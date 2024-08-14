@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
 import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
 import org.smartregister.fct.aurora.ui.components.ScrollableTabs
-import org.smartregister.fct.editor.data.enums.CodeStyle
+import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
 import org.smartregister.fct.engine.util.logicalId
@@ -83,7 +83,7 @@ internal fun SMTransformationResult(bundle: Bundle) {
                         when (resultType) {
                             ResultType.Json -> {
                                 CodeEditor(
-                                    codeStyle = CodeStyle.Json,
+                                    fileType = FileType.Json,
                                     controller = smResultTabViewModel.codeController
                                 )
                             }

@@ -22,16 +22,17 @@ fun rememberAlertDialog(
     width: Dp = 300.dp,
     height: Dp? = null,
     cancelable: Boolean = true,
+    dialogType: DialogType = DialogType.Default,
     content: @Composable (ColumnScope.(DialogController) -> Unit)
 ): DialogController {
 
     val isShowDialog = remember { mutableStateOf(false) }
-    var dialogType by remember { mutableStateOf(DialogType.Default) }
+    //var dialogType by remember { mutableStateOf(DialogType.Default) }
 
     val dialogController = remember {
         DialogController(
             onShow = {
-                dialogType = it
+                //dialogType = it
                 isShowDialog.value = true
             },
             onHide = { isShowDialog.value = false }

@@ -1,4 +1,4 @@
-package org.smartregister.fct.logcat
+package org.smartregister.fct.logger
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.apache.commons.collections4.queue.CircularFifoQueue
-import org.smartregister.fct.logcat.domain.model.Log
-import org.smartregister.fct.logcat.domain.model.LogFilter
-import org.smartregister.fct.logcat.domain.model.LogLevel
+import org.smartregister.fct.logger.model.Log
+import org.smartregister.fct.logger.model.LogFilter
+import org.smartregister.fct.logger.model.LogLevel
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.time.LocalDateTime
@@ -25,31 +25,31 @@ object FCTLogger {
     private val logChain = CircularFifoQueue<Log>(MAXIMUM_LOG_LIMIT)
     private var priorityFilter: LogLevel? = null
 
-    internal fun clearLogs() {
+    fun clearLogs() {
         CoroutineScope(Dispatchers.IO).launch {
             logChain.clear()
             allLogs.emit(listOf())
         }
     }
 
-    internal fun togglePause() {
+    fun togglePause() {
         CoroutineScope(Dispatchers.IO).launch {
             isPause.emit(!isPause.value)
         }
     }
 
-    internal fun getAllLogs(): StateFlow<List<Log>> = allLogs
+    fun getAllLogs(): StateFlow<List<Log>> = allLogs
 
-    internal fun getPause(): StateFlow<Boolean> = isPause
+    fun getPause(): StateFlow<Boolean> = isPause
 
-    internal fun clearPriorityFilter() {
+    fun clearPriorityFilter() {
         priorityFilter = null
         CoroutineScope(Dispatchers.IO).launch {
             allLogs.emit(logChain.toList())
         }
     }
 
-    internal fun filterByPriority(priority: LogLevel) {
+    fun filterByPriority(priority: LogLevel) {
         priorityFilter = priority
         CoroutineScope(Dispatchers.IO).launch {
             allLogs.emit(
@@ -125,7 +125,13 @@ object FCTLogger {
         )
     }
 
-    private fun prepareLog(priority: LogLevel, message: String? = null, t: Throwable? = null, tag: String?, vararg args: Any?) {
+    private fun prepareLog(
+        priority: LogLevel,
+        message: String? = null,
+        t: Throwable? = null,
+        tag: String?,
+        vararg args: Any?
+    ) {
         var msg = message
 
         msg = if (msg.isNullOrEmpty()) {
@@ -137,7 +143,8 @@ object FCTLogger {
 
         push(
             Log(
-                dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                dateTime = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 tag = parseTag(tag),
                 message = msg.replace("\t", "    "),
                 priority = priority
@@ -153,7 +160,8 @@ object FCTLogger {
         CoroutineScope(Dispatchers.IO).launch {
             logChain.add(log)
             allLogs.emit(
-                priorityFilter?.let { logChain.filter { it.priority == priorityFilter }} ?: logChain.toList()
+                priorityFilter?.let { logChain.filter { it.priority == priorityFilter } }
+                    ?: logChain.toList()
             )
         }
     }

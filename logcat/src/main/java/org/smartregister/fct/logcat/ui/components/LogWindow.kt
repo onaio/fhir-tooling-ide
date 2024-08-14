@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.logger.FCTLogger
 
 @Composable
 internal fun LogWindow() {

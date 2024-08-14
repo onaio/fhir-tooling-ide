@@ -12,12 +12,15 @@ import org.smartregister.fct.fm.ui.viewmodel.FileManagerViewModel
 import org.smartregister.fct.aurora.ui.components.SmallIconButton
 
 @Composable
-internal fun BackButton(viewModel: FileManagerViewModel) {
+internal fun BackButton(
+    modifier: Modifier,
+    viewModel: FileManagerViewModel
+) {
     val scope = rememberCoroutineScope()
     val activePath by viewModel.getActivePath().collectAsState()
 
     SmallIconButton(
-        modifier = Modifier,
+        modifier = modifier,
         icon = Icons.AutoMirrored.Outlined.ArrowBack,
         enable = activePath.toString() !in viewModel.getCommonDirs().map { it.path.toString() },
         onClick = {

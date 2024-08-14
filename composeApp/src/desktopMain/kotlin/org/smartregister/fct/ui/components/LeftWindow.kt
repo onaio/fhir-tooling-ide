@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import org.smartregister.fct.configs.ui.components.ConfigOptionsWindow
 import org.smartregister.fct.engine.data.enums.LeftWindowState
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
-import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.ui.components.SMOptionWindow
 
 @Composable

@@ -1,0 +1,54 @@
+package org.smartregister.fct.fm.ui.components
+
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import org.smartregister.fct.aurora.ui.components.dialog.DialogType
+import org.smartregister.fct.aurora.ui.components.dialog.getOrDefault
+import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
+import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.aurora.util.folderNameValidation
+import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+internal fun CreateNewFolder(viewModel: InAppFileManagerViewModel) {
+
+    val errorAlertDialog = rememberAlertDialog(
+        title = "Error",
+        dialogType = DialogType.Error
+    ) {
+        Text(it.getExtra().getOrDefault(0, "Error on creating new folder"))
+    }
+
+    val newFolderDialog = rememberSingleFieldDialog(
+        title = "Create New Folder",
+        validations = listOf(folderNameValidation)
+    ) { folderName, _ ->
+        val result = viewModel.createNewFolder(folderName)
+        if (result.isFailure) {
+            errorAlertDialog.show(result.exceptionOrNull()?.message)
+        }
+    }
+
+    Chip(
+        modifier = Modifier.height(30.dp),
+        colors = ChipDefaults.chipColors(
+            backgroundColor = MaterialTheme.colorScheme.surface
+        ),
+        onClick = {
+            newFolderDialog.show()
+        },
+    ) {
+        Text(
+            text = "New Folder",
+            style = MaterialTheme.typography.bodySmall
+        )
+    }
+}

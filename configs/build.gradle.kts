@@ -13,7 +13,6 @@ dependencies {
     Dependencies.HapiFhir.getAll().forEach(::implementation)
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
-    implementation(Dependencies.koin)
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.json)
     implementation(Dependencies.prettyTime)

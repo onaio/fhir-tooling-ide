@@ -1,6 +1,5 @@
 package org.smartregister.fct.sm.ui.components
 
-import UploadFromInputFieldButtonWithDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
@@ -48,15 +47,17 @@ import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Resource
 import org.koin.java.KoinJavaComponent.getKoin
-import org.smartregister.fct.editor.data.enums.CodeStyle
-import org.smartregister.fct.engine.util.decodeResourceFromString
-import org.smartregister.fct.engine.util.encodeResourceToString
-import org.smartregister.fct.engine.util.listOfAllFhirResources
-import org.smartregister.fct.logcat.FCTLogger
-import org.smartregister.fct.aurora.ui.components.ButtonType
 import org.smartregister.fct.aurora.ui.components.OutlinedButton
+import org.smartregister.fct.aurora.ui.components.TextButton
+import org.smartregister.fct.aurora.ui.components.dialog.DialogType
+import org.smartregister.fct.aurora.ui.components.dialog.getOrDefault
 import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberLoaderDialogController
+import org.smartregister.fct.editor.data.enums.FileType
+import org.smartregister.fct.engine.util.encodeResourceToString
+import org.smartregister.fct.engine.util.listOfAllFhirResources
+import org.smartregister.fct.fm.ui.dialog.rememberFileProviderDialog
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.data.viewmodel.SMTabViewModel
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
@@ -106,18 +107,21 @@ fun SMOptionWindow() {
                 GroupListAndOutResources("Output Resources", true, outputResources)
             }
 
-            SMUploadButton(
+            CreateNewSMButton(
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
-                label = "Upload Map",
+                label = "Create New Map",
                 icon = null,
-                buttonType = ButtonType.OutlineButton,
             )
         }
     }
 }
 
 @Composable
-private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMTabViewModel?, viewModel: SMViewModel) {
+private fun TransformButtonWithAction(
+    scope: CoroutineScope,
+    smTabViewModel: SMTabViewModel?,
+    viewModel: SMViewModel
+) {
     val inputResource by smTabViewModel?.inputResource?.collectAsState()
         ?: remember { mutableStateOf<Resource?>(null) }
     val smTransformService = getKoin().get<SMTransformService>()
@@ -127,10 +131,11 @@ private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMT
 
     val errorDialogController = rememberDialog(
         title = "Transformation Error",
+        dialogType = DialogType.Error
     ) {
         Text(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
-            text = it.getExtra<String>() ?: "",
+            text = it.getExtra().getOrDefault(0, ""),
             textAlign = TextAlign.Center
         )
     }
@@ -141,12 +146,13 @@ private fun TransformButtonWithAction(scope: CoroutineScope, smTabViewModel: SMT
         height = 800.dp,
     ) {
         viewModel.clearAllSMResultTabViewModel()
-        SMTransformationResult(it.getExtra<Bundle>()!!)
+        SMTransformationResult(it.getExtra().getOrDefault(0, Bundle()))
     }
 
     OutlinedButton(
         modifier = Modifier.fillMaxWidth(),
         label = "Transform",
+        enable = smTabViewModel != null,
         onClick = {
 
             smTabViewModel?.let { smTabViewModel ->
@@ -180,45 +186,37 @@ private fun InputResourceButton(scope: CoroutineScope, smTabViewModel: SMTabView
     val inputResource by smTabViewModel?.inputResource?.collectAsState()
         ?: remember { mutableStateOf<Resource?>(null) }
 
-    val dialogController = rememberDialog(
+    val parsingErrorDialog = rememberDialog(
         title = "Parsing Error",
         width = 300.dp,
+        dialogType = DialogType.Error
     ) {
         Text(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
-            text = it.getExtra<String>() ?: "",
+            text = it.getExtra().getOrDefault(0, ""),
             textAlign = TextAlign.Center
         )
     }
 
-    UploadFromInputFieldButtonWithDialog(
-        modifier = Modifier.fillMaxWidth(),
-        title = "Source Resource",
-        label = inputResource?.resourceType?.name ?: "Add Source",
-        initial = inputResource?.encodeResourceToString() ?: "",
-        icon = null,
-        buttonType = ButtonType.TextButton,
-        codeStyle = CodeStyle.Json,
-        onResult = { uploadResult ->
-
-            scope.launch(Dispatchers.IO) {
-                try {
-                    if (uploadResult.trim().isEmpty()) {
-                        smTabViewModel?.inputResource?.emit(null)
-                        return@launch
-                    }
-                    val resource = uploadResult.decodeResourceFromString<Resource>()
-                    smTabViewModel?.let {
-                        smTabViewModel.smDetail = smTabViewModel.smDetail.copy(
-                            source = uploadResult
-                        )
-                        smTabViewModel.inputResource.emit(resource)
-                    }
-                } catch (t: Throwable) {
-                    dialogController.show(t.message)
-                    FCTLogger.e(t)
-                }
+    val filePickerDialog = rememberFileProviderDialog(
+        fileType = FileType.Json
+    ) { source ->
+        scope.launch {
+            val result = smTabViewModel?.addSource(source)
+            if (result?.isFailure == true) {
+                parsingErrorDialog.show(result.exceptionOrNull()?.message)
             }
+        }
+    }
+
+    TextButton(
+        modifier = Modifier.fillMaxWidth(),
+        label = inputResource?.resourceType?.name ?: "Add Source",
+        enable = smTabViewModel != null,
+        onClick = {
+            val title = inputResource?.resourceType?.name ?: "Source"
+            val initialData = inputResource?.encodeResourceToString() ?: ""
+            filePickerDialog.show(title, initialData)
         }
     )
 }

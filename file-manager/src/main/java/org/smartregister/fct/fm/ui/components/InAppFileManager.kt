@@ -5,34 +5,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.Chip
-import androidx.compose.material.ChipDefaults
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.launch
-import org.smartregister.fct.engine.data.helper.AppSettingProvide.getKoin
+import org.koin.compose.koinInject
+import org.koin.core.parameter.parametersOf
+import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
-import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
-import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
-import org.smartregister.fct.aurora.util.newFolderNameValidation
 
 @Composable
-fun InAppFileManager(viewModel: InAppFileManagerViewModel = getKoin().get()) {
+fun InAppFileManager(
+    mode: FileManagerMode = FileManagerMode.Edit
+) {
 
-    val activePath by viewModel.getActivePath().collectAsState()
+    val viewModel: InAppFileManagerViewModel = koinInject<InAppFileManagerViewModel> { parametersOf(mode) }
+    viewModel.setMode(mode)
+
     val scope = rememberCoroutineScope()
+    val activePath by viewModel.getActivePath().collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Title("App File Manager")
+        if (mode is FileManagerMode.Edit) Title("App File Manager")
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -45,9 +45,21 @@ fun InAppFileManager(viewModel: InAppFileManagerViewModel = getKoin().get()) {
                     }
                 },
             )
-            Content(viewModel) {
-                DefaultContentOptions(viewModel)
+
+            ConstraintLayout {
+                val (contentRef, pathRef) = createRefs()
+
+                Content(
+                    pathRef = pathRef,
+                    contentRef = contentRef,
+                    viewModel = viewModel
+                ) {
+                    DefaultContentOptions(viewModel)
+                }
+
+                Breadcrumb(pathRef, activePath)
             }
+
         }
     }
 
@@ -61,7 +73,7 @@ private fun DefaultContentOptions(viewModel: InAppFileManagerViewModel) {
         viewModel = viewModel
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp),
             horizontalArrangement = Arrangement.End
         ) {
             CreateNewFolder(viewModel)
@@ -69,36 +81,3 @@ private fun DefaultContentOptions(viewModel: InAppFileManagerViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun CreateNewFolder(viewModel: InAppFileManagerViewModel) {
-
-    val alertDialog = rememberAlertDialog("Error") {
-        Text(it.getExtra<String>() ?: "Error on creating new folder")
-    }
-
-    val newFolderDialog = rememberSingleFieldDialog(
-        title = "Create New Folder",
-        validations = listOf(newFolderNameValidation)
-    ) { folderName, _ ->
-        val result = viewModel.createNewFolder(folderName)
-        if (result.isFailure) {
-            alertDialog.show(result.exceptionOrNull()?.message, DialogType.Error)
-        }
-    }
-
-    Chip(
-        modifier = Modifier.height(30.dp),
-        colors = ChipDefaults.chipColors(
-            backgroundColor = MaterialTheme.colorScheme.surface
-        ),
-        onClick = {
-            newFolderDialog.show()
-        },
-    ) {
-        Text(
-            text = "New Folder",
-            style = MaterialTheme.typography.bodySmall
-        )
-    }
-}

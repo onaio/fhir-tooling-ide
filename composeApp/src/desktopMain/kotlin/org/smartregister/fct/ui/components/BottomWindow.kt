@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.engine.data.enums.BottomWindowState
 import org.smartregister.fct.engine.data.viewmodel.SubWindowViewModel
-import org.smartregister.fct.logcat.FCTLogger
 import org.smartregister.fct.logcat.ui.LogcatWindow
+import org.smartregister.fct.logger.FCTLogger
 
 @Composable
 fun BottomWindow(subWindowViewModel: SubWindowViewModel) {

@@ -7,6 +7,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
@@ -64,7 +65,8 @@ fun main() = application {
             snackbarHost = {
                 SnackbarHost(LocalSnackbarHost.current)
             },
-            bottomBar = { BottomBar() }
+            bottomBar = { BottomBar() },
+            containerColor = Color.Transparent,
         ) {
             Box(modifier = Modifier.padding(it)) {
                 App(subWindowViewModel)

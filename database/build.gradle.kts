@@ -6,8 +6,8 @@ plugins {
 
 dependencies {
     Dependencies.SqlDelight.getAll().forEach(::implementation)
+    Dependencies.Koin.getAll().forEach(::implementation)
 
-    implementation(Dependencies.koin)
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.SqlDelight.sqliteDriver)
 }

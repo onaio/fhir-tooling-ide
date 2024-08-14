@@ -9,7 +9,7 @@ dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
-    implementation(Dependencies.koin)
+
     api(Dependencies.fileKitCompose)
     implementation(project(":engine"))
     implementation(project(":editor"))

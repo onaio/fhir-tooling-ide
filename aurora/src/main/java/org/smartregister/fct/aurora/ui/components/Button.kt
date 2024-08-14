@@ -1,5 +1,6 @@
 package org.smartregister.fct.aurora.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -118,7 +120,10 @@ fun OutlinedButton(
     Mat3OutlinedButton(
         modifier = modifier,
         onClick = onClick,
-        enabled = enable
+        enabled = enable,
+        border = ButtonDefaults.outlinedButtonBorder.copy(
+            brush = if (enable) ButtonDefaults.outlinedButtonBorder.brush else SolidColor(MaterialTheme.colorScheme.surface)
+        )
     ) {
         icon?.let {
             Icon(
@@ -131,7 +136,7 @@ fun OutlinedButton(
 
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.onSurface
+            color = if (enable) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         )
     }
 }

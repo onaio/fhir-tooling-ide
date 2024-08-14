@@ -1,9 +1,13 @@
 package org.smartregister.fct.sm
 
+import org.koin.compose.getKoin
+import org.koin.compose.koinInject
+import org.koin.core.component.KoinComponent
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.database.Database
 import org.smartregister.fct.engine.ModuleSetup
+import org.smartregister.fct.engine.util.getKoinInstance
 import org.smartregister.fct.sm.data.datasource.SMSqlDelightDataSource
 import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository
 import org.smartregister.fct.sm.data.transformation.SMTransformService
@@ -17,7 +21,7 @@ import org.smartregister.fct.sm.domain.usecase.UpdateSM
 
 class SMModuleSetup : ModuleSetup {
 
-    private val smModule = module {
+    private val smModule = module(createdAtStart = true) {
         single<SMDataSource> { SMSqlDelightDataSource(Database.getDatabase().sMDaoQueries) }
         single<SMRepository> { SMSqlDelightRepository(get()) }
         single<GetAllSM> { GetAllSM(get()) }
@@ -30,5 +34,6 @@ class SMModuleSetup : ModuleSetup {
 
     override suspend fun setup() {
         GlobalContext.get().loadModules(listOf(smModule))
+        getKoinInstance<SMViewModel>().init()
     }
 }

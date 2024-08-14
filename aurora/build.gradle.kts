@@ -9,4 +9,5 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     api(Dependencies.compottie)
+    implementation(project(":logger"))
 }

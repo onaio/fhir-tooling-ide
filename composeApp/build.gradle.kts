@@ -22,8 +22,6 @@ kotlin {
             Dependencies.Compose.getAll().forEach(::implementation)
             Dependencies.Voyager.getAll().forEach(::implementation)
 
-            implementation(Dependencies.koin)
-
             implementation(project(":engine"))
             implementation(project(":configs"))
             implementation(project(":adb"))
@@ -31,6 +29,7 @@ kotlin {
             implementation(project(":package-manager"))
             implementation(project(":structure-map"))
             implementation(project(":file-manager"))
+            implementation(project(":logcat"))
         }
 
         desktopMain.dependencies {

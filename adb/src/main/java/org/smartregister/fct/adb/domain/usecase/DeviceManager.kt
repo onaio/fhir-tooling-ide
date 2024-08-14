@@ -15,7 +15,7 @@ import org.smartregister.fct.adb.data.commands.GetDeviceInfoCommand
 import org.smartregister.fct.adb.data.controller.ADBController
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.model.PackageInfo
-import org.smartregister.fct.logcat.FCTLogger
+import org.smartregister.fct.logger.FCTLogger
 
 object DeviceManager : KoinComponent {
 

@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.logcat.domain.model.Log
-import org.smartregister.fct.logcat.domain.model.LogLevel
 import org.smartregister.fct.aurora.ui.components.MiddleEllipsisText
+import org.smartregister.fct.logger.model.Log
+import org.smartregister.fct.logger.model.LogLevel
 
 @Composable
 internal fun LogView(log: Log) {
