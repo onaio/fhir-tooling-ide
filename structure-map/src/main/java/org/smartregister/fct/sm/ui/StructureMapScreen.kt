@@ -109,7 +109,6 @@ class StructureMapScreen : Screen {
                         ) {
                             Box(Modifier.padding(it)) {
                                 CodeEditor(
-                                    fileType = FileType.StructureMap,
                                     controller = smTabViewModel.codeController
                                 )
                             }

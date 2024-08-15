@@ -82,7 +82,6 @@ internal fun SMTransformationResult(bundle: Bundle) {
                         when (resultType) {
                             ResultType.Json -> {
                                 CodeEditor(
-                                    fileType = FileType.Json,
                                     controller = smResultTabViewModel.codeController
                                 )
                             }

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import fct.file_manager.generated.resources.Res
@@ -32,11 +33,13 @@ import org.smartregister.fct.fm.ui.components.SystemFileManager
 @Composable
 fun rememberFileProviderDialog(
     title: String = "File Provider",
-    fileType: FileType,
+    fileType: FileType? = null,
     onCancelled: (() -> Unit)? = null,
     onFilePath: ((Path) -> Unit)? = null,
     onFileContent: ((String) -> Unit)? = null,
 ): DialogController {
+
+    val scope =  rememberCoroutineScope()
 
     val dialogController = rememberDialog(
         width = 1200.dp,
@@ -46,14 +49,14 @@ fun rememberFileProviderDialog(
     ) {
         val editorTitle = it.getExtra().getOrDefault(0, "Untitled")
         val initialData = it.getExtra().getOrDefault(1, "")
+        val codeController = CodeController(scope, initialData, fileType)
 
         FileProviderDialog(
             editorTitle = editorTitle,
-            fileType = fileType,
-            initialData = initialData,
             onFilePath = onFilePath,
             onFileContent = onFileContent,
-            fileProviderController = it
+            fileProviderController = it,
+            codeController = codeController
         )
     }
 
@@ -63,14 +66,14 @@ fun rememberFileProviderDialog(
 @Composable
 fun FileProviderDialog(
     editorTitle: String,
-    fileType: FileType,
-    initialData: String,
     onFilePath: ((Path) -> Unit)? = null,
     onFileContent: ((String) -> Unit)? = null,
-    fileProviderController: DialogController
+    fileProviderController: DialogController,
+    codeController: CodeController
 ) {
 
-    val controller = rememberCodeController(initialData)
+    val initialData = codeController.getText()
+
     val onFileSelected = onFileContent?.let {
         val listener: (String) -> Unit = {
             fileProviderController.hide()
@@ -90,7 +93,7 @@ fun FileProviderDialog(
     val mode = FileManagerMode.View(
         onFileSelected = onFileSelected,
         onPathSelected = onPathSelected,
-        extensions = listOf(fileType.extension)
+        extensions = listOf(codeController.getFileType()?.extension ?: "")
     )
 
     Tabs(
@@ -105,17 +108,15 @@ fun FileProviderDialog(
         onSelected = { tabIndex, _ ->
             when (tabIndex) {
                 0 -> if (initialData.isNotEmpty()) CodeView(
-                    fileType = fileType,
                     onFileContent = onFileContent,
-                    controller = controller,
+                    controller = codeController,
                     fileProviderController = fileProviderController
                 ) else SystemFileManager(mode)
 
                 1 -> if (initialData.isNotEmpty()) SystemFileManager(mode) else InAppFileManager(mode)
                 2 -> if (initialData.isNotEmpty()) InAppFileManager(mode) else CodeView(
-                    fileType = fileType,
                     onFileContent = onFileContent,
-                    controller = controller,
+                    controller = codeController,
                     fileProviderController = fileProviderController
                 )
             }
@@ -125,7 +126,6 @@ fun FileProviderDialog(
 
 @Composable
 private fun CodeView(
-    fileType: FileType,
     onFileContent: ((String) -> Unit)?,
     controller: CodeController,
     fileProviderController: DialogController
@@ -143,7 +143,6 @@ private fun CodeView(
     ) {
         Box(modifier = Modifier.padding(it)) {
             CodeEditor(
-                fileType = fileType,
                 controller = controller
             )
         }

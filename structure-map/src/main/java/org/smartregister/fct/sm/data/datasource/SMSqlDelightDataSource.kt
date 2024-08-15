@@ -26,7 +26,7 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
                             id = sm.id,
                             title = sm.title,
                             body = sm.body.decompress(),
-                            source = sm.source.decompress(),
+                            source = if (sm.source.isEmpty()) null else sm.source.decompress(),
                         )
                     } catch (t: Throwable) {
                         FCTLogger.e(t)
@@ -34,7 +34,6 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
                             id = sm.id,
                             title = "Error",
                             body = t.toString(),
-                            source = ""
                         )
                     }
                 }
@@ -46,7 +45,7 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
             id = smDetail.id,
             title = smDetail.title,
             body = smDetail.body.compress(),
-            source = smDetail.source.compress()
+            source = smDetail.source?.compress() ?: ""
         )
     }
 
@@ -55,7 +54,7 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
             id = smDetail.id,
             title = smDetail.title,
             body = smDetail.body.compress(),
-            source = smDetail.source.compress()
+            source = smDetail.source?.compress() ?: ""
         )
     }
 

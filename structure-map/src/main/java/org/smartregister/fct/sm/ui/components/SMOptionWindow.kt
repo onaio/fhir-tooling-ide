@@ -44,10 +44,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
-import org.hl7.fhir.r4.model.Resource
 import org.koin.java.KoinJavaComponent.getKoin
 import org.smartregister.fct.aurora.ui.components.OutlinedButton
 import org.smartregister.fct.aurora.ui.components.TextButton
@@ -56,14 +54,11 @@ import org.smartregister.fct.aurora.ui.components.dialog.getOrDefault
 import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberLoaderDialogController
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.engine.util.encodeResourceToString
 import org.smartregister.fct.engine.util.listOfAllFhirResources
-import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.fm.ui.dialog.rememberFileProviderDialog
-import org.smartregister.fct.logger.FCTLogger
-import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.data.viewmodel.SMTabViewModel
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
+import org.smartregister.fct.sm.domain.model.SMDetail
 
 @Composable
 fun SMOptionWindow() {
@@ -131,8 +126,8 @@ private fun TransformButtonWithAction(
     smTabViewModel: SMTabViewModel?,
     viewModel: SMViewModel
 ) {
-    val inputResource by smTabViewModel?.inputResource?.collectAsState()
-        ?: remember { mutableStateOf<Resource?>(null) }
+    val smDetail by smTabViewModel?.getSMDetailState()?.collectAsState()
+        ?: remember { mutableStateOf<SMDetail?>(null) }
 
 
     val loaderController = rememberLoaderDialogController()
@@ -166,7 +161,11 @@ private fun TransformButtonWithAction(
             smTabViewModel?.let { smTabViewModel ->
                 loaderController.show()
                 scope.launch(Dispatchers.IO) {
-                    val result = viewModel.applyTransformation(smTabViewModel, inputResource)
+                    val result = viewModel.applyTransformation(
+                        smDetail!!.title,
+                        smTabViewModel.codeController.getText(),
+                        smDetail!!.source
+                    )
                     loaderController.hide()
 
                     if (result.isSuccess) {
@@ -182,8 +181,14 @@ private fun TransformButtonWithAction(
 
 @Composable
 private fun InputResourceButton(scope: CoroutineScope, smTabViewModel: SMTabViewModel?) {
-    val inputResource by smTabViewModel?.inputResource?.collectAsState()
-        ?: remember { mutableStateOf<Resource?>(null) }
+    val smDetail by smTabViewModel?.getSMDetailState()?.collectAsState()
+        ?: remember { mutableStateOf<SMDetail?>(null) }
+
+    var sourceName by remember { mutableStateOf("") }
+
+    LaunchedEffect(smDetail?.source) {
+        sourceName = smDetail?.getSourceResourceName() ?: "Add Source"
+    }
 
     val parsingErrorDialog = rememberDialog(
         title = "Parsing Error",
@@ -210,12 +215,12 @@ private fun InputResourceButton(scope: CoroutineScope, smTabViewModel: SMTabView
 
     TextButton(
         modifier = Modifier.fillMaxWidth(),
-        label = inputResource?.resourceType?.name ?: "Add Source",
-        enable = smTabViewModel != null,
+        label = sourceName,
+        enable = smDetail != null,
         onClick = {
             scope.launch {
-                val title = inputResource?.resourceType?.name ?: "Source"
-                val initialData = inputResource?.prettyJson() ?: ""
+                val title = sourceName
+                val initialData = smDetail?.source ?: ""
                 filePickerDialog.show(title, initialData)
             }
         }

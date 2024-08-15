@@ -98,7 +98,7 @@ fun UploadFromInputFieldWithFab(
     onResult: (String) -> Unit
 ) {
 
-    val controller = rememberCodeController(initial)
+    val controller = rememberCodeController(initial, fileType)
 
     Scaffold(
         modifier = modifier,
@@ -112,7 +112,6 @@ fun UploadFromInputFieldWithFab(
         Box(modifier = Modifier.padding(it)) {
             CodeEditor(
                 modifier = modifier,
-                fileType = fileType,
                 controller = controller
             )
         }

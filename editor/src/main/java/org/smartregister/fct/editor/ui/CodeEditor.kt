@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,31 +55,33 @@ import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
+import org.smartregister.fct.editor.util.prettyJson
 import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.engine.ui.viewmodel.AppSettingViewModel
-import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.engine.util.uuid
 
 
 @Composable
-fun rememberCodeController(initial: String = ""): CodeController {
-    val controller by remember { mutableStateOf(CodeController(initial)) }
+fun rememberCodeController(initial: String = "", fileType: FileType): CodeController {
+    val scope = rememberCoroutineScope()
+    val controller by remember { mutableStateOf(CodeController(scope, initial, fileType)) }
     return controller
 }
 
 @Composable
 fun CodeEditor(
     modifier: Modifier = Modifier,
-    fileType: FileType,
     controller: CodeController,
     key: String = uuid()
 ) {
 
     val appSetting: AppSetting = koinInject<AppSettingViewModel>().appSetting
     val showToolbox = remember { mutableStateOf(false) }
+    val initialText by controller.initTextFlow.collectAsState()
+    val fileType = controller.getFileType()
     val isDarkTheme = appSetting.isDarkTheme
     val textFieldValue =
-        remember(key) { mutableStateOf(TextFieldValue(AnnotatedString(controller.getText()))) }
+        remember(initialText.length) { mutableStateOf(TextFieldValue(AnnotatedString(initialText))) }
     val searchText = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     var lineNumbers by remember { mutableStateOf("") }
@@ -218,7 +221,7 @@ private fun getLineNumbers(text: String): String {
 }
 
 private fun getTransformation(
-    fileType: FileType,
+    fileType: FileType?,
     searchText: String,
     isDarkTheme: Boolean,
     colorScheme: ColorScheme
@@ -227,6 +230,7 @@ private fun getTransformation(
     return when (fileType) {
         FileType.StructureMap -> SMTextTransformation(searchText, isDarkTheme, colorScheme)
         FileType.Json -> JsonTransformation(searchText, isDarkTheme, colorScheme)
+        else -> VisualTransformation.None
     }
 }
 
@@ -234,7 +238,7 @@ private fun formatStyle(
     scope: CoroutineScope,
     controller: CodeController,
     textFieldValue: MutableState<TextFieldValue>,
-    fileType: FileType
+    fileType: FileType?
 ) {
     scope.launch(Dispatchers.IO) {
         if (fileType == FileType.Json) {

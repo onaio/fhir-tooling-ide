@@ -7,6 +7,7 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
 
+    implementation(Dependencies.gson)
     implementation(project(":engine"))
 
 }

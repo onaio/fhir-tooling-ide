@@ -74,7 +74,7 @@ class SMViewModel : KoinComponent {
 
     fun addSMResultTabViewModel(resource: Resource) {
         if (!resultTabViewModels.containsKey(resource.logicalId)) {
-            resultTabViewModels[resource.id] = SMResultTabViewModel(resource)
+            resultTabViewModels[resource.id] = SMResultTabViewModel(resource.encodeResourceToString())
         }
     }
 
@@ -99,17 +99,18 @@ class SMViewModel : KoinComponent {
         activeSMResultTabViewModel
 
     suspend fun applyTransformation(
-        smTabViewModel: SMTabViewModel,
-        inputResource: Resource?
+        title: String,
+        structureMap: String,
+        source: String?
     ): Result<Bundle> {
         return try {
-            FCTLogger.i("Start transforming the structure-map ${smTabViewModel.smDetail.title}")
+            FCTLogger.i("Start transforming the structure-map $title")
 
             val result = withContext(Dispatchers.IO) {
                 delay(500)
                 transformService.transform(
-                    smTabViewModel.codeController.getText(),
-                    inputResource?.encodeResourceToString()
+                    structureMap,
+                    source
                 )
             }
 
