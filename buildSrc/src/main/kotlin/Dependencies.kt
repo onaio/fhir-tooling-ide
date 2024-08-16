@@ -36,6 +36,8 @@ object Dependencies {
         const val gson = "2.11.0"
         const val compottie = "2.0.0-beta02"
         const val okio = "3.9.0"
+        const val decompose = "3.1.0"
+        const val essenty = "2.2.0-alpha04"
     }
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
@@ -46,19 +48,25 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:${Version.gson}"
     const val compottie = "io.github.alexzhirkevich:compottie:${Version.compottie}"
 
+    object Decompose {
+        const val core = "com.arkivanov.decompose:decompose:${Version.decompose}"
+        const val extCompose = "com.arkivanov.decompose:extensions-compose:${Version.decompose}"
+        const val lifecycleCoroutines = "com.arkivanov.essenty:lifecycle-coroutines:${Version.essenty}"
+        const val stateKeeper = "com.arkivanov.essenty:state-keeper:${Version.essenty}"
+        fun getAll() = listOf(core, extCompose, lifecycleCoroutines, stateKeeper)
+    }
 
     object Koin {
         const val core = "io.insert-koin:koin-core:${Version.koin}"
         const val compose = "io.insert-koin:koin-compose:${Version.koin}"
 
-        fun getAll(): List<String> = listOf(core, compose)
+        fun getAll() = listOf(core, compose)
     }
 
     object KotlinX {
         const val coroutine = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.kotlinXCoroutine}"
         const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Version.kotlinXSerializationJson}"
-
-        fun getAll(): List<String> = listOf(coroutine, serializationJson)
+        fun getAll() = listOf(coroutine, serializationJson)
     }
 
     object Compose {
@@ -77,7 +85,7 @@ object Dependencies {
 
         const val constraintLayoutCompose = "tech.annexflow.compose:constraintlayout-compose-multiplatform:${Version.constraintLayoutCompose}"
 
-        fun getAll(): List<String> = listOf(
+        fun getAll() = listOf(
             runtime,
             foundation,
             material3Desktop,

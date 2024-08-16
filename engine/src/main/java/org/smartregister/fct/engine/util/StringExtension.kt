@@ -45,15 +45,6 @@ fun String.messageFormat(locale: Locale?, vararg arguments: Any?): String? =
     MessageFormat(this, locale).format(arguments)
 
 /**
- * Creates identifier from string text by doing clean up on the passed value
- *
- * @return string.properties key to be used in string look ups
- */
-fun String.translationPropertyKey(): String {
-    return this.trim { it <= ' ' }.lowercase(Locale.ENGLISH).replace(" ".toRegex(), ".")
-}
-
-/**
  * This property returns the substring of the filepath after the last period '.' which is the
  * extension
  *
@@ -64,12 +55,6 @@ val String.fileExtension
 
 /** Function that converts snake_case string to camelCase */
 fun String.camelCase(): String = CaseUtils.toCamelCase(this, false, '_')
-
-/**
- * Get the practitioner endpoint url and append the keycloak-uuid. The original String is assumed to
- * be a keycloak-uuid.
- */
-fun String.practitionerEndpointUrl(): String = "PractitionerDetail?keycloak-uuid=$this"
 
 /** Remove double white spaces from text and also remove space before comma */
 fun String.removeExtraWhiteSpaces(): String =

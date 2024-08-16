@@ -39,7 +39,7 @@ private fun DateView(
     Text(
         modifier = Modifier,
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodySmall,
         fontFamily = FontFamily.Monospace
     )
 }
@@ -49,9 +49,9 @@ private fun TagView(
     text: String
 ) {
     MiddleEllipsisText(
-        modifier = Modifier.width(150.dp),
+        modifier = Modifier.width(200.dp),
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodySmall,
         softWrap = false,
         fontFamily = FontFamily.Monospace
     )
@@ -83,7 +83,7 @@ private fun MessageView(
     Text(
         modifier = Modifier,
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodySmall,
         softWrap = true,
         fontFamily = FontFamily.Monospace,
         color = color

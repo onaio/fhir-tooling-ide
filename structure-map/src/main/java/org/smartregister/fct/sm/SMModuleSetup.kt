@@ -11,6 +11,7 @@ import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository
 import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
+import org.smartregister.fct.sm.domain.model.TabIndex
 import org.smartregister.fct.sm.domain.repository.SMRepository
 import org.smartregister.fct.sm.domain.usecase.CreateNewSM
 import org.smartregister.fct.sm.domain.usecase.DeleteSM
@@ -28,6 +29,7 @@ class SMModuleSetup : ModuleSetup {
         single<DeleteSM> { DeleteSM(get()) }
         single<SMViewModel> { SMViewModel() }
         single<SMTransformService> { SMTransformService() }
+        single<TabIndex> { TabIndex() }
     }
 
     override suspend fun setup() {

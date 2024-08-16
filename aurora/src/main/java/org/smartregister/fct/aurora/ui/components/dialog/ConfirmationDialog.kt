@@ -24,6 +24,7 @@ fun <T> rememberConfirmationDialog(
     cancelButtonLabel: String = "No",
     isCancellable: Boolean = true,
     icon: ImageVector? = null,
+    onDismiss: (() -> Unit)? = null,
     onConfirmed: suspend CoroutineScope.(T?) -> Unit
 ): ConfirmationDialogController<T> {
 
@@ -45,6 +46,7 @@ fun <T> rememberConfirmationDialog(
         cancelButtonLabel = cancelButtonLabel,
         isCancellable = isCancellable,
         icon = icon,
+        onDismiss = onDismiss,
         onConfirmed = {
             scope.launch {
                 onConfirmed(confirmationDialogController.extra)
@@ -56,7 +58,7 @@ fun <T> rememberConfirmationDialog(
 }
 
 @Composable
-internal fun ConfirmationDialog(
+fun ConfirmationDialog(
     isShowDialog: MutableState<Boolean>,
     modifier: Modifier = Modifier,
     title: String? = null,
@@ -65,6 +67,7 @@ internal fun ConfirmationDialog(
     cancelButtonLabel: String = "No",
     isCancellable: Boolean = true,
     icon: ImageVector? = null,
+    onDismiss: (() -> Unit)?,
     onConfirmed: () -> Unit
 ) {
 
@@ -86,7 +89,10 @@ internal fun ConfirmationDialog(
             text = {
                 Text(message)
             },
-            onDismissRequest = { isShowDialog.value = !isCancellable },
+            onDismissRequest = {
+                isShowDialog.value = !isCancellable
+                if (isCancellable) onDismiss?.invoke()
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -102,6 +108,7 @@ internal fun ConfirmationDialog(
                     TextButton(
                         onClick = {
                             isShowDialog.value = false
+                            onDismiss?.invoke()
                         }
                     ) {
                         Text(cancelButtonLabel)
@@ -110,4 +117,55 @@ internal fun ConfirmationDialog(
             }
         )
     }
+}
+
+
+@Composable
+fun ConfirmationDialog(
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    message: String,
+    confirmButtonLabel: String = "Yes",
+    cancelButtonLabel: String = "No",
+    icon: ImageVector? = null,
+    onCancelRequest: () -> Unit = {},
+    onDismiss: () -> Unit,
+    onConfirmed: () -> Unit
+) {
+
+    AlertDialog(
+        modifier = modifier,
+        icon = {
+            icon?.run {
+                Icon(this, contentDescription = null)
+            }
+
+        },
+        title = {
+            title?.run {
+                Text(this)
+            }
+
+        },
+        text = {
+            Text(message)
+        },
+        onDismissRequest = onCancelRequest,
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmed()
+                }
+            ) {
+                Text(confirmButtonLabel)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text(cancelButtonLabel)
+            }
+        }
+    )
 }

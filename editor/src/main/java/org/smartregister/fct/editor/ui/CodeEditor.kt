@@ -57,8 +57,7 @@ import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
 import org.smartregister.fct.editor.util.prettyJson
 import org.smartregister.fct.engine.domain.model.AppSetting
-import org.smartregister.fct.engine.ui.viewmodel.AppSettingViewModel
-import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.engine.presentation.viewmodel.AppSettingViewModel
 
 
 @Composable
@@ -72,16 +71,17 @@ fun rememberCodeController(initial: String = "", fileType: FileType): CodeContro
 fun CodeEditor(
     modifier: Modifier = Modifier,
     controller: CodeController,
-    key: String = uuid()
+    key: Any = controller
 ) {
 
     val appSetting: AppSetting = koinInject<AppSettingViewModel>().appSetting
     val showToolbox = remember { mutableStateOf(false) }
-    val initialText by controller.initTextFlow.collectAsState()
+    val preInitialText by controller.initTextFlow.collectAsState()
+    val initialText = if (controller.isInitialTextSet) controller.getText() else preInitialText
     val fileType = controller.getFileType()
     val isDarkTheme = appSetting.isDarkTheme
     val textFieldValue =
-        remember(initialText.length) { mutableStateOf(TextFieldValue(AnnotatedString(initialText))) }
+        remember(initialText) { mutableStateOf(TextFieldValue(AnnotatedString(initialText))) }
     val searchText = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     var lineNumbers by remember { mutableStateOf("") }
@@ -101,15 +101,13 @@ fun CodeEditor(
 
             val (lineNoColumn, editorRef, toolboxRef) = createRefs()
 
-            Box(
-                modifier = Modifier.widthIn(min = 30.dp).fillMaxHeight()
-                    .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
-                    .padding(horizontal = 5.dp, vertical = 4.dp).constrainAs(lineNoColumn) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(toolboxRef.top)
-                    }
-            ) {
+            Box(modifier = Modifier.widthIn(min = 30.dp).fillMaxHeight()
+                .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
+                .padding(horizontal = 5.dp, vertical = 4.dp).constrainAs(lineNoColumn) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(toolboxRef.top)
+                }) {
                 Text(
                     modifier = Modifier.align(Alignment.TopStart)
                         .verticalScroll(verticalScrollState),
@@ -130,11 +128,8 @@ fun CodeEditor(
                         controller.setText(it.text)
                     }
                 },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 5.dp, vertical = 3.dp)
-                    .pointerHoverIcon(PointerIcon.Text)
-                    .onPreviewKeyEvent { keyEvent ->
+                modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 3.dp)
+                    .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
                         when {
                             keyEvent.isCtrlPressed && keyEvent.key == Key.F && keyEvent.type == KeyEventType.KeyUp -> {
                                 showToolbox.value = true
@@ -153,9 +148,7 @@ fun CodeEditor(
 
                             else -> false
                         }
-                    }
-                    .verticalScroll(verticalScrollState)
-                    .horizontalScroll(horizontalScrollState)
+                    }.verticalScroll(verticalScrollState).horizontalScroll(horizontalScrollState)
                     .constrainAs(editorRef) {
                         start.linkTo(lineNoColumn.end)
                         top.linkTo(parent.top)
@@ -177,17 +170,14 @@ fun CodeEditor(
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground)
             )
 
-            Box(
-                modifier = Modifier.fillMaxWidth().constrainAs(toolboxRef) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
-            ) {
+            Box(modifier = Modifier.fillMaxWidth().constrainAs(toolboxRef) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+            }) {
                 if (showToolbox.value) {
                     Toolbox(
-                        searchTextInEditor = searchText,
-                        showToolbox = showToolbox
+                        searchTextInEditor = searchText, showToolbox = showToolbox
                     )
                 }
             }
@@ -212,19 +202,14 @@ fun CodeEditor(
 
 private fun getLineNumbers(text: String): String {
     return List(
-        "\n".toRegex()
-            .findAll(text)
-            .toList().size + 1
+        "\n".toRegex().findAll(text).toList().size + 1
     ) { index ->
         "${index + 1}"
     }.joinToString("\n")
 }
 
 private fun getTransformation(
-    fileType: FileType?,
-    searchText: String,
-    isDarkTheme: Boolean,
-    colorScheme: ColorScheme
+    fileType: FileType?, searchText: String, isDarkTheme: Boolean, colorScheme: ColorScheme
 ): VisualTransformation {
 
     return when (fileType) {

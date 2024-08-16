@@ -6,7 +6,7 @@ import org.smartregister.fct.database.Database
 import org.smartregister.fct.engine.domain.mdoule.ModuleSetup
 import org.smartregister.fct.engine.domain.usecase.GetAppSetting
 import org.smartregister.fct.engine.domain.usecase.UpdateAppSetting
-import org.smartregister.fct.engine.ui.viewmodel.AppSettingViewModel
+import org.smartregister.fct.engine.presentation.viewmodel.AppSettingViewModel
 import org.smartregister.fct.logger.FCTLogger
 import sqldelight.AppSettingsDaoQueries
 

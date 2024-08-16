@@ -39,33 +39,28 @@ class SMTransformService {
         jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
     }
 
-    suspend fun transform(map: String, source: String? = null): Result<Bundle> {
-
+    fun transform(map: String, source: String? = null): Result<Bundle> {
         return try {
-            val bundle = withContext(Dispatchers.IO) {
+            val structureMap = structureMapUtilities.parse(map, "")
 
-                val structureMap = structureMapUtilities.parse(map, "")
-                val targetResource = Bundle().apply {
-                    addEntry().apply {
-                        resource = structureMap
-                    }
+            val targetResource = Bundle().apply {
+                addEntry().apply {
+                    resource = structureMap
                 }
-
-                if (source != null) {
-                    val clazz = source.decodeResourceFromString<Resource>().javaClass
-                    val baseElement = jsonParser.parseResource(clazz, source)
-                    structureMapUtilities.transform(
-                        contextR4,
-                        baseElement,
-                        structureMap,
-                        targetResource
-                    )
-                }
-
-                targetResource
             }
 
-            Result.success(bundle)
+            if (source != null) {
+                val clazz = source.decodeResourceFromString<Resource>().javaClass
+                val baseElement = jsonParser.parseResource(clazz, source)
+                structureMapUtilities.transform(
+                    contextR4,
+                    baseElement,
+                    structureMap,
+                    targetResource
+                )
+            }
+
+            Result.success(targetResource)
         } catch (ex: Throwable) {
             FCTLogger.e(ex)
             Result.failure(ex)

@@ -105,6 +105,16 @@ val Resource.logicalId: String
         return this.idElement?.idPart.orEmpty()
     }
 
+val Resource.readableResourceName: String
+    get() =
+        resourceType
+            .name
+            .split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])".toRegex())
+            .joinToString(" ") {
+                it.replaceFirstChar(Char::titlecase)
+            }
+
+
 val listOfAllFhirResources = listOf(
     "CapabilityStatement",
     "StructureDefinition",

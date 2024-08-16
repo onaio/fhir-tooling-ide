@@ -20,7 +20,7 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
             .asFlow()
             .mapToList(Dispatchers.Default)
             .map {
-                it.map { sm ->
+                it.mapNotNull { sm ->
                     try {
                         SMDetail(
                             id = sm.id,
@@ -30,11 +30,7 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
                         )
                     } catch (t: Throwable) {
                         FCTLogger.e(t)
-                        SMDetail(
-                            id = sm.id,
-                            title = "Error",
-                            body = t.toString(),
-                        )
+                        null
                     }
                 }
             }

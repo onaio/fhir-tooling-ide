@@ -11,6 +11,7 @@ dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
     Dependencies.Koin.getAll().forEach(::api)
+    Dependencies.Decompose.getAll().forEach(::api)
 
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.SqlDelight.coroutineExtension)

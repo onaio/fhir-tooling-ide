@@ -1,5 +1,6 @@
 package org.smartregister.fct.editor.data.controller
 
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,11 +10,13 @@ import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.util.prettyJson
 import org.smartregister.fct.logger.FCTLogger
 
-class CodeController(scope: CoroutineScope, initialText: String = "", private val fileType: FileType? = null) {
+class CodeController(scope: CoroutineScope, initialText: String = "", private val fileType: FileType? = null) : InstanceKeeper.Instance{
 
     private var text: String = initialText
     private val textFlow = MutableStateFlow(initialText)
     internal val initTextFlow = MutableStateFlow(initialText)
+    internal var isInitialTextSet = false
+        private set
 
     init {
         if (fileType == FileType.Json && initialText.isNotEmpty()) {
@@ -23,11 +26,14 @@ class CodeController(scope: CoroutineScope, initialText: String = "", private va
                         val prettyJson = initialText.prettyJson()
                         setText(prettyJson)
                         initTextFlow.emit(prettyJson)
+                        isInitialTextSet = true
                     }
                 } catch (ex: Exception) {
                     FCTLogger.e(ex)
                 }
             }
+        } else {
+            isInitialTextSet = true
         }
     }
 
@@ -35,7 +41,7 @@ class CodeController(scope: CoroutineScope, initialText: String = "", private va
 
     fun getTextAsFlow(): StateFlow<String> = textFlow
 
-    suspend fun setText(text: String) {
+    internal suspend fun setText(text: String) {
         this.text = text
         textFlow.emit(text)
     }

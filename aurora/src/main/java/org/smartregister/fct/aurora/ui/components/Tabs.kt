@@ -257,3 +257,51 @@ fun Tab(
     )
 }
 
+@Composable
+fun<T> CloseableTab(
+    index: Int,
+    item: T,
+    title: (T) -> String,
+    selected: Boolean,
+    onClick: (Int) -> Unit,
+    onClose: (Int) -> Unit
+) {
+    Tab(
+        text = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    title(item),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Box(
+                    modifier = Modifier
+                        .minimumInteractiveComponentSize()
+                        .clickable(
+                            onClick = { onClose(index) },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(
+                                bounded = false,
+                                radius = 15.dp
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        icon = Icons.Rounded.Close,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
+            }
+
+        },
+        selected = selected,
+        onClick = { onClick(index) }
+    )
+}
+

@@ -6,9 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,7 +22,6 @@ import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.editor.ui.rememberCodeController
 import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.ui.components.InAppFileManager
 import org.smartregister.fct.fm.ui.components.SystemFileManager
@@ -39,7 +35,7 @@ fun rememberFileProviderDialog(
     onFileContent: ((String) -> Unit)? = null,
 ): DialogController {
 
-    val scope =  rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
     val dialogController = rememberDialog(
         width = 1200.dp,
@@ -47,6 +43,7 @@ fun rememberFileProviderDialog(
         title = title,
         onCancelled = onCancelled,
     ) {
+
         val editorTitle = it.getExtra().getOrDefault(0, "Untitled")
         val initialData = it.getExtra().getOrDefault(1, "")
         val codeController = CodeController(scope, initialData, fileType)
@@ -113,7 +110,10 @@ fun FileProviderDialog(
                     fileProviderController = fileProviderController
                 ) else SystemFileManager(mode)
 
-                1 -> if (initialData.isNotEmpty()) SystemFileManager(mode) else InAppFileManager(mode)
+                1 -> if (initialData.isNotEmpty()) SystemFileManager(mode) else InAppFileManager(
+                    mode
+                )
+
                 2 -> if (initialData.isNotEmpty()) InAppFileManager(mode) else CodeView(
                     onFileContent = onFileContent,
                     controller = codeController,

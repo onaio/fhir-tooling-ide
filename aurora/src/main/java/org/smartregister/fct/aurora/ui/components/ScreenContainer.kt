@@ -13,11 +13,13 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ScreenContainer(
-    leftWindow: @Composable BoxScope.() -> Unit,
+    panelWidth: Dp = 200.dp,
+    leftPanel: @Composable BoxScope.() -> Unit,
     mainContent: @Composable RowScope.() -> Unit
 ) {
 
@@ -26,11 +28,11 @@ fun ScreenContainer(
     ) {
         Box(
             modifier = Modifier
-                .width(200.dp)
+                .width(panelWidth)
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f))
         ) {
-            leftWindow(this)
+            leftPanel(this)
             VerticalDivider(modifier = Modifier.align(Alignment.CenterEnd))
         }
 
