@@ -14,7 +14,7 @@ import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDial
 import org.smartregister.fct.aurora.util.fileNameValidation
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.engine.util.uuid
-import org.smartregister.fct.fm.ui.dialog.rememberFileProviderDialog
+import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
@@ -43,6 +43,7 @@ fun CreateNewSMButton(
     }
 
     val fileProviderDialog = rememberFileProviderDialog(
+        componentContext = component,
         fileType = FileType.StructureMap
     ) {
         smData.value = it

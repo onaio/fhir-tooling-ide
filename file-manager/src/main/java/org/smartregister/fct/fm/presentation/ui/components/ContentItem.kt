@@ -1,4 +1,4 @@
-package org.smartregister.fct.fm.ui.components
+package org.smartregister.fct.fm.presentation.ui.components
 
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
@@ -29,26 +29,17 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.Path
-import org.koin.compose.getKoin
-import org.koin.core.Koin
-import org.smartregister.fct.aurora.domain.controller.DialogController
 import org.smartregister.fct.aurora.ui.components.Icon
-import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.getOrDefault
-import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
-import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
-import org.smartregister.fct.fm.data.FileHandler
 import org.smartregister.fct.fm.domain.model.Applicable
 import org.smartregister.fct.fm.domain.model.ContextMenu
-import org.smartregister.fct.fm.domain.model.ContextMenuType
-import org.smartregister.fct.fm.ui.viewmodel.FileManagerViewModel
 import org.smartregister.fct.fm.util.getFileTypeImage
 
 @Composable
 internal fun ContentItem(
     path: Path,
-    viewModel: FileManagerViewModel,
-    copyErrorDialog: DialogController
+    onDoubleClick: (Path) -> Unit,
+    contextMenuList: List<ContextMenu>,
+    onContextMenuClick: (ContextMenu, Path) -> Unit,
 ) {
 
     Column(
@@ -56,8 +47,8 @@ internal fun ContentItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ContextMenu(path, viewModel, copyErrorDialog) {
-            ContentIcon(path, viewModel)
+        ContextMenu(path, contextMenuList, onContextMenuClick) {
+            ContentIcon(path, onDoubleClick)
         }
 
         Text(
@@ -75,7 +66,7 @@ internal fun ContentItem(
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-private fun ContentIcon(path: Path, viewModel: FileManagerViewModel) {
+private fun ContentIcon(path: Path, onDoubleClick: (Path) -> Unit) {
     val scope = rememberCoroutineScope()
 
     Card(
@@ -95,7 +86,7 @@ private fun ContentIcon(path: Path, viewModel: FileManagerViewModel) {
                             2 -> {
                                 scope.launch {
                                     delay(200)
-                                    viewModel.onDoubleClick(path)
+                                    onDoubleClick(path)
                                 }
                             }
                         }
@@ -113,39 +104,14 @@ private fun ContentIcon(path: Path, viewModel: FileManagerViewModel) {
 @Composable
 private fun ContextMenu(
     path: Path,
-    viewModel: FileManagerViewModel,
-    copyErrorDialog: DialogController,
+    contextMenuList: List<ContextMenu>,
+    onContextMenuClick: (ContextMenu, Path) -> Unit,
     content: @Composable () -> Unit
 ) {
-    val koin = getKoin()
-    val scope = rememberCoroutineScope()
-    val deleteWhat = if (path.toFile().isDirectory) "Folder" else "File"
-
-    val deleteErrorDialog = rememberAlertDialog(
-        title = "Error",
-        dialogType = DialogType.Error
-    ) {
-        val error =
-            it.getExtra().getOrDefault<Exception?, String>(0, "Unknown Error") { ex, default ->
-                ex?.message ?: default
-            }
-        Text(error)
-    }
-
-    val deleteDialog = rememberConfirmationDialog<Pair<ContextMenu, Path>>(
-        title = "Delete $deleteWhat",
-        message = "Are you sure you want to ${path.name} $deleteWhat"
-    ) {
-        val result = viewModel.onContextMenuClick(it!!.first, it.second)
-        if (result.isFailure) {
-            deleteErrorDialog.show(result.exceptionOrNull())
-        }
-    }
 
     ContextMenuArea(
         items = {
-            viewModel
-                .getContextMenuList()
+            contextMenuList
                 .filter {
                     !path.toFile().isHidden && it.applicable is Applicable.Both ||
                             (path.toFile().isFile && it.applicable is Applicable.File) ||
@@ -153,31 +119,10 @@ private fun ContextMenu(
                 }
                 .map {
                     ContextMenuItem(it.menuType.label) {
-                        scope.launch {
-                            when (it.menuType) {
-                                ContextMenuType.Delete -> deleteDialog.show(Pair(it, path))
-                                ContextMenuType.CopyToInternal -> copyToInternal(
-                                    koin,
-                                    path,
-                                    copyErrorDialog
-                                )
-
-                                else -> viewModel.onContextMenuClick(it, path)
-                            }
-                        }
+                        onContextMenuClick(it, path)
                     }
                 }
         },
         content = content
     )
-}
-
-private suspend fun copyToInternal(koin: Koin, path: Path, copyErrorDialog: DialogController) {
-    val result = koin.get<FileHandler>().inAppFileHandler.copy(path)
-    if (result.isFailure) {
-        copyErrorDialog.show(
-            result.exceptionOrNull(),
-            DialogType.Error
-        )
-    }
 }

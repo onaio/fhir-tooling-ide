@@ -5,9 +5,9 @@ import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.smartregister.fct.configs.ui.ConfigManagerScreen
 import org.smartregister.fct.engine.presentation.component.RootComponent
-import org.smartregister.fct.fm.ui.screen.FileManagerScreen
+import org.smartregister.fct.fm.presentation.ui.screen.FileManagerScreen
 import org.smartregister.fct.presentation.component.DataSpecificationScreenComponent
-import org.smartregister.fct.presentation.component.FileManagerScreenComponent
+import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.presentation.ui.screen.StructureMapScreen
 
@@ -19,6 +19,6 @@ fun MainRoot(component: RootComponent) {
     when (val contextComponent = mainSlot.child?.instance) {
         is DataSpecificationScreenComponent -> ConfigManagerScreen()
         is StructureMapScreenComponent -> StructureMapScreen(contextComponent)
-        is FileManagerScreenComponent -> FileManagerScreen()
+        is FileManagerScreenComponent -> FileManagerScreen(contextComponent)
     }
 }

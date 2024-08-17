@@ -1,4 +1,4 @@
-package org.smartregister.fct.fm.ui.components
+package org.smartregister.fct.fm.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,11 +20,11 @@ import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.ui.components.LabelledCheckBox
 import org.smartregister.fct.fm.domain.model.FileManagerMode
-import org.smartregister.fct.fm.ui.viewmodel.FileManagerViewModel
+import org.smartregister.fct.fm.presentation.components.FileManagerComponent
 
 @Composable
 internal fun ContentOptions(
-    viewModel: FileManagerViewModel,
+    component: FileManagerComponent,
     content: @Composable (RowScope.() -> Unit)? = null
 ) {
     val scope = rememberCoroutineScope()
@@ -44,10 +44,10 @@ internal fun ContentOptions(
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
                 },
-                viewModel = viewModel
+                component = component
             )
 
-            if (viewModel.mode == FileManagerMode.Edit) {
+            if (component.mode == FileManagerMode.Edit) {
                 Row(
                     modifier = Modifier.constrainAs(middleRef) {
                         start.linkTo(leftRef.end)
@@ -60,7 +60,7 @@ internal fun ContentOptions(
                     content = content ?: {}
                 )
 
-                val showHiddenFile by viewModel.getShowHiddenFile().collectAsState()
+                val showHiddenFile by component.getShowHiddenFile().collectAsState()
 
                 LabelledCheckBox(
                     modifier = Modifier.constrainAs(rightRef) {
@@ -72,7 +72,7 @@ internal fun ContentOptions(
                     label = "Hidden Files",
                     onCheckedChange = {
                         scope.launch {
-                            viewModel.setShowHiddenFile(it)
+                            component.setShowHiddenFile(it)
                         }
                     }
                 )

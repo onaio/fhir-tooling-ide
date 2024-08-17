@@ -1,11 +1,19 @@
 package org.smartregister.fct.aurora.domain.controller
 
-class ConfirmationDialogController<T>(internal val onShow: (extra: T?) -> Unit) {
+class ConfirmationDialogController(
+    private val onShow: ConfirmationDialogController.(
+        title: String?,
+        message: String,
+        extras: List<Any?>
+    ) -> Unit,
+    private val onHide: ConfirmationDialogController.() -> Unit)
+{
 
-    internal var extra: T? = null
+    fun show(title: String? = null, message: String, vararg extras: Any?) {
+        onShow(title, message, extras.asList())
+    }
 
-    fun show(extra: T? = null) {
-        this.extra = extra
-        onShow(extra)
+    fun hide() {
+        onHide()
     }
 }

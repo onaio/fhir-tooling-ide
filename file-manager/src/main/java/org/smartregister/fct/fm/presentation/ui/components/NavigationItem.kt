@@ -1,4 +1,4 @@
-package org.smartregister.fct.fm.ui.components
+package org.smartregister.fct.fm.presentation.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

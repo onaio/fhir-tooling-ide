@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.domain.controller.DialogController
 import org.smartregister.fct.aurora.ui.components.TextButton
 import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.getOrDefault
 import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
+import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.fm.ui.dialog.rememberFileProviderDialog
+import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.sm.presentation.component.TabComponent
 
 @Composable
@@ -66,6 +66,7 @@ private fun fileProviderDialog(
     component: TabComponent,
     parsingErrorDialog: DialogController
 ) = rememberFileProviderDialog(
+    componentContext = component,
     fileType = FileType.Json
 ) { source ->
 

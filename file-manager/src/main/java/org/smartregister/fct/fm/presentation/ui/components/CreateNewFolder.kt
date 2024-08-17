@@ -1,4 +1,4 @@
-package org.smartregister.fct.fm.ui.components
+package org.smartregister.fct.fm.presentation.ui.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Chip
@@ -10,15 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.getOrDefault
 import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.aurora.util.folderNameValidation
-import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
+import org.smartregister.fct.aurora.util.getOrDefault
+import org.smartregister.fct.fm.presentation.components.InAppFileManagerComponent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun CreateNewFolder(viewModel: InAppFileManagerViewModel) {
+internal fun CreateNewFolder(component: InAppFileManagerComponent) {
 
     val errorAlertDialog = rememberAlertDialog(
         title = "Error",
@@ -31,7 +31,7 @@ internal fun CreateNewFolder(viewModel: InAppFileManagerViewModel) {
         title = "Create New Folder",
         validations = listOf(folderNameValidation)
     ) { folderName, _ ->
-        val result = viewModel.createNewFolder(folderName)
+        val result = component.createNewFolder(folderName)
         if (result.isFailure) {
             errorAlertDialog.show(result.exceptionOrNull()?.message)
         }

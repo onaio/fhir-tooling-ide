@@ -30,30 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import org.smartregister.fct.aurora.domain.controller.DialogController
 import org.smartregister.fct.aurora.ui.components.SmallIconButton
-import org.smartregister.fct.logger.FCTLogger
 import androidx.compose.ui.window.Dialog as MatDialog
 
 enum class DialogType {
     Default, Error
 }
 
-fun <T, R> List<Any?>.getOrDefault(index: Int, default: R, map: (T, R) -> R): R {
-    return try {
-        map(this[index] as T, default)
-    } catch (ex: Exception) {
-        FCTLogger.e(ex)
-        default
-    }
-}
-
-fun <T> List<Any?>.getOrDefault(index: Int, default: T): T {
-    return try {
-        this[index] as T
-    } catch (ex: Exception) {
-        FCTLogger.e(ex)
-        default
-    }
-}
 
 @Composable
 fun rememberDialog(

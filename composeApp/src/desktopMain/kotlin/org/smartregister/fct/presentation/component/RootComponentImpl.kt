@@ -9,6 +9,7 @@ import com.arkivanov.decompose.value.Value
 import org.smartregister.fct.engine.domain.model.Config
 import org.smartregister.fct.engine.presentation.component.RootComponent
 import org.smartregister.fct.engine.presentation.component.ScreenComponent
+import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
 class RootComponentImpl(componentContext: ComponentContext) :

@@ -5,14 +5,12 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.smartregister.fct.engine.domain.mdoule.ModuleSetup
-import org.smartregister.fct.fm.data.FileHandler
+import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.data.datasource.InAppFileSystem
 import org.smartregister.fct.fm.data.datasource.MacFileSystem
 import org.smartregister.fct.fm.data.datasource.UnixFileSystem
 import org.smartregister.fct.fm.data.datasource.WindowsFileSystem
 import org.smartregister.fct.fm.domain.datasource.FileSystem
-import org.smartregister.fct.fm.ui.viewmodel.InAppFileManagerViewModel
-import org.smartregister.fct.fm.ui.viewmodel.SystemFileManagerViewModel
 import org.smartregister.fct.logger.FCTLogger
 
 class FileManagerModuleSetup : ModuleSetup {
@@ -29,9 +27,7 @@ class FileManagerModuleSetup : ModuleSetup {
             }
         }
         single<FileSystem>(named("inApp"), true) { InAppFileSystem() }
-        single<InAppFileManagerViewModel> { InAppFileManagerViewModel(get(named("inApp"))) }
-        single<SystemFileManagerViewModel> { SystemFileManagerViewModel(get()) }
-        single<FileHandler> { FileHandler(get<SystemFileManagerViewModel>(), get<InAppFileManagerViewModel>() )}
+        single<InterCommunication> { InterCommunication() }
     }
 
     override suspend fun setup() {

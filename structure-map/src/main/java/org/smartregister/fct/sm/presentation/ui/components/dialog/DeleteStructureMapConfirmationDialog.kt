@@ -11,14 +11,17 @@ fun DeleteStructureMapConfirmationDialog(component: StructureMapScreenComponent)
 
     val showDialog by component.showStructureMapDeleteDialog.subscribeAsState()
 
-    val confirmationDialog = rememberConfirmationDialog<Int>(
-        title = "Delete Structure Map",
-        message = "Are you sure you want to delete this structure-map?",
+    val confirmationDialog = rememberConfirmationDialog(
         onDismiss = { component.hideDeleteStructureMapDialog() },
-        onConfirmed = { component.closeTab() }
+        onConfirmed = {  _, _ ->
+            component.closeTab()
+        }
     )
 
     if (showDialog.first) {
-        confirmationDialog.show()
+        confirmationDialog.show(
+            title = "Delete Structure Map",
+            message = "Are you sure you want to delete this structure-map?",
+        )
     }
 }

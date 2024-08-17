@@ -1,4 +1,4 @@
-package org.smartregister.fct.fm.ui.components
+package org.smartregister.fct.fm.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -6,24 +6,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.FileManagerMode
-import org.smartregister.fct.fm.ui.viewmodel.SystemFileManagerViewModel
+import org.smartregister.fct.fm.presentation.components.SystemFileManagerComponent
 
 @Composable
 fun SystemFileManager(
+    componentContext: ComponentContext,
     mode: FileManagerMode = FileManagerMode.Edit
 ) {
 
-    val viewModel: SystemFileManagerViewModel = koinInject()
-    viewModel.setMode(mode)
+    val fileSystem: FileSystem = koinInject()
+    val component = remember {
+        SystemFileManagerComponent(
+            componentContext = componentContext,
+            fileSystem = fileSystem,
+            mode = mode
+        )
+    }
 
     val scope = rememberCoroutineScope()
-    val activePath by viewModel.getActivePath().collectAsState()
+    val activePath by component.getActivePath().collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (mode is FileManagerMode.Edit) Title("System File Manager")
@@ -32,11 +42,11 @@ fun SystemFileManager(
         ) {
             CommonNavigation(
                 activePath = activePath,
-                commonDirs = viewModel.getCommonDirs(),
-                rootDirs = viewModel.getRootDirs(),
+                commonDirs = component.getCommonDirs(),
+                rootDirs = component.getRootDirs(),
                 onDirectoryClick = { activePath ->
                     scope.launch {
-                        viewModel.setActivePath(activePath)
+                        component.setActivePath(activePath)
                     }
                 },
             )
@@ -47,14 +57,13 @@ fun SystemFileManager(
                 Content(
                     pathRef = pathRef,
                     contentRef = contentRef,
-                    viewModel = viewModel,
+                    component = component,
                 ) {
-                    ContentOptions(viewModel)
+                    ContentOptions(component)
                 }
 
                 Breadcrumb(pathRef, activePath)
             }
-
 
         }
     }

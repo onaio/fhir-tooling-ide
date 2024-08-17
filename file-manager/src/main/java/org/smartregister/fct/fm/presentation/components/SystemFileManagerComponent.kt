@@ -1,32 +1,35 @@
-package org.smartregister.fct.fm.ui.viewmodel
+package org.smartregister.fct.fm.presentation.components
 
+import com.arkivanov.decompose.ComponentContext
 import okio.Path
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.Applicable
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.domain.model.ContextMenuType
 import org.smartregister.fct.fm.domain.model.FileManagerMode
-import org.smartregister.fct.fm.domain.handler.SystemFileHandler
 import org.smartregister.fct.logger.FCTLogger
 
-internal class SystemFileManagerViewModel(
-    private val fileSystem: FileSystem
+internal class SystemFileManagerComponent(
+    componentContext: ComponentContext,
+    fileSystem: FileSystem,
+    mode: FileManagerMode
 ) :
-    FileManagerViewModel(fileSystem), SystemFileHandler {
+    FileManagerComponent(componentContext, fileSystem, mode) {
 
     fun getRootDirs() = fileSystem.rootDirs()
 
     override fun getContextMenuList(): List<ContextMenu> {
-        return when(mode) {
+        return when (mode) {
             is FileManagerMode.Edit -> listOf(
                 ContextMenu(ContextMenuType.CopyToInternal, Applicable.Both),
                 ContextMenu(ContextMenuType.Upload, Applicable.File()),
             )
+
             is FileManagerMode.View -> {
                 listOf(
                     ContextMenu(
                         ContextMenuType.SelectFile,
-                        Applicable.File((mode as FileManagerMode.View).extensions)
+                        Applicable.File(mode.extensions)
                     )
                 )
             }
@@ -44,3 +47,4 @@ internal class SystemFileManagerViewModel(
         }
     }
 }
+
