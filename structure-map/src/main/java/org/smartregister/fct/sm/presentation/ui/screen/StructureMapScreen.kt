@@ -65,7 +65,8 @@ fun StructureMapScreen(component: StructureMapScreenComponent) {
                 floatingActionButton = {
                     CreateNewSMButton(
                         label = null,
-                        icon = Icons.Outlined.Add
+                        icon = Icons.Outlined.Add,
+                        component = component
                     )
                 }
             ) {
@@ -74,7 +75,7 @@ fun StructureMapScreen(component: StructureMapScreenComponent) {
                 }
             }
         } else {
-            CreateNewStructureMap()
+            CreateNewStructureMap(component = component)
         }
     }
 
@@ -82,7 +83,7 @@ fun StructureMapScreen(component: StructureMapScreenComponent) {
 }
 
 @Composable
-private fun CreateNewStructureMap() {
+private fun CreateNewStructureMap(component: StructureMapScreenComponent) {
     var showButton by remember { mutableStateOf(false) }
 
     AnimatedVisibility(
@@ -97,7 +98,8 @@ private fun CreateNewStructureMap() {
     ) {
         Box(Modifier.fillMaxSize()) {
             CreateNewSMButton(
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
+                component = component
             )
         }
     }

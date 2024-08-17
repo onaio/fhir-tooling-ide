@@ -10,7 +10,9 @@ import org.koin.core.component.inject
 import org.smartregister.fct.engine.presentation.component.ScreenComponent
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.getKoinInstance
+import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.domain.model.TabIndex
+import org.smartregister.fct.sm.domain.usecase.CreateNewSM
 import org.smartregister.fct.sm.domain.usecase.DeleteSM
 import org.smartregister.fct.sm.domain.usecase.GetAllSM
 
@@ -19,6 +21,7 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
     KoinComponent, ComponentContext by componentContext {
 
     private val getAllStructureMaps: GetAllSM by inject()
+    private val createNewSM: CreateNewSM by inject()
     private val deleteStructureMap: DeleteSM by inject()
     private val tabIndex: TabIndex = getKoinInstance()
 
@@ -48,6 +51,12 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
         }
     }
 
+    fun insertNewStructureMap(smDetail: SMDetail) {
+        componentScope.launch {
+            createNewSM(smDetail)
+        }
+    }
+
     fun changeTab(index: Int) {
         updateTabIndex(index)
     }
@@ -61,6 +70,7 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
     fun hideDeleteStructureMapDialog() {
         _showStructureMapDeleteDialog.value = Pair(false, -1)
     }
+
 
     fun closeTab() {
         componentScope.launch {

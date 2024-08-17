@@ -41,7 +41,10 @@ internal fun TransformButton(component: TabComponent) {
         width = 1200.dp,
         height = 800.dp,
     ) {
-        SMTransformationResult(it.getExtra().getOrDefault(0, Bundle()))
+        SMTransformationResult(
+            componentContext = component,
+            bundle = it.getExtra().getOrDefault(0, Bundle())
+        )
     }
 
     OutlinedButton(

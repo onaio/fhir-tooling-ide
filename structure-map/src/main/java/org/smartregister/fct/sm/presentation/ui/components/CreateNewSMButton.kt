@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import org.koin.java.KoinJavaComponent.getKoin
 import org.smartregister.fct.aurora.ui.components.FloatingActionIconButton
 import org.smartregister.fct.aurora.ui.components.TextButton
 import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
@@ -16,24 +15,24 @@ import org.smartregister.fct.aurora.util.fileNameValidation
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.fm.ui.dialog.rememberFileProviderDialog
-import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.model.SMDetail
+import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
 @Composable
 fun CreateNewSMButton(
     modifier: Modifier = Modifier,
     label: String? = "Create Structure Map",
     icon: ImageVector? = Icons.Outlined.Add,
+    component: StructureMapScreenComponent
 ) {
 
-    val smViewModel = getKoin().get<SMViewModel>()
     val smData = remember { mutableStateOf("") }
     val smTitleDialog = rememberSingleFieldDialog(
         title = "Structure Map Title",
         maxLength = 30,
         validations = listOf(fileNameValidation)
     ) { title, _ ->
-        smViewModel.insert(
+        component.insertNewStructureMap(
             SMDetail(
                 id = uuid(),
                 title = title,

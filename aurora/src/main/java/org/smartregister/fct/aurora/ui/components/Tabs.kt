@@ -258,6 +258,37 @@ fun Tab(
 }
 
 @Composable
+fun Tab(
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    title: String,
+    icon: @Composable (() -> Unit)? = null,
+    selectedContentColor: Color = LocalContentColor.current,
+    unselectedContentColor: Color = selectedContentColor,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+) {
+    Mat3Tab(
+        selected = selected,
+        onClick = onClick,
+        modifier = modifier.height(40.dp)
+            .background(if (selected) MaterialTheme.colorScheme.surfaceContainer else MaterialTheme.colorScheme.surface),
+        enabled = enabled,
+        selectedContentColor = selectedContentColor,
+        unselectedContentColor = unselectedContentColor,
+        interactionSource = interactionSource,
+        text = {
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        },
+        icon = icon
+    )
+}
+
+@Composable
 fun<T> CloseableTab(
     index: Int,
     item: T,

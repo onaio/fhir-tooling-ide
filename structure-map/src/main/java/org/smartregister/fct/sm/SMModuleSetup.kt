@@ -9,7 +9,6 @@ import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.datasource.SMSqlDelightDataSource
 import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository
 import org.smartregister.fct.sm.data.transformation.SMTransformService
-import org.smartregister.fct.sm.data.viewmodel.SMViewModel
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
 import org.smartregister.fct.sm.domain.model.TabIndex
 import org.smartregister.fct.sm.domain.repository.SMRepository
@@ -27,7 +26,6 @@ class SMModuleSetup : ModuleSetup {
         single<CreateNewSM> { CreateNewSM(get()) }
         single<UpdateSM> { UpdateSM(get()) }
         single<DeleteSM> { DeleteSM(get()) }
-        single<SMViewModel> { SMViewModel() }
         single<SMTransformService> { SMTransformService() }
         single<TabIndex> { TabIndex() }
     }
@@ -36,7 +34,6 @@ class SMModuleSetup : ModuleSetup {
         FCTLogger.d("Loading... Structure Map Module")
         GlobalContext.get().loadModules(listOf(smModule))
         getKoinInstance<SMTransformService>().init()
-        getKoinInstance<SMViewModel>().init()
         FCTLogger.d("Structure Map Module Loaded")
     }
 }
