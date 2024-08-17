@@ -9,12 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Chip
@@ -49,14 +47,11 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import fct.composeapp.generated.resources.Res
 import fct.composeapp.generated.resources.github_icon
-import io.github.alexzhirkevich.compottie.Compottie
-import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import org.jetbrains.compose.resources.painterResource
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
-import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.presentation.viewmodel.SubWindowViewModel
-import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
+import org.smartregister.fct.common.data.enums.RightWindowState
+import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
 
 @Composable
 fun TopAppBar(subWindowViewModel: SubWindowViewModel) {

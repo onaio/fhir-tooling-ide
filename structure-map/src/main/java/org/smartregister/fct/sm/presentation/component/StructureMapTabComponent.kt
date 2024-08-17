@@ -16,10 +16,10 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.engine.util.componentScope
-import org.smartregister.fct.engine.util.decodeResourceFromString
-import org.smartregister.fct.engine.util.listOfAllFhirResources
-import org.smartregister.fct.engine.util.readableResourceName
+import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.common.util.decodeResourceFromString
+import org.smartregister.fct.common.util.listOfAllFhirResources
+import org.smartregister.fct.common.util.readableResourceName
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.domain.model.SMDetail

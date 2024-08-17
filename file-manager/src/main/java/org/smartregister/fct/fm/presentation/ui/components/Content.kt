@@ -36,7 +36,7 @@ import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
 import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.aurora.util.getOrThrow
-import org.smartregister.fct.engine.util.getKoinInstance
+import org.smartregister.fct.common.util.getKoinInstance
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.domain.model.ContextMenuType

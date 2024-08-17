@@ -10,8 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.device.ui.DeviceManagerWindow
-import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.enums.RightWindowState
+import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.pm.ui.PackageManagerWindow
 

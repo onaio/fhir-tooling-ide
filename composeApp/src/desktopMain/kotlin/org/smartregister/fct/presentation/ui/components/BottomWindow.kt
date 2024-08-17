@@ -9,8 +9,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.engine.data.enums.BottomWindowState
-import org.smartregister.fct.engine.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.enums.BottomWindowState
+import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
 import org.smartregister.fct.logcat.ui.LogcatWindow
 import org.smartregister.fct.logger.FCTLogger
 

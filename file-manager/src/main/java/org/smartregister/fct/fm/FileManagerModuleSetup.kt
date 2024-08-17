@@ -4,7 +4,7 @@ import okio.Path.Companion.toPath
 import org.koin.core.context.GlobalContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import org.smartregister.fct.engine.domain.mdoule.ModuleSetup
+import org.smartregister.fct.common.domain.mdoule.ModuleSetup
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.data.datasource.InAppFileSystem
 import org.smartregister.fct.fm.data.datasource.MacFileSystem

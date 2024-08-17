@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.smartregister.fct.engine.presentation.component.RootComponent
-import org.smartregister.fct.engine.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.presentation.component.RootComponent
+import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
 import org.smartregister.fct.presentation.ui.components.BottomWindow
 import org.smartregister.fct.presentation.ui.components.LeftNavigation
 import org.smartregister.fct.presentation.ui.components.MainRoot

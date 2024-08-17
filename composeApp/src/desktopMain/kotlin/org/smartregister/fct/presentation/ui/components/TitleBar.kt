@@ -45,8 +45,8 @@ import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
-import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.enums.RightWindowState
+import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
 
 @Composable
 fun TitleBar(subWindowViewModel: SubWindowViewModel) {
@@ -103,7 +103,7 @@ private fun DeviceSelectionMenu() {
     }
 
     val dropdownModifier =
-        if (selectedValue == null) Modifier.width(200.dp) else Modifier.wrapContentSize()
+        if (selectedValue == null) Modifier.width(230.dp) else Modifier.wrapContentSize()
 
     ExposedDropdownMenuBox(
         expanded = expanded,

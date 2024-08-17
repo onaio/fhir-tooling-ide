@@ -8,8 +8,8 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     implementation(Dependencies.SqlDelight.coroutineExtension)
+    implementation(project(":common"))
 
-    implementation(project(":engine"))
     implementation(project(":database"))
     implementation(project(":adb"))
 }

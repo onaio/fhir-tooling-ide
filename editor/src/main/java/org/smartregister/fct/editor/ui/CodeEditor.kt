@@ -56,8 +56,8 @@ import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
 import org.smartregister.fct.editor.util.prettyJson
-import org.smartregister.fct.engine.domain.model.AppSetting
-import org.smartregister.fct.engine.presentation.viewmodel.AppSettingViewModel
+import org.smartregister.fct.common.domain.model.AppSetting
+import org.smartregister.fct.common.presentation.viewmodel.AppSettingViewModel
 
 
 @Composable

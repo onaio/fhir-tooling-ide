@@ -23,7 +23,6 @@ import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.engine.data.locals.LocalRootComponent
 import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.presentation.ui.components.InAppFileManager
 import org.smartregister.fct.fm.presentation.ui.components.SystemFileManager

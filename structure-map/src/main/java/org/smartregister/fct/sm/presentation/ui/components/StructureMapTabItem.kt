@@ -10,7 +10,7 @@ import org.smartregister.fct.sm.presentation.component.TabComponent
 internal fun StructureMapTabItem(component: TabComponent) {
 
     ScreenContainer(
-        panelWidth = 250.dp,
+        panelWidth = 230.dp,
         leftPanel = { StructureMapControlPanel(component) }
     ) {
         CodeEditor(

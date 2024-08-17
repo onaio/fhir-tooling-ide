@@ -3,8 +3,8 @@ package org.smartregister.fct.editor.util
 import com.google.gson.FormattingStyle
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import org.smartregister.fct.engine.presentation.viewmodel.AppSettingViewModel
-import org.smartregister.fct.engine.util.getKoinInstance
+import org.smartregister.fct.common.presentation.viewmodel.AppSettingViewModel
+import org.smartregister.fct.common.util.getKoinInstance
 
 internal fun String.prettyJson(): String {
 

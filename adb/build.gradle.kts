@@ -13,5 +13,5 @@ java {
 dependencies {
     implementation(Dependencies.kScriptTool)
     implementation(Dependencies.KotlinX.coroutine)
-    implementation(project(":engine"))
+    implementation(project(":common"))
 }

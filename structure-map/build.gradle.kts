@@ -15,8 +15,8 @@ dependencies {
     implementation(Dependencies.gson)
     implementation(Dependencies.KotlinX.coroutine)
     implementation(Dependencies.KotlinX.serializationJson)
+    implementation(project(":common"))
 
-    implementation(project(":engine"))
     implementation(project(":database"))
     implementation(project(":editor"))
     implementation(project(":upload"))

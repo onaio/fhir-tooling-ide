@@ -8,7 +8,7 @@ plugins {
 
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
+    implementation(project(":common"))
 
-    implementation(project(":engine"))
     implementation(project(":adb"))
 }

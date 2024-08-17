@@ -5,8 +5,8 @@ import app.cash.sqldelight.coroutines.mapToList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.smartregister.fct.engine.util.compress
-import org.smartregister.fct.engine.util.decompress
+import org.smartregister.fct.common.util.compress
+import org.smartregister.fct.common.util.decompress
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
 import org.smartregister.fct.sm.domain.model.SMDetail

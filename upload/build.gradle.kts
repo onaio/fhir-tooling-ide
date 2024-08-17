@@ -11,7 +11,7 @@ dependencies {
     implementation(Dependencies.SqlDelight.coroutineExtension)
 
     api(Dependencies.fileKitCompose)
-    implementation(project(":engine"))
+    implementation(project(":common"))
     implementation(project(":editor"))
 }
 

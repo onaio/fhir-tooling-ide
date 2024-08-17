@@ -17,7 +17,7 @@ dependencies {
     implementation(Dependencies.json)
     implementation(Dependencies.prettyTime)
     implementation(Dependencies.fileKitCompose)
+    implementation(project(":common"))
 
-    implementation(project(":engine"))
     implementation(project(":database"))
 }

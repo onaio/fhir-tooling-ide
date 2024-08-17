@@ -4,7 +4,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import org.smartregister.fct.editor.domain.transformation.TextTransformation
-import org.smartregister.fct.engine.util.hexToColor
+import org.smartregister.fct.common.util.hexToColor
 
 internal class SMTextTransformation(
     searchText: String,

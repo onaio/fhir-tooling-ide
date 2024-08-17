@@ -33,8 +33,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.koin.compose.koinInject
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.engine.domain.model.AppSetting
-import org.smartregister.fct.engine.presentation.viewmodel.AppSettingViewModel
+import org.smartregister.fct.common.domain.model.AppSetting
+import org.smartregister.fct.common.presentation.viewmodel.AppSettingViewModel
 import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.presentation.theme.FCTTheme
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
@@ -172,6 +172,7 @@ fun MainWindow(
         title = title,
         onCloseRequest = onCloseRequest,
     ) {
+        window.minimumSize = java.awt.Dimension(800, 600)
 
         CompositionLocalProvider(
             LocalWindowController provides windowController,

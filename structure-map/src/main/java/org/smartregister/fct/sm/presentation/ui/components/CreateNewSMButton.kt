@@ -13,7 +13,7 @@ import org.smartregister.fct.aurora.ui.components.TextButton
 import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.aurora.util.fileNameValidation
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.common.util.uuid
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
@@ -21,7 +21,7 @@ import org.smartregister.fct.sm.presentation.component.StructureMapScreenCompone
 @Composable
 fun CreateNewSMButton(
     modifier: Modifier = Modifier,
-    label: String? = "Create Structure Map",
+    label: String? = "New Structure Map",
     icon: ImageVector? = Icons.Outlined.Add,
     component: StructureMapScreenComponent
 ) {

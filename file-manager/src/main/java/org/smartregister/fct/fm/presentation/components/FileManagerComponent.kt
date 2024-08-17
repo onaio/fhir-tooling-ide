@@ -1,9 +1,7 @@
 package org.smartregister.fct.fm.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +10,7 @@ import kotlinx.coroutines.withContext
 import okio.Path
 import okio.Path.Companion.toPath
 import org.apache.commons.io.FileUtils
-import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.common.util.componentScope
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.domain.model.FileManagerMode

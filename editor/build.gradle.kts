@@ -8,7 +8,7 @@ dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
 
     implementation(Dependencies.gson)
-    implementation(project(":engine"))
+    implementation(project(":common"))
 
 }
 

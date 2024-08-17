@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.ui.components.TextButton
-import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
+import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.sm.presentation.component.TabComponent
 
 @Composable

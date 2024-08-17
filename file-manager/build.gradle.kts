@@ -13,8 +13,8 @@ dependencies {
     implementation(Dependencies.ApacheCommon.io)
 
     implementation("io.github.ltttttttttttt:ComposeViews:1.6.11.4")
+    implementation(project(":common"))
 
-    implementation(project(":engine"))
     implementation(project(":database"))
     implementation(project(":editor"))
     implementation(project(":upload"))

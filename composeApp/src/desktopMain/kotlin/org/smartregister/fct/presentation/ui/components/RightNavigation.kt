@@ -18,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.engine.data.enums.BottomWindowState
-import org.smartregister.fct.engine.data.enums.RightWindowState
-import org.smartregister.fct.engine.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.enums.BottomWindowState
+import org.smartregister.fct.common.data.enums.RightWindowState
+import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
 import org.smartregister.fct.aurora.ui.components.SmallIconButton
 
 @Composable

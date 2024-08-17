@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.smartregister.fct.engine.presentation.component.ScreenComponent
-import org.smartregister.fct.engine.util.componentScope
-import org.smartregister.fct.engine.util.getKoinInstance
+import org.smartregister.fct.common.presentation.component.ScreenComponent
+import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.common.util.getKoinInstance
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.domain.model.TabIndex
 import org.smartregister.fct.sm.domain.usecase.CreateNewSM

@@ -6,9 +6,9 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.value.Value
-import org.smartregister.fct.engine.domain.model.Config
-import org.smartregister.fct.engine.presentation.component.RootComponent
-import org.smartregister.fct.engine.presentation.component.ScreenComponent
+import org.smartregister.fct.common.domain.model.Config
+import org.smartregister.fct.common.presentation.component.RootComponent
+import org.smartregister.fct.common.presentation.component.ScreenComponent
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 

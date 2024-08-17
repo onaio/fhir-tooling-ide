@@ -2,7 +2,7 @@ package org.smartregister.fct.configs.domain.model
 
 import kotlinx.serialization.Serializable
 import org.hl7.fhir.r4.model.ResourceType
-import org.smartregister.fct.engine.util.extractLogicalIdUuid
+import org.smartregister.fct.common.util.extractLogicalIdUuid
 import org.smartregister.fct.configs.util.extension.interpolate
 
 

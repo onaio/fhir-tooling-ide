@@ -22,7 +22,7 @@ kotlin {
             Dependencies.Compose.getAll().forEach(::implementation)
             Dependencies.Voyager.getAll().forEach(::implementation)
 
-            implementation(project(":engine"))
+            implementation(project(":common"))
             implementation(project(":configs"))
             implementation(project(":adb"))
             implementation(project(":device-manager"))

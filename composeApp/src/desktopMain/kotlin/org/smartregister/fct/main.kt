@@ -24,23 +24,21 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import org.smartregister.fct.adb.ADBModuleSetup
+import org.smartregister.fct.common.CommonModuleSetup
+import org.smartregister.fct.common.data.locals.LocalRootComponent
+import org.smartregister.fct.common.data.locals.LocalSnackbarHost
+import org.smartregister.fct.common.data.locals.LocalSubWindowViewModel
 import org.smartregister.fct.configs.ConfigModuleSetup
-import org.smartregister.fct.presentation.component.RootComponentImpl
-import org.smartregister.fct.engine.EngineModuleSetup
-import org.smartregister.fct.engine.data.locals.LocalRootComponent
-import org.smartregister.fct.engine.data.locals.LocalSnackbarHost
-import org.smartregister.fct.engine.data.locals.LocalSubWindowViewModel
-import org.smartregister.fct.engine.presentation.component.RootComponent
 import org.smartregister.fct.fm.FileManagerModuleSetup
 import org.smartregister.fct.pm.PMModuleSetup
-import org.smartregister.fct.sm.SMModuleSetup
+import org.smartregister.fct.presentation.component.RootComponentImpl
 import org.smartregister.fct.presentation.ui.App
 import org.smartregister.fct.presentation.ui.MainWindow
 import org.smartregister.fct.presentation.ui.components.BottomBar
 import org.smartregister.fct.presentation.ui.components.TitleBar
+import org.smartregister.fct.sm.SMModuleSetup
 import org.smartregister.fct.util.runOnUiThread
 import java.awt.Toolkit
-
 
 
 fun main() = application {
@@ -103,7 +101,7 @@ fun main() = application {
 private fun initSubModules(scope: CoroutineScope) {
 
     listOf(
-        EngineModuleSetup(),
+        CommonModuleSetup(),
         ConfigModuleSetup(),
         ADBModuleSetup(),
         PMModuleSetup(),

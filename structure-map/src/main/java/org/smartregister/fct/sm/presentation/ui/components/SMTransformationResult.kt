@@ -20,7 +20,7 @@ import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
 import org.smartregister.fct.aurora.ui.components.ScrollableTabRow
 import org.smartregister.fct.aurora.ui.components.Tab
 import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.engine.util.readableResourceName
+import org.smartregister.fct.common.util.readableResourceName
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
 import org.smartregister.fct.json.JsonTreeView
