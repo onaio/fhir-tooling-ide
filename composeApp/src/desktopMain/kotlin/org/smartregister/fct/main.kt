@@ -27,7 +27,7 @@ import org.smartregister.fct.adb.ADBModuleSetup
 import org.smartregister.fct.common.CommonModuleSetup
 import org.smartregister.fct.common.data.locals.LocalRootComponent
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
-import org.smartregister.fct.common.data.locals.LocalSubWindowViewModel
+import org.smartregister.fct.common.data.locals.LocalSubWindowManager
 import org.smartregister.fct.configs.ConfigModuleSetup
 import org.smartregister.fct.fm.FileManagerModuleSetup
 import org.smartregister.fct.pm.PMModuleSetup
@@ -68,7 +68,7 @@ fun main() = application {
 
     initSubModules(scope)
 
-    val subWindowViewModel = LocalSubWindowViewModel.current
+    val subWindowViewModel = LocalSubWindowManager.current
 
     CompositionLocalProvider(LocalRootComponent provides rootComponent) {
         MainWindow(
@@ -77,7 +77,10 @@ fun main() = application {
             appIcon = painterResource(Res.drawable.app_icon),
             onCloseRequest = ::exitApplication,
             titleContent = {
-                TitleBar(subWindowViewModel)
+                TitleBar(
+                    componentContext = rootComponent,
+                    subWindowManager = subWindowViewModel
+                )
             },
         ) {
             Scaffold(
@@ -90,7 +93,7 @@ fun main() = application {
                 Box(modifier = Modifier.padding(it)) {
                     App(
                         rootComponent = rootComponent,
-                        subWindowViewModel = subWindowViewModel
+                        subWindowManager = subWindowViewModel
                     )
                 }
             }

@@ -17,35 +17,35 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.domain.controller.ConfirmationDialogController
 
-private data class Content(
+private data class Content<T>(
     val title: String? = null,
     val message: String = "",
-    val extras: List<Any?> = listOf(),
+    val data: T? = null,
 )
 
 @Composable
-fun rememberConfirmationDialog(
+fun <T> rememberConfirmationDialog(
     modifier: Modifier = Modifier,
     confirmButtonLabel: String = "Yes",
     cancelButtonLabel: String = "No",
     isCancellable: Boolean = true,
     icon: ImageVector? = null,
-    onDismiss: ((ConfirmationDialogController) -> Unit)? = null,
-    onShow: ((ConfirmationDialogController) -> Unit)? = null,
-    onConfirmed: suspend CoroutineScope.(ConfirmationDialogController, List<Any?>) -> Unit
-): ConfirmationDialogController {
+    onDismiss: ((ConfirmationDialogController<T>) -> Unit)? = null,
+    onShow: ((ConfirmationDialogController<T>) -> Unit)? = null,
+    onConfirmed: suspend CoroutineScope.(ConfirmationDialogController<T>, T?) -> Unit
+): ConfirmationDialogController<T> {
 
     val isShowDialog = remember { mutableStateOf(false) }
-    var content by remember { mutableStateOf(Content()) }
+    var content by remember { mutableStateOf(Content<T>()) }
     val scope = rememberCoroutineScope()
 
     val confirmationDialogController = remember {
-        ConfirmationDialogController (
-            onShow = { title, message, extras ->
+        ConfirmationDialogController<T>(
+            onShow = { title, message, data ->
                 content = Content(
                     title = title,
                     message = message,
-                    extras = extras
+                    data = data
                 )
                 isShowDialog.value = true
                 onShow?.invoke(this)
@@ -70,7 +70,7 @@ fun rememberConfirmationDialog(
         onDismiss = onDismiss,
         onConfirmed = {
             scope.launch {
-                onConfirmed(confirmationDialogController, content.extras)
+                onConfirmed(confirmationDialogController, content.data)
             }
         }
     )
@@ -79,9 +79,9 @@ fun rememberConfirmationDialog(
 }
 
 @Composable
-fun ConfirmationDialog(
+fun <T> ConfirmationDialog(
     isShowDialog: MutableState<Boolean>,
-    controller: ConfirmationDialogController,
+    controller: ConfirmationDialogController<T>,
     modifier: Modifier = Modifier,
     title: String? = null,
     message: String,
@@ -89,8 +89,8 @@ fun ConfirmationDialog(
     cancelButtonLabel: String,
     isCancellable: Boolean,
     icon: ImageVector?,
-    onDismiss: ((ConfirmationDialogController) -> Unit)?,
-    onConfirmed: (ConfirmationDialogController) -> Unit
+    onDismiss: ((ConfirmationDialogController<T>) -> Unit)?,
+    onConfirmed: (ConfirmationDialogController<T>) -> Unit
 ) {
 
     if (isShowDialog.value) {

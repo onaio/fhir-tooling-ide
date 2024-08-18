@@ -132,11 +132,11 @@ fun UploadFromInputFieldButtonWithDialog(
     onResult: (String) -> Unit
 ) {
 
-    val dialogController = rememberDialog(
+    val dialogController = rememberDialog<Unit>(
         title = title,
         width = dialogWidth,
         height = dialogHeight,
-    ) { controller ->
+    ) { controller, _ ->
 
         UploadFromInputFieldWithFab(
             initial = initial,

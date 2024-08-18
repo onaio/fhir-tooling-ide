@@ -20,8 +20,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,26 +38,31 @@ enum class DialogType {
     Default, Error
 }
 
-
 @Composable
-fun rememberDialog(
+fun <T> rememberDialog(
     title: String,
     width: Dp = 300.dp,
     height: Dp? = null,
     cancelable: Boolean = true,
-    onCancelled: (() -> Unit)? = null,
+    cancelOnTouchOutside: Boolean = true,
     dialogType: DialogType = DialogType.Default,
-    content: @Composable (ColumnScope.(DialogController) -> Unit)
-): DialogController {
+    onDismiss: (DialogController<T>.() -> Unit)? = null,
+    content: @Composable (ColumnScope.(DialogController<T>, T?) -> Unit)
+): DialogController<T> {
 
     val isShowDialog = remember { mutableStateOf(false) }
+    var data by remember { mutableStateOf<T?>(null) }
 
     val dialogController = remember {
-        DialogController(
+        DialogController<T>(
             onShow = {
+                data = it
                 isShowDialog.value = true
             },
-            onHide = { isShowDialog.value = false }
+            onHide = {
+                isShowDialog.value = false
+                onDismiss?.invoke(this)
+            }
         )
     }
 
@@ -67,7 +74,9 @@ fun rememberDialog(
         width = width,
         height = height,
         cancelable = cancelable,
-        onCancelled = onCancelled,
+        cancelOnTouchOutside = cancelOnTouchOutside,
+        onDismiss = onDismiss,
+        data = data,
         content = content
     )
 
@@ -75,24 +84,26 @@ fun rememberDialog(
 }
 
 @Composable
-internal fun Dialog(
-    dialogController: DialogController,
+internal fun <T> Dialog(
+    dialogController: DialogController<T>,
     isShowDialog: MutableState<Boolean>,
     dialogType: DialogType,
     title: String,
     width: Dp,
     height: Dp?,
     cancelable: Boolean,
-    onCancelled: (() -> Unit)? = null,
-    content: @Composable (ColumnScope.(DialogController) -> Unit)
+    cancelOnTouchOutside: Boolean,
+    onDismiss: (DialogController<T>.() -> Unit)?,
+    data: T?,
+    content: @Composable (ColumnScope.(DialogController<T>, T?) -> Unit)
 ) {
 
     if (isShowDialog.value) {
 
         val borderColor =
-            if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surface
+            if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
         val titleBackground =
-            if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surfaceContainer
+            if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surface
         val titleForeground =
             if (dialogType == DialogType.Error) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.onSecondaryContainer
 
@@ -101,8 +112,8 @@ internal fun Dialog(
                 usePlatformDefaultWidth = false
             ),
             onDismissRequest = {
-                isShowDialog.value = !cancelable
-                if (cancelable) onCancelled?.invoke()
+                isShowDialog.value = !cancelOnTouchOutside
+                if (cancelOnTouchOutside) onDismiss?.invoke(dialogController)
             }
         ) {
 
@@ -139,7 +150,7 @@ internal fun Dialog(
                             tint = titleForeground,
                             onClick = {
                                 isShowDialog.value = false
-                                onCancelled?.invoke()
+                                onDismiss?.invoke(dialogController)
                             }
                         )
                     }
@@ -153,7 +164,7 @@ internal fun Dialog(
                 Column(
                     modifier = bodyModifier,
                     content = {
-                        content(dialogController)
+                        content(dialogController, data)
                     }
                 )
             }

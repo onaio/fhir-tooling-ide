@@ -1,6 +1,5 @@
 package org.smartregister.fct.configs.data.viewmodel
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -9,7 +8,7 @@ import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.common.util.uuid
 import sqldelight.Config
 
-class ConfigManagerViewModel : ScreenModel, KoinComponent {
+class ConfigManagerViewModel :  KoinComponent {
 
     private val configRepository: ConfigRepository by inject()
 

@@ -20,7 +20,6 @@ object Dependencies {
         const val kotlinXCoroutine = "1.9.0-RC"
         const val kotlinXSerializationJson = "1.7.1"
         const val compose = "1.6.11"
-        const val voyager = "1.1.0-beta02"
         const val fhirVersion = "6.8.0"
         const val hapiFhirCore = "6.0.22"
         const val koin = "4.0.0-RC1"
@@ -38,15 +37,16 @@ object Dependencies {
         const val okio = "3.9.0"
         const val decompose = "3.1.0"
         const val essenty = "2.2.0-alpha04"
+        const val composeView = "1.6.11.4"
     }
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
     const val kScriptTool = "com.sealwu:kscript-tools:${Version.kScriptTool}"
-
     const val json = "org.json:json:${Version.json}"
     const val prettyTime = "org.ocpsoft.prettytime:prettytime:${Version.prettyTime}"
     const val gson = "com.google.code.gson:gson:${Version.gson}"
     const val compottie = "io.github.alexzhirkevich:compottie:${Version.compottie}"
+    const val composeView = "io.github.ltttttttttttt:ComposeViews:${Version.composeView}"
 
     object Decompose {
         const val core = "com.arkivanov.decompose:decompose:${Version.decompose}"
@@ -94,29 +94,6 @@ object Dependencies {
             componentsUiTollingPreview,
             materialIconsExtended,
             constraintLayoutCompose
-        )
-    }
-
-    object Voyager {
-        const val voyagerVersion = "1.1.0-beta02"
-
-        const val navigator = "cafe.adriel.voyager:voyager-navigator:${Version.voyager}"
-        const val screenModel = "cafe.adriel.voyager:voyager-screenmodel:${Version.voyager}"
-        const val bottomSheetNavigator =
-            "cafe.adriel.voyager:voyager-bottom-sheet-navigator:${Version.voyager}"
-        const val tabNavigator = "cafe.adriel.voyager:voyager-tab-navigator:${Version.voyager}"
-        const val transition = "cafe.adriel.voyager:voyager-transitions:${Version.voyager}"
-        const val lifecycleKmp = "cafe.adriel.voyager:voyager-lifecycle-kmp:${Version.voyager}"
-        const val koin = "cafe.adriel.voyager:voyager-koin:${Version.voyager}"
-
-        fun getAll() = listOf(
-            navigator,
-            screenModel,
-            bottomSheetNavigator,
-            tabNavigator,
-            transition,
-            lifecycleKmp,
-            koin
         )
     }
 

@@ -10,14 +10,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.common.data.enums.BottomWindowState
-import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.logcat.ui.LogcatWindow
 import org.smartregister.fct.logger.FCTLogger
 
 @Composable
-fun BottomWindow(subWindowViewModel: SubWindowViewModel) {
+fun BottomWindow(subWindowManager: SubWindowManager) {
 
-    val windowState by subWindowViewModel.getBottomWindowState().collectAsState(initial = null)
+    val windowState by subWindowManager.getBottomWindowState().collectAsState(initial = null)
 
     if (windowState != null) {
         Column(modifier = Modifier.height(200.dp).fillMaxWidth()) {
@@ -26,7 +26,7 @@ fun BottomWindow(subWindowViewModel: SubWindowViewModel) {
             when (windowState) {
                 BottomWindowState.Logcat -> {
                     LogcatWindow(onClose = {
-                        subWindowViewModel.setBottomWindowState(BottomWindowState.Logcat)
+                        subWindowManager.setBottomWindowState(BottomWindowState.Logcat)
                     })
                 }
 

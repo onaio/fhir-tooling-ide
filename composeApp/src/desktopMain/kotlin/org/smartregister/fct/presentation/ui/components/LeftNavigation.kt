@@ -17,7 +17,6 @@ import androidx.compose.material.icons.outlined.DataObject
 import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.MoveDown
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Token
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.rounded.DarkMode
@@ -36,13 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
 import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.ui.components.Icon
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
-import org.smartregister.fct.common.presentation.viewmodel.AppSettingViewModel
+import org.smartregister.fct.common.data.manager.AppSettingManager
 
 @Composable
 fun LeftNavigation(
@@ -50,7 +47,7 @@ fun LeftNavigation(
 ) {
     Box(
         modifier = Modifier.width(60.dp).fillMaxHeight()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Row(
             modifier = Modifier.fillMaxSize()
@@ -95,14 +92,14 @@ private fun NavigationBar(rootComponent: RootComponent) {
 
 @Composable
 private fun ThemeChangerButton() {
-    val appSettingViewModel = koinInject<AppSettingViewModel>()
-    var appSetting = appSettingViewModel.appSetting
+    val appSettingManager = koinInject<AppSettingManager>()
+    var appSetting = appSettingManager.appSetting
 
     IconButton(onClick = {
         appSetting = appSetting.copy(
             isDarkTheme = !appSetting.isDarkTheme
         )
-        appSettingViewModel.setAndUpdate(appSetting)
+        appSettingManager.setAndUpdate(appSetting)
     }) {
         val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
         Icon(icon = icon)
@@ -134,7 +131,6 @@ private fun navigationMenu(): List<NavigationButton> {
         NavigationButton(title = "FHIR Path Expression",
             icon = Icons.Outlined.DataObject,
             onClick = {}),
-        NavigationButton(title = "Settings", icon = Icons.Outlined.Settings, onClick = {})
     )
 }
 
@@ -143,11 +139,3 @@ data class NavigationButton(
     val icon: ImageVector,
     val onClick: (rootComponent: RootComponent) -> Unit
 )
-
-fun Navigator.replaceUntilRoot(screen: Screen) {
-    /* if (lastItem is ConfigManagerScreen) {
-         push(screen)
-     } else {
-         replace(screen)
-     }*/
-}

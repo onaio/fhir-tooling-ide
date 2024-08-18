@@ -15,7 +15,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.smartregister.fct.common.presentation.component.RootComponent
-import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.presentation.ui.components.BottomWindow
 import org.smartregister.fct.presentation.ui.components.LeftNavigation
 import org.smartregister.fct.presentation.ui.components.MainRoot
@@ -26,7 +26,7 @@ import org.smartregister.fct.presentation.ui.components.RightWindow
 @Preview
 fun App(
     rootComponent: RootComponent,
-    subWindowViewModel: SubWindowViewModel
+    subWindowManager: SubWindowManager
 ) {
 
     Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
@@ -55,7 +55,7 @@ fun App(
                             bottom.linkTo(bottomWindow.top)
                             height = Dimension.preferredWrapContent
                         }) {
-                    RightWindow(subWindowViewModel)
+                    RightWindow(subWindowManager)
                 }
 
                 Row(
@@ -65,7 +65,7 @@ fun App(
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
                         }) {
-                    RightNavigation(subWindowViewModel)
+                    RightNavigation(subWindowManager)
                 }
 
                 Column(
@@ -76,7 +76,7 @@ fun App(
                             bottom.linkTo(parent.bottom)
                             width = Dimension.preferredWrapContent
                         }) {
-                    BottomWindow(subWindowViewModel)
+                    BottomWindow(subWindowManager)
                 }
             }
 

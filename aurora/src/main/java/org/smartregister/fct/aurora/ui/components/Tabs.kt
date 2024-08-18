@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
@@ -311,6 +312,7 @@ fun<T> CloseableTab(
 
                 Box(
                     modifier = Modifier
+                        .offset(x = 20.dp)
                         .minimumInteractiveComponentSize()
                         .clickable(
                             onClick = { onClose(index) },
@@ -323,7 +325,7 @@ fun<T> CloseableTab(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(16.dp),
                         icon = Icons.Rounded.Close,
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )

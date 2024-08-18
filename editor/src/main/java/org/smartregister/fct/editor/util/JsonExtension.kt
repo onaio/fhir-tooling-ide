@@ -3,12 +3,12 @@ package org.smartregister.fct.editor.util
 import com.google.gson.FormattingStyle
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import org.smartregister.fct.common.presentation.viewmodel.AppSettingViewModel
+import org.smartregister.fct.common.data.manager.AppSettingManager
 import org.smartregister.fct.common.util.getKoinInstance
 
 internal fun String.prettyJson(): String {
 
-    val appSetting = getKoinInstance<AppSettingViewModel>().appSetting
+    val appSetting = getKoinInstance<AppSettingManager>().appSetting
 
     val gson = GsonBuilder()
         .disableHtmlEscaping()

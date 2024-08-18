@@ -1,16 +1,14 @@
-package org.smartregister.fct.common.presentation.viewmodel
+package org.smartregister.fct.common.data.manager
 
 import kotlinx.coroutines.flow.Flow
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.smartregister.fct.common.domain.model.AppSetting
 import org.smartregister.fct.common.domain.usecase.GetAppSetting
 import org.smartregister.fct.common.domain.usecase.UpdateAppSetting
 
-class AppSettingViewModel : KoinComponent{
-
-    private val getAppSetting: GetAppSetting by inject()
-    private val updateAppSetting: UpdateAppSetting by inject()
+class AppSettingManager(
+    private val getAppSetting: GetAppSetting,
+    private val updateAppSetting: UpdateAppSetting
+) {
 
     var appSetting = AppSetting()
         private set
@@ -25,7 +23,7 @@ class AppSettingViewModel : KoinComponent{
         this.appSetting = appSetting
     }
 
-    fun getAppSettingFlow() : Flow<AppSetting> {
+    fun getAppSettingFlow(): Flow<AppSetting> {
         return getAppSetting()
     }
 }

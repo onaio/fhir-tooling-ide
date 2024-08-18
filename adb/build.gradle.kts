@@ -1,7 +1,5 @@
 
 plugins {
-    //id("java-library")
-    //kotlin("jvm") version "2.0.0"
     alias(libs.plugins.jetbrainsKotlinJvm)
 }
 
@@ -12,6 +10,5 @@ java {
 
 dependencies {
     implementation(Dependencies.kScriptTool)
-    implementation(Dependencies.KotlinX.coroutine)
     implementation(project(":common"))
 }

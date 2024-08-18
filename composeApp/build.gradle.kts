@@ -20,7 +20,6 @@ kotlin {
         
         commonMain.dependencies {
             Dependencies.Compose.getAll().forEach(::implementation)
-            Dependencies.Voyager.getAll().forEach(::implementation)
 
             implementation(project(":common"))
             implementation(project(":configs"))
@@ -30,6 +29,7 @@ kotlin {
             implementation(project(":structure-map"))
             implementation(project(":file-manager"))
             implementation(project(":logcat"))
+            implementation(project(":settings"))
         }
 
         desktopMain.dependencies {

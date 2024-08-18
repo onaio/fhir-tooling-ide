@@ -11,7 +11,7 @@ fun DeleteStructureMapConfirmationDialog(component: StructureMapScreenComponent)
 
     val showDialog by component.showStructureMapDeleteDialog.subscribeAsState()
 
-    val confirmationDialog = rememberConfirmationDialog(
+    val confirmationDialog = rememberConfirmationDialog<Unit>(
         onDismiss = { component.hideDeleteStructureMapDialog() },
         onConfirmed = {  _, _ ->
             component.closeTab()

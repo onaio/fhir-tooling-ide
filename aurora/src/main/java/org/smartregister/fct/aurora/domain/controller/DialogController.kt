@@ -1,20 +1,17 @@
 package org.smartregister.fct.aurora.domain.controller
 
-import org.smartregister.fct.aurora.ui.components.dialog.DialogType
+class DialogController<T>(
+    private val onShow: DialogController<T>.(
+        data: T?
+    ) -> Unit,
+    private val onHide: DialogController<T>.() -> Unit)
+{
 
-class DialogController(private val onShow: DialogController.() -> Unit, private val onHide: DialogController.() -> Unit) {
-
-    private var extras: MutableList<Any?> = mutableListOf()
-
-    fun show(vararg extras: Any?) {
-        this.extras.clear()
-        this.extras.addAll(extras)
-        onShow()
+    fun show(data: T? = null) {
+        onShow(data)
     }
 
     fun hide() {
         onHide()
     }
-
-    fun getExtra() : List<Any?> = extras
 }

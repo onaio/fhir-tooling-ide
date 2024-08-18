@@ -20,16 +20,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.enums.RightWindowState
-import org.smartregister.fct.common.presentation.viewmodel.SubWindowViewModel
+import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.aurora.ui.components.SmallIconButton
 
 @Composable
-fun RightNavigation(subWindowViewModel: SubWindowViewModel) {
+fun RightNavigation(subWindowManager: SubWindowManager) {
 
     VerticalDivider()
     Column(
         modifier = Modifier.width(45.dp)
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)).fillMaxHeight(),
+            .background(MaterialTheme.colorScheme.surface).fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -37,12 +37,12 @@ fun RightNavigation(subWindowViewModel: SubWindowViewModel) {
             Spacer(Modifier.height(12.dp))
             SmallIconButton(
                 icon = Icons.Outlined.PhoneAndroid,
-                onClick = { subWindowViewModel.setRightWindowState(RightWindowState.DeviceManager) }
+                onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
             )
             Spacer(Modifier.height(18.dp))
             SmallIconButton(
                 icon = Icons.AutoMirrored.Outlined.ListAlt,
-                onClick = { subWindowViewModel.setRightWindowState(RightWindowState.PackageManager) }
+                onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
             )
             Spacer(Modifier.height(18.dp))
             SmallIconButton(
@@ -53,7 +53,7 @@ fun RightNavigation(subWindowViewModel: SubWindowViewModel) {
         Column {
             SmallIconButton(
                 icon = Icons.Outlined.ConnectedTv,
-                onClick = { subWindowViewModel.setBottomWindowState(BottomWindowState.Logcat) }
+                onClick = { subWindowManager.setBottomWindowState(BottomWindowState.Logcat) }
             )
             Spacer(Modifier.height(12.dp))
         }

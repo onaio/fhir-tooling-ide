@@ -13,6 +13,7 @@ dependencies {
     Dependencies.Koin.getAll().forEach(::api)
     Dependencies.Decompose.getAll().forEach(::api)
 
+    api(Dependencies.KotlinX.coroutine)
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.prettyTime)

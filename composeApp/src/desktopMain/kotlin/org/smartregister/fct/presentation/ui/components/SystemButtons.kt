@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -49,7 +50,8 @@ fun WindowsActionButtons(
                 Icon(
                     modifier = Modifier.scale(0.6f),
                     painter = painterResource(Res.drawable.minimize),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -64,7 +66,8 @@ fun WindowsActionButtons(
                 Icon(
                     modifier = Modifier.scale(0.6f),
                     painter = painterResource(if (isWindowMaximized()) Res.drawable.restore else Res.drawable.maximize),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -84,7 +87,7 @@ fun WindowsActionButtons(
             Icon(
                 modifier = Modifier.scale(0.5f),
                 painter = painterResource(Res.drawable.close),
-                tint = if (isHover) Color.White else LocalContentColor.current,
+                tint = if (isHover) Color.White else MaterialTheme.colorScheme.onSurface,
                 contentDescription = null,
             )
         }

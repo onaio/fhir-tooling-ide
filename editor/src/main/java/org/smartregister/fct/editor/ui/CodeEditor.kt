@@ -57,7 +57,7 @@ import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
 import org.smartregister.fct.editor.util.prettyJson
 import org.smartregister.fct.common.domain.model.AppSetting
-import org.smartregister.fct.common.presentation.viewmodel.AppSettingViewModel
+import org.smartregister.fct.common.data.manager.AppSettingManager
 
 
 @Composable
@@ -74,7 +74,7 @@ fun CodeEditor(
     key: Any = controller
 ) {
 
-    val appSetting: AppSetting = koinInject<AppSettingViewModel>().appSetting
+    val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val showToolbox = remember { mutableStateOf(false) }
     val preInitialText by controller.initTextFlow.collectAsState()
     val initialText = if (controller.isInitialTextSet) controller.getText() else preInitialText

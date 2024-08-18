@@ -7,13 +7,11 @@ plugins {
 
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
-    Dependencies.Voyager.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
 
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.ApacheCommon.compress)
     implementation(Dependencies.gson)
-    implementation(Dependencies.KotlinX.coroutine)
     implementation(Dependencies.KotlinX.serializationJson)
     implementation(project(":common"))
 

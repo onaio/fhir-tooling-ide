@@ -13,18 +13,17 @@ import org.smartregister.fct.aurora.ui.components.dialog.DialogType
 import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.aurora.util.folderNameValidation
-import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.fm.presentation.components.InAppFileManagerComponent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun CreateNewFolder(component: InAppFileManagerComponent) {
 
-    val errorAlertDialog = rememberAlertDialog(
+    val errorAlertDialog = rememberAlertDialog<String>(
         title = "Error",
         dialogType = DialogType.Error
-    ) {
-        Text(it.getExtra().getOrDefault(0, "Error on creating new folder"))
+    ) { _, errorMessage ->
+        Text(errorMessage ?: "Error on creating new folder")
     }
 
     val newFolderDialog = rememberSingleFieldDialog(

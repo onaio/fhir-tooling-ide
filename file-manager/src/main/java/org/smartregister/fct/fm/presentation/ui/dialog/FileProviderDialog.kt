@@ -19,11 +19,11 @@ import org.smartregister.fct.aurora.domain.controller.DialogController
 import org.smartregister.fct.aurora.ui.components.FloatingActionIconButton
 import org.smartregister.fct.aurora.ui.components.Tabs
 import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
-import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.fm.domain.model.FileManagerMode
+import org.smartregister.fct.fm.domain.model.FPInitialConfig
 import org.smartregister.fct.fm.presentation.ui.components.InAppFileManager
 import org.smartregister.fct.fm.presentation.ui.components.SystemFileManager
 
@@ -32,10 +32,10 @@ fun rememberFileProviderDialog(
     componentContext: ComponentContext,
     title: String = "File Provider",
     fileType: FileType? = null,
-    onCancelled: (() -> Unit)? = null,
+    onDismiss: ((DialogController<FPInitialConfig>) -> Unit)? = null,
     onFilePath: ((Path) -> Unit)? = null,
     onFileContent: ((String) -> Unit)? = null
-): DialogController {
+): DialogController<FPInitialConfig> {
 
     val scope = rememberCoroutineScope()
 
@@ -43,18 +43,18 @@ fun rememberFileProviderDialog(
         width = 1200.dp,
         height = 800.dp,
         title = title,
-        onCancelled = onCancelled,
-    ) {
+        onDismiss = onDismiss,
+    ) { controller, config ->
 
-        val editorTitle = it.getExtra().getOrDefault(0, "Untitled")
-        val initialData = it.getExtra().getOrDefault(1, "")
+        val editorTitle = config?.title ?: "Untitled"
+        val initialData = config?.initialData ?: ""
         val codeController = CodeController(scope, initialData, fileType)
 
         FileProviderDialog(
             editorTitle = editorTitle,
             onFilePath = onFilePath,
             onFileContent = onFileContent,
-            fileProviderController = it,
+            fileProviderController = controller,
             codeController = codeController,
             componentContext = componentContext
         )
@@ -64,11 +64,11 @@ fun rememberFileProviderDialog(
 }
 
 @Composable
-fun FileProviderDialog(
+private fun FileProviderDialog(
     editorTitle: String,
     onFilePath: ((Path) -> Unit)? = null,
     onFileContent: ((String) -> Unit)? = null,
-    fileProviderController: DialogController,
+    fileProviderController: DialogController<FPInitialConfig>,
     codeController: CodeController,
     componentContext: ComponentContext
 ) {
@@ -114,11 +114,17 @@ fun FileProviderDialog(
                     fileProviderController = fileProviderController
                 ) else SystemFileManager(componentContext, mode)
 
-                1 -> if (initialData.isNotEmpty()) SystemFileManager(componentContext, mode) else InAppFileManager(
+                1 -> if (initialData.isNotEmpty()) SystemFileManager(
+                    componentContext,
+                    mode
+                ) else InAppFileManager(
                     componentContext, mode
                 )
 
-                2 -> if (initialData.isNotEmpty()) InAppFileManager(componentContext, mode) else CodeView(
+                2 -> if (initialData.isNotEmpty()) InAppFileManager(
+                    componentContext,
+                    mode
+                ) else CodeView(
                     onFileContent = onFileContent,
                     controller = codeController,
                     fileProviderController = fileProviderController
@@ -132,7 +138,7 @@ fun FileProviderDialog(
 private fun CodeView(
     onFileContent: ((String) -> Unit)?,
     controller: CodeController,
-    fileProviderController: DialogController
+    fileProviderController: DialogController<FPInitialConfig>
 ) {
     Scaffold(
         floatingActionButton = {

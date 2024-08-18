@@ -14,6 +14,7 @@ import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDial
 import org.smartregister.fct.aurora.util.fileNameValidation
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.common.util.uuid
+import org.smartregister.fct.fm.domain.model.FPInitialConfig
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.sm.domain.model.SMDetail
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
@@ -56,14 +57,24 @@ fun CreateNewSMButton(
             label = label,
             icon = icon,
         ) {
-            fileProviderDialog.show("New Map")
+            fileProviderDialog.show(
+                FPInitialConfig(
+                    title = "New Map",
+                    initialData = ""
+                )
+            )
         }
     } else {
         FloatingActionIconButton(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             icon = icon!!,
             onClick = {
-                fileProviderDialog.show("New Map")
+                fileProviderDialog.show(
+                    FPInitialConfig(
+                        title = "New Map",
+                        initialData = ""
+                    )
+                )
             }
         )
     }

@@ -16,8 +16,8 @@ import org.smartregister.fct.aurora.domain.controller.DialogController
 import org.smartregister.fct.aurora.ui.components.TextButton
 import org.smartregister.fct.aurora.ui.components.dialog.DialogType
 import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
-import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.editor.data.enums.FileType
+import org.smartregister.fct.fm.domain.model.FPInitialConfig
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.sm.presentation.component.TabComponent
 
@@ -39,23 +39,26 @@ internal fun AddSourceButton(component: TabComponent) {
         label = sourceName,
         onClick = {
             scope.launch {
-                val title = sourceName
-                val initialData = smDetail.source ?: ""
-                filePickerDialog.show(title, initialData)
+                filePickerDialog.show(
+                    FPInitialConfig(
+                        title = sourceName,
+                        initialData = smDetail.source ?: ""
+                    )
+                )
             }
         }
     )
 }
 
 @Composable
-private fun parseErrorDialog() = rememberDialog(
+private fun parseErrorDialog() = rememberDialog<String>(
     title = "Parsing Error",
     width = 300.dp,
     dialogType = DialogType.Error
-) {
+) { _, errorMessage ->
     Text(
         modifier = Modifier.fillMaxWidth().padding(12.dp),
-        text = it.getExtra().getOrDefault(0, ""),
+        text = errorMessage ?: "Unknown Error",
         textAlign = TextAlign.Center
     )
 }
@@ -64,7 +67,7 @@ private fun parseErrorDialog() = rememberDialog(
 private fun fileProviderDialog(
     scope: CoroutineScope,
     component: TabComponent,
-    parsingErrorDialog: DialogController
+    parsingErrorDialog: DialogController<String>
 ) = rememberFileProviderDialog(
     componentContext = component,
     fileType = FileType.Json

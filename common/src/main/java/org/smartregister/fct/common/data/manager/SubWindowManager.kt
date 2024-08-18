@@ -1,4 +1,4 @@
-package org.smartregister.fct.common.presentation.viewmodel
+package org.smartregister.fct.common.data.manager
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +9,7 @@ import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.enums.RightWindowState
 
 
-class SubWindowViewModel {
+class SubWindowManager {
 
     private val rightWindowState = MutableStateFlow<RightWindowState?>(null)
     private val bottomWindowState = MutableStateFlow<BottomWindowState?>(null)

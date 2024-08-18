@@ -15,7 +15,6 @@ import org.smartregister.fct.aurora.ui.components.OutlinedButton
 import org.smartregister.fct.aurora.ui.components.dialog.DialogType
 import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberLoaderDialogController
-import org.smartregister.fct.aurora.util.getOrDefault
 import org.smartregister.fct.sm.presentation.component.TabComponent
 
 @Composable
@@ -25,25 +24,25 @@ internal fun TransformButton(component: TabComponent) {
 
     val loaderController = rememberLoaderDialogController()
 
-    val errorDialogController = rememberDialog(
+    val errorDialogController = rememberDialog<String>(
         title = "Transformation Error",
         dialogType = DialogType.Error
-    ) {
+    ) { _, errorMessage ->
         Text(
             modifier = Modifier.fillMaxWidth().padding(12.dp),
-            text = it.getExtra().getOrDefault(0, ""),
+            text = errorMessage ?: "Unknown Error",
             textAlign = TextAlign.Center
         )
     }
 
-    val resultDialogController = rememberDialog(
+    val resultDialogController = rememberDialog<Bundle>(
         title = "Transformation Result",
         width = 1200.dp,
         height = 800.dp,
-    ) {
+    ) { _, bundle ->
         SMTransformationResult(
             componentContext = component,
-            bundle = it.getExtra().getOrDefault(0, Bundle())
+            bundle = bundle ?: Bundle()
         )
     }
 

@@ -34,11 +34,10 @@ import org.smartregister.fct.aurora.domain.controller.ConfirmationDialogControll
 import org.smartregister.fct.aurora.ui.components.dialog.DialogType
 import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
-import org.smartregister.fct.aurora.util.getOrDefault
-import org.smartregister.fct.aurora.util.getOrThrow
 import org.smartregister.fct.common.util.getKoinInstance
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.domain.model.ContextMenu
+import org.smartregister.fct.fm.domain.model.ContextMenuPath
 import org.smartregister.fct.fm.domain.model.ContextMenuType
 import org.smartregister.fct.fm.presentation.components.FileManagerComponent
 
@@ -53,20 +52,17 @@ internal fun ConstraintLayoutScope.Content(
     val verticalScrollState = rememberScrollState()
     val visible by component.visibleItem.collectAsState()
 
-    val deleteErrorDialog = rememberAlertDialog(
+    val deleteErrorDialog = rememberAlertDialog<Throwable>(
         title = "Error",
         dialogType = DialogType.Error
-    ) {
-        val error =
-            it.getExtra().getOrDefault<Exception?, String>(0, "Unknown Error") { ex, default ->
-                ex?.message ?: default
-            }
+    ) { _, ex ->
+        val error = ex?.message ?: "Unknown Error"
         Text(error)
     }
 
-    val deleteDialog = rememberConfirmationDialog { controller, extras ->
-        val contextMenu = extras.getOrThrow<ContextMenu>(0)
-        val path = extras.getOrThrow<Path>(1)
+    val deleteDialog = rememberConfirmationDialog<ContextMenuPath> { _, contextMenuPath ->
+        val contextMenu = contextMenuPath!!.menu
+        val path = contextMenuPath.path
         val result = component.onContextMenuClick(contextMenu, path)
         if (result.isFailure) {
             deleteErrorDialog.show(result.exceptionOrNull())
@@ -114,7 +110,7 @@ private fun Items(
     component: FileManagerComponent,
     visible: Boolean,
     activePathContent: List<Path>,
-    deleteDialog: ConfirmationDialogController
+    deleteDialog: ConfirmationDialogController<ContextMenuPath>
 ) {
     val scope = rememberCoroutineScope()
     Spacer(Modifier.height(12.dp))
@@ -149,7 +145,7 @@ private fun Items(
 private fun handleContextMenuClick(
     component: FileManagerComponent,
     scope: CoroutineScope,
-    deleteDialog: ConfirmationDialogController,
+    deleteDialog: ConfirmationDialogController<ContextMenuPath>,
     menu: ContextMenu,
     path: Path
 ) {
@@ -162,8 +158,7 @@ private fun handleContextMenuClick(
                 deleteDialog.show(
                     title = "Delete $deleteWhat",
                     message = "Are you sure you want to ${path.name} $deleteWhat",
-                    menu,
-                    path
+                    ContextMenuPath(menu, path)
                 )
             }
 
