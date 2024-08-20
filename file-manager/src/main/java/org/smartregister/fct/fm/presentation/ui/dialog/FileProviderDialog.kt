@@ -74,6 +74,8 @@ private fun FileProviderDialog(
 ) {
 
     val initialData = codeController.getText()
+    val labelSystemFileManager = "System File Manager"
+    val labelInAppFileManager = "In App File Manager"
 
     val onFileSelected = onFileContent?.let {
         val listener: (String) -> Unit = {
@@ -99,11 +101,9 @@ private fun FileProviderDialog(
 
     Tabs(
         tabs = listOf(
-            if (initialData.isNotEmpty()) editorTitle else stringResource(Res.string.system_file_manager_heading),
-            if (initialData.isNotEmpty()) stringResource(Res.string.system_file_manager_heading) else stringResource(
-                Res.string.in_app_file_manager_heading
-            ),
-            if (initialData.isNotEmpty()) stringResource(Res.string.in_app_file_manager_heading) else editorTitle,
+            if (initialData.isNotEmpty()) editorTitle else labelSystemFileManager,
+            if (initialData.isNotEmpty()) labelSystemFileManager else labelInAppFileManager,
+            if (initialData.isNotEmpty()) labelInAppFileManager else editorTitle,
         ),
         title = { it },
         onSelected = { tabIndex, _ ->

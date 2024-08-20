@@ -30,6 +30,7 @@ kotlin {
             implementation(project(":file-manager"))
             implementation(project(":logcat"))
             implementation(project(":settings"))
+            implementation(project(":api-client"))
         }
 
         desktopMain.dependencies {

@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
 import org.smartregister.fct.adb.ADBModuleSetup
+import org.smartregister.fct.apiclient.ApiClientModuleSetup
 import org.smartregister.fct.common.CommonModuleSetup
 import org.smartregister.fct.common.data.locals.LocalRootComponent
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
@@ -109,7 +110,8 @@ private fun initSubModules(scope: CoroutineScope) {
         ADBModuleSetup(),
         PMModuleSetup(),
         FileManagerModuleSetup(),
-        SMModuleSetup()
+        SMModuleSetup(),
+        ApiClientModuleSetup(),
     ).forEach {
         scope.launch(Dispatchers.IO) {
             it.setup()

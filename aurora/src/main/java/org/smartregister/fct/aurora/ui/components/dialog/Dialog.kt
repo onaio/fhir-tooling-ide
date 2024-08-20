@@ -20,9 +20,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +32,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.domain.controller.DialogController
 import org.smartregister.fct.aurora.ui.components.SmallIconButton
+import java.util.UUID
 import androidx.compose.ui.window.Dialog as MatDialog
 
 enum class DialogType {
@@ -47,17 +52,20 @@ fun <T> rememberDialog(
     cancelOnTouchOutside: Boolean = true,
     dialogType: DialogType = DialogType.Default,
     onDismiss: (DialogController<T>.() -> Unit)? = null,
+    key: Any? = null,
     content: @Composable (ColumnScope.(DialogController<T>, T?) -> Unit)
 ): DialogController<T> {
 
-    val isShowDialog = remember { mutableStateOf(false) }
-    var data by remember { mutableStateOf<T?>(null) }
+    val scope = rememberCoroutineScope()
 
-    val dialogController = remember {
+    val dialogController = remember(key) {
         DialogController<T>(
             onShow = {
-                data = it
-                isShowDialog.value = true
+
+                scope.launch {
+                    data.emit(it)
+                    isShowDialog.emit(true)
+                }
             },
             onHide = {
                 isShowDialog.value = false
@@ -68,7 +76,7 @@ fun <T> rememberDialog(
 
     Dialog(
         dialogController = dialogController,
-        isShowDialog = isShowDialog,
+        isShowDialog = dialogController.isShowDialog,
         dialogType = dialogType,
         title = title,
         width = width,
@@ -76,7 +84,7 @@ fun <T> rememberDialog(
         cancelable = cancelable,
         cancelOnTouchOutside = cancelOnTouchOutside,
         onDismiss = onDismiss,
-        data = data,
+        data = dialogController.data.collectAsState().value,
         content = content
     )
 
@@ -86,7 +94,7 @@ fun <T> rememberDialog(
 @Composable
 internal fun <T> Dialog(
     dialogController: DialogController<T>,
-    isShowDialog: MutableState<Boolean>,
+    isShowDialog: MutableStateFlow<Boolean>,
     dialogType: DialogType,
     title: String,
     width: Dp,
@@ -98,7 +106,8 @@ internal fun <T> Dialog(
     content: @Composable (ColumnScope.(DialogController<T>, T?) -> Unit)
 ) {
 
-    if (isShowDialog.value) {
+    if (isShowDialog.collectAsState().value) {
+        val scope = rememberCoroutineScope()
 
         val borderColor =
             if (dialogType == DialogType.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
@@ -112,7 +121,9 @@ internal fun <T> Dialog(
                 usePlatformDefaultWidth = false
             ),
             onDismissRequest = {
-                isShowDialog.value = !cancelOnTouchOutside
+                scope.launch {
+                    isShowDialog.emit(!cancelOnTouchOutside)
+                }
                 if (cancelOnTouchOutside) onDismiss?.invoke(dialogController)
             }
         ) {
@@ -149,8 +160,10 @@ internal fun <T> Dialog(
                             icon = Icons.Outlined.Close,
                             tint = titleForeground,
                             onClick = {
-                                isShowDialog.value = false
-                                onDismiss?.invoke(dialogController)
+                                scope.launch {
+                                    isShowDialog.emit(false)
+                                    onDismiss?.invoke(dialogController)
+                                }
                             }
                         )
                     }

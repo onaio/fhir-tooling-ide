@@ -31,7 +31,9 @@ internal fun SettingsContainer(
 
         when (activeSetting) {
             is Setting.ServerConfigs -> {
-                ServerConfigPanel(serverConfigPanelComponent)
+                with (serverConfigPanelComponent) {
+                    ServerConfigPanel()
+                }
             }
             is Setting.CodeEditor -> {}
         }

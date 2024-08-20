@@ -38,6 +38,7 @@ object Dependencies {
         const val decompose = "3.1.0"
         const val essenty = "2.2.0-alpha04"
         const val composeView = "1.6.11.4"
+        const val ktor = "2.3.12"
     }
 
     const val fileKitCompose = "io.github.vinceglb:filekit-compose:${Version.fileKitCompose}"
@@ -47,6 +48,15 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:${Version.gson}"
     const val compottie = "io.github.alexzhirkevich:compottie:${Version.compottie}"
     const val composeView = "io.github.ltttttttttttt:ComposeViews:${Version.composeView}"
+
+    object Ktor {
+        const val clientCore = "io.ktor:ktor-client-core:${Version.ktor}"
+        const val clientCio = "io.ktor:ktor-client-cio:${Version.ktor}"
+        const val contentNegotiation = "io.ktor:ktor-client-content-negotiation:${Version.ktor}"
+        const val serializationKotlinX = "io.ktor:ktor-serialization-kotlinx-json:${Version.ktor}"
+
+        fun getAll() = listOf(clientCore, clientCio, contentNegotiation, serializationKotlinX)
+    }
 
     object Decompose {
         const val core = "com.arkivanov.decompose:decompose:${Version.decompose}"

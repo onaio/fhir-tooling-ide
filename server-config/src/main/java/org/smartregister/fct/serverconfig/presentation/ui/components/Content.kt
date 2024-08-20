@@ -10,31 +10,54 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import fct.server_config.generated.resources.Res
+import fct.server_config.generated.resources.auth_token
+import fct.server_config.generated.resources.client_id
+import fct.server_config.generated.resources.client_secret
+import fct.server_config.generated.resources.config_verified
+import fct.server_config.generated.resources.description
+import fct.server_config.generated.resources.error
+import fct.server_config.generated.resources.failed
+import fct.server_config.generated.resources.fhir_base_url
+import fct.server_config.generated.resources.oauth_url
+import fct.server_config.generated.resources.password
+import fct.server_config.generated.resources.save
+import fct.server_config.generated.resources.setting_saved
+import fct.server_config.generated.resources.success
+import fct.server_config.generated.resources.username
+import fct.server_config.generated.resources.verify
 import kotlinx.coroutines.delay
+import org.smartregister.fct.apiclient.domain.model.AuthResponse
+import org.smartregister.fct.aurora.ui.components.Button
 import org.smartregister.fct.aurora.ui.components.OutlinedButton
-import org.smartregister.fct.aurora.ui.components.TextButton
+import org.smartregister.fct.aurora.ui.components.dialog.DialogType
+import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
+import org.smartregister.fct.serverconfig.domain.model.VerifyConfigState
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigComponent
+import org.smartregister.fct.serverconfig.util.asString
 
+context (ServerConfigComponent)
 @Composable
-internal fun ServerConfigComponent.Content() {
+internal fun Content() {
+
+    val verifyConfigState by verifyConfigState.subscribeAsState()
 
     Column(
         modifier = Modifier.fillMaxSize().padding(12.dp),
@@ -45,7 +68,7 @@ internal fun ServerConfigComponent.Content() {
                 Box(Modifier.weight(1f)) {
                     TextFieldItem(
                         text = username.subscribeAsState(),
-                        label = "Username",
+                        label = Res.string.username.asString(),
                         onValueChange = ::setUsername
                     )
                 }
@@ -53,7 +76,7 @@ internal fun ServerConfigComponent.Content() {
                 Box(Modifier.weight(1f)) {
                     TextFieldItem(
                         text = password.subscribeAsState(),
-                        label = "Password",
+                        label = Res.string.password.asString(),
                         onValueChange = ::setPassword
                     )
                 }
@@ -61,44 +84,68 @@ internal fun ServerConfigComponent.Content() {
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
                 text = fhirBaseUrl.subscribeAsState(),
-                label = "Fhir Base Url",
+                label = Res.string.fhir_base_url.asString(),
                 onValueChange = ::setFhirBaseUrl
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
                 text = oAuthUrl.subscribeAsState(),
-                label = "OAuth Url",
+                label = Res.string.oauth_url.asString(),
                 onValueChange = ::setOAuthUrl
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
                 text = clientId.subscribeAsState(),
-                label = "Client Id",
+                label = Res.string.client_id.asString(),
                 onValueChange = ::setClientId
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
+                text = clientSecret.subscribeAsState(),
+                label = Res.string.client_secret.asString(),
+                onValueChange = ::setClientSecret
+            )
+            Spacer(Modifier.height(12.dp))
+            TextFieldItem(
                 text = authToken.subscribeAsState(),
-                label = "Auth Token",
+                label = Res.string.auth_token.asString(),
                 readOnly = true,
                 onValueChange = {}
             )
             Spacer(Modifier.height(12.dp))
-            Row {
-                OutlinedButton(
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
                     onClick = ::save,
-                    label = "Save"
+                    label = Res.string.save.asString()
                 )
                 Spacer(Modifier.width(12.dp))
-                TextButton(
-                    label = "Authenticate",
-                    onClick = ::authenticate
-                )
+
+                when (val state = verifyConfigState) {
+                    is VerifyConfigState.Idle -> {
+                        OutlinedButton(
+                            label = Res.string.verify.asString(),
+                            onClick = ::verifyAuthConfig
+                        )
+                    }
+
+                    is VerifyConfigState.Authenticating -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp
+                        )
+                    }
+
+                    is VerifyConfigState.Result -> {
+                        ShowAuthResponseDialog(state.authResponse)
+                    }
+                }
             }
         }
 
         AnimatedVisibility(settingSaved.subscribeAsState().value) {
-            Text("Setting Saved")
+            Text(Res.string.setting_saved.asString())
             LaunchedEffect(null) {
                 delay(1500)
                 settingSaved.value = false
@@ -138,4 +185,46 @@ internal fun TextFieldItem(
                 )
         )
     }
+}
+
+context (ServerConfigComponent)
+@Composable
+fun ShowAuthResponseDialog(authResponse: AuthResponse) {
+
+    val title =
+        if (authResponse is AuthResponse.Success) Res.string.success.asString()
+        else Res.string.failed.asString()
+
+    val dialogType =
+        if (authResponse is AuthResponse.Success) DialogType.Default else DialogType.Error
+
+    val responseDialog = rememberAlertDialog<Unit>(
+        title = title,
+        dialogType = dialogType,
+        onDismiss = {
+            verifyConfigState.value = VerifyConfigState.Idle
+        }
+    ) { _, _ ->
+        when (authResponse) {
+            is AuthResponse.Success -> {
+                Text(Res.string.config_verified.asString().format(serverConfig.title))
+            }
+
+            is AuthResponse.Failed -> {
+                Text(Res.string.error.asString(), style = TextStyle(fontWeight = FontWeight.Bold))
+                Text(authResponse.error)
+
+                authResponse.description?.let {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        Res.string.description.asString(),
+                        style = TextStyle(fontWeight = FontWeight.Bold)
+                    )
+                    Text(it)
+                }
+            }
+        }
+    }
+
+    responseDialog.show()
 }

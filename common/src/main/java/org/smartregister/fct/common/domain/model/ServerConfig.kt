@@ -9,6 +9,7 @@ data class ServerConfig(
     val fhirBaseUrl: String = "",
     val oAuthUrl: String = "",
     val clientId: String = "",
+    val clientSecret: String = "",
     val username: String = "",
     val password: String = "",
     val authToken: String = "",

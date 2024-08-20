@@ -24,9 +24,9 @@ import kotlinx.coroutines.delay
 import org.smartregister.fct.aurora.domain.controller.SingleFieldDialogController
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 
+context (ServerConfigPanelComponent)
 @Composable
 internal fun CreateOrImportConfig(
-    component: ServerConfigPanelComponent,
     titleDialogController: SingleFieldDialogController
 ) {
     var showButton by remember { mutableStateOf(false) }
@@ -55,7 +55,7 @@ internal fun CreateOrImportConfig(
                         fontWeight = FontWeight.Thin
                     )
                 )
-                ImportConfigButton(component)
+                ImportConfigButton()
             }
         }
     }

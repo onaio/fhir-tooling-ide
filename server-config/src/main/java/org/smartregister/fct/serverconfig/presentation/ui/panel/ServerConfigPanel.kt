@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -17,15 +18,19 @@ import org.smartregister.fct.serverconfig.presentation.ui.components.CreateOrImp
 import org.smartregister.fct.serverconfig.presentation.ui.components.MultiItemFloatingActionButton
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 import org.smartregister.fct.serverconfig.presentation.ui.components.Content
+import org.smartregister.fct.serverconfig.presentation.ui.components.ExportConfigsDialog
+import org.smartregister.fct.serverconfig.presentation.ui.components.ImportConfigsDialog
 
+context (ServerConfigPanelComponent)
 @Composable
-fun ServerConfigPanel(component : ServerConfigPanelComponent) {
+fun ServerConfigPanel() {
 
-
-    val activeTabIndex by component.activeTabIndex.subscribeAsState()
-    val serverConfigList by component.tabComponents.subscribeAsState()
-    val deleteConfigDialog = deleteConfigDialog(component)
-    val titleDialogController = titleDialogController(component)
+    val activeTabIndex by activeTabIndex.subscribeAsState()
+    val serverConfigList by tabComponents.subscribeAsState()
+    val showExportConfigDialog by exportConfigDialog.collectAsState()
+    val showImportConfigDialog by importConfigDialog.collectAsState()
+    val deleteConfigDialog = deleteConfigDialog()
+    val titleDialogController = titleDialogController()
 
     Column {
 
@@ -44,7 +49,7 @@ fun ServerConfigPanel(component : ServerConfigPanelComponent) {
                             title = { it.title },
                             selected = index == activeTabIndex,
                             onClick = {
-                                component.changeTab(it)
+                                changeTab(it)
                             },
                             onClose = {
                                 deleteConfigDialog.show(
@@ -58,30 +63,46 @@ fun ServerConfigPanel(component : ServerConfigPanelComponent) {
             }
 
             Box(Modifier.fillMaxSize()) {
-                serverConfigList[activeTabIndex].Content()
-                MultiItemFloatingActionButton(component, titleDialogController)
+                with(serverConfigList[activeTabIndex]) {
+                    Content()
+                }
+                MultiItemFloatingActionButton(titleDialogController)
             }
         } else {
             CreateOrImportConfig(
-                component = component,
                 titleDialogController = titleDialogController
             )
         }
     }
+
+    showExportConfigDialog?.let {
+        with(it) {
+            ExportConfigsDialog()
+        }
+    }
+
+   /* showImportConfigDialog?.let {
+        with(it) {
+
+        }
+    }*/
+    ImportConfigsDialog()
 }
 
+context (ServerConfigPanelComponent)
 @Composable
-private fun titleDialogController(component: ServerConfigPanelComponent) = rememberSingleFieldDialog(
+private fun titleDialogController() = rememberSingleFieldDialog(
     title = "Config Title",
     maxLength = 30,
     validations = listOf(fileNameValidation)
 ) { title, _ ->
-    component.createNewConfig(title)
+    createNewConfig(title)
 }
 
+context (ServerConfigPanelComponent)
 @Composable
-private fun deleteConfigDialog(component: ServerConfigPanelComponent) = rememberConfirmationDialog<Int> { _, tabIndex ->
+private fun deleteConfigDialog() = rememberConfirmationDialog<Int> { _, tabIndex ->
     tabIndex?.let {
-        component.closeTab(it)
+        closeTab(it)
     }
 }
