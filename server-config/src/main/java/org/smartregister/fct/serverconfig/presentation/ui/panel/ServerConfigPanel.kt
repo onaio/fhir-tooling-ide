@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -14,12 +13,12 @@ import org.smartregister.fct.aurora.ui.components.ScrollableTabRow
 import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
 import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.aurora.util.fileNameValidation
-import org.smartregister.fct.serverconfig.presentation.ui.components.CreateOrImportConfig
-import org.smartregister.fct.serverconfig.presentation.ui.components.MultiItemFloatingActionButton
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
-import org.smartregister.fct.serverconfig.presentation.ui.components.Content
+import org.smartregister.fct.serverconfig.presentation.ui.components.CreateOrImportConfig
 import org.smartregister.fct.serverconfig.presentation.ui.components.ExportConfigsDialog
 import org.smartregister.fct.serverconfig.presentation.ui.components.ImportConfigsDialog
+import org.smartregister.fct.serverconfig.presentation.ui.components.ImportExportContent
+import org.smartregister.fct.serverconfig.presentation.ui.components.MultiItemFloatingActionButton
 
 context (ServerConfigPanelComponent)
 @Composable
@@ -27,8 +26,6 @@ fun ServerConfigPanel() {
 
     val activeTabIndex by activeTabIndex.subscribeAsState()
     val serverConfigList by tabComponents.subscribeAsState()
-    val showExportConfigDialog by exportConfigDialog.collectAsState()
-    val showImportConfigDialog by importConfigDialog.collectAsState()
     val deleteConfigDialog = deleteConfigDialog()
     val titleDialogController = titleDialogController()
 
@@ -64,7 +61,7 @@ fun ServerConfigPanel() {
 
             Box(Modifier.fillMaxSize()) {
                 with(serverConfigList[activeTabIndex]) {
-                    Content()
+                    ImportExportContent()
                 }
                 MultiItemFloatingActionButton(titleDialogController)
             }
@@ -75,17 +72,7 @@ fun ServerConfigPanel() {
         }
     }
 
-    showExportConfigDialog?.let {
-        with(it) {
-            ExportConfigsDialog()
-        }
-    }
-
-   /* showImportConfigDialog?.let {
-        with(it) {
-
-        }
-    }*/
+    ExportConfigsDialog()
     ImportConfigsDialog()
 }
 

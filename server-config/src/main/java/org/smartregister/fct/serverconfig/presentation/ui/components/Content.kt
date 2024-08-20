@@ -55,7 +55,7 @@ import org.smartregister.fct.serverconfig.util.asString
 
 context (ServerConfigComponent)
 @Composable
-internal fun Content() {
+internal fun ImportExportContent() {
 
     val verifyConfigState by verifyConfigState.subscribeAsState()
 

@@ -3,7 +3,6 @@ package org.smartregister.fct.serverconfig.presentation.components
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -12,8 +11,8 @@ import org.smartregister.fct.common.data.manager.AppSettingManager
 import org.smartregister.fct.common.domain.model.ServerConfig
 import org.smartregister.fct.common.util.componentScope
 import org.smartregister.fct.common.util.uuid
+import org.smartregister.fct.serverconfig.domain.model.ExportDialogState
 import org.smartregister.fct.serverconfig.domain.model.ImportDialogState
-import org.smartregister.fct.serverconfig.presentation.ui.components.ImportConfigsDialog
 
 class ServerConfigPanelComponent(
     private val componentContext: ComponentContext
@@ -29,8 +28,7 @@ class ServerConfigPanelComponent(
     val tabComponents: Value<List<ServerConfigComponent>> = _tabComponents
 
     val importDialogState = MutableValue<ImportDialogState>(ImportDialogState.Idle)
-    val exportConfigDialog = MutableStateFlow<ExportConfigDialogComponent?>(null)
-    val importConfigDialog = MutableStateFlow<ImportConfigDialogComponent?>(null)
+    val exportDialogState = MutableValue<ExportDialogState>(ExportDialogState.Idle)
 
     init {
         loadConfigs()
@@ -67,9 +65,11 @@ class ServerConfigPanelComponent(
         updateSetting()
     }
 
-    fun showImportConfigDialog () {
+    fun showImportConfigDialog() {
         importDialogState.value = ImportDialogState.ImportFileDialog(
-            ImportConfigDialogComponent(this@ServerConfigPanelComponent)
+            ImportConfigDialogComponent(
+                serverConfigPanelComponent = this@ServerConfigPanelComponent
+            )
         )
     }
 
@@ -78,17 +78,16 @@ class ServerConfigPanelComponent(
     }
 
     fun showExportConfigDialog() {
-        componentScope.launch {
-            exportConfigDialog.emit(
-                ExportConfigDialogComponent(componentContext)
-            )
-        }
+        exportDialogState.value = ExportDialogState.SelectConfigs(
+            ExportConfigDialogComponent(
+                serverConfigPanelComponent = this@ServerConfigPanelComponent,
+            ),
+            configs = _tabComponents.value.map { it.serverConfig }
+        )
     }
 
     fun hideExportConfigDialog() {
-        componentScope.launch {
-            exportConfigDialog.emit(null)
-        }
+        exportDialogState.value = ExportDialogState.Idle
     }
 
     private fun loadConfigs() {
