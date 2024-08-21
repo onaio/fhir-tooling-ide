@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,18 +29,16 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.smartregister.fct.aurora.data.locals.AuroraLocal
 import org.smartregister.fct.aurora.domain.controller.DialogController
-import org.smartregister.fct.aurora.domain.manager.AuroraManager
 import org.smartregister.fct.aurora.domain.model.Message
 import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.aurora.presentation.ui.components.TextField
 import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
 import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
-import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.common.domain.model.ServerConfig
 import org.smartregister.fct.common.presentation.component.UploadResourceDialogComponent
 
 @Composable
-fun rememberUploadResourceDialog(
+fun rememberResourceUploadDialog(
     componentContext: ComponentContext,
     title: String = "Select Config",
     cancelOnTouchOutside: Boolean = false,
@@ -53,18 +50,21 @@ fun rememberUploadResourceDialog(
         height = 350.dp,
         cancelOnTouchOutside = cancelOnTouchOutside,
         onDismiss = onDismiss,
-    ) { _, data ->
+    ) { controller, data ->
         with(UploadResourceDialogComponent(componentContext, data!!)) {
-            UploadResourcePanel()
+            with(controller) {
+                UploadResourcePanel()
+            }
         }
     }
 
     return dialogController
 }
 
-context (UploadResourceDialogComponent)
+context (UploadResourceDialogComponent, DialogController<String>)
 @Composable
 private fun UploadResourcePanel() {
+    val parentAurora = AuroraLocal.current
     Aurora {
         Content(configs.subscribeAsState().value) {
             UploadButton()
@@ -74,7 +74,10 @@ private fun UploadResourcePanel() {
         val success by uploadSuccess.collectAsState()
         val error by uploadError.collectAsState()
 
-        success?.let { aurora?.showSnackbar(it) }
+        success?.let {
+            hide()
+            parentAurora?.showSnackbar(it)
+        }
         error?.let { aurora?.showSnackbar(Message.Error(it)) }
     }
 }

@@ -11,8 +11,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
+import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
-import org.smartregister.fct.common.presentation.ui.dialog.rememberUploadResourceDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberResourceUploadDialog
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
 import org.smartregister.fct.fm.presentation.ui.components.InAppFileManager
 import org.smartregister.fct.fm.presentation.ui.components.SystemFileManager
@@ -20,18 +21,20 @@ import org.smartregister.fct.fm.presentation.ui.components.SystemFileManager
 @Composable
 fun FileManagerScreen(component: FileManagerScreenComponent) {
 
-    Row(Modifier.fillMaxSize()) {
-        Box(Modifier.weight(1f)) {
-            SystemFileManager(component)
+    Aurora {
+        Row(Modifier.fillMaxSize()) {
+            Box(Modifier.weight(1f)) {
+                SystemFileManager(component)
+            }
+            VerticalDivider()
+            Box(Modifier.weight(1f)) {
+                InAppFileManager(component)
+            }
         }
-        VerticalDivider()
-        Box(Modifier.weight(1f)) {
-            InAppFileManager(component)
-        }
-    }
 
-    with(component) {
-        ResourceUpload()
+        with(component) {
+            ResourceUpload()
+        }
     }
 }
 
@@ -49,7 +52,7 @@ private fun FileManagerScreenComponent.ResourceUpload() {
         }
     }
 
-    val uploadResourceDialog = rememberUploadResourceDialog(
+    val uploadResourceDialog = rememberResourceUploadDialog(
         componentContext = this,
         onDismiss = { resetContent() }
     )

@@ -16,7 +16,7 @@ internal class StructureMapResultTabComponent(
     ResultTabComponent, ComponentContext by componentContext {
 
     override val codeController =
-        instanceKeeper.getOrCreate("code-controller-${resource.logicalId}") {
+        instanceKeeper.getOrCreate("code-controller-${resource.logicalId}-${resource.hashCode()}") {
             CodeController(
                 scope = componentScope,
                 initialText = resource.encodeResourceToString(),

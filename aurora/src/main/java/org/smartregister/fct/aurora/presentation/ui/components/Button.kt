@@ -3,6 +3,7 @@ package org.smartregister.fct.aurora.presentation.ui.components
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -10,16 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button as Mat3Button
 import androidx.compose.material3.TextButton as Mat3TextButton
 import androidx.compose.material3.OutlinedButton as Mat3OutlinedButton
 
-enum class ButtonType {
-    Button, OutlineButton, TextButton
+enum class ButtonSize {
+    Small, Regular
 }
 
 @Composable
@@ -28,12 +31,14 @@ fun Button(
     label: String,
     icon: ImageVector? = null,
     enable: Boolean = true,
+    shape: Shape = RoundedCornerShape(8.dp),
     onClick: () -> Unit
 ) {
     Mat3Button(
         modifier = modifier,
         onClick = onClick,
-        enabled = enable
+        enabled = enable,
+        shape = shape,
     ) {
         icon?.let {
             Icon(
@@ -57,12 +62,21 @@ fun TextButton(
     enable: Boolean = true,
     textAlign: TextAlign? = null,
     selected: Boolean = false,
+    buttonSize: ButtonSize = ButtonSize.Regular,
+    shape: Shape = RoundedCornerShape(8.dp),
     selectedContainerColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit
 ) {
 
     val content: @Composable (RowScope.() -> Unit) = {
+
         val alpha = if(enable) 1f else 0.5f
+
+        val textStyle = when(buttonSize) {
+            ButtonSize.Small -> MaterialTheme.typography.bodySmall
+            ButtonSize.Regular -> MaterialTheme.typography.titleSmall
+        }
+
         icon?.let {
             Icon(
                 icon = icon,
@@ -77,12 +91,14 @@ fun TextButton(
                 modifier = Modifier.weight(1f),
                 text = label,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
-                textAlign = textAlign
+                textAlign = textAlign,
+                style = textStyle
             )
         } else {
             Text(
                 text = label,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
+                style = textStyle
             )
         }
     }
@@ -92,6 +108,7 @@ fun TextButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enable,
+            shape = shape,
             colors = ButtonDefaults.buttonColors(
                 containerColor = selectedContainerColor
             ),
@@ -102,6 +119,7 @@ fun TextButton(
             modifier = modifier,
             onClick = onClick,
             enabled = enable,
+            shape = shape,
             content = content
         )
     }
@@ -114,12 +132,14 @@ fun OutlinedButton(
     label: String,
     icon: ImageVector? = null,
     enable: Boolean = true,
+    shape: Shape = RoundedCornerShape(8.dp),
     onClick: () -> Unit
 ) {
     Mat3OutlinedButton(
         modifier = modifier,
         onClick = onClick,
         enabled = enable,
+        shape = shape,
         border = ButtonDefaults.outlinedButtonBorder.copy(
             brush = if (enable) ButtonDefaults.outlinedButtonBorder.brush else SolidColor(MaterialTheme.colorScheme.surface)
         )

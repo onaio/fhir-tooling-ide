@@ -20,13 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.delay
 import org.smartregister.fct.aurora.presentation.ui.components.CloseableTab
+import org.smartregister.fct.aurora.presentation.ui.components.ScreenContainer
 import org.smartregister.fct.aurora.presentation.ui.components.TabRow
+import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.presentation.ui.components.CreateNewSMButton
-import org.smartregister.fct.sm.presentation.ui.components.StructureMapTabItem
+import org.smartregister.fct.sm.presentation.ui.components.StructureMapControlPanel
 import org.smartregister.fct.sm.presentation.ui.components.dialog.DeleteStructureMapConfirmationDialog
 
 @Composable
@@ -39,41 +42,51 @@ fun StructureMapScreen(component: StructureMapScreenComponent) {
 
         if (smDetailList.isNotEmpty()) {
 
-            TabRow(
-                modifier = Modifier.fillMaxWidth(),
-                selectedTabIndex = activeTabIndex,
+            ScreenContainer(
+                panelWidth = 230.dp,
+                leftPanel = { StructureMapControlPanel(smDetailList[activeTabIndex]) }
             ) {
-                smDetailList
-                    .map { it.smDetail }
-                    .forEachIndexed { index, item ->
-                        CloseableTab(
-                            index = index,
-                            item = item,
-                            title = { it.title },
-                            selected = index == activeTabIndex,
-                            onClick = {
-                                component.changeTab(it)
-                            },
-                            onClose = {
-                                component.showDeleteStructureMapDialog(it)
+                Column {
+                    TabRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        selectedTabIndex = activeTabIndex,
+                    ) {
+                        smDetailList
+                            .map { it.smDetail }
+                            .forEachIndexed { index, item ->
+                                CloseableTab(
+                                    index = index,
+                                    item = item,
+                                    title = { it.title },
+                                    selected = index == activeTabIndex,
+                                    onClick = {
+                                        component.changeTab(it)
+                                    },
+                                    onClose = {
+                                        component.showDeleteStructureMapDialog(it)
+                                    }
+                                )
                             }
-                        )
                     }
+
+                    Scaffold(
+                        floatingActionButton = {
+                            CreateNewSMButton(
+                                label = null,
+                                icon = Icons.Outlined.Add,
+                                component = component
+                            )
+                        }
+                    ) {
+                        Box(Modifier.padding(it)) {
+                            CodeEditor(
+                                controller = smDetailList[activeTabIndex].codeController
+                            )
+                        }
+                    }
+                }
             }
 
-            Scaffold(
-                floatingActionButton = {
-                    CreateNewSMButton(
-                        label = null,
-                        icon = Icons.Outlined.Add,
-                        component = component
-                    )
-                }
-            ) {
-                Box(Modifier.padding(it)) {
-                    StructureMapTabItem(smDetailList[activeTabIndex])
-                }
-            }
         } else {
             CreateNewStructureMap(component = component)
         }

@@ -37,7 +37,7 @@ internal fun GroupListAndOutResources(title: String, showLinkIcon: Boolean, item
 
     Box(
         Modifier.fillMaxWidth().height(35.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
         Text(

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun Heading() {
     Box(
         Modifier.fillMaxWidth().height(40.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),

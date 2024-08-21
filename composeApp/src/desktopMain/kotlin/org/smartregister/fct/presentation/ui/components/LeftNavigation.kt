@@ -49,12 +49,7 @@ fun LeftNavigation(
         modifier = Modifier.width(60.dp).fillMaxHeight()
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            NavigationBar(rootComponent)
-            VerticalDivider()
-        }
+        NavigationBar(rootComponent)
     }
 }
 
@@ -62,14 +57,12 @@ fun LeftNavigation(
 private fun NavigationBar(rootComponent: RootComponent) {
 
     Column(
-        modifier = Modifier.fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.2f)).fillMaxHeight(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
             var selectedNav by remember { mutableStateOf(0) }
-            val scope = rememberCoroutineScope()
             Spacer(Modifier.height(12.dp))
             navigationMenu().forEachIndexed { index, navButton ->
                 IconButton(
