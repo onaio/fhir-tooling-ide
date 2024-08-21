@@ -44,12 +44,14 @@ import org.smartregister.fct.common.presentation.component.UploadResourceDialogC
 fun rememberUploadResourceDialog(
     componentContext: ComponentContext,
     title: String = "Select Config",
+    cancelOnTouchOutside: Boolean = false,
     onDismiss: (DialogController<String>.() -> Unit)? = null,
 ): DialogController<String> {
 
-    val dialogController = rememberDialog<String>(
+    val dialogController = rememberDialog(
         title = title,
         height = 350.dp,
+        cancelOnTouchOutside = cancelOnTouchOutside,
         onDismiss = onDismiss,
     ) { _, data ->
         with(UploadResourceDialogComponent(componentContext, data!!)) {

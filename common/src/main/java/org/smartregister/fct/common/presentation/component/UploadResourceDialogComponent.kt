@@ -75,6 +75,7 @@ internal class UploadResourceDialogComponent(
 
             } catch (ex: Exception) {
                 FCTLogger.e(ex)
+                resourceType = ResourceType.Binary.name
             }
         }
     }
@@ -113,6 +114,7 @@ internal class UploadResourceDialogComponent(
                     uploadSuccess.emit("$resourceType successfully uploaded")
                 }
                 is UploadResponse.UnAuthorized -> {
+                    println("authenticating")
                     authenticate()
                 }
                 is UploadResponse.Failed -> {
