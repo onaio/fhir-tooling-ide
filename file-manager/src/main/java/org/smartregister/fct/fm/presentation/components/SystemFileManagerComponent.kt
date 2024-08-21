@@ -39,6 +39,12 @@ internal class SystemFileManagerComponent(
     override suspend fun onContextMenuClick(contextMenu: ContextMenu, path: Path): Result<Unit> {
         return when (contextMenu.menuType) {
             ContextMenuType.SelectFile -> onPathSelected(path)
+            ContextMenuType.Upload -> {
+                if (componentContext is FileManagerScreenComponent) {
+                    componentContext.uploadResource(path)
+                }
+                return Result.success(Unit)
+            }
             else -> {
                 val error = "type ${contextMenu.menuType} is not handled"
                 FCTLogger.w(error)

@@ -3,7 +3,7 @@ package org.smartregister.fct.pm
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.database.Database
-import org.smartregister.fct.common.domain.mdoule.ModuleSetup
+import org.smartregister.fct.engine.setup.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.pm.data.datasource.SqlDelightPackageDataSource
 import org.smartregister.fct.pm.data.repository.SqlDelightPackageRepository

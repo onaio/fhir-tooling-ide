@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -32,11 +33,9 @@ import androidx.compose.ui.window.WindowState
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.koin.compose.koinInject
-import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.common.domain.model.AppSetting
 import org.smartregister.fct.common.data.manager.AppSettingManager
-import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.presentation.theme.FCTTheme
+import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
 import org.smartregister.fct.util.ProvideWindowSpotContainer
 
@@ -180,12 +179,10 @@ fun MainWindow(
         ) {
 
             val appSettingManager: AppSettingManager = koinInject()
-            val appSetting by appSettingManager.getAppSettingFlow()
-                .flowAsState(initial = AppSetting())
-            appSettingManager.setAppSetting(appSetting)
+            val isDarkTheme by appSettingManager.isDarkTheme.collectAsState()
 
             FCTTheme(
-                isDarkModel = appSetting.isDarkTheme
+                isDarkModel = isDarkTheme
             ) {
 
                 Surface(

@@ -3,14 +3,13 @@ package org.smartregister.fct.serverconfig.presentation.components
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.smartregister.fct.apiclient.data.datasource.KtorApiClientDataSource
-import org.smartregister.fct.apiclient.data.repository.ApiClientRepository
+import org.smartregister.fct.apiclient.domain.model.AuthRequest
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
+import org.smartregister.fct.apiclient.domain.usecase.AuthenticateClient
 import org.smartregister.fct.common.data.manager.AppSettingManager
 import org.smartregister.fct.common.domain.model.AppSetting
 import org.smartregister.fct.common.domain.model.ServerConfig
@@ -22,7 +21,7 @@ class ServerConfigComponent(
     val serverConfig: ServerConfig,
 ) : KoinComponent, ComponentContext by componentContext {
 
-    private val apiClientRepository: ApiClientRepository by inject()
+    private val authenticateClient: AuthenticateClient by inject()
     private val appSettingManager: AppSettingManager by inject()
     private lateinit var appSetting: AppSetting
 
@@ -82,11 +81,11 @@ class ServerConfigComponent(
         _password.value = text
     }
 
-    fun save() {
+    fun save(showSnackbar: Boolean = true) {
         componentScope.launch {
             val updatedConfig = serverConfig.copy(
                 fhirBaseUrl = _fhirBaseUrl.value,
-                oAuthUrl =  _oAuthUrl.value,
+                oAuthUrl = _oAuthUrl.value,
                 clientId = _clientId.value,
                 clientSecret = _clientSecret.value,
                 username = _username.value,
@@ -102,9 +101,9 @@ class ServerConfigComponent(
                 }.let {
                     appSetting.copy(serverConfigs = it)
                 }.run {
-                    appSettingManager.setAndUpdate(this)
+                    appSettingManager.update(this)
                 }.also {
-                    settingSaved.value = true
+                    if (showSnackbar) settingSaved.value = true
                 }
         }
     }
@@ -114,16 +113,19 @@ class ServerConfigComponent(
 
             verifyConfigState.value = VerifyConfigState.Authenticating
 
-            val response = apiClientRepository.auth(
-                url = oAuthUrl.value,
-                clientId = clientId.value,
-                clientSecret = clientSecret.value,
-                username = username.value,
-                password = password.value
+            val response = authenticateClient(
+                AuthRequest(
+                    oAuthUrl = oAuthUrl.value,
+                    clientId = clientId.value,
+                    clientSecret = clientSecret.value,
+                    username = username.value,
+                    password = password.value
+                )
             )
 
             if (response is AuthResponse.Success) {
                 _authToken.value = response.accessToken
+                save(showSnackbar = false)
             }
 
             verifyConfigState.value = VerifyConfigState.Result(response)

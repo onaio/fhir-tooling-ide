@@ -16,9 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import org.hl7.fhir.r4.model.Bundle
-import org.smartregister.fct.aurora.ui.components.ExtendedFloatingActionButton
-import org.smartregister.fct.aurora.ui.components.ScrollableTabRow
-import org.smartregister.fct.aurora.ui.components.Tab
+import org.smartregister.fct.aurora.presentation.ui.components.ExtendedFloatingActionButton
+import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
+import org.smartregister.fct.aurora.presentation.ui.components.Tab
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.common.util.readableResourceName
 import org.smartregister.fct.json.JsonStyle

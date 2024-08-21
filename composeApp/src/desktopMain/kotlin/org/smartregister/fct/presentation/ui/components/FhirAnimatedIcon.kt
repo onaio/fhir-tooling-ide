@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
-import org.smartregister.fct.aurora.ui.components.getLottieFireComposition
+import org.smartregister.fct.aurora.presentation.ui.components.getLottieFireComposition
 
 @Composable
 internal fun FhirAnimatedIcon() {

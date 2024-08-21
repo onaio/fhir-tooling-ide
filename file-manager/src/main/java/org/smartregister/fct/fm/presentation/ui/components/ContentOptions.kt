@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.launch
-import org.smartregister.fct.aurora.ui.components.LabelledCheckBox
+import org.smartregister.fct.aurora.presentation.ui.components.LabelledCheckBox
 import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.presentation.components.FileManagerComponent
 

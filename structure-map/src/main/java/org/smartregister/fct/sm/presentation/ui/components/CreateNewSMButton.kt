@@ -8,9 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import org.smartregister.fct.aurora.ui.components.FloatingActionIconButton
-import org.smartregister.fct.aurora.ui.components.TextButton
-import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.aurora.presentation.ui.components.FloatingActionIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.TextButton
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.aurora.util.fileNameValidation
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.common.util.uuid

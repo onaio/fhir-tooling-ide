@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
-import org.smartregister.fct.aurora.ui.components.OutlinedButton
-import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
-import org.smartregister.fct.aurora.ui.components.dialog.rememberLoaderDialogController
+import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.DialogType
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberLoaderDialogController
 import org.smartregister.fct.sm.presentation.component.TabComponent
 
 @Composable

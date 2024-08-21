@@ -3,8 +3,8 @@ package org.smartregister.fct.sm
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.database.Database
-import org.smartregister.fct.common.domain.mdoule.ModuleSetup
 import org.smartregister.fct.common.util.getKoinInstance
+import org.smartregister.fct.engine.setup.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.datasource.SMSqlDelightDataSource
 import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository

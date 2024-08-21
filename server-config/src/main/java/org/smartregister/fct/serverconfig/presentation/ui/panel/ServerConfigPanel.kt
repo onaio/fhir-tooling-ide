@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import org.smartregister.fct.aurora.ui.components.CloseableTab
-import org.smartregister.fct.aurora.ui.components.ScrollableTabRow
-import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
-import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.aurora.presentation.ui.components.CloseableTab
+import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberConfirmationDialog
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.aurora.util.fileNameValidation
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 import org.smartregister.fct.serverconfig.presentation.ui.components.CreateOrImportConfig

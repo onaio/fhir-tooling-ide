@@ -2,7 +2,7 @@ package org.smartregister.fct.sm.presentation.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.aurora.ui.components.ScreenContainer
+import org.smartregister.fct.aurora.presentation.ui.components.ScreenContainer
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.sm.presentation.component.TabComponent
 

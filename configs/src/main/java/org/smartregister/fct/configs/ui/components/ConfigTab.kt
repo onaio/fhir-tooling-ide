@@ -50,7 +50,7 @@ import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration
 import org.smartregister.fct.common.util.encodeJson
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
-import org.smartregister.fct.aurora.ui.components.Button
+import org.smartregister.fct.aurora.presentation.ui.components.Button
 
 @Composable
 fun ConfigTab(configWrapper: ConfigWrapper) {

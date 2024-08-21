@@ -112,6 +112,6 @@ class ServerConfigPanelComponent(
         val updatedSetting = appSetting.copy(
             serverConfigs = configs
         )
-        appSettingManager.setAndUpdate(updatedSetting)
+        appSettingManager.update(updatedSetting)
     }
 }

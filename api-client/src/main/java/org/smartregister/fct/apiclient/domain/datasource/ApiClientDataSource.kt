@@ -1,14 +1,17 @@
 package org.smartregister.fct.apiclient.domain.datasource
 
+import org.smartregister.fct.apiclient.domain.model.AuthRequest
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
+import org.smartregister.fct.apiclient.domain.model.UploadResourceRequest
+import org.smartregister.fct.apiclient.domain.model.UploadResponse
 
-interface ApiClientDataSource {
+internal interface ApiClientDataSource {
 
     suspend fun auth(
-        url: String,
-        clientId: String,
-        clientSecret: String,
-        username: String,
-        password: String
+        request: AuthRequest
     ) : AuthResponse
+
+    suspend fun upload(
+       request: UploadResourceRequest
+    ) : UploadResponse
 }

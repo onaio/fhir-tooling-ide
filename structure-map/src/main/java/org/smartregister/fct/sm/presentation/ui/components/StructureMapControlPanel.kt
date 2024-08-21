@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
-import org.smartregister.fct.aurora.ui.components.TextButton
+import org.smartregister.fct.aurora.presentation.ui.components.TextButton
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.sm.presentation.component.TabComponent
 

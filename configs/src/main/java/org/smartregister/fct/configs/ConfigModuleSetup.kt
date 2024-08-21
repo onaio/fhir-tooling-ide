@@ -6,7 +6,7 @@ import org.smartregister.fct.configs.data.repository.ConfigRepository
 import org.smartregister.fct.configs.domain.datasource.ConfigDataSource
 import org.smartregister.fct.configs.data.datasource.SqlDelightConfigDataSource
 import org.smartregister.fct.database.Database
-import org.smartregister.fct.common.domain.mdoule.ModuleSetup
+import org.smartregister.fct.engine.setup.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 
 class ConfigModuleSetup : ModuleSetup {

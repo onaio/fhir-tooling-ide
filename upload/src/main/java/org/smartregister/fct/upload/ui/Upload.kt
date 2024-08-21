@@ -17,12 +17,12 @@ import kotlinx.coroutines.launch
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.editor.ui.rememberCodeController
-import org.smartregister.fct.aurora.ui.components.Button
-import org.smartregister.fct.aurora.ui.components.ButtonType
-import org.smartregister.fct.aurora.ui.components.FloatingActionIconButton
-import org.smartregister.fct.aurora.ui.components.OutlinedButton
-import org.smartregister.fct.aurora.ui.components.TextButton
-import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
+import org.smartregister.fct.aurora.presentation.ui.components.Button
+import org.smartregister.fct.aurora.presentation.ui.components.ButtonType
+import org.smartregister.fct.aurora.presentation.ui.components.FloatingActionIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
+import org.smartregister.fct.aurora.presentation.ui.components.TextButton
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
 import org.smartregister.fct.upload.domain.model.FileResult
 
 private val supportedExtension = listOf("json", "map")

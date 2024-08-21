@@ -1,6 +1,6 @@
 package org.smartregister.fct.aurora.util
 
-import org.smartregister.fct.aurora.ui.components.dialog.TextFieldValidation
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.TextFieldValidation
 
 
 val folderNameValidation: TextFieldValidation = {

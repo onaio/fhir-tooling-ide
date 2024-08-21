@@ -50,8 +50,8 @@ import org.smartregister.fct.configs.domain.model.ConfigType
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.ui.components.ConfigTab
 import org.smartregister.fct.configs.util.extension.flowAsState
-import org.smartregister.fct.aurora.ui.components.Tab
-import org.smartregister.fct.aurora.ui.components.TabRow
+import org.smartregister.fct.aurora.presentation.ui.components.Tab
+import org.smartregister.fct.aurora.presentation.ui.components.TabRow
 import org.smartregister.fct.common.util.compress
 
 @Composable

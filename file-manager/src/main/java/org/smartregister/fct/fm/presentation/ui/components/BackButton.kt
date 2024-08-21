@@ -9,7 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import org.smartregister.fct.fm.presentation.components.FileManagerComponent
-import org.smartregister.fct.aurora.ui.components.SmallIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 
 @Composable
 internal fun BackButton(

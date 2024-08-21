@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.Path
-import org.smartregister.fct.aurora.ui.components.Icon
+import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.fm.domain.model.Applicable
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.util.getFileTypeImage

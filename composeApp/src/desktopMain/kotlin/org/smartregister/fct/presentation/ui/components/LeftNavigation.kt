@@ -36,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import org.koin.compose.koinInject
-import org.smartregister.fct.aurora.ui.components.Icon
+import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.data.manager.AppSettingManager
@@ -96,10 +96,10 @@ private fun ThemeChangerButton() {
     var appSetting = appSettingManager.appSetting
 
     IconButton(onClick = {
-        appSetting = appSetting.copy(
+        appSetting = appSettingManager.appSetting.copy(
             isDarkTheme = !appSetting.isDarkTheme
         )
-        appSettingManager.setAndUpdate(appSetting)
+        appSettingManager.update(appSetting)
     }) {
         val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
         Icon(icon = icon)

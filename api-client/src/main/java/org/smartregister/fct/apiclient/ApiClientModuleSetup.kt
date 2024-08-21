@@ -8,7 +8,9 @@ import org.koin.dsl.module
 import org.smartregister.fct.apiclient.data.datasource.KtorApiClientDataSource
 import org.smartregister.fct.apiclient.data.repository.ApiClientRepository
 import org.smartregister.fct.apiclient.domain.datasource.ApiClientDataSource
-import org.smartregister.fct.common.domain.mdoule.ModuleSetup
+import org.smartregister.fct.apiclient.domain.usecase.AuthenticateClient
+import org.smartregister.fct.apiclient.domain.usecase.UploadResource
+import org.smartregister.fct.engine.setup.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 
 class ApiClientModuleSetup : ModuleSetup {
@@ -26,6 +28,8 @@ class ApiClientModuleSetup : ModuleSetup {
         single<ApiClientRepository> {
             ApiClientRepository(get())
         }
+        factory<AuthenticateClient> { AuthenticateClient() }
+        factory<UploadResource> { UploadResource() }
     }
 
     override suspend fun setup() {

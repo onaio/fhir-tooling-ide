@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import org.koin.java.KoinJavaComponent.getKoin
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
-import org.smartregister.fct.aurora.ui.components.MiddleEllipsisText
-import org.smartregister.fct.aurora.ui.components.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisText
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.common.util.uuid
 import org.smartregister.fct.pm.domain.usecase.DeletePackage

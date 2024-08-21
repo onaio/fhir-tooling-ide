@@ -59,7 +59,7 @@ class ImportConfigDialogComponent(
                 serverConfigs = mergedConfigs
             )
 
-            appSettingManager.setAndUpdate(updatedAppSetting)
+            appSettingManager.update(updatedAppSetting)
             serverConfigPanelComponent.hideImportConfigDialog()
         }
     }

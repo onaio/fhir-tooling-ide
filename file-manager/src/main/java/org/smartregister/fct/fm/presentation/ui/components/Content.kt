@@ -31,9 +31,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okio.Path
 import org.smartregister.fct.aurora.domain.controller.ConfirmationDialogController
-import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
-import org.smartregister.fct.aurora.ui.components.dialog.rememberConfirmationDialog
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.DialogType
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberAlertDialog
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberConfirmationDialog
 import org.smartregister.fct.common.util.getKoinInstance
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.domain.model.ContextMenu

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 import org.smartregister.fct.serverconfig.presentation.ui.panel.ServerConfigPanel
 import org.smartregister.fct.settings.domain.model.Setting
@@ -29,15 +30,16 @@ internal fun SettingsContainer(
             }
         )
 
-        when (activeSetting) {
-            is Setting.ServerConfigs -> {
-                with (serverConfigPanelComponent) {
-                    ServerConfigPanel()
+        Aurora {
+            when (activeSetting) {
+                is Setting.ServerConfigs -> {
+                    with (serverConfigPanelComponent) {
+                        ServerConfigPanel()
+                    }
                 }
+                is Setting.CodeEditor -> {}
             }
-            is Setting.CodeEditor -> {}
         }
-
     }
 
 }

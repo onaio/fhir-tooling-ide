@@ -1,21 +1,18 @@
 package org.smartregister.fct.apiclient.data.repository
 
 import org.smartregister.fct.apiclient.domain.datasource.ApiClientDataSource
+import org.smartregister.fct.apiclient.domain.model.AuthRequest
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
+import org.smartregister.fct.apiclient.domain.model.UploadResourceRequest
+import org.smartregister.fct.apiclient.domain.model.UploadResponse
 
-class ApiClientRepository(private val dataSource: ApiClientDataSource)  {
+internal class ApiClientRepository(private val dataSource: ApiClientDataSource)  {
 
     suspend fun auth(
-        url: String,
-        clientId: String,
-        clientSecret: String,
-        username: String,
-        password: String
-    ) : AuthResponse = dataSource.auth(
-        url = url,
-        clientId = clientId,
-        clientSecret = clientSecret,
-        username = username,
-        password = password
-    )
+       request: AuthRequest
+    ) : AuthResponse = dataSource.auth(request)
+
+    suspend fun upload(
+        request: UploadResourceRequest
+    ): UploadResponse = dataSource.upload(request)
 }

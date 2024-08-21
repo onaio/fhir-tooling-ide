@@ -5,7 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import org.smartregister.fct.aurora.domain.controller.DialogController
-import org.smartregister.fct.aurora.ui.components.dialog.rememberDialog
+import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
 import org.smartregister.fct.settings.domain.model.Setting
 import org.smartregister.fct.settings.presentation.components.SettingsComponent
 import org.smartregister.fct.settings.presentation.ui.components.SettingsContainer

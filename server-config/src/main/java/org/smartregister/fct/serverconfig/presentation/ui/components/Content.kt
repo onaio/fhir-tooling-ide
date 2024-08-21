@@ -1,6 +1,5 @@
 package org.smartregister.fct.serverconfig.presentation.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,18 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import fct.server_config.generated.resources.Res
@@ -34,21 +26,19 @@ import fct.server_config.generated.resources.client_secret
 import fct.server_config.generated.resources.config_verified
 import fct.server_config.generated.resources.description
 import fct.server_config.generated.resources.error
-import fct.server_config.generated.resources.failed
 import fct.server_config.generated.resources.fhir_base_url
 import fct.server_config.generated.resources.oauth_url
 import fct.server_config.generated.resources.password
 import fct.server_config.generated.resources.save
 import fct.server_config.generated.resources.setting_saved
-import fct.server_config.generated.resources.success
 import fct.server_config.generated.resources.username
 import fct.server_config.generated.resources.verify
-import kotlinx.coroutines.delay
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
-import org.smartregister.fct.aurora.ui.components.Button
-import org.smartregister.fct.aurora.ui.components.OutlinedButton
-import org.smartregister.fct.aurora.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.ui.components.dialog.rememberAlertDialog
+import org.smartregister.fct.aurora.data.locals.AuroraLocal
+import org.smartregister.fct.aurora.domain.model.Message
+import org.smartregister.fct.aurora.presentation.ui.components.Button
+import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
+import org.smartregister.fct.aurora.presentation.ui.components.TextField
 import org.smartregister.fct.serverconfig.domain.model.VerifyConfigState
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigComponent
 import org.smartregister.fct.serverconfig.util.asString
@@ -69,7 +59,8 @@ internal fun ImportExportContent() {
                     TextFieldItem(
                         text = username.subscribeAsState(),
                         label = Res.string.username.asString(),
-                        onValueChange = ::setUsername
+                        onValueChange = ::setUsername,
+                        readOnly = verifyConfigState is VerifyConfigState.Authenticating
                     )
                 }
                 Spacer(Modifier.width(12.dp))
@@ -77,7 +68,8 @@ internal fun ImportExportContent() {
                     TextFieldItem(
                         text = password.subscribeAsState(),
                         label = Res.string.password.asString(),
-                        onValueChange = ::setPassword
+                        onValueChange = ::setPassword,
+                        readOnly = verifyConfigState is VerifyConfigState.Authenticating
                     )
                 }
             }
@@ -85,25 +77,29 @@ internal fun ImportExportContent() {
             TextFieldItem(
                 text = fhirBaseUrl.subscribeAsState(),
                 label = Res.string.fhir_base_url.asString(),
-                onValueChange = ::setFhirBaseUrl
+                onValueChange = ::setFhirBaseUrl,
+                readOnly = verifyConfigState is VerifyConfigState.Authenticating
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
                 text = oAuthUrl.subscribeAsState(),
                 label = Res.string.oauth_url.asString(),
-                onValueChange = ::setOAuthUrl
+                onValueChange = ::setOAuthUrl,
+                readOnly = verifyConfigState is VerifyConfigState.Authenticating
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
                 text = clientId.subscribeAsState(),
                 label = Res.string.client_id.asString(),
-                onValueChange = ::setClientId
+                onValueChange = ::setClientId,
+                readOnly = verifyConfigState is VerifyConfigState.Authenticating
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
                 text = clientSecret.subscribeAsState(),
                 label = Res.string.client_secret.asString(),
-                onValueChange = ::setClientSecret
+                onValueChange = ::setClientSecret,
+                readOnly = verifyConfigState is VerifyConfigState.Authenticating
             )
             Spacer(Modifier.height(12.dp))
             TextFieldItem(
@@ -117,8 +113,9 @@ internal fun ImportExportContent() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    onClick = ::save,
-                    label = Res.string.save.asString()
+                    onClick = { save() },
+                    label = Res.string.save.asString(),
+                    enable = verifyConfigState !is VerifyConfigState.Authenticating
                 )
                 Spacer(Modifier.width(12.dp))
 
@@ -138,18 +135,16 @@ internal fun ImportExportContent() {
                     }
 
                     is VerifyConfigState.Result -> {
-                        ShowAuthResponseDialog(state.authResponse)
+                        ShowAuthResponseSnackbar(state.authResponse)
                     }
                 }
             }
         }
 
-        AnimatedVisibility(settingSaved.subscribeAsState().value) {
-            Text(Res.string.setting_saved.asString())
-            LaunchedEffect(null) {
-                delay(1500)
-                settingSaved.value = false
-            }
+        val aurora = AuroraLocal.current
+        if (settingSaved.subscribeAsState().value) {
+            aurora?.showSnackbar(Res.string.setting_saved.asString())
+            settingSaved.value = false
         }
     }
 }
@@ -168,63 +163,30 @@ internal fun TextFieldItem(
             modifier = modifier.fillMaxWidth(),
             value = text.value,
             onValueChange = onValueChange,
-            label = {
-                Text(text = label)
-            },
+            label = label,
             readOnly = readOnly,
-            singleLine = true,
-            textStyle = MaterialTheme.typography.bodyMedium,
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                focusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-
-                )
         )
     }
 }
 
 context (ServerConfigComponent)
 @Composable
-fun ShowAuthResponseDialog(authResponse: AuthResponse) {
+fun ShowAuthResponseSnackbar(authResponse: AuthResponse) {
 
-    val title =
-        if (authResponse is AuthResponse.Success) Res.string.success.asString()
-        else Res.string.failed.asString()
+    val aurora = AuroraLocal.current
 
-    val dialogType =
-        if (authResponse is AuthResponse.Success) DialogType.Default else DialogType.Error
-
-    val responseDialog = rememberAlertDialog<Unit>(
-        title = title,
-        dialogType = dialogType,
-        onDismiss = {
+    if (authResponse is AuthResponse.Success) {
+        aurora?.showSnackbar(Res.string.config_verified.asString().format(serverConfig.title))
+    } else if (authResponse is AuthResponse.Failed) {
+        val errorDetail = "${Res.string.error.asString()}: ${authResponse.error}".let { e ->
+            authResponse
+                .description
+                ?.let {
+                    "$e\n${Res.string.description.asString()}: $it"
+                } ?: e
+        }
+        aurora?.showSnackbar(Message.Error(errorDetail)) {
             verifyConfigState.value = VerifyConfigState.Idle
         }
-    ) { _, _ ->
-        when (authResponse) {
-            is AuthResponse.Success -> {
-                Text(Res.string.config_verified.asString().format(serverConfig.title))
-            }
-
-            is AuthResponse.Failed -> {
-                Text(Res.string.error.asString(), style = TextStyle(fontWeight = FontWeight.Bold))
-                Text(authResponse.error)
-
-                authResponse.description?.let {
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        Res.string.description.asString(),
-                        style = TextStyle(fontWeight = FontWeight.Bold)
-                    )
-                    Text(it)
-                }
-            }
-        }
     }
-
-    responseDialog.show()
 }

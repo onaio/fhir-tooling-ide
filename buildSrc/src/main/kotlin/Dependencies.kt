@@ -52,10 +52,12 @@ object Dependencies {
     object Ktor {
         const val clientCore = "io.ktor:ktor-client-core:${Version.ktor}"
         const val clientCio = "io.ktor:ktor-client-cio:${Version.ktor}"
+        const val clientAuth = "io.ktor:ktor-client-auth:${Version.ktor}"
         const val contentNegotiation = "io.ktor:ktor-client-content-negotiation:${Version.ktor}"
         const val serializationKotlinX = "io.ktor:ktor-serialization-kotlinx-json:${Version.ktor}"
+        const val serializationGson = "io.ktor:ktor-serialization-gson:${Version.ktor}"
 
-        fun getAll() = listOf(clientCore, clientCio, contentNegotiation, serializationKotlinX)
+        fun getAll() = listOf(clientCore, clientCio, clientAuth, contentNegotiation, serializationKotlinX, serializationGson)
     }
 
     object Decompose {

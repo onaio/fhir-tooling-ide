@@ -76,6 +76,12 @@ internal class InAppFileManagerComponent(
         return when (contextMenu.menuType) {
             ContextMenuType.Delete -> deletePath(path)
             ContextMenuType.SelectFile -> onPathSelected(path)
+            ContextMenuType.Upload -> {
+                if (componentContext is FileManagerScreenComponent) {
+                    componentContext.uploadResource(path)
+                }
+                return Result.success(Unit)
+            }
             else -> {
                 val error = "type ${contextMenu.menuType} is not handled"
                 FCTLogger.w(error)

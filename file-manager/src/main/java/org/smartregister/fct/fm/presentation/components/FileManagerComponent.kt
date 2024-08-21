@@ -20,7 +20,7 @@ import java.nio.charset.Charset
 
 
 internal abstract class FileManagerComponent(
-    componentContext: ComponentContext,
+    protected val componentContext: ComponentContext,
     val fileSystem: FileSystem,
     val mode: FileManagerMode
 ) : ComponentContext by componentContext {

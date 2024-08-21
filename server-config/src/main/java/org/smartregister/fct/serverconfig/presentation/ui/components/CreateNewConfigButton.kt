@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import fct.server_config.generated.resources.Res
 import fct.server_config.generated.resources.create_new
 import org.smartregister.fct.aurora.domain.controller.SingleFieldDialogController
-import org.smartregister.fct.aurora.ui.components.TextButton
+import org.smartregister.fct.aurora.presentation.ui.components.TextButton
 import org.smartregister.fct.serverconfig.util.asString
 
 @Composable
