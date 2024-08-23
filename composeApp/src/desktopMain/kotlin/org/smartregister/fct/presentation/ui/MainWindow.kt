@@ -33,8 +33,9 @@ import androidx.compose.ui.window.WindowState
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.koin.compose.koinInject
+import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
 import org.smartregister.fct.common.data.manager.AppSettingManager
-import org.smartregister.fct.presentation.theme.FCTTheme
+import org.smartregister.fct.presentation.theme.AuroraTheme
 import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
 import org.smartregister.fct.util.ProvideWindowSpotContainer
@@ -181,7 +182,7 @@ fun MainWindow(
             val appSettingManager: AppSettingManager = koinInject()
             val isDarkTheme by appSettingManager.isDarkTheme.collectAsState()
 
-            FCTTheme(
+            AuroraTheme(
                 isDarkModel = isDarkTheme
             ) {
 
@@ -198,7 +199,9 @@ fun MainWindow(
                         onRequestToggleMaximize = onRequestToggleMaximize,
                         titleContent = titleContent
                     ) {
-                        content()
+                        Aurora {
+                            content()
+                        }
                     }
                 }
             }

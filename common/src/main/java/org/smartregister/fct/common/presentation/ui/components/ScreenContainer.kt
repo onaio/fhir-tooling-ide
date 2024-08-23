@@ -1,4 +1,4 @@
-package org.smartregister.fct.aurora.presentation.ui.components
+package org.smartregister.fct.common.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

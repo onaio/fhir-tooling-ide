@@ -9,6 +9,7 @@ import com.arkivanov.decompose.value.Value
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.presentation.component.ScreenComponent
+import org.smartregister.fct.fhirman.presentation.components.FhirmanScreenComponent
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
@@ -21,15 +22,16 @@ class RootComponentImpl(componentContext: ComponentContext) :
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = {
-            Config.DataSpecification
+            Config.Fhirman
         },
         key = "MainRoot"
     ) { config, childComponentContext ->
 
         when (config) {
-            is Config.DataSpecification -> DataSpecificationScreenComponent(childComponentContext)
+            is Config.ConfigManagement -> DataSpecificationScreenComponent(childComponentContext)
             is Config.StructureMap -> StructureMapScreenComponent(childComponentContext)
             is Config.FileManager -> FileManagerScreenComponent(childComponentContext)
+            is Config.Fhirman -> FhirmanScreenComponent(childComponentContext)
         }
 
     }

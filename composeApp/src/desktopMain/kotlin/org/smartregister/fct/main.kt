@@ -45,12 +45,11 @@ import org.smartregister.fct.fhirman.FhirmanModuleSetup
 import org.smartregister.fct.fm.FileManagerModuleSetup
 import org.smartregister.fct.pm.PMModuleSetup
 import org.smartregister.fct.presentation.component.RootComponentImpl
-import org.smartregister.fct.presentation.theme.FCTTheme
+import org.smartregister.fct.presentation.theme.AuroraTheme
 import org.smartregister.fct.presentation.ui.App
 import org.smartregister.fct.presentation.ui.MainWindow
 import org.smartregister.fct.presentation.ui.components.BottomBar
 import org.smartregister.fct.presentation.ui.components.TitleBar
-import org.smartregister.fct.sm.SMModuleSetup
 import org.smartregister.fct.util.runOnUiThread
 import java.awt.Toolkit
 
@@ -133,7 +132,7 @@ private fun LoadingWindow() {
         undecorated = true,
         onCloseRequest = {},
     ) {
-        FCTTheme {
+        AuroraTheme {
             Box {
                 Image(
                     painter = painterResource(Res.drawable.splash),
@@ -160,7 +159,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             ADBModuleSetup(),
             PMModuleSetup(),
             FileManagerModuleSetup(),
-            SMModuleSetup(),
+            //SMModuleSetup(),
             ApiClientModuleSetup(),
             FhirmanModuleSetup(),
         ).map {

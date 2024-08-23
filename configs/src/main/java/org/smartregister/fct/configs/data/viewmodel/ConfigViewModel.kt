@@ -39,7 +39,6 @@ class ComponentNavigator {
     fun reload() {
         CoroutineScope(Dispatchers.IO).launch {
             state.collectLatest {
-                println(it)
                 state.emit(it)
             }
         }

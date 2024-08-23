@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,8 @@ import androidx.compose.material3.Button as Mat3Button
 import androidx.compose.material3.TextButton as Mat3TextButton
 import androidx.compose.material3.OutlinedButton as Mat3OutlinedButton
 
+val auroraButtonShape = RoundedCornerShape(8.dp)
+
 enum class ButtonSize {
     Small, Regular
 }
@@ -31,13 +34,15 @@ fun Button(
     label: String,
     icon: ImageVector? = null,
     enable: Boolean = true,
-    shape: Shape = RoundedCornerShape(8.dp),
+    shape: Shape = auroraButtonShape,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
     onClick: () -> Unit
 ) {
     Mat3Button(
         modifier = modifier,
         onClick = onClick,
         enabled = enable,
+        colors = colors,
         shape = shape,
     ) {
         icon?.let {
@@ -59,11 +64,12 @@ fun TextButton(
     modifier: Modifier = Modifier,
     label: String,
     icon: ImageVector? = null,
+    labelColor: Color? = null,
     enable: Boolean = true,
     textAlign: TextAlign? = null,
     selected: Boolean = false,
     buttonSize: ButtonSize = ButtonSize.Regular,
-    shape: Shape = RoundedCornerShape(8.dp),
+    shape: Shape = auroraButtonShape,
     selectedContainerColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit
 ) {
@@ -90,14 +96,14 @@ fun TextButton(
             Text(
                 modifier = Modifier.weight(1f),
                 text = label,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
+                color = labelColor ?: MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
                 textAlign = textAlign,
                 style = textStyle
             )
         } else {
             Text(
                 text = label,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
+                color = labelColor ?: MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
                 style = textStyle
             )
         }
@@ -132,7 +138,7 @@ fun OutlinedButton(
     label: String,
     icon: ImageVector? = null,
     enable: Boolean = true,
-    shape: Shape = RoundedCornerShape(8.dp),
+    shape: Shape = auroraButtonShape,
     onClick: () -> Unit
 ) {
     Mat3OutlinedButton(

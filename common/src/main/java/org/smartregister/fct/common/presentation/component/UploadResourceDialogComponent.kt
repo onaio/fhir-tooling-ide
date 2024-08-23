@@ -114,7 +114,8 @@ internal class UploadResourceDialogComponent(
                     uploadSuccess.emit("$resourceType successfully uploaded")
                 }
                 is UploadResponse.UnAuthorized -> {
-                    println("authenticating")
+                    FCTLogger.w("UnAuthorized")
+                    FCTLogger.d("Re Authenticating")
                     authenticate()
                 }
                 is UploadResponse.Failed -> {

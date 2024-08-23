@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.launch
+import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.sm.presentation.component.TabComponent
@@ -22,9 +23,7 @@ import org.smartregister.fct.sm.presentation.component.TabComponent
 @Composable
 internal fun StructureMapControlPanel(component: TabComponent) {
     Column(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .fillMaxSize(),
+        modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -33,7 +32,7 @@ internal fun StructureMapControlPanel(component: TabComponent) {
         val totalGroups by component.groups.subscribeAsState()
         val outputResources by component.outputResources.subscribeAsState()
 
-        Heading()
+        PanelHeading("Structure Map")
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -50,16 +49,12 @@ internal fun StructureMapControlPanel(component: TabComponent) {
                 GroupListAndOutResources("Output Resources", true, outputResources)
             }
 
-            TextButton(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-                label = "Save",
-                onClick = {
-                    component.save()
-                    scope.launch {
-                        snackbarHostState.showSnackbar("${component.smDetail.title} has been updated.")
-                    }
+            TextButton(modifier = Modifier.fillMaxWidth().padding(8.dp), label = "Save", onClick = {
+                component.save()
+                scope.launch {
+                    snackbarHostState.showSnackbar("${component.smDetail.title} has been updated.")
                 }
-            )
+            })
         }
     }
 }

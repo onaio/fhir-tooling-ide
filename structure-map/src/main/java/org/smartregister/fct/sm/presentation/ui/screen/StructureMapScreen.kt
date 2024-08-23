@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.delay
 import org.smartregister.fct.aurora.presentation.ui.components.CloseableTab
-import org.smartregister.fct.aurora.presentation.ui.components.ScreenContainer
+import org.smartregister.fct.common.presentation.ui.components.ScreenContainer
 import org.smartregister.fct.aurora.presentation.ui.components.TabRow
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent

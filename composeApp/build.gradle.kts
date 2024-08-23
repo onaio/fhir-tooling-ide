@@ -31,6 +31,7 @@ kotlin {
             implementation(project(":logcat"))
             implementation(project(":settings"))
             implementation(project(":api-client"))
+            implementation(project(":fhirman"))
         }
 
         desktopMain.dependencies {

@@ -9,5 +9,6 @@ plugins {
 dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     api(Dependencies.compottie)
+    implementation(kotlin("reflect"))
     implementation(project(":logger"))
 }

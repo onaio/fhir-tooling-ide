@@ -1,4 +1,4 @@
-package org.smartregister.fct.sm.presentation.ui.components
+package org.smartregister.fct.aurora.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Heading() {
+fun PanelHeading(text: String) {
     Box(
         Modifier.fillMaxWidth().height(40.dp)
             .background(MaterialTheme.colorScheme.surface)
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = "Structure Map",
+            text = text,
             style = MaterialTheme.typography.titleSmall
         )
         VerticalDivider(modifier = Modifier.align(Alignment.CenterEnd))

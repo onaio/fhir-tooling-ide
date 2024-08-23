@@ -54,7 +54,7 @@ val DarkColorScheme = darkColorScheme(
     onSurface = Color(0xFFe5e1e9),
     surfaceVariant = Color(0xFFDADADA),
     onSurfaceVariant = Color(0xFFc9c5d0),
-    error = Color(0xFFba1a1a),
+    error = Color(0xfffa5d5d),
     onError = Color(0xFFffffff),
     errorContainer = Color(0xFF93000a),
     onErrorContainer = Color(0xFFffdad6),
@@ -63,7 +63,7 @@ val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun FCTTheme(
+fun AuroraTheme(
     isDarkModel: Boolean = false,
     content: @Composable () -> Unit
 ) {

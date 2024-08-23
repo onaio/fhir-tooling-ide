@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Config {
-    data object DataSpecification : Config()
+    data object ConfigManagement : Config()
     data object StructureMap : Config()
     data object FileManager : Config()
+    data object Fhirman : Config()
 }
