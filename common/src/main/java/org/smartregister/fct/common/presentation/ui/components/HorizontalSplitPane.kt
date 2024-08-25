@@ -26,8 +26,6 @@ import org.smartregister.fct.common.domain.model.MIN_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.util.windowWidthResizePointer
 
-
-
 @Composable
 fun HorizontalSplitPane(
     modifier: Modifier = Modifier.fillMaxSize(),
@@ -51,7 +49,7 @@ fun HorizontalSplitPane(
     var left by remember { mutableStateOf(resizeOption.sizeRatio) }
     val right = 1f - left;
 
-    val draggableArea = remember { 6.dp }
+    val draggableArea = remember { 4.dp }
     var containerWidth by remember { mutableStateOf(0f) }
     val dividerOffsetX = (containerWidth * left)
     val leftViewWidth = (containerWidth * left) + (draggableArea.dpToPx() / 2f)
@@ -81,9 +79,8 @@ fun HorizontalSplitPane(
             content = rightContent
         )
 
-        Box(
+        VerticalDivider(
             modifier = Modifier
-                .fillMaxHeight()
                 .width(draggableArea)
                 .offset(dividerOffsetX.pxToDp())
                 .pointerHoverIcon(windowWidthResizePointer)
@@ -96,10 +93,6 @@ fun HorizontalSplitPane(
                         )
                     }
                 }
-        ) {
-            VerticalDivider(
-                modifier = Modifier.align(Alignment.Center)
-            )
-        }
+        )
     }
 }

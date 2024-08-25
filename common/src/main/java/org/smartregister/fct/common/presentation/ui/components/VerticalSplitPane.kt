@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
@@ -49,7 +48,7 @@ fun VerticalSplitPane(
     var top by remember { mutableStateOf(resizeOption.sizeRatio) }
     val bottom = 1f - top;
 
-    val draggableArea = remember { 6.dp }
+    val draggableArea = remember { 4.dp }
     var containerHeight by remember { mutableStateOf(0f) }
     val dividerOffsetY = (containerHeight * top)
     val topViewHeight = (containerHeight * top) + (draggableArea.dpToPx() / 2f)
@@ -78,9 +77,8 @@ fun VerticalSplitPane(
             content = bottomContent
         )
 
-        Box(
+        HorizontalDivider(
             modifier = Modifier
-                .fillMaxWidth()
                 .height(draggableArea)
                 .offset(y = dividerOffsetY.pxToDp())
                 .pointerHoverIcon(windowHeightResizePointer)
@@ -93,12 +91,6 @@ fun VerticalSplitPane(
                         )
                     }
                 }
-        ) {
-            HorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center)
-            )
-        }
+        )
     }
 }
