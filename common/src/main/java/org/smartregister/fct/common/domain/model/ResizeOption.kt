@@ -5,6 +5,13 @@ import androidx.constraintlayout.compose.platform.annotation.FloatRange
 internal const val MIN_SIZE_RATIO = 0.01f
 internal const val MAX_SIZE_RATIO = 0.99f
 
+/**
+ * Resize option for vertical and horizontal split pane
+ *
+ * @property sizeRatio use to define how much split the container withIn {minSizeRatio} and {maxSizeRatio} by default
+ * @property minSizeRatio use to define minimum threshold for top/left container
+ * @property maxSizeRatio use to define maximum threshold for bottom/right container
+ */
 sealed class ResizeOption(
     val sizeRatio: Float,
     val minSizeRatio: Float,

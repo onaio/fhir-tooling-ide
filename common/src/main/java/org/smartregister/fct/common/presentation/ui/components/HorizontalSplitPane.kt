@@ -1,6 +1,6 @@
 package org.smartregister.fct.common.presentation.ui.components
 
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
@@ -26,6 +25,14 @@ import org.smartregister.fct.common.domain.model.MIN_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.util.windowWidthResizePointer
 
+/**
+ *  Split the content vertically with fixed and flexible resizing options
+ *
+ *  @param modifier use to apply for composable property
+ *  @param resizeOption provide flexible and fixed resizing options
+ *  @param leftContent provide left space for composable view
+ *  @param rightContent provide right space for composable view
+ */
 @Composable
 fun HorizontalSplitPane(
     modifier: Modifier = Modifier.fillMaxSize(),
@@ -48,6 +55,7 @@ fun HorizontalSplitPane(
 
     var left by remember { mutableStateOf(resizeOption.sizeRatio) }
     val right = 1f - left;
+    var rawX by remember { mutableStateOf(left) }
 
     val draggableArea = remember { 4.dp }
     var containerWidth by remember { mutableStateOf(0f) }
@@ -85,12 +93,20 @@ fun HorizontalSplitPane(
                 .offset(dividerOffsetX.pxToDp())
                 .pointerHoverIcon(windowWidthResizePointer)
                 .pointerInput(Unit) {
-                    detectDragGestures { _, dragAmount ->
-                        val x = left + dragAmount.x / containerWidth
-                        left = x.coerceIn(
-                            resizeOption.minSizeRatio,
-                            resizeOption.maxSizeRatio
-                        )
+                    detectHorizontalDragGestures(
+                        onDragStart = {
+                            rawX = left
+                        }
+                    ) { _, dragAmount ->
+                        rawX += dragAmount / containerWidth
+
+                        if (rawX >= resizeOption.minSizeRatio && rawX <= resizeOption.maxSizeRatio) {
+                            val x = left + dragAmount / containerWidth
+                            left = x.coerceIn(
+                                resizeOption.minSizeRatio,
+                                resizeOption.maxSizeRatio
+                            )
+                        }
                     }
                 }
         )

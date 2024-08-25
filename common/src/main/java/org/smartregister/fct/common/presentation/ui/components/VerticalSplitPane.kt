@@ -1,6 +1,6 @@
 package org.smartregister.fct.common.presentation.ui.components
 
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +25,14 @@ import org.smartregister.fct.common.domain.model.MIN_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.util.windowHeightResizePointer
 
+/**
+ *  Split the content vertically with fixed and flexible resizing options
+ *
+ *  @param modifier use to apply for composable property
+ *  @param resizeOption provide flexible and fixed resizing options
+ *  @param topContent provide top space for composable view
+ *  @param bottomContent provide bottom space for composable view
+ */
 @Composable
 fun VerticalSplitPane(
     modifier: Modifier = Modifier.fillMaxSize(),
@@ -46,7 +54,8 @@ fun VerticalSplitPane(
     }
 
     var top by remember { mutableStateOf(resizeOption.sizeRatio) }
-    val bottom = 1f - top;
+    val bottom = 1f - top
+    var rawY by remember { mutableStateOf(top) }
 
     val draggableArea = remember { 4.dp }
     var containerHeight by remember { mutableStateOf(0f) }
@@ -83,12 +92,21 @@ fun VerticalSplitPane(
                 .offset(y = dividerOffsetY.pxToDp())
                 .pointerHoverIcon(windowHeightResizePointer)
                 .pointerInput(Unit) {
-                    detectDragGestures { _, dragAmount ->
-                        val y = top + dragAmount.y / containerHeight
-                        top = y.coerceIn(
-                            resizeOption.minSizeRatio,
-                            resizeOption.maxSizeRatio
-                        )
+
+                    detectVerticalDragGestures(
+                        onDragStart = {
+                            rawY = top
+                        }
+                    ) { _, dragAmount ->
+                        rawY += dragAmount / containerHeight
+
+                        if (rawY >= resizeOption.minSizeRatio && rawY <= resizeOption.maxSizeRatio) {
+                            val y = top + dragAmount / containerHeight
+                            top = y.coerceIn(
+                                resizeOption.minSizeRatio,
+                                resizeOption.maxSizeRatio
+                            )
+                        }
                     }
                 }
         )
