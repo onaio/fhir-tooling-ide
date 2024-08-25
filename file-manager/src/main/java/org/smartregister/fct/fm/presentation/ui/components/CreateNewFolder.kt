@@ -9,10 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberAlertDialog
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberSingleFieldDialog
-import org.smartregister.fct.aurora.util.folderNameValidation
+import org.smartregister.fct.common.presentation.ui.dialog.DialogType
+import org.smartregister.fct.common.presentation.ui.dialog.rememberAlertDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.common.util.folderNameValidation
 import org.smartregister.fct.fm.presentation.components.InAppFileManagerComponent
 
 @OptIn(ExperimentalMaterialApi::class)

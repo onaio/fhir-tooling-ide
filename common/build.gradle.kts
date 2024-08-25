@@ -14,7 +14,7 @@ dependencies {
 
     implementation(Dependencies.json)
     implementation(Dependencies.SqlDelight.coroutineExtension)
-    implementation(Dependencies.prettyTime)
+
 
     implementation(project(":database"))
     implementation(project(":api-client"))

@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.smartregister.fct.common.data.manager.AppSettingManager
-import org.smartregister.fct.common.domain.model.ServerConfig
-import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.common.data.manager.AuroraManager
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.ServerConfig
+import org.smartregister.fct.engine.util.componentScope
 
-class FhirmanServerComponent(
-    componentContext: ComponentContext
+internal class FhirmanServerComponent(
+    componentContext: ComponentContext,
+    val auroraManager: AuroraManager
 ) : KoinComponent, ComponentContext by componentContext {
 
     private val appSettingManager: AppSettingManager by inject()
@@ -32,8 +34,10 @@ class FhirmanServerComponent(
     private fun listenConfigs() {
         componentScope.launch {
             appSettingManager.getAppSettingFlow().collectLatest {
-
                 _configs.value = it.serverConfigs
+                if (_selectedConfig.value != null && _selectedConfig.value !in it.serverConfigs) {
+                    _selectedConfig.emit(null)
+                }
             }
         }
     }

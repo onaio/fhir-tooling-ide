@@ -32,14 +32,14 @@ fun <T> AutoCompleteDropDown(
     label: (T) -> String,
     heading: String,
     defaultSelectedIndex: Int? = null,
-    defaultSelection: ((Int, T) -> Boolean)? = null,
-    onDefaultSelected: (T.(Int) -> Unit)? = null,
+    defaultValue: String? = null,
+    key: Any? = null,
     onSelected: (T.(Int) -> Unit)? = null,
     onTextChanged: ((String, Boolean) -> Unit)? = null
 ) {
 
-    require(defaultSelectedIndex == null || defaultSelection == null) {
-        throw IllegalStateException("{defaultSelectedIndex} and {defaultSelection} cannot be provided both at a time provide only one of them")
+    require(defaultSelectedIndex == null || defaultValue == null) {
+        throw IllegalStateException("{defaultSelectedIndex} and {defaultValue} cannot be provided both at a time provide only one of them")
     }
 
     if (defaultSelectedIndex != null) {
@@ -49,12 +49,11 @@ fun <T> AutoCompleteDropDown(
     }
 
     val scope = rememberCoroutineScope()
-    var selectedIndex by remember { mutableStateOf(defaultSelectedIndex) }
-    var searchText by remember { mutableStateOf(TextFieldValue("")) }
-    var isError by remember { mutableStateOf(false) }
-    var expanded by remember { mutableStateOf(false) }
-    var textFieldWidth by remember { mutableStateOf(0f) }
-    val callOnInitialSelection = remember { mutableStateOf(false) }
+    var searchText by remember(key) { mutableStateOf(TextFieldValue(defaultValue ?: "")) }
+    var isError by remember(key) { mutableStateOf(false) }
+    var expanded by remember(key) { mutableStateOf(false) }
+    var textFieldWidth by remember(key) { mutableStateOf(0f) }
+    val callOnInitialSelection = remember(key) { mutableStateOf(false) }
 
     val filteredItems = items.filter {
         label(it).contains(searchText.text, ignoreCase = true)
@@ -64,24 +63,16 @@ fun <T> AutoCompleteDropDown(
         expanded = false
     }
 
-    if (defaultSelectedIndex != null && !callOnInitialSelection.value) {
+    if (!callOnInitialSelection.value) {
         callOnInitialSelection.value = true
-        val item = items[defaultSelectedIndex]
-        searchText = TextFieldValue(label(item))
-        onDefaultSelected?.invoke(item, defaultSelectedIndex)
-    }
 
-    if (defaultSelection != null && !callOnInitialSelection.value) {
-        callOnInitialSelection.value = true
-        run outer@{
-            items.forEachIndexed { index, item ->
-                if (defaultSelection.invoke(index, item)) {
-                    selectedIndex = index
-                    searchText = TextFieldValue(label(item))
-                    onDefaultSelected?.invoke(item, index)
-                    return@outer
-                }
-            }
+        if (defaultSelectedIndex != null) {
+            val item = items[defaultSelectedIndex]
+            searchText = TextFieldValue(label(item))
+        }
+
+        if (defaultValue != null && defaultValue.trim().isNotEmpty()) {
+            isError = !items.any { label(it) == defaultValue }
         }
     }
 

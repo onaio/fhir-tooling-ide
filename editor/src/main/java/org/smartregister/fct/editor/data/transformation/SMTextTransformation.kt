@@ -1,10 +1,10 @@
 package org.smartregister.fct.editor.data.transformation
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import org.smartregister.fct.editor.domain.transformation.TextTransformation
-import org.smartregister.fct.common.util.hexToColor
 
 internal class SMTextTransformation(
     searchText: String,
@@ -12,15 +12,15 @@ internal class SMTextTransformation(
     colorScheme: ColorScheme
 ) : TextTransformation(searchText) {
 
-    private var blueColor = "#86B1FF".hexToColor()
-    private var greenColor = "#91BE61".hexToColor()
-    private var yellowColor = "#DEA834".hexToColor()
+    private var blueColor = Color(0xFF86B1FF)
+    private var greenColor = Color(0xFF91BE61)
+    private var yellowColor = Color(0xFFDEA834)
 
     init {
         if (!isDarkTheme) {
-            blueColor = "#0050A5".hexToColor()
-            greenColor = "#457700".hexToColor()
-            yellowColor = "#BB8800".hexToColor()
+            blueColor = Color(0xFF0050A5)
+            greenColor = Color(0xFF457700)
+            yellowColor = Color(0xFFBB8800)
         }
     }
 
@@ -28,7 +28,7 @@ internal class SMTextTransformation(
     private val blueColorStyle = SpanStyle(color = blueColor)
     private val greenColorStyle = SpanStyle(color = greenColor)
     private val yellowColorStyle = SpanStyle(color = yellowColor)
-    private val greyColorStyle = SpanStyle(color = "#A0A0A0".hexToColor())
+    private val greyColorStyle = SpanStyle(color = Color(0xFFA0A0A0))
 
     private val groupTagRegex = Regex("(?<=\\n|\\s)group(?=\\s+)")
     private val mapTagRegex = Regex("map(?=\\s+([\"']))")

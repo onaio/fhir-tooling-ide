@@ -3,7 +3,7 @@ package org.smartregister.fct.sm.presentation.ui.components.dialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberConfirmationDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
 @Composable
@@ -13,7 +13,7 @@ fun DeleteStructureMapConfirmationDialog(component: StructureMapScreenComponent)
 
     val confirmationDialog = rememberConfirmationDialog<Unit>(
         onDismiss = { component.hideDeleteStructureMapDialog() },
-        onConfirmed = {  _, _ ->
+        onConfirmed = { _, _ ->
             component.closeTab()
         }
     )

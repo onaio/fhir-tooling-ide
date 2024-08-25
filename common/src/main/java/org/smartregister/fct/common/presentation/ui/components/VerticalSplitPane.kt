@@ -3,11 +3,11 @@ package org.smartregister.fct.common.presentation.ui.components
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,15 +24,14 @@ import org.smartregister.fct.aurora.util.pxToDp
 import org.smartregister.fct.common.domain.model.MAX_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.MIN_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.ResizeOption
-import org.smartregister.fct.common.util.windowWidthResizePointer
-
-
+import org.smartregister.fct.common.util.windowHeightResizePointer
 
 @Composable
 fun VerticalSplitPane(
+    modifier: Modifier = Modifier.fillMaxSize(),
     resizeOption: ResizeOption = ResizeOption.Flexible(),
-    leftContent: @Composable BoxScope.() -> Unit,
-    rightContent: @Composable BoxScope.() -> Unit,
+    topContent: @Composable BoxScope.() -> Unit,
+    bottomContent: @Composable BoxScope.() -> Unit,
 ) {
 
     require(resizeOption.minSizeRatio in MIN_SIZE_RATIO..MAX_SIZE_RATIO) {
@@ -47,57 +46,58 @@ fun VerticalSplitPane(
         throw IllegalStateException("sizeRatio should be in minSizeRatio to maxSizeRatio range.")
     }
 
-    var left by remember { mutableStateOf(resizeOption.sizeRatio) }
-    val right = 1f - left;
+    var top by remember { mutableStateOf(resizeOption.sizeRatio) }
+    val bottom = 1f - top;
 
     val draggableArea = remember { 6.dp }
-    var containerWidth by remember { mutableStateOf(0f) }
-    val dividerOffsetX = (containerWidth * left)
-    val leftViewWidth = (containerWidth * left) + (draggableArea.dpToPx() / 2f)
-    val rightViewWidth = (containerWidth * right) - (draggableArea.dpToPx() / 2f)
-    val rightViewOffsetX = (containerWidth * left) + (draggableArea.dpToPx() / 2f)
+    var containerHeight by remember { mutableStateOf(0f) }
+    val dividerOffsetY = (containerHeight * top)
+    val topViewHeight = (containerHeight * top) + (draggableArea.dpToPx() / 2f)
+    val bottomViewHeight = (containerHeight * bottom) - (draggableArea.dpToPx() / 2f)
+    val bottomViewOffsetY = (containerHeight * top) + (draggableArea.dpToPx() / 2f)
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
             .onGloballyPositioned { layoutCoordinates ->
-                containerWidth = layoutCoordinates.size.width.toFloat()
+                containerHeight = layoutCoordinates.size.height.toFloat()
             }
     ) {
 
         Box(
             modifier = Modifier
-                .width(leftViewWidth.pxToDp())
-                .fillMaxHeight(),
-            content = leftContent
+                .height(topViewHeight.pxToDp())
+                .fillMaxWidth(),
+            content = topContent
         )
 
         Box(
             modifier = Modifier
-                .offset(rightViewOffsetX.pxToDp())
-                .width(rightViewWidth.pxToDp())
-                .fillMaxHeight(),
-            content = rightContent
+                .offset(y = bottomViewOffsetY.pxToDp())
+                .height(bottomViewHeight.pxToDp())
+                .fillMaxWidth(),
+            content = bottomContent
         )
 
         Box(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(draggableArea)
-                .offset(dividerOffsetX.pxToDp())
-                .pointerHoverIcon(windowWidthResizePointer)
+                .fillMaxWidth()
+                .height(draggableArea)
+                .offset(y = dividerOffsetY.pxToDp())
+                .pointerHoverIcon(windowHeightResizePointer)
                 .pointerInput(Unit) {
                     detectDragGestures { _, dragAmount ->
-                        val x = left + dragAmount.x / containerWidth
-                        left = x.coerceIn(
+                        val y = top + dragAmount.y / containerHeight
+                        top = y.coerceIn(
                             resizeOption.minSizeRatio,
                             resizeOption.maxSizeRatio
                         )
                     }
                 }
         ) {
-            VerticalDivider(
-                modifier = Modifier.align(Alignment.Center)
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center)
             )
         }
     }

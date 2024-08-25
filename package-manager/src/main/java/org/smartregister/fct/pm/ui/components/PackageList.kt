@@ -26,9 +26,9 @@ import org.koin.java.KoinJavaComponent.getKoin
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisText
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
-import org.smartregister.fct.common.util.uuid
+import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.pm.domain.usecase.DeletePackage
 import org.smartregister.fct.pm.domain.usecase.SaveNewPackage
 

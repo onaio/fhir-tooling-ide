@@ -56,8 +56,8 @@ import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMTextTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
 import org.smartregister.fct.editor.util.prettyJson
-import org.smartregister.fct.common.domain.model.AppSetting
-import org.smartregister.fct.common.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.AppSetting
+import org.smartregister.fct.engine.data.manager.AppSettingManager
 
 
 @Composable
@@ -76,18 +76,20 @@ fun CodeEditor(
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val showToolbox = remember { mutableStateOf(false) }
+    val readOnly by controller.isReadOnly.collectAsState()
     val preInitialText by controller.initTextFlow.collectAsState()
+    val postInitialText by controller.postInitTextFlow.collectAsState()
     val initialText = if (controller.isInitialTextSet) controller.getText() else preInitialText
+    val editorKey = if (controller.isInitialTextSet) controller else null
     val fileType = controller.getFileType()
     val isDarkTheme = appSetting.isDarkTheme
     val textFieldValue =
-        remember(initialText) { mutableStateOf(TextFieldValue(AnnotatedString(initialText))) }
+        remember(editorKey, postInitialText) { mutableStateOf(TextFieldValue(AnnotatedString(initialText))) }
     val searchText = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     var lineNumbers by remember { mutableStateOf("") }
 
-
-    LaunchedEffect(key) {
+    LaunchedEffect(key, postInitialText) {
         lineNumbers = getLineNumbers(controller.getText())
     }
 
@@ -128,6 +130,7 @@ fun CodeEditor(
                         controller.setText(it.text)
                     }
                 },
+                readOnly = readOnly,
                 modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 3.dp)
                     .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
                         when {

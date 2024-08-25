@@ -10,11 +10,21 @@ import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.util.prettyJson
 import org.smartregister.fct.logger.FCTLogger
 
-class CodeController(scope: CoroutineScope, initialText: String = "", private val fileType: FileType? = null) : InstanceKeeper.Instance{
+class CodeController(
+    scope: CoroutineScope,
+    initialText: String = "",
+    private val fileType: FileType? = null,
+    private val readOnly: Boolean = false,
+) : InstanceKeeper.Instance{
 
     private var text: String = initialText
     private val textFlow = MutableStateFlow(initialText)
     internal val initTextFlow = MutableStateFlow(initialText)
+    internal val postInitTextFlow = MutableStateFlow(initialText)
+
+    private val _isReadOnly = MutableStateFlow(readOnly)
+    val isReadOnly: StateFlow<Boolean> = _isReadOnly
+
     internal var isInitialTextSet = false
         private set
 
@@ -44,6 +54,11 @@ class CodeController(scope: CoroutineScope, initialText: String = "", private va
     internal suspend fun setText(text: String) {
         this.text = text
         textFlow.emit(text)
+    }
+
+    suspend fun setPostText(text: String) {
+        this.text = text
+        postInitTextFlow.emit(text)
     }
 
     fun getFileType() = fileType

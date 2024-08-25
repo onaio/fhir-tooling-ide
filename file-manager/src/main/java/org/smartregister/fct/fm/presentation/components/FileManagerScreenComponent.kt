@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okio.Path
 import org.smartregister.fct.common.presentation.component.ScreenComponent
-import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.logger.FCTLogger
 
 class FileManagerScreenComponent(

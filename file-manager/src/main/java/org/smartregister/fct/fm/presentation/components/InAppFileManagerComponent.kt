@@ -6,7 +6,7 @@ import okio.Path
 import okio.Path.Companion.toPath
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.Applicable

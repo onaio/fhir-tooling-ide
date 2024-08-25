@@ -10,7 +10,7 @@ import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.utils.StructureMapUtilities
 import org.hl7.fhir.utilities.npm.FilesystemPackageCacheManager
-import org.smartregister.fct.common.util.decodeResourceFromString
+import org.smartregister.fct.engine.util.decodeResourceFromString
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.helper.TransformSupportServices
 

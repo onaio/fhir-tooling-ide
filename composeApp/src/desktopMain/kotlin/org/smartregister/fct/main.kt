@@ -41,6 +41,7 @@ import org.smartregister.fct.common.data.locals.LocalRootComponent
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.common.data.locals.LocalSubWindowManager
 import org.smartregister.fct.configs.ConfigModuleSetup
+import org.smartregister.fct.engine.EngineModuleSetup
 import org.smartregister.fct.fhirman.FhirmanModuleSetup
 import org.smartregister.fct.fm.FileManagerModuleSetup
 import org.smartregister.fct.pm.PMModuleSetup
@@ -87,6 +88,7 @@ fun main() = application {
                         subWindowManager = subWindowViewModel
                     )
                 },
+                rootComponent = rootComponent!!
             ) {
                 Scaffold(
                     snackbarHost = {
@@ -162,6 +164,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             //SMModuleSetup(),
             ApiClientModuleSetup(),
             FhirmanModuleSetup(),
+            EngineModuleSetup(),
         ).map {
             scope.async(Dispatchers.Default) {
                 it.setup()

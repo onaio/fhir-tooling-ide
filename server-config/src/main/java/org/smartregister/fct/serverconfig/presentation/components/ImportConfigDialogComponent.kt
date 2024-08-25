@@ -4,11 +4,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.smartregister.fct.common.data.manager.AppSettingManager
-import org.smartregister.fct.common.domain.model.ServerConfig
-import org.smartregister.fct.common.util.componentScope
-import org.smartregister.fct.common.util.decodeJson
-import org.smartregister.fct.common.util.uuid
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.ServerConfig
+import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.decodeJson
+import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.serverconfig.domain.model.ImportDialogState
 

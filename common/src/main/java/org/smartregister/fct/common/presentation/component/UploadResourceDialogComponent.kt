@@ -18,11 +18,11 @@ import org.smartregister.fct.apiclient.domain.model.UploadResourceRequest
 import org.smartregister.fct.apiclient.domain.model.UploadResponse
 import org.smartregister.fct.apiclient.domain.usecase.AuthenticateClient
 import org.smartregister.fct.apiclient.domain.usecase.UploadResource
-import org.smartregister.fct.common.data.manager.AppSettingManager
-import org.smartregister.fct.common.domain.model.ServerConfig
-import org.smartregister.fct.common.util.componentScope
-import org.smartregister.fct.common.util.decodeResourceFromString
-import org.smartregister.fct.common.util.logicalId
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.ServerConfig
+import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.decodeResourceFromString
+import org.smartregister.fct.engine.util.logicalId
 import org.smartregister.fct.logger.FCTLogger
 
 internal class UploadResourceDialogComponent(

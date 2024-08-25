@@ -5,7 +5,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.configs.data.repository.ConfigRepository
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
-import org.smartregister.fct.common.util.uuid
+import org.smartregister.fct.engine.util.uuid
 import sqldelight.Config
 
 class ConfigManagerViewModel :  KoinComponent {

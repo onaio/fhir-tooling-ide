@@ -27,14 +27,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import org.smartregister.fct.aurora.data.locals.AuroraLocal
-import org.smartregister.fct.aurora.domain.controller.DialogController
-import org.smartregister.fct.aurora.domain.model.Message
+import org.smartregister.fct.common.data.locals.AuroraLocal
+import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.aurora.presentation.ui.components.TextField
-import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
-import org.smartregister.fct.common.domain.model.ServerConfig
+import org.smartregister.fct.common.domain.model.Message
+import org.smartregister.fct.common.presentation.ui.container.Aurora
+import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.common.presentation.component.UploadResourceDialogComponent
 
 @Composable
@@ -61,11 +60,13 @@ fun rememberResourceUploadDialog(
     return dialogController
 }
 
-context (UploadResourceDialogComponent, DialogController<String>)
+context (DialogController<String>)
 @Composable
-private fun UploadResourcePanel() {
+private fun UploadResourceDialogComponent.UploadResourcePanel() {
     val parentAurora = AuroraLocal.current
-    Aurora {
+    Aurora(
+        componentContext = this
+    ) {
         Content(configs.subscribeAsState().value) {
             UploadButton()
         }

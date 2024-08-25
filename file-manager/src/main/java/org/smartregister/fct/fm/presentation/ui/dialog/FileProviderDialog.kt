@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import okio.Path
-import org.smartregister.fct.aurora.domain.controller.DialogController
+import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.aurora.presentation.ui.components.FloatingActionIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tabs
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.ui.CodeEditor

@@ -21,13 +21,20 @@ import io.ktor.http.parameters
 import io.ktor.serialization.gson.gson
 import io.ktor.serialization.kotlinx.json.json
 import org.hl7.fhir.r4.model.OperationOutcome
+import org.koin.compose.getKoin
 import org.smartregister.fct.apiclient.data.deserializer.OperationOutcomeTypeAdapter
 import org.smartregister.fct.apiclient.domain.datasource.ApiClientDataSource
 import org.smartregister.fct.apiclient.domain.model.AuthRequest
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
+import org.smartregister.fct.apiclient.domain.model.Request
+import org.smartregister.fct.apiclient.domain.model.Response
 import org.smartregister.fct.apiclient.domain.model.UploadResourceRequest
 import org.smartregister.fct.apiclient.domain.model.UploadResponse
 import org.smartregister.fct.apiclient.util.asOperationOutcome
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.HttpMethodType
+import org.smartregister.fct.engine.domain.model.ServerConfig
+import org.smartregister.fct.engine.util.getKoinInstance
 import org.smartregister.fct.logger.FCTLogger
 
 internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSource {
@@ -129,6 +136,97 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
             client.close()
         }
 
+    }
+
+    override suspend fun request(request: Request): Response {
+        val client = HttpClient(CIO) {
+
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        BearerTokens(request.config.authToken, "").also {
+                            FCTLogger.d("AuthToken -> ${it.accessToken}")
+                        }
+                    }
+                }
+            }
+
+            install(ContentNegotiation) {
+                gson {
+                    registerTypeAdapter(
+                        OperationOutcome::class.java,
+                        OperationOutcomeTypeAdapter()
+                    )
+                }
+            }
+        }
+
+        return try {
+            val response = client.request(request.config.fhirBaseUrl) {
+                method = resolveMethod(request.methodType)
+
+                url {
+                    appendPathSegments(request.resourceType, request.resourceId).also {
+                        FCTLogger.d("${request.methodType.name} -> $it")
+                    }
+                }
+
+                if (method == HttpMethod.Post || method == HttpMethod.Put) {
+                    contentType(ContentType.Application.Json)
+                    setBody(request.body)
+                }
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> Response.Success(response.bodyAsText())
+
+                HttpStatusCode.Unauthorized -> {
+
+                    when(val authResponse = auth(createAuthRequest(request.config))) {
+                        is AuthResponse.Success -> {
+                            request.config.authToken = authResponse.accessToken
+                            updateServerConfig(request.config)
+                            request(request)
+                        }
+                        is AuthResponse.Failed -> {
+                            Response.Failed(authResponse.asOperationOutcome())
+                        }
+                    }
+                }
+
+                else -> {
+                    val outcome: OperationOutcome = response.body()
+                    FCTLogger.e(response.bodyAsText())
+                    Response.Failed(outcome)
+                }
+            }
+        } catch (ex: Exception) {
+            FCTLogger.e(ex)
+            Response.Failed(ex.asOperationOutcome())
+
+        } finally {
+            client.close()
+        }
+    }
+
+    private fun resolveMethod(httpMethodType: HttpMethodType) : HttpMethod = when (httpMethodType) {
+        is HttpMethodType.Get -> HttpMethod.Get
+        is HttpMethodType.Post -> HttpMethod.Post
+        is HttpMethodType.Put -> HttpMethod.Put
+        is HttpMethodType.Delete -> HttpMethod.Delete
+    }
+
+    private fun createAuthRequest(config: ServerConfig) = AuthRequest (
+        oAuthUrl = config.oAuthUrl,
+        clientId = config.clientId,
+        clientSecret = config.clientSecret,
+        username = config.username,
+        password = config.password
+    )
+
+    private fun updateServerConfig(serverConfig: ServerConfig) {
+        val appSettingManager = getKoinInstance<AppSettingManager>()
+        appSettingManager.updateServerConfig(serverConfig)
     }
 
     private fun <T> T.asPrettyJson(): String {

@@ -3,7 +3,7 @@ package org.smartregister.fct.serverconfig.presentation.components
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import org.smartregister.fct.common.domain.model.ServerConfig
+import org.smartregister.fct.engine.domain.model.ServerConfig
 
 abstract class ConfigDialogComponent(
     protected val serverConfigPanelComponent: ServerConfigPanelComponent

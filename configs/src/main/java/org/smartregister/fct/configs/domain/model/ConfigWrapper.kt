@@ -1,6 +1,6 @@
 package org.smartregister.fct.configs.domain.model
 
-import org.smartregister.fct.common.util.encodeJson
+import org.smartregister.fct.engine.util.encodeJson
 
 
 data class ConfigWrapper(

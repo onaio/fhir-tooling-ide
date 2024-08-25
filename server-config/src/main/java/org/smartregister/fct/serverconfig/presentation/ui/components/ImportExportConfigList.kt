@@ -17,7 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.common.domain.model.ServerConfig
+import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.serverconfig.presentation.components.ConfigDialogComponent
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 

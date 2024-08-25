@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.smartregister.fct.aurora.presentation.ui.components.FloatingActionIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberSingleFieldDialog
-import org.smartregister.fct.aurora.util.fileNameValidation
+import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.common.util.fileNameValidation
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.common.util.uuid
+import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.fm.domain.model.FPInitialConfig
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.sm.domain.model.SMDetail

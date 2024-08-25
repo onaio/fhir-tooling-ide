@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.smartregister.fct.aurora.presentation.ui.components.Button
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberAlertDialog
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
+import org.smartregister.fct.common.presentation.ui.dialog.DialogType
+import org.smartregister.fct.common.presentation.ui.dialog.rememberAlertDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.serverconfig.domain.model.ImportDialogState

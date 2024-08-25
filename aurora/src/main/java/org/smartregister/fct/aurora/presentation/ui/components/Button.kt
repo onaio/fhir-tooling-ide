@@ -147,7 +147,7 @@ fun OutlinedButton(
         enabled = enable,
         shape = shape,
         border = ButtonDefaults.outlinedButtonBorder.copy(
-            brush = if (enable) ButtonDefaults.outlinedButtonBorder.brush else SolidColor(MaterialTheme.colorScheme.surface)
+            brush = if (enable) SolidColor(MaterialTheme.colorScheme.primary) else SolidColor(MaterialTheme.colorScheme.surface)
         )
     ) {
         icon?.let {

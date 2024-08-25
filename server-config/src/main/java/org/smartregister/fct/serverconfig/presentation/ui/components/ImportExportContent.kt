@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import org.smartregister.fct.common.domain.model.ServerConfig
+import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.serverconfig.presentation.components.ConfigDialogComponent
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 

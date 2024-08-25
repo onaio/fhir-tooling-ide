@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -25,19 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
-import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.ResourceType
 import org.smartregister.fct.aurora.presentation.ui.components.ExtendedFloatingActionButton
 import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
 import org.smartregister.fct.aurora.presentation.ui.components.Tab
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
-import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
+import org.smartregister.fct.common.presentation.ui.container.Aurora
 import org.smartregister.fct.common.presentation.ui.dialog.rememberResourceUploadDialog
-import org.smartregister.fct.common.util.encodeResourceToString
 import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.common.util.readableResourceName
+import org.smartregister.fct.engine.util.readableResourceName
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
@@ -62,7 +58,9 @@ internal fun SMTransformationResult(componentContext: ComponentContext, bundle: 
     }?.codeController
 
 
-    Aurora {
+    Aurora(
+        componentContext = componentContext
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
 
             ConstraintLayout(

@@ -8,8 +8,8 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import io.github.vinceglb.filekit.compose.rememberFileSaverLauncher
 import org.smartregister.fct.aurora.presentation.ui.components.Button
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberAlertDialog
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberAlertDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.serverconfig.domain.model.ExportDialogState
 import org.smartregister.fct.serverconfig.presentation.components.ExportConfigDialogComponent
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent

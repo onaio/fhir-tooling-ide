@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.util.pxToDp
+import java.util.UUID
 
 @Composable
 fun <T> HorizontalButtonStrip(
@@ -43,6 +44,7 @@ fun <T> HorizontalButtonStrip(
     selectedButtonBackground: Color = MaterialTheme.colorScheme.primary,
     selectedLabelColor: Color = MaterialTheme.colorScheme.onPrimary,
     stripBackgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    key: Any? = null,
     onClick: T.(Int) -> Unit,
 ) {
 
@@ -87,7 +89,7 @@ fun <T> HorizontalButtonStrip(
     }
 
     val buttonProps = remember { mutableStateMapOf<Int, Pair<Float, Float>>() }
-    var selectedIndex by remember { mutableStateOf(initialSelectedIndex) }
+    var selectedIndex by remember(key) { mutableStateOf(initialSelectedIndex) }
 
     val sliderOffsetX = buttonProps[selectedIndex]?.first ?: 0f
     val sliderWidth = buttonProps[selectedIndex]?.second ?: 0f

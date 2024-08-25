@@ -52,7 +52,7 @@ import org.smartregister.fct.configs.ui.components.ConfigTab
 import org.smartregister.fct.configs.util.extension.flowAsState
 import org.smartregister.fct.aurora.presentation.ui.components.Tab
 import org.smartregister.fct.aurora.presentation.ui.components.TabRow
-import org.smartregister.fct.common.util.compress
+import org.smartregister.fct.engine.util.compress
 
 @Composable
 fun ConfigManagerScreen() {

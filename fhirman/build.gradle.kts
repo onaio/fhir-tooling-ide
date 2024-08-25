@@ -13,5 +13,6 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":editor"))
+    implementation(project(":api-client"))
     implementation(project(":settings"))
 }

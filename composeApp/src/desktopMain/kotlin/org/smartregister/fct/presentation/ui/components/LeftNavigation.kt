@@ -36,7 +36,7 @@ import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
-import org.smartregister.fct.common.data.manager.AppSettingManager
+import org.smartregister.fct.engine.data.manager.AppSettingManager
 
 @Composable
 fun LeftNavigation(

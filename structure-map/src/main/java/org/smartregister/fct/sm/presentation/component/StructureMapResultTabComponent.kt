@@ -5,9 +5,9 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import org.hl7.fhir.r4.model.Resource
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.common.util.componentScope
-import org.smartregister.fct.common.util.encodeResourceToString
-import org.smartregister.fct.common.util.logicalId
+import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.encodeResourceToString
+import org.smartregister.fct.engine.util.logicalId
 
 internal class StructureMapResultTabComponent(
     componentContext: ComponentContext,

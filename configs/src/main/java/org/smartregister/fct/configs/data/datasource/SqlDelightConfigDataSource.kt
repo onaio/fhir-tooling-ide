@@ -10,8 +10,8 @@ import org.smartregister.fct.configs.domain.datasource.ConfigDataSource
 import org.smartregister.fct.configs.domain.model.ConfigType
 import org.smartregister.fct.configs.domain.model.ConfigWrapper
 import org.smartregister.fct.configs.domain.model.RegisterConfiguration
-import org.smartregister.fct.common.util.decodeJson
-import org.smartregister.fct.common.util.decompress
+import org.smartregister.fct.engine.util.decodeJson
+import org.smartregister.fct.engine.util.decompress
 import sqldelight.Config
 import sqldelight.ConfigQueries
 

@@ -1,10 +1,10 @@
 package org.smartregister.fct.editor.data.transformation
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import org.smartregister.fct.editor.domain.transformation.TextTransformation
-import org.smartregister.fct.common.util.hexToColor
 
 internal class JsonTransformation(
     searchText: String,
@@ -12,15 +12,15 @@ internal class JsonTransformation(
     colorScheme: ColorScheme
 ) : TextTransformation(searchText) {
 
-    private var blueColor = "#86B1FF".hexToColor()
-    private var greenColor = "#91BE61".hexToColor()
-    private var yellowColor = "#DEA834".hexToColor()
+    private var blueColor = Color(0xFF86B1FF)
+    private var greenColor = Color(0xFF91BE61)
+    private var yellowColor = Color(0xFFDEA834)
 
     init {
         if (!isDarkTheme) {
-            blueColor = "#0050A5".hexToColor()
-            greenColor = "#457700".hexToColor()
-            yellowColor = "#BB8800".hexToColor()
+            blueColor = Color(0xFF0050A5)
+            greenColor = Color(0xFF457700)
+            yellowColor = Color(0xFFBB8800)
         }
     }
 

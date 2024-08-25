@@ -33,8 +33,10 @@ import androidx.compose.ui.window.WindowState
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.koin.compose.koinInject
-import org.smartregister.fct.aurora.presentation.ui.components.container.Aurora
-import org.smartregister.fct.common.data.manager.AppSettingManager
+import org.smartregister.fct.common.presentation.component.RootComponent
+import org.smartregister.fct.common.presentation.ui.container.Aurora
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.presentation.component.RootComponentImpl
 import org.smartregister.fct.presentation.theme.AuroraTheme
 import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
@@ -158,6 +160,7 @@ fun MainWindow(
     title: String = "Untitled",
     appIcon: Painter,
     titleContent: @Composable RowScope.() -> Unit,
+    rootComponent: RootComponentImpl,
     content: @Composable FrameWindowScope.() -> Unit,
 ) {
     //two-way binding
@@ -199,7 +202,9 @@ fun MainWindow(
                         onRequestToggleMaximize = onRequestToggleMaximize,
                         titleContent = titleContent
                     ) {
-                        Aurora {
+                        Aurora(
+                            componentContext = rootComponent
+                        ) {
                             content()
                         }
                     }

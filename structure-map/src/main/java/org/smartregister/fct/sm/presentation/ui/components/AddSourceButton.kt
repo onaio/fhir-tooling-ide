@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.smartregister.fct.aurora.domain.controller.DialogController
+import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.DialogType
-import org.smartregister.fct.aurora.presentation.ui.components.dialog.rememberDialog
+import org.smartregister.fct.common.presentation.ui.dialog.DialogType
+import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.fm.domain.model.FPInitialConfig
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog

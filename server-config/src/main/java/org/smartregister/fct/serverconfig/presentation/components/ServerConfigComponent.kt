@@ -10,10 +10,10 @@ import org.koin.core.component.inject
 import org.smartregister.fct.apiclient.domain.model.AuthRequest
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
 import org.smartregister.fct.apiclient.domain.usecase.AuthenticateClient
-import org.smartregister.fct.common.data.manager.AppSettingManager
-import org.smartregister.fct.common.domain.model.AppSetting
-import org.smartregister.fct.common.domain.model.ServerConfig
-import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.AppSetting
+import org.smartregister.fct.engine.domain.model.ServerConfig
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.serverconfig.domain.model.VerifyConfigState
 
 class ServerConfigComponent(

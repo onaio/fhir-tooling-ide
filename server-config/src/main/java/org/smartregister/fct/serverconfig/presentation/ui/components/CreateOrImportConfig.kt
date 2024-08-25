@@ -21,7 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import org.smartregister.fct.aurora.domain.controller.SingleFieldDialogController
+import org.smartregister.fct.common.data.controller.SingleFieldDialogController
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigPanelComponent
 
 context (ServerConfigPanelComponent)

@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import okio.Path
 import okio.Path.Companion.toPath
 import org.apache.commons.io.FileUtils
-import org.smartregister.fct.common.util.componentScope
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.domain.model.FileManagerMode

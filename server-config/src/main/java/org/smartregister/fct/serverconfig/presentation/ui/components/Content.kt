@@ -34,11 +34,11 @@ import fct.server_config.generated.resources.setting_saved
 import fct.server_config.generated.resources.username
 import fct.server_config.generated.resources.verify
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
-import org.smartregister.fct.aurora.data.locals.AuroraLocal
-import org.smartregister.fct.aurora.domain.model.Message
 import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
 import org.smartregister.fct.aurora.presentation.ui.components.TextField
+import org.smartregister.fct.common.data.locals.AuroraLocal
+import org.smartregister.fct.common.domain.model.Message
 import org.smartregister.fct.serverconfig.domain.model.VerifyConfigState
 import org.smartregister.fct.serverconfig.presentation.components.ServerConfigComponent
 import org.smartregister.fct.serverconfig.util.asString
