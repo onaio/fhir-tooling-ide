@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.context.SimpleWorkerContext
 import org.hl7.fhir.r4.model.Bundle
+import org.hl7.fhir.r4.model.Parameters
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.utils.StructureMapUtilities
 import org.hl7.fhir.utilities.npm.FilesystemPackageCacheManager
@@ -30,7 +31,10 @@ class SMTransformService {
                 "hl7.fhir.r4.core",
                 "4.0.1"
             )
-        ).apply { isCanRunWithoutTerminology = true }
+        ).apply {
+            setExpansionProfile(Parameters())
+            isCanRunWithoutTerminology = true
+        }
 
         transformSupportServices = TransformSupportServices(contextR4)
 
