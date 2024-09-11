@@ -5,7 +5,7 @@ import java.util.Queue
 
 interface ADBCommand<T> {
 
-    fun process(result: String, dependentResult: Queue<Result<*>>): Result<T>
+    fun process(response: String, dependentResult: Queue<Result<*>>): Result<T>
     fun build(): List<String>
     fun getDependentCommands(): Queue<ADBCommand<*>> = LinkedList()
 }

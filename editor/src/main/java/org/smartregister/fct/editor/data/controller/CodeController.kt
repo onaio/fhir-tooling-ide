@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.editor.util.prettyJson
+import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.logger.FCTLogger
 
 class CodeController(

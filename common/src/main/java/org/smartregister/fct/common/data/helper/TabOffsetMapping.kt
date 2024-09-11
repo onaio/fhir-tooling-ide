@@ -1,4 +1,4 @@
-package org.smartregister.fct.editor.data.helper
+package org.smartregister.fct.common.data.helper
 
 import androidx.compose.ui.text.input.OffsetMapping
 

@@ -32,6 +32,7 @@ kotlin {
             implementation(project(":settings"))
             implementation(project(":api-client"))
             implementation(project(":fhirman"))
+            implementation(project(":device-database"))
         }
 
         desktopMain.dependencies {

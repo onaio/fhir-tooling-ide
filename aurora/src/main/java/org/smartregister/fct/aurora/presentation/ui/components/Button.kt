@@ -1,5 +1,6 @@
 package org.smartregister.fct.aurora.presentation.ui.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -62,6 +63,7 @@ fun Button(
 @Composable
 fun TextButton(
     modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
     label: String,
     icon: ImageVector? = null,
     labelColor: Color? = null,
@@ -70,6 +72,7 @@ fun TextButton(
     selected: Boolean = false,
     buttonSize: ButtonSize = ButtonSize.Regular,
     shape: Shape = auroraButtonShape,
+    contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
     selectedContainerColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit
 ) {
@@ -85,6 +88,7 @@ fun TextButton(
 
         icon?.let {
             Icon(
+                modifier = iconModifier,
                 icon = icon,
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha)
             )
@@ -115,6 +119,7 @@ fun TextButton(
             onClick = onClick,
             enabled = enable,
             shape = shape,
+            contentPadding = contentPadding,
             colors = ButtonDefaults.buttonColors(
                 containerColor = selectedContainerColor
             ),
@@ -126,6 +131,7 @@ fun TextButton(
             onClick = onClick,
             enabled = enable,
             shape = shape,
+            contentPadding = contentPadding,
             content = content
         )
     }

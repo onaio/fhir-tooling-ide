@@ -10,15 +10,15 @@ internal class GetAllPackagesCommand(private val packageFilterList: List<String>
     ADBCommand<List<PackageInfo>> {
 
     override fun process(
-        result: String,
+        response: String,
         dependentResult: Queue<Result<*>>
     ): Result<List<PackageInfo>> {
-        return result
+        return response
             .takeIfNotError()
             ?.split("\n")
             ?.map { PackageInfo(packageId = it.replace("package:", "")) }
             ?.let { Result.success(it) }
-            ?: result.resultAsCommandException()
+            ?: response.resultAsCommandException()
 
     }
 

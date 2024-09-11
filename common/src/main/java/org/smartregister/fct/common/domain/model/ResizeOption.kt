@@ -16,26 +16,53 @@ sealed class ResizeOption(
     val sizeRatio: Float,
     val minSizeRatio: Float,
     val maxSizeRatio: Float,
+    val viewMode: ViewMode
 ) {
-
 
     class Fixed(
         @FloatRange(from = MIN_SIZE_RATIO.toDouble(), to = MAX_SIZE_RATIO.toDouble())
-        sizeRatio: Float = 0.5f
+        sizeRatio: Float = 0.5f,
+        viewMode: ViewMode = ViewMode.Dock,
     ) : ResizeOption(
         sizeRatio = sizeRatio,
         minSizeRatio = sizeRatio,
-        maxSizeRatio = sizeRatio
+        maxSizeRatio = sizeRatio,
+        viewMode = viewMode
     )
 
     class Flexible(
+        val savedKey: Any? = null,
         @FloatRange(from = MIN_SIZE_RATIO.toDouble(), to = MAX_SIZE_RATIO.toDouble())
         sizeRatio: Float = 0.5f,
         minSizeRatio: Float = MIN_SIZE_RATIO,
         maxSizeRatio: Float = MAX_SIZE_RATIO,
+        viewMode: ViewMode = ViewMode.Dock,
     ) : ResizeOption(
-        sizeRatio = sizeRatio,
+        sizeRatio = ResizeOptionContainer.getOrPut(savedKey, sizeRatio),
         minSizeRatio = minSizeRatio,
-        maxSizeRatio = maxSizeRatio
-    )
+        maxSizeRatio = maxSizeRatio,
+        viewMode = viewMode,
+    ) {
+        fun updateValue(value: Float) {
+            savedKey?.run {
+                ResizeOptionContainer.put(savedKey, value)
+            }
+        }
+    }
+}
+
+private object ResizeOptionContainer {
+
+    private val savedRatio = mutableMapOf<Any, Float>()
+
+    fun getOrPut(savedKey: Any?, value: Float): Float {
+        return savedRatio[savedKey] ?: savedKey?.let {
+            savedRatio[savedKey] = value
+            value
+        } ?: value
+    }
+
+    fun put(savedKey: Any, value: Float) {
+        savedRatio[savedKey] = value
+    }
 }

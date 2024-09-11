@@ -13,6 +13,7 @@ dependencies {
     api(Dependencies.KotlinX.coroutine)
     implementation(Dependencies.SqlDelight.coroutineExtension)
     implementation(Dependencies.prettyTime)
+    implementation(Dependencies.gson)
 
     implementation(project(":database"))
     implementation(project(":logger"))

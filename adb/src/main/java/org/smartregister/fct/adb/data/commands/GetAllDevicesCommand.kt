@@ -8,8 +8,8 @@ import java.util.Queue
 
 class GetAllDevicesCommand : ADBCommand<List<Device>> {
 
-    override fun process(result: String, dependentResult: Queue<Result<*>>): Result<List<Device>> {
-        return result
+    override fun process(response: String, dependentResult: Queue<Result<*>>): Result<List<Device>> {
+        return response
             .takeIf { it.contains("\t") }
             ?.split("\n")
             ?.filter { it.contains("\t") }
@@ -21,7 +21,7 @@ class GetAllDevicesCommand : ADBCommand<List<Device>> {
             }
             ?.toList()
             ?.let { Result.success(it) }
-            ?: result.resultAsCommandException()
+            ?: response.resultAsCommandException()
     }
 
     override fun build(): List<String> {

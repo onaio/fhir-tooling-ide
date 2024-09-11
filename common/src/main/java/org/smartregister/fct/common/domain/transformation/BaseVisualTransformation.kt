@@ -1,4 +1,4 @@
-package org.smartregister.fct.editor.domain.transformation
+package org.smartregister.fct.common.domain.transformation
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -6,11 +6,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import org.smartregister.fct.editor.data.helper.TabOffsetMapping
+import org.smartregister.fct.common.data.helper.TabOffsetMapping
 
 private const val TAB_WIDTH_IN_SPACES = 4
 
-internal abstract class TextTransformation(private val searchText: String = "") :
+abstract class BaseVisualTransformation(private val searchText: String = "") :
     VisualTransformation {
 
 

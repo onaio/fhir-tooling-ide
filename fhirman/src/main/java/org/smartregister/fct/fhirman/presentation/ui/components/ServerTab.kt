@@ -30,6 +30,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.domain.model.ResizeOption
+import org.smartregister.fct.common.presentation.ui.components.HorizontalSplitPane
 import org.smartregister.fct.common.presentation.ui.components.VerticalSplitPane
 import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.editor.ui.CodeEditor
@@ -43,15 +44,22 @@ internal fun FhirmanServerTabComponent.ServerTab() {
 
     Column {
 
-        Row(
+        ConstraintLayout(
             modifier = Modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(12.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
+
+            val (btnResConfig, methodType, resType, resId, btnSend) = createRefs()
 
             val initialSelectedConfig by selectedConfig.collectAsState()
             OutlinedButton(
-                modifier = Modifier.height(40.dp),
+                modifier = Modifier.constrainAs(btnResConfig) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                },
                 label = initialSelectedConfig?.title ?: "Select Config",
                 onClick = {
                     selectServerConfig(initialSelectedConfig) {
@@ -60,8 +68,14 @@ internal fun FhirmanServerTabComponent.ServerTab() {
                     }
                 }
             )
-            Spacer(Modifier.width(12.dp))
+
             HorizontalButtonStrip(
+                modifier = Modifier.width(400.dp).constrainAs(methodType) {
+                    start.linkTo(btnResConfig.end, margin = 12.dp)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.preferredWrapContent
+                },
                 options = options,
                 label = { it.name },
                 isExpanded = true,
@@ -72,9 +86,59 @@ internal fun FhirmanServerTabComponent.ServerTab() {
                     content.methodType = this
                 }
             )
+
+            Box(modifier = Modifier
+                .width(240.dp).constrainAs(resType) {
+                    start.linkTo(methodType.end, margin = 12.dp)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.preferredWrapContent
+                }) {
+
+                AutoCompleteDropDown(
+                    modifier = Modifier.fillMaxWidth(),
+                    items = listOfAllFhirResources,
+                    label = { it },
+                    heading = "Resource",
+                    key = this@ServerTab,
+                    defaultValue = content.resourceType,
+                    onTextChanged = { text, isMatch ->
+                        content.resourceType = text
+                    }
+                )
+            }
+
+            var resIdText by remember(this@ServerTab) { mutableStateOf(content.resourceId) }
+
+            OutlinedTextField(
+                modifier = Modifier.constrainAs(resId) {
+                    start.linkTo(resType.end, margin = 12.dp)
+                    top.linkTo(parent.top)
+                    end.linkTo(btnSend.start, margin = 12.dp)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                },
+                value = resIdText,
+                onValueChange = {
+                    content.resourceId = it
+                    resIdText = it
+                },
+                label = "Id"
+            )
+
+            OutlinedButton(
+                modifier = Modifier.constrainAs(btnSend) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                },
+                label = "SEND",
+                onClick = ::send
+            )
         }
 
-        HorizontalDivider()
+
+        /*HorizontalDivider()
 
         ConstraintLayout(
             modifier = Modifier
@@ -131,22 +195,22 @@ internal fun FhirmanServerTabComponent.ServerTab() {
                 label = "SEND",
                 onClick = ::send
             )
-        }
+        }*/
 
         HorizontalDivider()
-        VerticalSplitPane(
+        HorizontalSplitPane(
             resizeOption = ResizeOption.Flexible(
-                sizeRatio = 0.3f,
+                sizeRatio = 0.5f,
                 minSizeRatio = 0.1f,
                 maxSizeRatio = 0.9f,
             ),
-            topContent = {
+            leftContent = {
                 CodeEditor(
                     modifier = Modifier.fillMaxSize(),
                     controller = content.bodyController,
                 )
             },
-            bottomContent = {
+            rightContent = {
                 CodeEditor(
                     modifier = Modifier.fillMaxSize(),
                     controller = content.responseController

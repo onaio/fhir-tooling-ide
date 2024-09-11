@@ -11,7 +11,7 @@ import org.smartregister.fct.common.domain.model.TabType
 
 class TabsControllerImpl<T>(
     items: List<T>,
-    override val title: (T) -> String,
+    override val title: (Int, T) -> String,
     defaultTabIndex: Int = 0,
     override val tabType: TabType = TabType.Filled,
     override val showCloseIcon: Boolean = true,

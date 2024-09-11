@@ -3,6 +3,7 @@ package org.smartregister.fct.common.presentation.ui.components
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,6 +40,7 @@ fun VerticalSplitPane(
     resizeOption: ResizeOption = ResizeOption.Flexible(),
     topContent: @Composable BoxScope.() -> Unit,
     bottomContent: @Composable BoxScope.() -> Unit,
+    enableBottom: Boolean = true,
 ) {
 
     require(resizeOption.minSizeRatio in MIN_SIZE_RATIO..MAX_SIZE_RATIO) {
@@ -71,44 +73,55 @@ fun VerticalSplitPane(
             }
     ) {
 
+        val topModifier = if (enableBottom) {
+            Modifier.height(topViewHeight.pxToDp())
+        } else {
+            Modifier.fillMaxHeight()
+        }
+
         Box(
-            modifier = Modifier
-                .height(topViewHeight.pxToDp())
+            modifier = topModifier
                 .fillMaxWidth(),
             content = topContent
         )
 
-        Box(
-            modifier = Modifier
-                .offset(y = bottomViewOffsetY.pxToDp())
-                .height(bottomViewHeight.pxToDp())
-                .fillMaxWidth(),
-            content = bottomContent
-        )
+        if (enableBottom) {
+            Box(
+                modifier = Modifier
+                    .offset(y = bottomViewOffsetY.pxToDp())
+                    .height(bottomViewHeight.pxToDp())
+                    .fillMaxWidth(),
+                content = bottomContent
+            )
 
-        HorizontalDivider(
-            modifier = Modifier
-                .height(draggableArea)
-                .offset(y = dividerOffsetY.pxToDp())
-                .pointerHoverIcon(windowHeightResizePointer)
-                .pointerInput(Unit) {
+            HorizontalDivider(
+                modifier = Modifier
+                    .height(draggableArea)
+                    .offset(y = dividerOffsetY.pxToDp())
+                    .pointerHoverIcon(windowHeightResizePointer)
+                    .pointerInput(Unit) {
 
-                    detectVerticalDragGestures(
-                        onDragStart = {
-                            rawY = top
-                        }
-                    ) { _, dragAmount ->
-                        rawY += dragAmount / containerHeight
+                        detectVerticalDragGestures(
+                            onDragStart = {
+                                rawY = top
+                            }
+                        ) { _, dragAmount ->
+                            rawY += dragAmount / containerHeight
 
-                        if (rawY >= resizeOption.minSizeRatio && rawY <= resizeOption.maxSizeRatio) {
-                            val y = top + dragAmount / containerHeight
-                            top = y.coerceIn(
-                                resizeOption.minSizeRatio,
-                                resizeOption.maxSizeRatio
-                            )
+                            if (rawY >= resizeOption.minSizeRatio && rawY <= resizeOption.maxSizeRatio) {
+                                val y = top + dragAmount / containerHeight
+                                top = y.coerceIn(
+                                    resizeOption.minSizeRatio,
+                                    resizeOption.maxSizeRatio
+                                )
+                            }
                         }
                     }
-                }
-        )
+            )
+        }
+    }
+
+    if (resizeOption is ResizeOption.Flexible) {
+        resizeOption.updateValue(top)
     }
 }

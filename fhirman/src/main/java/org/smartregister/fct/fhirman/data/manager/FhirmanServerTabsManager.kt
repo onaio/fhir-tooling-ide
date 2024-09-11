@@ -27,7 +27,7 @@ internal class FhirmanServerTabsManager() {
 
     val controller = TabsControllerImpl(
         items = items,
-        title = { it.content.title },
+        title = { _, tab -> tab.content.title },
         tabType = TabType.Scrollable
     )
 

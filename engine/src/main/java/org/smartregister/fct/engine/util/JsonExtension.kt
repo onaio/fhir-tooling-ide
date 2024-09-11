@@ -1,7 +1,11 @@
 package org.smartregister.fct.engine.util
 
+import com.google.gson.FormattingStyle
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.smartregister.fct.engine.data.manager.AppSettingManager
 
 val json = Json {
     encodeDefaults = true
@@ -38,3 +42,21 @@ inline fun <reified T> String.tryDecodeJson(jsonInstance: Json? = null): T? =
  */
 inline fun <reified T> T.encodeJson(jsonInstance: Json? = null): String =
     jsonInstance?.encodeToString(this) ?: json.encodeToString(this)
+
+fun String.prettyJson(): String {
+
+    val appSetting = getKoinInstance<AppSettingManager>().appSetting
+
+    val gson = GsonBuilder()
+        .disableHtmlEscaping()
+        .setFormattingStyle(
+            FormattingStyle.PRETTY.withIndent(
+                " ".repeat(
+                    appSetting.codeEditorConfig.indent
+                )
+            )
+        )
+        .create()
+    val jsonParser = JsonParser.parseString(this).asJsonObject
+    return gson.toJson(jsonParser)
+}

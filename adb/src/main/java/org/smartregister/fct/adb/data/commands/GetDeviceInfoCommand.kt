@@ -10,9 +10,9 @@ import java.util.Queue
 
 class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
 
-    override fun process(result: String, dependentResult: Queue<Result<*>>): Result<DeviceInfo> {
+    override fun process(response: String, dependentResult: Queue<Result<*>>): Result<DeviceInfo> {
 
-        return result
+        return response
             .takeIfNotError()
             ?.split("\n")
             ?.associate {
@@ -42,7 +42,7 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
             }
             ?.let {
                 Result.success(it)
-            } ?: result.resultAsCommandException()
+            } ?: response.resultAsCommandException()
 
     }
 

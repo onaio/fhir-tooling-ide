@@ -4,7 +4,7 @@ import org.smartregister.fct.common.domain.model.TabType
 
 interface TabsController<T> {
 
-    val title: (T) -> String
+    val title: (Int, T) -> String
     val tabType: TabType
     val showCloseIcon: Boolean
 

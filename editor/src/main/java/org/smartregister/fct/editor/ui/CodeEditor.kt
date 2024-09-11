@@ -53,11 +53,11 @@ import org.koin.compose.koinInject
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.data.transformation.JsonTransformation
-import org.smartregister.fct.editor.data.transformation.SMTextTransformation
+import org.smartregister.fct.editor.data.transformation.SMVisualTransformation
 import org.smartregister.fct.editor.ui.components.Toolbox
-import org.smartregister.fct.editor.util.prettyJson
 import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.util.prettyJson
 
 
 @Composable
@@ -216,7 +216,7 @@ private fun getTransformation(
 ): VisualTransformation {
 
     return when (fileType) {
-        FileType.StructureMap -> SMTextTransformation(searchText, isDarkTheme, colorScheme)
+        FileType.StructureMap -> SMVisualTransformation(searchText, isDarkTheme, colorScheme)
         FileType.Json -> JsonTransformation(searchText, isDarkTheme, colorScheme)
         else -> VisualTransformation.None
     }

@@ -33,6 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import org.koin.compose.koinInject
+import org.smartregister.fct.aurora.AllIcons
+import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.Database
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
@@ -117,15 +120,19 @@ private fun navigationMenu(): List<NavigationButton> {
         NavigationButton(title = "File Manager", icon = Icons.Outlined.Folder, onClick = {
             it.changeSlot(Config.FileManager)
         }),
-        NavigationButton(title = "Database", icon = Icons.Outlined.Dataset, onClick = {}),
-        NavigationButton(title = "FHIR Path Expression",
-            icon = Icons.Outlined.DataObject,
-            onClick = {}),
+        NavigationButton(title = "Database",
+            icon = AuroraIconPack.Database,
+            onClick = {
+                it.changeSlot(Config.DeviceDatabase)
+            }),
         NavigationButton(title = "Fhirman",
             icon = Icons.Outlined.LocalFireDepartment,
             onClick = {
                 it.changeSlot(Config.Fhirman)
             }),
+        NavigationButton(title = "FHIR Path Expression",
+            icon = Icons.Outlined.DataObject,
+            onClick = {}),
     )
 }
 

@@ -58,13 +58,13 @@ class ADBController(private val shellProgram: ShellProgram) {
             .also { FCTLogger.d(it, tag = command.javaClass.simpleName) }
         )
 
-       return if (result.isSuccess) {
-           try {
-               command.process(result.getOrThrow(), dependentResult)
-           } catch (t: Throwable) {
-               FCTLogger.e(t)
-               result
-           }
+        return if (result.isSuccess) {
+            try {
+                command.process(result.getOrThrow(), dependentResult)
+            } catch (t: Throwable) {
+                FCTLogger.e(t)
+                result
+            }
         } else {
             result
         }

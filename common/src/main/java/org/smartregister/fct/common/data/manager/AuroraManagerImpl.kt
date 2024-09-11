@@ -30,6 +30,12 @@ internal class AuroraManagerImpl(
         }
     }
 
+    override fun showErrorSnackbar(text: String?, onDismiss: (() -> Unit)?) {
+        text?.let {
+            showSnackbar(Message.Error(text), onDismiss)
+        }
+    }
+
     override fun showSnackbar(message: Message, onDismiss: (() -> Unit)?) {
         componentScope.launch {
             if (message.text.trim().isNotEmpty()) {

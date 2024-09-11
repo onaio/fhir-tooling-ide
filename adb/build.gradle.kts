@@ -10,5 +10,7 @@ java {
 
 dependencies {
     implementation(Dependencies.kScriptTool)
+    implementation(Dependencies.json)
+    implementation(Dependencies.KotlinX.coroutine)
     implementation(project(":common"))
 }

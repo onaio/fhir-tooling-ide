@@ -35,7 +35,7 @@ import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationD
 @Composable
 fun<T> rememberTabsController(
     items: List<T>,
-    title: (T) -> String,
+    title: (Int, T) -> String,
     defaultTabIndex: Int = 0,
     tabType: TabType = TabType.Filled,
     showCloseIcon: Boolean = true,
@@ -55,7 +55,7 @@ fun<T> rememberTabsController(
 fun<T> AuroraTabs(
     modifier: Modifier = Modifier.fillMaxSize(),
     tabsController: TabsController<T>,
-    noContent: @Composable BoxScope.() -> Unit,
+    noContent: (@Composable BoxScope.() -> Unit)? = null,
     content: @Composable T.(Int) -> Unit
 ) {
 
@@ -84,7 +84,7 @@ private fun<T> TabRowView(
     tabs: List<T>,
     selectedTabIndex: Int,
     tabType: TabType,
-    noContent: @Composable BoxScope.() -> Unit,
+    noContent: (@Composable BoxScope.() -> Unit)? = null,
     tabsContent: @Composable () -> Unit,
 ) {
     Column(
@@ -109,7 +109,7 @@ private fun<T> TabRowView(
             tabsContent()
         } else {
             Box(Modifier.fillMaxSize()) {
-                noContent()
+                noContent?.invoke(this)
             }
         }
     }
@@ -178,7 +178,7 @@ private fun<T> TabView(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        title(item),
+                        title(index, item),
                         color = MaterialTheme.colorScheme.onSurface
                     )
 
@@ -190,7 +190,7 @@ private fun<T> TabView(
                                     onClick = {
                                         confirmCloseTabDialogController.show(
                                             title = "Close Tab",
-                                            message = "Are you sure you want to close ${title(item)} tab?",
+                                            message = "Are you sure you want to close ${title(index, item)} tab?",
                                             data = index
                                         )
                                     },

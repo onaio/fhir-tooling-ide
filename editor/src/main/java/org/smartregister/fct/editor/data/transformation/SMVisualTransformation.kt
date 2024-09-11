@@ -4,13 +4,13 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import org.smartregister.fct.editor.domain.transformation.TextTransformation
+import org.smartregister.fct.common.domain.transformation.BaseVisualTransformation
 
-internal class SMTextTransformation(
+internal class SMVisualTransformation(
     searchText: String,
     isDarkTheme: Boolean,
     colorScheme: ColorScheme
-) : TextTransformation(searchText) {
+) : BaseVisualTransformation(searchText) {
 
     private var blueColor = Color(0xFF86B1FF)
     private var greenColor = Color(0xFF91BE61)
