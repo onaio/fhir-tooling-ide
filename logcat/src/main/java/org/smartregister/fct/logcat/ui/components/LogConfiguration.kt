@@ -30,17 +30,17 @@ internal fun LogConfiguration() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(6.dp))
-        SmallIconButton(
+        LogcatSmallIconButton(
             icon = Icons.Outlined.Delete,
             onClick = { FCTLogger.clearLogs() }
         )
         Spacer(Modifier.height(3.dp))
-        SmallIconButton(
+        LogcatSmallIconButton(
             icon = if(isPause) Icons.Rounded.PlayArrow else Icons.Outlined.Pause,
             onClick = { FCTLogger.togglePause() }
         )
         Spacer(Modifier.height(3.dp))
-        SmallIconButton(
+        LogcatSmallIconButton(
             icon = Icons.AutoMirrored.Outlined.WrapText,
             onClick = {}
         )

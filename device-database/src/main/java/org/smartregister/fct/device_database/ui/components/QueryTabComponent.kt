@@ -7,12 +7,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.smartregister.fct.adb.domain.model.Device
+import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
-import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.device_database.domain.model.DBInfo
+import org.smartregister.fct.device_database.domain.model.QueryRequest
+import org.smartregister.fct.device_database.domain.model.QueryResponse
 
 class QueryTabComponent(
     componentContext: ComponentContext,
-) : TabComponent(componentContext) {
+) : TabComponent(componentContext), QueryDependency {
 
     var selectedDBInfo = DeviceDBConfigPersistence.sidePanelDBInfo
 
@@ -22,11 +26,13 @@ class QueryTabComponent(
     private var _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    private var _query = MutableStateFlow(TextFieldValue())
+    private var _query = MutableStateFlow(TextFieldValue("select * from ResourceEntity"))
     val query: StateFlow<TextFieldValue> = _query
 
-    private val _queryResultComponent = MutableStateFlow<QueryResultComponent?>(null)
-    val queryResultComponent: StateFlow<QueryResultComponent?> = _queryResultComponent
+    private val _queryResultDTController = MutableStateFlow<QueryResultDTController?>(null)
+    val queryResultDTController: StateFlow<QueryResultDTController?> = _queryResultDTController
+
+    var limit = 50
 
     fun updateTextField(textFieldValue: TextFieldValue) {
         CoroutineScope(Dispatchers.Default).launch {
@@ -37,26 +43,35 @@ class QueryTabComponent(
     fun runQuery() {
         if (_query.value.text.trim().isEmpty() || _loading.value) return
 
-        if (componentContext is QueryDependency) {
-            componentContext.getRequiredParam { _, device, pkg ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    _loading.emit(true)
-                    val result = device.runAppDBQuery(
+        getRequiredParam { device, pkg ->
+            CoroutineScope(Dispatchers.IO).launch {
+                _loading.emit(true)
+                val result = device.runAppDBQuery(
+                    packageId = pkg.packageId,
+                    requestJson = QueryRequest(
                         database = selectedDBInfo.name,
                         query = _query.value.text,
-                        packageId = pkg.packageId
-                    )
+                    ).asJSONString()
+                )
 
-                    _loading.emit(false)
-                    _queryResultComponent.emit(
-                        QueryResultComponent(
-                            componentContext = componentContext,
-                            persistedQuery = _query.value.text,
-                            result = result
-                        )
+                _loading.emit(false)
+                _queryResultDTController.emit(
+                    QueryResultDTController(
+                        queryComponent = this@QueryTabComponent,
+                        persistedQuery = _query.value.text,
+                        queryResponse = QueryResponse.build(result)
                     )
-                }
+                )
             }
+        }
+    }
+
+    override fun getRequiredParam(
+        showErrors: Boolean,
+        info: (Device, PackageInfo) -> Unit
+    ) {
+        if (componentContext is QueryDependency) {
+            componentContext.getRequiredParam(showErrors, info)
         }
     }
 }

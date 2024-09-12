@@ -15,7 +15,7 @@ import org.smartregister.fct.fm.presentation.components.FileManagerScreenCompone
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
 class RootComponentImpl(componentContext: ComponentContext) :
-    RootComponent, ComponentContext by componentContext {
+    RootComponent(componentContext) {
 
     private val navigation = SlotNavigation<Config>()
 

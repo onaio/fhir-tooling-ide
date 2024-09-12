@@ -1,14 +1,12 @@
 package org.smartregister.fct.device_database.data.persistence
 
-import kotlinx.coroutines.launch
 import org.smartregister.fct.common.data.controller.TabsControllerImpl
 import org.smartregister.fct.common.domain.model.TabType
-import org.smartregister.fct.device_database.domain.DBInfo
-import org.smartregister.fct.device_database.domain.TableInfo
+import org.smartregister.fct.device_database.domain.model.DBInfo
+import org.smartregister.fct.device_database.domain.model.TableInfo
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 import org.smartregister.fct.device_database.ui.components.TabComponent
 import org.smartregister.fct.device_database.ui.components.TableTabComponent
-import org.smartregister.fct.engine.util.componentScope
 
 internal object DeviceDBConfigPersistence {
 

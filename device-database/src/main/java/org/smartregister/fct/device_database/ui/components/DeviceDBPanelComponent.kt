@@ -12,9 +12,11 @@ import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
-import org.smartregister.fct.device_database.domain.DBInfo
-import org.smartregister.fct.device_database.domain.TableInfo
+import org.smartregister.fct.device_database.domain.model.DBInfo
+import org.smartregister.fct.device_database.domain.model.QueryRequest
+import org.smartregister.fct.device_database.domain.model.TableInfo
 import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.logger.FCTLogger
 
 internal class DeviceDBPanelComponent(componentContext: ComponentContext) : QueryDependency, ComponentContext by componentContext {
@@ -32,7 +34,7 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
 
     init {
         if (_listOfTables.value.isEmpty()) {
-            getRequiredParam (false) { selectedDBInfo, activeDevice, selectedPackage ->
+            getRequiredParam (false) { activeDevice, selectedPackage ->
                 fetchTables(selectedDBInfo, activeDevice, selectedPackage.packageId)
             }
         }
@@ -40,7 +42,7 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
 
     fun reFetchTables() {
         if (_loadingTables.value) return
-        getRequiredParam { selectedDBInfo, activeDevice, selectedPackage ->
+        getRequiredParam { activeDevice, selectedPackage ->
             fetchTables(selectedDBInfo, activeDevice, selectedPackage.packageId)
         }
     }
@@ -64,9 +66,11 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
             _loadingTables.emit(true)
 
             val result = device.runAppDBQuery(
-                database = dbInfo.name,
-                query = "SELECT * FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%'",
-                packageId = packageId
+                packageId = packageId,
+                requestJson = QueryRequest(
+                    database = dbInfo.name,
+                    query = "SELECT * FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%'",
+                ).asJSONString()
             )
 
             _loadingTables.emit(false)
@@ -79,7 +83,7 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
         }
     }
 
-    override fun getRequiredParam(showErrors: Boolean, info: (DBInfo, Device, PackageInfo) -> Unit) {
+    override fun getRequiredParam(showErrors: Boolean, info: (Device, PackageInfo) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             val activeDevice = DeviceManager.getActiveDevice()
             val selectedPackage = DeviceManager.getActivePackage().value
@@ -91,7 +95,7 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
                 if (showErrors) showError("No package selected")
                 return@launch
             }
-            info(selectedDBInfo, activeDevice, selectedPackage)
+            info(activeDevice, selectedPackage)
         }
     }
 

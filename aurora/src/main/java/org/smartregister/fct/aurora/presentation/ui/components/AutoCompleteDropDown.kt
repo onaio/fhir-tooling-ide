@@ -1,11 +1,17 @@
 package org.smartregister.fct.aurora.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextRange
@@ -30,10 +37,11 @@ fun <T> AutoCompleteDropDown(
     modifier: Modifier = Modifier,
     items: List<T>,
     label: (T) -> String,
-    heading: String,
+    placeholder: String = "",
     defaultSelectedIndex: Int? = null,
     defaultValue: String? = null,
     key: Any? = null,
+    errorHighlight: Boolean = true,
     onSelected: (T.(Int) -> Unit)? = null,
     onTextChanged: ((String, Boolean) -> Unit)? = null
 ) {
@@ -77,30 +85,56 @@ fun <T> AutoCompleteDropDown(
     }
 
     Column {
-        OutlinedTextField(
-            modifier = modifier
-                .onGloballyPositioned { layoutCoordinates ->
-                    textFieldWidth = layoutCoordinates.size.width.toFloat()
-                },
-            value = searchText,
-            onValueChange = {
+        Box(
+            modifier.height(38.dp).fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                modifier = Modifier.fillMaxHeight().fillMaxWidth()
+                    .onGloballyPositioned { layoutCoordinates ->
+                        textFieldWidth = layoutCoordinates.size.width.toFloat()
+                    },
+                value = searchText,
+                onValueChange = {
 
-                searchText = it
-                expanded = filteredItems.isNotEmpty()
+                    searchText = it
+                    expanded = filteredItems.isNotEmpty()
 
-                scope.launch {
-                    val isMatch = items.any { item ->
-                        searchText.text == label(item)
+                    scope.launch {
+                        val isMatch = items.any { item ->
+                            searchText.text == label(item)
+                        }
+
+                        isError = searchText.text.trim().isNotEmpty() && !isMatch
+                        onTextChanged?.invoke(searchText.text, isMatch)
                     }
 
-                    isError = searchText.text.trim().isNotEmpty() && !isMatch
-                    onTextChanged?.invoke(searchText.text, isMatch)
-                }
+                },
+                label = placeholder,
+                isError = errorHighlight && isError
+            )
 
-            },
-            label = heading,
-            isError = isError
-        )
+            androidx.compose.material3.Button(
+                modifier = Modifier
+                    .width(40.dp)
+                    .fillMaxHeight()
+                    .align(Alignment.CenterEnd),
+                shape = RoundedCornerShape(
+                    topStart = 0.dp,
+                    topEnd = 4.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 4.dp
+                ),
+                contentPadding = PaddingValues(0.dp),
+                onClick = {
+                    expanded = !expanded
+                },
+                content = {
+                    Icon(
+                        icon = Icons.Outlined.ArrowDropDown
+                    )
+                }
+            )
+        }
 
         DropdownMenu(
             modifier = Modifier

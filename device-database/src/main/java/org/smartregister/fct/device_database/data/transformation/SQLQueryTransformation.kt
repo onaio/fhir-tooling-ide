@@ -6,7 +6,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import org.smartregister.fct.common.domain.transformation.BaseVisualTransformation
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
-import org.smartregister.fct.device_database.domain.TableInfo
 
 class SQLQueryTransformation(
     isDarkTheme: Boolean,

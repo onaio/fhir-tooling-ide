@@ -24,6 +24,7 @@ import org.smartregister.fct.aurora.util.pxToDp
 import org.smartregister.fct.common.domain.model.MAX_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.MIN_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.ResizeOption
+import org.smartregister.fct.common.domain.model.ViewMode
 import org.smartregister.fct.common.util.windowHeightResizePointer
 
 /**
@@ -40,7 +41,7 @@ fun VerticalSplitPane(
     resizeOption: ResizeOption = ResizeOption.Flexible(),
     topContent: @Composable BoxScope.() -> Unit,
     bottomContent: @Composable BoxScope.() -> Unit,
-    enableBottom: Boolean = true,
+    enableBottomContent: Boolean = true,
 ) {
 
     require(resizeOption.minSizeRatio in MIN_SIZE_RATIO..MAX_SIZE_RATIO) {
@@ -73,7 +74,7 @@ fun VerticalSplitPane(
             }
     ) {
 
-        val topModifier = if (enableBottom) {
+        val topModifier = if (enableBottomContent && resizeOption.viewMode == ViewMode.Dock) {
             Modifier.height(topViewHeight.pxToDp())
         } else {
             Modifier.fillMaxHeight()
@@ -85,7 +86,8 @@ fun VerticalSplitPane(
             content = topContent
         )
 
-        if (enableBottom) {
+        if (enableBottomContent) {
+
             Box(
                 modifier = Modifier
                     .offset(y = bottomViewOffsetY.pxToDp())
@@ -118,10 +120,10 @@ fun VerticalSplitPane(
                         }
                     }
             )
-        }
-    }
 
-    if (resizeOption is ResizeOption.Flexible) {
-        resizeOption.updateValue(top)
+            if (resizeOption is ResizeOption.Flexible) {
+                resizeOption.updateValue(top)
+            }
+        }
     }
 }

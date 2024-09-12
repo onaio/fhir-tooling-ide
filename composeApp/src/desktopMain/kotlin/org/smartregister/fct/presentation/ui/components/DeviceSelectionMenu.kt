@@ -39,19 +39,21 @@ internal fun DeviceSelectionMenu() {
     var expanded by remember { mutableStateOf(false) }
     var selectedValue by remember { mutableStateOf(devices[0]) }
 
-    if (devices[0] == null) {
-        selectedValue = null
-        DeviceManager.setActiveDevice(null)
-    } else {
-        devices.filterNotNull()
-            .map {
-                it.getDeviceInfo().id
-            }.run {
-                if (selectedValue?.getDeviceInfo()?.id !in this) {
-                    selectedValue = devices[0]
-                    DeviceManager.setActiveDevice(selectedValue)
+    if (devices.isNotEmpty()) {
+        if (devices[0] == null) {
+            selectedValue = null
+            DeviceManager.setActiveDevice(null)
+        } else {
+            devices.filterNotNull()
+                .map {
+                    it.getDeviceInfo().id
+                }.run {
+                    if (selectedValue?.getDeviceInfo()?.id !in this) {
+                        selectedValue = devices[0]
+                        DeviceManager.setActiveDevice(selectedValue)
+                    }
                 }
-            }
+        }
     }
 
     val dropdownModifier =

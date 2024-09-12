@@ -25,20 +25,29 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
+import org.smartregister.fct.common.data.enums.RightWindowState
+import org.smartregister.fct.common.data.manager.SubWindowManager
+import org.smartregister.fct.common.domain.model.ViewMode
+import org.smartregister.fct.common.presentation.ui.components.RightWindowHeader
+import org.smartregister.fct.common.presentation.ui.components.ViewModePopupMenu
 
 @Composable
-fun DeviceManagerWindow() {
+fun DeviceManagerWindow(subWindowManager: SubWindowManager) {
 
     val devices by DeviceManager.getAllDevices().collectAsState(initial = null)
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f)).padding(8.dp)) {
-            Text("Device Manager",
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
+        RightWindowHeader(
+            title = "Device Manager",
+            onViewModeSelected = {
+                subWindowManager.changeRightWindowViewMode(
+                    state = RightWindowState.DeviceManager,
+                    viewMode = it
+                )
+            }
+        )
         HorizontalDivider()
         Header()
         HorizontalDivider()

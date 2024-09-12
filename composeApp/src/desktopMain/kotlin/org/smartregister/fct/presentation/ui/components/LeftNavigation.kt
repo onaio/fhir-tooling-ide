@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
+import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.AllIcons
 import org.smartregister.fct.aurora.AuroraIconPack
@@ -41,15 +45,25 @@ import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.engine.data.manager.AppSettingManager
 
+context (ConstraintLayoutScope)
 @Composable
 fun LeftNavigation(
-    rootComponent: RootComponent
+    rootComponent: RootComponent,
+    leftNav: ConstrainedLayoutReference
 ) {
-    Box(
-        modifier = Modifier.width(60.dp).fillMaxHeight()
+    Row (
+        modifier = Modifier
+            .width(60.dp)
+            .fillMaxHeight()
             .background(MaterialTheme.colorScheme.surface)
+            .constrainAs(leftNav) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+            }
     ) {
         NavigationBar(rootComponent)
+        VerticalDivider()
     }
 }
 

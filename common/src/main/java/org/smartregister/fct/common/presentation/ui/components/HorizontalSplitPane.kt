@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.VerticalDivider
@@ -23,6 +24,7 @@ import org.smartregister.fct.aurora.util.pxToDp
 import org.smartregister.fct.common.domain.model.MAX_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.MIN_SIZE_RATIO
 import org.smartregister.fct.common.domain.model.ResizeOption
+import org.smartregister.fct.common.domain.model.ViewMode
 import org.smartregister.fct.common.util.windowWidthResizePointer
 
 /**
@@ -39,6 +41,7 @@ fun HorizontalSplitPane(
     resizeOption: ResizeOption = ResizeOption.Flexible(),
     leftContent: @Composable BoxScope.() -> Unit,
     rightContent: @Composable BoxScope.() -> Unit,
+    enableRightContent: Boolean = true,
 ) {
 
     require(resizeOption.minSizeRatio in MIN_SIZE_RATIO..MAX_SIZE_RATIO) {
@@ -72,43 +75,56 @@ fun HorizontalSplitPane(
             }
     ) {
 
-        Box(
-            modifier = Modifier
+        val leftModifier = if (enableRightContent && resizeOption.viewMode == ViewMode.Dock) {
+            Modifier
                 .width(leftViewWidth.pxToDp())
-                .fillMaxHeight(),
+                .fillMaxHeight()
+        } else {
+            Modifier.fillMaxSize()
+        }
+
+        Box(
+            modifier = leftModifier,
             content = leftContent
         )
 
-        Box(
-            modifier = Modifier
-                .offset(rightViewOffsetX.pxToDp())
-                .width(rightViewWidth.pxToDp())
-                .fillMaxHeight(),
-            content = rightContent
-        )
+        if (enableRightContent) {
 
-        VerticalDivider(
-            modifier = Modifier
-                .width(draggableArea)
-                .offset(dividerOffsetX.pxToDp())
-                .pointerHoverIcon(windowWidthResizePointer)
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragStart = {
-                            rawX = left
-                        }
-                    ) { _, dragAmount ->
-                        rawX += dragAmount / containerWidth
+            Box(
+                modifier = Modifier
+                    .offset(rightViewOffsetX.pxToDp())
+                    .width(rightViewWidth.pxToDp())
+                    .fillMaxHeight(),
+                content = rightContent
+            )
 
-                        if (rawX >= resizeOption.minSizeRatio && rawX <= resizeOption.maxSizeRatio) {
-                            val x = left + dragAmount / containerWidth
-                            left = x.coerceIn(
-                                resizeOption.minSizeRatio,
-                                resizeOption.maxSizeRatio
-                            )
+            VerticalDivider(
+                modifier = Modifier
+                    .width(draggableArea)
+                    .offset(dividerOffsetX.pxToDp())
+                    .pointerHoverIcon(windowWidthResizePointer)
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures(
+                            onDragStart = {
+                                rawX = left
+                            }
+                        ) { _, dragAmount ->
+                            rawX += dragAmount / containerWidth
+
+                            if (rawX >= resizeOption.minSizeRatio && rawX <= resizeOption.maxSizeRatio) {
+                                val x = left + dragAmount / containerWidth
+                                left = x.coerceIn(
+                                    resizeOption.minSizeRatio,
+                                    resizeOption.maxSizeRatio
+                                )
+                            }
                         }
                     }
-                }
-        )
+            )
+
+            if (resizeOption is ResizeOption.Flexible) {
+                resizeOption.updateValue(left)
+            }
+        }
     }
 }

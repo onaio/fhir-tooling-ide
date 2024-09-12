@@ -3,14 +3,10 @@ package org.smartregister.fct.fhirman.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,16 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
-import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.aurora.presentation.ui.components.HorizontalButtonStrip
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.presentation.ui.components.HorizontalSplitPane
-import org.smartregister.fct.common.presentation.ui.components.VerticalSplitPane
-import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.editor.ui.CodeEditor
+import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.fhirman.data.manager.FhirmanServerTabsManager
 import org.smartregister.fct.fhirman.presentation.components.FhirmanServerComponent
 import org.smartregister.fct.fhirman.presentation.components.FhirmanServerTabComponent
@@ -99,7 +93,7 @@ internal fun FhirmanServerTabComponent.ServerTab() {
                     modifier = Modifier.fillMaxWidth(),
                     items = listOfAllFhirResources,
                     label = { it },
-                    heading = "Resource",
+                    placeholder = "Resource",
                     key = this@ServerTab,
                     defaultValue = content.resourceType,
                     onTextChanged = { text, isMatch ->

@@ -2,15 +2,14 @@ package org.smartregister.fct.device_database.ui.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
-import org.smartregister.fct.device_database.domain.DBInfo
-import org.smartregister.fct.device_database.domain.TableInfo
+import org.smartregister.fct.device_database.domain.model.DBInfo
+import org.smartregister.fct.device_database.domain.model.TableInfo
 
 @Composable
 internal fun SidePanel(

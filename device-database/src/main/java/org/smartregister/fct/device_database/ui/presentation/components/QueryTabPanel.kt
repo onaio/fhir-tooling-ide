@@ -11,7 +11,7 @@ import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 
 @Composable
 fun QueryTabPanel(tabComponent: QueryTabComponent) {
-    val resultComponent by tabComponent.queryResultComponent.collectAsState()
+    val resultComponent by tabComponent.queryResultDTController.collectAsState()
 
     Column {
         QueryToolbar(tabComponent)
@@ -31,7 +31,7 @@ fun QueryTabPanel(tabComponent: QueryTabComponent) {
                     QueryResult(resultComponent!!)
                 }
             },
-            enableBottom = resultComponent != null
+            enableBottomContent = resultComponent != null
         )
     }
 }

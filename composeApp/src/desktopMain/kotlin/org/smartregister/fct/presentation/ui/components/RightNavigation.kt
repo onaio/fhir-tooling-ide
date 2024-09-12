@@ -3,6 +3,7 @@ package org.smartregister.fct.presentation.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -18,44 +19,59 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
+import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.enums.RightWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 
+context (ConstraintLayoutScope)
 @Composable
-fun RightNavigation(subWindowManager: SubWindowManager) {
+fun RightNavigation(
+    subWindowManager: SubWindowManager,
+    rightNav: ConstrainedLayoutReference
+) {
 
-    VerticalDivider()
-    Column(
-        modifier = Modifier.width(45.dp)
-            .background(MaterialTheme.colorScheme.surface).fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column {
-            Spacer(Modifier.height(12.dp))
-            SmallIconButton(
-                icon = Icons.Outlined.PhoneAndroid,
-                onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
-            )
-            Spacer(Modifier.height(18.dp))
-            SmallIconButton(
-                icon = Icons.AutoMirrored.Outlined.ListAlt,
-                onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
-            )
-            Spacer(Modifier.height(18.dp))
-            SmallIconButton(
-                icon = Icons.Outlined.Insights,
-                onClick = {  }
-            )
-        }
-        Column {
-            SmallIconButton(
-                icon = Icons.Outlined.ConnectedTv,
-                onClick = { subWindowManager.setBottomWindowState(BottomWindowState.Logcat) }
-            )
-            Spacer(Modifier.height(12.dp))
+    Row(
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            .constrainAs(rightNav) {
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+            })
+    {
+        VerticalDivider()
+        Column(
+            modifier = Modifier.width(45.dp)
+                .background(MaterialTheme.colorScheme.surface).fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Spacer(Modifier.height(12.dp))
+                SmallIconButton(
+                    icon = Icons.Outlined.PhoneAndroid,
+                    onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
+                )
+                Spacer(Modifier.height(18.dp))
+                SmallIconButton(
+                    icon = Icons.AutoMirrored.Outlined.ListAlt,
+                    onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
+                )
+                Spacer(Modifier.height(18.dp))
+                SmallIconButton(
+                    icon = Icons.Outlined.Insights,
+                    onClick = {  }
+                )
+            }
+            Column {
+                SmallIconButton(
+                    icon = Icons.Outlined.ConnectedTv,
+                    onClick = { subWindowManager.setBottomWindowState(BottomWindowState.Logcat) }
+                )
+                Spacer(Modifier.height(12.dp))
+            }
         }
     }
 }

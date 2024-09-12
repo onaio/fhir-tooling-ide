@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.presentation.ui.components.Dropdown
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
-import org.smartregister.fct.device_database.domain.DBInfo
+import org.smartregister.fct.device_database.domain.model.DBInfo
 
 @Composable
 internal fun DatabaseDropdown(

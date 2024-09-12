@@ -3,9 +3,8 @@ package org.smartregister.fct.adb.data.commands
 import org.json.JSONObject
 
 class AppDatabaseQueryCommand(
-    private val database: String,
-    private val query: String,
-    private val packageId: String
+    private val packageId: String,
+    private val requestJson: String
 ) :
     ContentCommand() {
 
@@ -18,11 +17,11 @@ class AppDatabaseQueryCommand(
     }
 
     override fun getArgument(): String {
-        val jsonArg = JSONObject().apply {
+        /*val jsonArg = JSONObject().apply {
             put("database", database)
             put("query", query)
-        }
+        }*/
 
-        return jsonArg.toString()
+        return requestJson
     }
 }

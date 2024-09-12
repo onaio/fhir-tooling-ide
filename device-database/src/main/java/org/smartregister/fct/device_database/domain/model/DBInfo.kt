@@ -1,4 +1,4 @@
-package org.smartregister.fct.device_database.domain
+package org.smartregister.fct.device_database.domain.model
 
 data class DBInfo(
     val name: String,

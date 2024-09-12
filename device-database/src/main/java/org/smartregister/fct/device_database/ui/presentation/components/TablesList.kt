@@ -31,7 +31,7 @@ import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Table
 import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
-import org.smartregister.fct.device_database.domain.TableInfo
+import org.smartregister.fct.device_database.domain.model.TableInfo
 import java.awt.event.MouseEvent
 
 @OptIn(ExperimentalComposeUiApi::class)

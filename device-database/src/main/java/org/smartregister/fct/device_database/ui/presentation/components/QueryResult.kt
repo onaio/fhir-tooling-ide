@@ -9,27 +9,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
-import org.smartregister.fct.device_database.ui.components.QueryResultComponent
-import org.smartregister.fct.device_database.ui.components.QueryTabComponent
+import org.smartregister.fct.common.presentation.ui.components.datatable.DataTable
+import org.smartregister.fct.device_database.domain.model.QueryResponse
+import org.smartregister.fct.device_database.ui.components.QueryResultDTController
 
 @Composable
-internal fun QueryResult(component: QueryResultComponent) {
+internal fun QueryResult(component: QueryResultDTController) {
 
-    val result = component.result
-    RefineError(result)
+    val queryResponse = component.queryResponse
+    RefineError(queryResponse)
 
-    if (result.isSuccess) {
-
+    if (queryResponse.error == null) {
+        DataTable(
+            controller = component
+        )
     }
 }
 
 @Composable
-private fun RefineError(result: Result<JSONObject>) {
+private fun RefineError(queryResponse: QueryResponse) {
 
-    if (result.isFailure) {
+    if (queryResponse.error != null) {
         Text(
             modifier = Modifier.fillMaxSize().padding(12.dp),
-            text = result.exceptionOrNull()?.message ?: "Query Error",
+            text = queryResponse.error,
             style = TextStyle(
                 color = MaterialTheme.colorScheme.error
             )

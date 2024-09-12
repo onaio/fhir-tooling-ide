@@ -18,9 +18,9 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
         return controller.executeCommand(GetAllPackagesCommand(filter), deviceId = deviceId)
     }
 
-    suspend fun runAppDBQuery(database: String, query: String, packageId: String): Result<JSONObject> {
+    suspend fun runAppDBQuery(packageId: String, requestJson: String): Result<JSONObject> {
         return controller.executeCommand(
-            AppDatabaseQueryCommand(database, query, packageId),
+            AppDatabaseQueryCommand(packageId, requestJson),
             deviceId = deviceId
         )
     }
