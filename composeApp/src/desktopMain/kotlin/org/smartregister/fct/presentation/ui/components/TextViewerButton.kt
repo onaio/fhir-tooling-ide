@@ -1,29 +1,29 @@
 package org.smartregister.fct.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
-import org.smartregister.fct.settings.presentation.ui.dialogs.rememberSettingsDialog
+import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 
 @Composable
-internal fun SettingButton(
+internal fun TextViewerButton(
     componentContext: ComponentContext
 ) {
 
-    val settingsDialog = rememberSettingsDialog(
+    val textViewerDialog = rememberTextViewerDialog(
         componentContext = componentContext
     )
 
     SmallIconButton(
-        tooltip = "Settings",
+        tooltip = "Text Viewer / Formatter",
         tooltipPosition = TooltipPosition.Bottom(),
         onClick = {
-            settingsDialog.show()
+            textViewerDialog.show()
         },
-        icon = Icons.Outlined.Settings,
+        icon = Icons.Outlined.Edit,
         alpha = 0.7f
     )
 }

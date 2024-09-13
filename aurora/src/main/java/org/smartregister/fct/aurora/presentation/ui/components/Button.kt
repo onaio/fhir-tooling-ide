@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -145,6 +146,8 @@ fun OutlinedButton(
     icon: ImageVector? = null,
     enable: Boolean = true,
     shape: Shape = auroraButtonShape,
+    style: TextStyle = LocalTextStyle.current,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     onClick: () -> Unit
 ) {
     Mat3OutlinedButton(
@@ -152,6 +155,7 @@ fun OutlinedButton(
         onClick = onClick,
         enabled = enable,
         shape = shape,
+        contentPadding = contentPadding,
         border = ButtonDefaults.outlinedButtonBorder.copy(
             brush = if (enable) SolidColor(MaterialTheme.colorScheme.primary) else SolidColor(MaterialTheme.colorScheme.surface)
         )

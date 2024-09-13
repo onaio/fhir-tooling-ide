@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
@@ -27,14 +28,14 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SmallIconButton(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.size(18.dp),
     icon: ImageVector,
     enable: Boolean = true,
     tint: Color? = null,
     alpha: Float = 1f,
     tooltip: String? = null,
     tooltipPosition: TooltipPosition = TooltipPosition.Bottom(),
-    rippleRadius: Dp = 16.dp,
+    rippleRadius: Dp = 14.dp,
     onClick: () -> Unit
 ) {
 

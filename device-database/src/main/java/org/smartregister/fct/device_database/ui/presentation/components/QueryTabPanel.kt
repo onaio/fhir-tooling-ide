@@ -28,7 +28,10 @@ fun QueryTabPanel(tabComponent: QueryTabComponent) {
             },
             bottomContent = {
                 if (resultComponent != null) {
-                    QueryResult(resultComponent!!)
+                    QueryResult(
+                        resultComponent!!,
+                        componentContext = tabComponent
+                    )
                 }
             },
             enableBottomContent = resultComponent != null

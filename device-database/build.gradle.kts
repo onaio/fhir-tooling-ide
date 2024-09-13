@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":api-client"))
     implementation(project(":settings"))
     implementation(project(":adb"))
+    implementation(project(":data-table"))
 }

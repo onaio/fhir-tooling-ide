@@ -8,26 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import org.json.JSONObject
-import org.smartregister.fct.common.presentation.ui.components.datatable.DataTable
+import com.arkivanov.decompose.ComponentContext
+import org.smartregister.fct.datatable.presentation.ui.view.DataTable
 import org.smartregister.fct.device_database.domain.model.QueryResponse
 import org.smartregister.fct.device_database.ui.components.QueryResultDTController
 
 @Composable
-internal fun QueryResult(component: QueryResultDTController) {
+internal fun QueryResult(component: QueryResultDTController, componentContext: ComponentContext) {
 
     val queryResponse = component.queryResponse
-    RefineError(queryResponse)
+    CheckError(queryResponse)
 
     if (queryResponse.error == null) {
         DataTable(
-            controller = component
+            controller = component,
+            componentContext = componentContext
         )
     }
 }
 
 @Composable
-private fun RefineError(queryResponse: QueryResponse) {
+private fun CheckError(queryResponse: QueryResponse) {
 
     if (queryResponse.error != null) {
         Text(

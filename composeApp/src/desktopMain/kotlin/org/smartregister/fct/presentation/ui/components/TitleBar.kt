@@ -39,11 +39,13 @@ fun TitleBar(
                 ActivePackageChip(subWindowManager = subWindowManager)
             }
 
-            Row (
+            Row(
                 modifier = Modifier.padding(end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
+                TextViewerButton(componentContext)
+                Spacer(Modifier.width(16.dp))
                 SettingButton(componentContext)
             }
         }

@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.smartregister.fct.common.data.datatable.controller.DataTableController
+import org.smartregister.fct.datatable.data.controller.DataTableController
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.QueryResponse
 

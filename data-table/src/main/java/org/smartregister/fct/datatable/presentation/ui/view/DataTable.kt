@@ -1,14 +1,11 @@
-package org.smartregister.fct.common.presentation.ui.components.datatable
+package org.smartregister.fct.datatable.presentation.ui.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.HorizontalScrollbar
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.text.BasicTextField
@@ -46,7 +42,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -55,7 +50,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -73,12 +67,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -89,19 +83,21 @@ import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropD
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
-import org.smartregister.fct.common.data.datatable.controller.DataTableController
-import org.smartregister.fct.common.data.datatable.feature.DTPagination
 import org.smartregister.fct.common.util.windowWidthResizePointer
+import org.smartregister.fct.datatable.data.controller.DataTableController
 import org.smartregister.fct.engine.data.manager.AppSettingManager
 import org.smartregister.fct.engine.util.getKoinInstance
+import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 
 private val defaultDataCellWidth = 200.dp
 private val serialNoCellWidth = 60.dp
 
 @Composable
 fun DataTable(
-    controller: DataTableController
+    controller: DataTableController,
+    componentContext: ComponentContext,
 ) {
+
 
     val horizontalScrollState = rememberScrollState()
     val verticalScrollState = rememberScrollState()
@@ -167,6 +163,7 @@ fun DataTable(
                 ) {
                     PopulateData(
                         controller = controller,
+                        componentContext = componentContext,
                         columnsInfo = columns,
                         columnWidthMapState = columnWidthMapState,
                         dataRowBGOdd = dataRowBGOdd,
@@ -206,51 +203,49 @@ fun DTTopBar(
             onClick = controller::refreshData,
         )
 
-        if (controller is DTPagination) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SmallIconButton(
-                    modifier = Modifier.size(22.dp),
-                    icon = Icons.Outlined.FirstPage,
-                    onClick = controller::refreshData
-                )
-                Spacer(Modifier.width(12.dp))
-                SmallIconButton(
-                    modifier = Modifier.size(22.dp),
-                    icon = Icons.Outlined.ChevronLeft,
-                    onClick = controller::refreshData
-                )
-                Spacer(Modifier.width(12.dp))
-                AutoCompleteDropDown(
-                    modifier = Modifier.width(100.dp),
-                    items = listOf(50, 100, 500, 1000),
-                    label = { "$it" },
-                    defaultSelectedIndex = 0,
-                    errorHighlight = false,
-                    onTextChanged = { text, isMatch ->
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SmallIconButton(
+                modifier = Modifier.size(22.dp),
+                icon = Icons.Outlined.FirstPage,
+                onClick = controller::refreshData
+            )
+            Spacer(Modifier.width(12.dp))
+            SmallIconButton(
+                modifier = Modifier.size(22.dp),
+                icon = Icons.Outlined.ChevronLeft,
+                onClick = controller::refreshData
+            )
+            Spacer(Modifier.width(12.dp))
+            AutoCompleteDropDown(
+                modifier = Modifier.width(100.dp),
+                items = listOf(50, 100, 500, 1000),
+                label = { "$it" },
+                defaultSelectedIndex = 0,
+                errorHighlight = false,
+                onTextChanged = { text, isMatch ->
 
-                    },
-                    onSelected = {
+                },
+                onSelected = {
 
-                    }
-                )
-                Spacer(Modifier.width(12.dp))
-                SmallIconButton(
-                    modifier = Modifier.size(22.dp),
-                    icon = Icons.Outlined.ChevronRight,
-                    onClick = {
-                        controller.goNext()
-                    }
-                )
-                Spacer(Modifier.width(12.dp))
-                SmallIconButton(
-                    modifier = Modifier.size(22.dp),
-                    icon = Icons.AutoMirrored.Outlined.LastPage,
-                    onClick = controller::refreshData
-                )
-                Spacer(Modifier.width(8.dp))
-            }
+                }
+            )
+            Spacer(Modifier.width(12.dp))
+            SmallIconButton(
+                modifier = Modifier.size(22.dp),
+                icon = Icons.Outlined.ChevronRight,
+                onClick = {
+                    controller.goNext()
+                }
+            )
+            Spacer(Modifier.width(12.dp))
+            SmallIconButton(
+                modifier = Modifier.size(22.dp),
+                icon = Icons.AutoMirrored.Outlined.LastPage,
+                onClick = controller::refreshData
+            )
+            Spacer(Modifier.width(8.dp))
         }
     }
 }
@@ -284,7 +279,11 @@ internal fun ColumnHeader(
 
         columnsInfo.forEach { colView ->
 
-            var rawX by remember { mutableStateOf(columnWidthMapState[colView.index] ?: defaultDataCellWidth) }
+            var rawX by remember {
+                mutableStateOf(
+                    columnWidthMapState[colView.index] ?: defaultDataCellWidth
+                )
+            }
 
             DataBox(
                 index = colView.index,
@@ -363,6 +362,7 @@ internal fun ColumnFilter(
 @Composable
 internal fun PopulateData(
     controller: DataTableController,
+    componentContext: ComponentContext,
     columnsInfo: List<ColumnInfo>,
     columnWidthMapState: SnapshotStateMap<Int, Dp>,
     dataRowBGOdd: Color,
@@ -371,6 +371,7 @@ internal fun PopulateData(
 ) {
 
     val clipboardManager = LocalClipboardManager.current
+    val textViewerDialog = rememberTextViewerDialog(componentContext)
     val data by controller.records.collectAsState()
     var dataRowHover by remember { mutableStateOf(-1) }
     var dataCellHover by remember { mutableStateOf(-1) }
@@ -457,12 +458,15 @@ internal fun PopulateData(
                                                     AnnotatedString(columnInfo.getData(dataObj))
                                                 )
                                             },
-                                            ContextMenuItem("View") {},
+                                            ContextMenuItem("View") {
+                                                textViewerDialog.show(columnInfo.getData(dataObj))
+                                            },
                                         )
                                     },
                                 ) {
                                     Text(
-                                        modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
+                                        modifier = Modifier.fillMaxSize()
+                                            .padding(horizontal = 8.dp),
                                         text = text,
                                         softWrap = false,
                                         lineHeight = 32.sp
@@ -617,12 +621,12 @@ fun <T> T.useDebounce(
     delayMillis: Long = 300L,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     onChange: (T) -> Unit
-): T{
+): T {
     // 2. updating state
     val state by rememberUpdatedState(this)
 
     // 3. launching the side-effect handler
-    DisposableEffect(state){
+    DisposableEffect(state) {
         val job = coroutineScope.launch {
             delay(delayMillis)
             onChange(state)

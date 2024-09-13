@@ -1,4 +1,4 @@
-package org.smartregister.fct.common.data.datatable.controller
+package org.smartregister.fct.datatable.data.controller
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -43,18 +43,33 @@ inline fun <reified T> String.tryDecodeJson(jsonInstance: Json? = null): T? =
 inline fun <reified T> T.encodeJson(jsonInstance: Json? = null): String =
     jsonInstance?.encodeToString(this) ?: json.encodeToString(this)
 
-fun String.prettyJson(): String {
+fun String.prettyJson(indent: Int? = null): String {
 
     val appSetting = getKoinInstance<AppSettingManager>().appSetting
+    val tabIndent = indent ?: appSetting.codeEditorConfig.indent
 
     val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setFormattingStyle(
             FormattingStyle.PRETTY.withIndent(
                 " ".repeat(
-                    appSetting.codeEditorConfig.indent
+                    tabIndent
                 )
             )
+        )
+        .create()
+    val jsonParser = JsonParser.parseString(this).asJsonObject
+    return gson.toJson(jsonParser)
+}
+
+fun String.compactJson(): String {
+
+    val appSetting = getKoinInstance<AppSettingManager>().appSetting
+
+    val gson = GsonBuilder()
+        .disableHtmlEscaping()
+        .setFormattingStyle(
+            FormattingStyle.COMPACT
         )
         .create()
     val jsonParser = JsonParser.parseString(this).asJsonObject
