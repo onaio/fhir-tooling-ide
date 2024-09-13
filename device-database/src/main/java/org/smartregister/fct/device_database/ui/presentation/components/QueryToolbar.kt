@@ -43,7 +43,6 @@ internal fun QueryToolbar(component: QueryTabComponent) {
             modifier = Modifier.size(16.dp),
             rippleRadius = 16.dp,
             tooltip = "Run\nCtrl + Enter",
-            tooltipPosition = TooltipPosition.BOTTOM,
             icon = Icons.AutoMirrored.Outlined.Send,
             onClick = component::runQuery
         )

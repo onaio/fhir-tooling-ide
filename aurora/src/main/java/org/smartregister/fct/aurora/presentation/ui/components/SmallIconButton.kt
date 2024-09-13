@@ -33,7 +33,7 @@ fun SmallIconButton(
     tint: Color? = null,
     alpha: Float = 1f,
     tooltip: String? = null,
-    tooltipPosition: TooltipPosition = TooltipPosition.BOTTOM,
+    tooltipPosition: TooltipPosition = TooltipPosition.Bottom(),
     rippleRadius: Dp = 16.dp,
     onClick: () -> Unit
 ) {

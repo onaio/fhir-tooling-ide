@@ -46,7 +46,6 @@ internal fun PanelOptions(
             modifier = Modifier.size(18.dp),
             rippleRadius = 14.dp,
             tooltip = "New Tab",
-            tooltipPosition = TooltipPosition.BOTTOM,
             icon = AuroraIconPack.TableEye,
             onClick = openNewTab
         )

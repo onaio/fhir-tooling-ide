@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +43,7 @@ fun Tooltip(
     tooltip: String,
     delayMillis: Int = 500,
     tooltipPosition: TooltipPosition,
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     var contentSize by remember { mutableStateOf(IntSize.Zero) }
     var tooltipOffset by remember { mutableStateOf(IntOffset.Zero) }
@@ -104,31 +105,31 @@ fun Tooltip(
                                 val height = it.size.height
 
                                 when (tooltipPosition) {
-                                    TooltipPosition.LEFT -> {
+                                    is TooltipPosition.Left -> {
                                         tooltipOffset = IntOffset(
-                                            x = 0 - (10 + width),
+                                            x = tooltipPosition.space - (10 + width),
                                             y = (contentSize.height / 2) - height / 2
                                         )
                                     }
 
-                                    TooltipPosition.TOP -> {
+                                    is TooltipPosition.Top -> {
                                         tooltipOffset = IntOffset(
                                             x = (contentSize.width / 2) - width / 2,
-                                            y = 0 - (contentSize.height / 2 + height)
+                                            y = tooltipPosition.space - (contentSize.height / 2 + height)
                                         )
                                     }
 
-                                    TooltipPosition.RIGHT -> {
+                                    is TooltipPosition.Right -> {
                                         tooltipOffset = IntOffset(
-                                            x = contentSize.width + 10,
+                                            x = contentSize.width + tooltipPosition.space,
                                             y = (contentSize.height / 2) - height / 2
                                         )
                                     }
 
-                                    TooltipPosition.BOTTOM -> {
+                                    is TooltipPosition.Bottom -> {
                                         tooltipOffset = IntOffset(
                                             x = (contentSize.width / 2) - width / 2,
-                                            y = contentSize.height + 10
+                                            y = contentSize.height + tooltipPosition.space
                                         )
                                     }
                                 }
@@ -160,8 +161,23 @@ fun Tooltip(
     }
 }
 
-enum class TooltipPosition {
-    LEFT, TOP, RIGHT, BOTTOM
+sealed class TooltipPosition(val space: Int) {
+
+    class Left(
+        space: Int = 0
+    ) : TooltipPosition(space)
+
+    class Top(
+        space: Int = 0
+    ) : TooltipPosition(space)
+
+    class Right(
+        space: Int = 10
+    ) : TooltipPosition(space)
+
+    class Bottom(
+        space: Int = 10
+    ) : TooltipPosition(space)
 }
 
 private fun Modifier.onPointerEvent(
