@@ -5,6 +5,7 @@ import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +35,8 @@ import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.FirstPage
 import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -72,25 +76,51 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintLayoutScope
+import androidx.constraintlayout.compose.Dimension
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.ExpandAll
 import org.smartregister.fct.aurora.auroraiconpack.Sync
-import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
+import org.smartregister.fct.aurora.presentation.ui.components.Icon
+import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
+import org.smartregister.fct.aurora.presentation.ui.components.NumberDropDown
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
+import org.smartregister.fct.common.presentation.ui.container.Aurora
 import org.smartregister.fct.common.util.windowWidthResizePointer
 import org.smartregister.fct.datatable.data.controller.DataTableController
+import org.smartregister.fct.datatable.data.enums.OrderBy
+import org.smartregister.fct.datatable.domain.feature.DTColumn
+import org.smartregister.fct.datatable.domain.feature.DTCountable
+import org.smartregister.fct.datatable.domain.feature.DTFilterColumn
+import org.smartregister.fct.datatable.domain.feature.DTFilterable
+import org.smartregister.fct.datatable.domain.feature.DTFilterableType
+import org.smartregister.fct.datatable.domain.feature.DTPagination
+import org.smartregister.fct.datatable.domain.feature.DTRefreshable
+import org.smartregister.fct.datatable.domain.feature.DTSortable
+import org.smartregister.fct.datatable.domain.model.DataColumn
+import org.smartregister.fct.datatable.domain.model.DataFilterColumn
+import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
+import org.smartregister.fct.datatable.presentation.ui.components.ColumnFilter
+import org.smartregister.fct.datatable.presentation.ui.components.ColumnHeader
+import org.smartregister.fct.datatable.presentation.ui.components.DTHorizontalDivider
+import org.smartregister.fct.datatable.presentation.ui.components.PopulateData
+import org.smartregister.fct.datatable.presentation.ui.components.TopBar
 import org.smartregister.fct.engine.data.manager.AppSettingManager
 import org.smartregister.fct.engine.util.getKoinInstance
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 
-private val defaultDataCellWidth = 200.dp
-private val serialNoCellWidth = 60.dp
+internal val defaultDataCellWidth = 200.dp
+internal val serialNoCellWidth = 60.dp
+
 
 @Composable
 fun DataTable(
@@ -98,508 +128,93 @@ fun DataTable(
     componentContext: ComponentContext,
 ) {
 
-
+    val error by controller.error.collectAsState()
+    val info by controller.info.collectAsState()
     val horizontalScrollState = rememberScrollState()
-    val verticalScrollState = rememberScrollState()
+    //val verticalScrollState = rememberScrollState()
     val dataRowBGOdd = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f)
     val dataRowBGEven = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f)
     var dtWidth by remember { mutableStateOf(0.dp) }
+    val columns = controller.columns
 
-
-    val columns = controller.columns.mapIndexed { index, columnObj ->
-        ColumnInfo(
-            index = index,
-            name = columnObj.getString("name"),
-            type = columnObj.getInt("type")
-        )
-    }
-
-    val columnWidthMapState = remember {
-        mutableStateMapOf<Int, Dp>().apply {
-            columns.forEachIndexed { index, _ ->
-                put(index, defaultDataCellWidth)
-            }
-        }
-    }
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        DTTopBar(controller)
-        DTHorizontalDivider(dtWidth, alpha = 0.5f)
-        Box(Modifier.fillMaxSize()) {
-            Column(Modifier.fillMaxSize()) {
-                Row(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f))
-                        .horizontalScroll(horizontalScrollState)
-                        .onGloballyPositioned {
-                            dtWidth = it.size.width.dp
-                        }
-                ) {
-                    ColumnHeader(
-                        controller = controller,
-                        columnsInfo = columns,
-                        columnWidthMapState = columnWidthMapState
-                    )
-                }
-                //DTHorizontalDivider(dtWidth, alpha = 0.4f)
-                Row(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
-                        .horizontalScroll(horizontalScrollState)
-                ) {
-                    ColumnFilter(
-                        controller = controller,
-                        columnsInfo = columns,
-                        columnWidthMapState = columnWidthMapState
-                    )
-                }
-                DTHorizontalDivider(dtWidth, alpha = 0.5f)
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .horizontalScroll(horizontalScrollState)
-                ) {
-                    PopulateData(
-                        controller = controller,
-                        componentContext = componentContext,
-                        columnsInfo = columns,
-                        columnWidthMapState = columnWidthMapState,
-                        dataRowBGOdd = dataRowBGOdd,
-                        dataRowBGEven = dataRowBGEven,
-                        dtWidth = dtWidth
-                    )
-                }
-            }
-
-            HorizontalScrollbar(
-                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-                adapter = rememberScrollbarAdapter(
-                    scrollState = horizontalScrollState
-                )
-            )
-        }
-    }
-}
-
-@Composable
-fun DTTopBar(
-    controller: DataTableController
-) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+    Aurora(
+        componentContext = componentContext
     ) {
 
-        SmallIconButton(
-            modifier = Modifier.size(18.dp),
-            icon = AuroraIconPack.Sync,
-            onClick = controller::refreshData,
-        )
+        showErrorSnackbar(error)
+        showSnackbar(info)
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SmallIconButton(
-                modifier = Modifier.size(22.dp),
-                icon = Icons.Outlined.FirstPage,
-                onClick = controller::refreshData
-            )
-            Spacer(Modifier.width(12.dp))
-            SmallIconButton(
-                modifier = Modifier.size(22.dp),
-                icon = Icons.Outlined.ChevronLeft,
-                onClick = controller::refreshData
-            )
-            Spacer(Modifier.width(12.dp))
-            AutoCompleteDropDown(
-                modifier = Modifier.width(100.dp),
-                items = listOf(50, 100, 500, 1000),
-                label = { "$it" },
-                defaultSelectedIndex = 0,
-                errorHighlight = false,
-                onTextChanged = { text, isMatch ->
-
-                },
-                onSelected = {
-
+        val columnWidthMapState = remember {
+            mutableStateMapOf<Int, Dp>().apply {
+                columns.forEachIndexed { index, _ ->
+                    put(index, defaultDataCellWidth)
                 }
-            )
-            Spacer(Modifier.width(12.dp))
-            SmallIconButton(
-                modifier = Modifier.size(22.dp),
-                icon = Icons.Outlined.ChevronRight,
-                onClick = {
-                    controller.goNext()
-                }
-            )
-            Spacer(Modifier.width(12.dp))
-            SmallIconButton(
-                modifier = Modifier.size(22.dp),
-                icon = Icons.AutoMirrored.Outlined.LastPage,
-                onClick = controller::refreshData
-            )
-            Spacer(Modifier.width(8.dp))
-        }
-    }
-}
-
-@Composable
-internal fun ColumnHeader(
-    controller: DataTableController,
-    columnsInfo: List<ColumnInfo>,
-    columnWidthMapState: SnapshotStateMap<Int, Dp>,
-) {
-    Row(Modifier.fillMaxHeight()) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(serialNoCellWidth)
-                .background(MaterialTheme.colorScheme.surfaceContainer),
-        ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "S.No",
-                style = MaterialTheme.typography.titleSmall
-            )
-
-            DTVerticalDivider(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd),
-                alpha = 0.5f
-            )
-        }
-
-        columnsInfo.forEach { colView ->
-
-            var rawX by remember {
-                mutableStateOf(
-                    columnWidthMapState[colView.index] ?: defaultDataCellWidth
-                )
-            }
-
-            DataBox(
-                index = colView.index,
-                columnWidthMapState = columnWidthMapState
-            ) {
-                Text(
-                    modifier = Modifier.align(Alignment.Center),
-                    text = colView.name,
-                    style = MaterialTheme.typography.titleSmall
-                )
-
-                Box(
-                    modifier = Modifier
-                        .width(5.dp)
-                        .fillMaxHeight()
-                        .align(Alignment.CenterEnd)
-                        .pointerHoverIcon(windowWidthResizePointer)
-                        .pointerInput(Unit) {
-                            detectHorizontalDragGestures(
-                                onDragStart = {
-                                    rawX = columnWidthMapState[colView.index]!!
-                                }
-                            ) { _, dragAmount ->
-                                rawX += dragAmount.toDp()
-
-                                if (rawX > 40.dp) {
-                                    columnWidthMapState[colView.index] = rawX.coerceAtLeast(40.dp)
-                                }
-                            }
-                        }
-                )
             }
         }
 
-
-    }
-}
-
-@Composable
-internal fun ColumnFilter(
-    controller: DataTableController,
-    columnsInfo: List<ColumnInfo>,
-    columnWidthMapState: SnapshotStateMap<Int, Dp>,
-) {
-    Row(Modifier.fillMaxHeight()) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(serialNoCellWidth)
-                .background(MaterialTheme.colorScheme.surfaceContainer),
-        ) {
-            DTVerticalDivider(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd),
-                alpha = 0.5f
-            )
-        }
-
-        columnsInfo.forEach {
-
-            DataBox(
-                index = it.index,
-                columnWidthMapState = columnWidthMapState
-            ) {
-                DataFilterTextField(
-                    controller = controller,
-                    placeholder = it.name
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-internal fun PopulateData(
-    controller: DataTableController,
-    componentContext: ComponentContext,
-    columnsInfo: List<ColumnInfo>,
-    columnWidthMapState: SnapshotStateMap<Int, Dp>,
-    dataRowBGOdd: Color,
-    dataRowBGEven: Color,
-    dtWidth: Dp,
-) {
-
-    val clipboardManager = LocalClipboardManager.current
-    val textViewerDialog = rememberTextViewerDialog(componentContext)
-    val data by controller.records.collectAsState()
-    var dataRowHover by remember { mutableStateOf(-1) }
-    var dataCellHover by remember { mutableStateOf(-1) }
-
-    LazyColumn {
-
-        itemsIndexed(data) { rowIndex, dataObj ->
-
-            val dataRowBG = if (dataRowHover == rowIndex) {
-                MaterialTheme.colorScheme.surfaceContainer
-            } else {
-                if (rowIndex % 2 == 0) dataRowBGEven else dataRowBGOdd
-            }
-
-            Row(
-                modifier = Modifier
-                    .height(40.dp)
-                    .background(dataRowBG),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(serialNoCellWidth)
-                        .background(MaterialTheme.colorScheme.surfaceContainer),
-                ) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = "${controller.getOffset() + rowIndex + 1}"
-                    )
-
-                    DTVerticalDivider(
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopBar(controller)
+            DTHorizontalDivider(dtWidth, alpha = 0.5f)
+            Box(Modifier.fillMaxSize()) {
+                Column(Modifier.fillMaxSize()) {
+                    Row(
                         modifier = Modifier
-                            .align(Alignment.CenterEnd),
-                        alpha = 0.5f
-                    )
-                }
-
-                columnsInfo.forEachIndexed { colIndex, columnInfo ->
-
-                    val dataCellBorder =
-                        if (rowIndex == dataRowHover && colIndex == dataCellHover) BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-                        ) else null
-
-                    DataBox(
-                        modifier = Modifier
-                            .onPointerEvent(PointerEventType.Enter) {
-                                dataRowHover = rowIndex
-                                dataCellHover = colIndex
+                            .height(40.dp)
+                            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f))
+                            .horizontalScroll(horizontalScrollState)
+                            .onGloballyPositioned {
+                                dtWidth = it.size.width.dp
                             }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                dataRowHover = -1
-                                dataCellHover = -1
-                            },
-                        index = columnInfo.index,
-                        columnWidthMapState = columnWidthMapState,
-                        enableDivider = colIndex == columnsInfo.size.minus(1)
                     ) {
-
-                        val text = columnInfo.getData(dataObj).let {
-                            if (it.length > 40) {
-                                "${it.substring(0, 40)}..."
-                            } else it
-                        }
-
-                        Surface(
-                            modifier = Modifier.fillMaxSize().background(Color.Transparent),
-                            border = dataCellBorder,
-                            color = Color.Transparent
+                        ColumnHeader(
+                            controller = controller,
+                            columns = columns,
+                            columnWidthMapState = columnWidthMapState
+                        )
+                    }
+                    if (controller is DTFilterable) {
+                        Row(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
+                                .horizontalScroll(horizontalScrollState)
                         ) {
-                            Tooltip(
-                                modifier = Modifier.fillMaxSize(),
-                                tooltip = text,
-                                tooltipPosition = TooltipPosition.Top(space = 10),
-                            ) {
-                                ContextMenuArea(
-                                    items = {
-                                        listOf(
-                                            ContextMenuItem("Copy") {
-                                                clipboardManager.setText(
-                                                    AnnotatedString(columnInfo.getData(dataObj))
-                                                )
-                                            },
-                                            ContextMenuItem("View") {
-                                                textViewerDialog.show(columnInfo.getData(dataObj))
-                                            },
-                                        )
-                                    },
-                                ) {
-                                    Text(
-                                        modifier = Modifier.fillMaxSize()
-                                            .padding(horizontal = 8.dp),
-                                        text = text,
-                                        softWrap = false,
-                                        lineHeight = 32.sp
-                                    )
-                                }
-                            }
+                            ColumnFilter(
+                                controller = controller,
+                                columns = columns,
+                                columnWidthMapState = columnWidthMapState
+                            )
                         }
                     }
+                    DTHorizontalDivider(dtWidth, alpha = 0.5f)
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .horizontalScroll(horizontalScrollState)
+                    ) {
+                        PopulateData(
+                            controller = controller,
+                            componentContext = componentContext,
+                            columns = columns,
+                            columnWidthMapState = columnWidthMapState,
+                            dataRowBGOdd = dataRowBGOdd,
+                            dataRowBGEven = dataRowBGEven,
+                            dtWidth = dtWidth
+                        )
+                    }
                 }
-            }
 
-            if (rowIndex == data.size.minus(1)) {
-                DTHorizontalDivider(dtWidth)
-            }
-        }
-    }
-}
-
-@Composable
-internal fun DataBox(
-    modifier: Modifier = Modifier,
-    index: Int,
-    columnWidthMapState: SnapshotStateMap<Int, Dp>,
-    enableDivider: Boolean = true,
-    content: @Composable BoxScope.() -> Unit
-) {
-    Box(
-        modifier = modifier
-            .width(columnWidthMapState[index] ?: defaultDataCellWidth)
-            .fillMaxHeight(),
-    ) {
-        content()
-
-        if (enableDivider) {
-            DTVerticalDivider(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd),
-                alpha = 0.5f
-            )
-        }
-    }
-}
-
-@Composable
-internal fun DTHorizontalDivider(
-    dtWidth: Dp,
-    alpha: Float = 1f
-) {
-    val theme = getKoinInstance<AppSettingManager>()
-
-    HorizontalDivider(
-        modifier = Modifier.width(dtWidth),
-        color = if (theme.appSetting.isDarkTheme) DividerDefaults.color else DividerDefaults.color.copy(
-            alpha = alpha
-        )
-    )
-}
-
-@Composable
-internal fun DTVerticalDivider(
-    modifier: Modifier = Modifier,
-    alpha: Float = 1f
-) {
-    val theme = getKoinInstance<AppSettingManager>()
-    VerticalDivider(
-        modifier = modifier,
-        thickness = if (theme.appSetting.isDarkTheme) 0.3.dp else 1.dp,
-        color = if (theme.appSetting.isDarkTheme) MaterialTheme.colorScheme.outline else DividerDefaults.color.copy(
-            alpha = alpha
-        )
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DataFilterTextField(
-    controller: DataTableController,
-    placeholder: String
-) {
-
-    var filterText by remember { mutableStateOf("") }
-
-    filterText.useDebounce {
-        println(it)
-    }
-
-    BasicTextField(
-        modifier = Modifier.fillMaxSize(),
-        value = filterText,
-        onValueChange = {
-            if (it.length > 40) return@BasicTextField
-            filterText = it
-        },
-        textStyle = TextStyle(
-            fontSize = MaterialTheme.typography.bodySmall.fontSize
-        ),
-        decorationBox = @Composable { innerTextField ->
-            // places leading icon, text field with label and placeholder, trailing icon
-            TextFieldDefaults.DecorationBox(
-                value = filterText,
-                visualTransformation = VisualTransformation.None,
-                innerTextField = innerTextField,
-                placeholder = {
-                    Text(
-                        text = placeholder,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                HorizontalScrollbar(
+                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
+                    adapter = rememberScrollbarAdapter(
+                        scrollState = horizontalScrollState
                     )
-                },
-                label = null,
-                leadingIcon = null,
-                trailingIcon = null,
-                prefix = null,
-                suffix = null,
-                supportingText = null,
-                shape = TextFieldDefaults.shape,
-                singleLine = true,
-                enabled = true,
-                isError = false,
-                interactionSource = remember { MutableInteractionSource() },
-                contentPadding = PaddingValues(8.dp),
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.2f),
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                ),
-            )
+                )
+            }
         }
-    )
+    }
 }
+
 
 private val VerticalScrollConsumer = object : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource) = available.copy(x = 0f)
@@ -616,42 +231,7 @@ private fun Modifier.disableVerticalPointerInputScroll() = this.nestedScroll(Ver
 private fun Modifier.disableHorizontalPointerInputScroll() =
     this.nestedScroll(HorizontalScrollConsumer)
 
-@Composable
-fun <T> T.useDebounce(
-    delayMillis: Long = 300L,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    onChange: (T) -> Unit
-): T {
-    // 2. updating state
-    val state by rememberUpdatedState(this)
 
-    // 3. launching the side-effect handler
-    DisposableEffect(state) {
-        val job = coroutineScope.launch {
-            delay(delayMillis)
-            onChange(state)
-        }
-        onDispose {
-            job.cancel()
-        }
-    }
-    return state
-}
-
-private fun ColumnInfo.getData(jsonObject: JSONObject): String {
-    return try {
-        jsonObject.optString(name, "NULL")
-    } catch (ex: Exception) {
-        "NULL"
-    }
-}
-
-internal data class ColumnInfo(
-    //val ref: ConstrainedLayoutReference,
-    val index: Int,
-    val name: String,
-    val type: Int
-)
 
 internal object ColumnType {
     const val FIELD_TYPE_NULL = 0

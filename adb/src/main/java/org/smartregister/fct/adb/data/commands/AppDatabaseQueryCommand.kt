@@ -1,6 +1,7 @@
 package org.smartregister.fct.adb.data.commands
 
 import org.json.JSONObject
+import org.smartregister.fct.logger.FCTLogger
 
 class AppDatabaseQueryCommand(
     private val packageId: String,
@@ -21,7 +22,6 @@ class AppDatabaseQueryCommand(
             put("database", database)
             put("query", query)
         }*/
-
         return requestJson
     }
 }

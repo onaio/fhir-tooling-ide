@@ -1,80 +1,121 @@
 package org.smartregister.fct.datatable.data.controller
 
+import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.json.JSONObject
+import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.KeyboardArrowDown
+import org.smartregister.fct.aurora.auroraiconpack.KeyboardArrowUp
+import org.smartregister.fct.datatable.data.enums.OrderBy
+import org.smartregister.fct.datatable.domain.feature.DTColumn
+import org.smartregister.fct.datatable.domain.feature.DTFilterColumn
+import org.smartregister.fct.datatable.domain.feature.DTFilterable
+import org.smartregister.fct.datatable.domain.feature.DTSortable
+import org.smartregister.fct.datatable.domain.model.Data
+import org.smartregister.fct.datatable.domain.model.DataRow
+import org.smartregister.fct.logger.FCTLogger
 
 abstract class DataTableController(
-    initialQuery: String,
-    val columns: List<JSONObject>,
-    data: List<JSONObject>,
-    count: Int,
-    initialOffset: Int = 0,
-    initialLimit: Int
+    val scope: CoroutineScope,
+    data: Data
 ) {
 
     private var _loading = MutableStateFlow(false)
-    val loading: StateFlow<Boolean> = _loading
+    internal val loading: StateFlow<Boolean> = _loading
 
     private var _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error
+    internal val error: StateFlow<String?> = _error
 
-    private var _query = MutableStateFlow(initialQuery)
-    val query: StateFlow<String> = _query
+    private var _info = MutableStateFlow<String?>(null)
+    internal val info: StateFlow<String?> = _info
 
-    private var _data = MutableStateFlow(data)
-    val records: StateFlow<List<JSONObject>> = _data
+    internal val tempFilterValue = mutableMapOf<Int, String>()
 
-    private var offset: Int = initialOffset
-    private var limit: Int = initialLimit
-    private var totalRecords: Int = count
+    internal val columns = data.columns
+    internal val filterColumns: Map<Int, MutableStateFlow<DTFilterColumn>>
 
-    fun refreshData() {}
+    private val _activeSortColumnInfo = MutableStateFlow<Triple<Int, ImageVector, OrderBy>?>(null)
+    internal val activeSortColumnInfo: StateFlow<Triple<Int, ImageVector, OrderBy>?> =
+        _activeSortColumnInfo
 
-    fun totalRecords(): Int = totalRecords
+    private var _records = MutableStateFlow(data.rows)
+    internal val records: StateFlow<List<DataRow>> = _records
 
-    fun getOffset(): Int = offset
-
-    fun getLimit(): Int = limit
-
-    fun updateLimit(limit: Int) {
-        this.limit = limit
+    init {
+        filterColumns = mutableMapOf<Int, MutableStateFlow<DTFilterColumn>>().apply {
+            columns.filterIsInstance<DTFilterColumn>().forEach {
+                put(it.index, MutableStateFlow(it))
+            }
+        }
     }
 
-    fun canGoFirstPage() : Boolean {
-        return getOffset() > 0
+    private fun getFilteredColumns(): List<DTFilterColumn> {
+        return filterColumns
+            .entries
+            .map { it.value.value }
+            .filter { it.value.trim().isNotEmpty() }
     }
 
-    fun canGoPreviousPage() : Boolean {
-        return getOffset() > 0
+    fun isLoading() = _loading.value
+
+    suspend fun setLoading(isLoading: Boolean) {
+        _loading.emit(isLoading)
     }
 
-    fun canGoNextPage(): Boolean {
-        return (getOffset() + getLimit()) < totalRecords()
+    inline fun ifIsNotLoading(block: () -> Boolean): Boolean {
+        return if (isLoading()) false else block()
     }
 
-    fun canGoLastPage(): Boolean {
-        return (getOffset() + getLimit()) < totalRecords()
+    internal suspend fun filter() {
+        if (this is DTFilterable) {
+            this.applyFilter(getFilteredColumns())
+        }
     }
 
-    fun goNext() {
-        runQuery(
-            offset = getOffset() + getLimit(),
-            limit = getLimit()
-        )
+    internal suspend fun sort(dtColumn: DTColumn, orderBy: OrderBy) {
+        if (this is DTSortable) {
+            val result = applySort(dtColumn, orderBy)
+            if (result.isSuccess) {
+                val icon =
+                    if (orderBy == OrderBy.Asc) AuroraIconPack.KeyboardArrowUp else AuroraIconPack.KeyboardArrowDown
+                _activeSortColumnInfo.emit(
+                    Triple(dtColumn.index, icon, orderBy)
+                )
+            } else {
+                _activeSortColumnInfo.emit(null)
+            }
+
+            process(result)
+        }
     }
 
-    suspend fun update(newOffset: Int, data: List<JSONObject>) {
-        offset = newOffset
-        _data.emit(data)
+    suspend fun process(result: Result<List<DataRow>>) {
+        if (result.isSuccess) {
+            updateRecords(result.getOrThrow())
+        } else {
+            showError(result.exceptionOrNull()?.message)
+        }
     }
 
-    suspend fun showError(message: String) {
+    suspend fun updateRecords(newRecords: List<DataRow>) {
+        _loading.emit(false)
+        _records.emit(newRecords)
+    }
+
+    suspend fun showError(message: String?) {
+        if (message != null) FCTLogger.e(message)
+        _loading.emit(false)
         _error.emit(message)
         delay(200)
         _error.emit(null)
     }
 
-    abstract fun runQuery(offset: Int, limit: Int)
+    suspend fun showInfo(message: String?) {
+        _loading.emit(false)
+        _info.emit(message)
+        delay(200)
+        _info.emit(null)
+    }
 }

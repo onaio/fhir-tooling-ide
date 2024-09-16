@@ -72,6 +72,7 @@ private fun FileProviderDialog(
     val initialData = codeController.getText()
     val labelSystemFileManager = "System File Manager"
     val labelInAppFileManager = "In App File Manager"
+    val labelDeviceDB = "Device Database"
 
     val onFileSelected = onFileContent?.let {
         val listener: (String) -> Unit = {

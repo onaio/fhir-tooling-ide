@@ -18,5 +18,6 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":editor"))
     implementation(project(":file-manager"))
+    implementation(project(":device-database"))
 }
 

@@ -43,6 +43,7 @@ abstract class ContentCommand : ADBCommand<JSONObject> {
 
     private fun getCompressedArgument(): String {
         val arg = getArgument()
+        FCTLogger.d("Content Request: $arg")
         if (arg.trim().isEmpty()) return arg
         return arg.compress()
     }

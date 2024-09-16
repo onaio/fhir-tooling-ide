@@ -11,10 +11,10 @@ import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 
 @Composable
 fun QueryTabPanel(tabComponent: QueryTabComponent) {
-    val resultComponent by tabComponent.queryResultDTController.collectAsState()
+    val resultComponent by tabComponent.queryResultDataController.collectAsState()
 
     Column {
-        QueryToolbar(tabComponent)
+        QueryTabToolbar(tabComponent)
         HorizontalDivider()
         VerticalSplitPane(
             resizeOption = ResizeOption.Flexible(

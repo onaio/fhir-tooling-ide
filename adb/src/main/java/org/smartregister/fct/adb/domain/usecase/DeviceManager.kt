@@ -55,7 +55,7 @@ object DeviceManager : KoinComponent {
                 } catch (ex: Throwable) {
                     FCTLogger.e(ex)
                 }
-                delay(2000)
+                delay(4000)
             }
         }
     }

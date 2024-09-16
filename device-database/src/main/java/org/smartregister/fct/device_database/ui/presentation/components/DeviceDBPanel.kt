@@ -19,7 +19,7 @@ import org.smartregister.fct.device_database.ui.components.TableTabComponent
 
 context (AuroraManager)
 @Composable
-fun AppDatabasePanel(componentContext: ComponentContext) {
+internal fun AppDatabasePanel(componentContext: ComponentContext) {
 
     val deviceDBPanelComponent = remember { DeviceDBPanelComponent(componentContext) }
 
@@ -46,7 +46,8 @@ fun AppDatabasePanel(componentContext: ComponentContext) {
                     DeviceDBConfigPersistence.addNewTab(
                         TableTabComponent(
                             componentContext = deviceDBPanelComponent,
-                            tableInfo = it
+                            tableInfo = it,
+                            database = DeviceDBConfigPersistence.sidePanelDBInfo.name
                         )
                     )
                 }

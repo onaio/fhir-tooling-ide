@@ -99,44 +99,52 @@ internal fun QueryEditor(component: QueryTabComponent) {
             }
 
             Box {
-                TextField(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(verticalScrollState)
-                        .horizontalScroll(horizontalScrollState)
-                        .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
-                            when {
-                                keyEvent.isCtrlPressed && keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp -> {
-                                    component.runQuery()
-                                    true
+                Row(
+                    Modifier.horizontalScroll(horizontalScrollState).widthIn(max = 2000.dp)
+                        .fillMaxHeight()
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(verticalScrollState)
+                            .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
+                                when {
+                                    keyEvent.isCtrlPressed && keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp -> {
+                                        component.runQuery()
+                                        true
+                                    }
+
+                                    else -> false
                                 }
-
-                                else -> false
-                            }
+                            },
+                        value = component.query.collectAsState().value,
+                        onValueChange = {
+                            lineNumbers = getLineNumbers(it.text)
+                            component.updateTextField(it)
                         },
-                    value = component.query.collectAsState().value,
-                    onValueChange = {
-                        lineNumbers = getLineNumbers(it.text)
-                        component.updateTextField(it)
-                    },
 
-                    textStyle = TextStyle(
-                        fontFamily = FontFamily.Monospace,
-                        textAlign = TextAlign.Start,
-                    ),
-                    singleLine = false,
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f),
-                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f),
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                    visualTransformation = SQLQueryTransformation(
-                        isDarkTheme = isDarkTheme,
-                        colorScheme = MaterialTheme.colorScheme,
+                        textStyle = TextStyle(
+                            fontFamily = FontFamily.Monospace,
+                            textAlign = TextAlign.Start,
+                        ),
+                        singleLine = false,
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+                                alpha = 0.3f
+                            ),
+                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+                                alpha = 0.3f
+                            ),
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            cursorColor = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        visualTransformation = SQLQueryTransformation(
+                            isDarkTheme = isDarkTheme,
+                            colorScheme = MaterialTheme.colorScheme,
+                        )
                     )
-                )
+                }
 
                 VerticalScrollbar(
                     modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),

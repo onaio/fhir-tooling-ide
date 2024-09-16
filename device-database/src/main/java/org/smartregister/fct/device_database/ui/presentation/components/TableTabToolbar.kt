@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -16,11 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
-import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
+import org.smartregister.fct.device_database.ui.components.TableTabComponent
 
 @Composable
-internal fun QueryToolbar(component: QueryTabComponent) {
+internal fun TableTabToolbar(component: TableTabComponent) {
 
     Row(
         modifier = Modifier
@@ -30,21 +31,13 @@ internal fun QueryToolbar(component: QueryTabComponent) {
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        DatabaseDropdown(
-            modifier = Modifier.width(150.dp),
-            onDBSelected = {
-                component.selectedDBInfo = it
-            },
-            initialSelected = component.selectedDBInfo
-        )
-        VerticalDivider()
         Spacer(Modifier.width(14.dp))
         SmallIconButton(
             modifier = Modifier.size(16.dp),
             rippleRadius = 16.dp,
-            tooltip = "Run\nCtrl + Enter",
-            icon = Icons.AutoMirrored.Outlined.Send,
-            onClick = component::runQuery
+            tooltip = "Refresh",
+            icon = Icons.Outlined.Sync,
+            onClick = {}
         )
     }
 }

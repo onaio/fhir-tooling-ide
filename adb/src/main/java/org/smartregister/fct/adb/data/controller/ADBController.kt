@@ -1,5 +1,8 @@
 package org.smartregister.fct.adb.data.controller
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.logger.FCTLogger
@@ -54,9 +57,12 @@ class ADBController(private val shellProgram: ShellProgram) {
             addAll(command.build())
         }
 
-        val result = shellProgram.run(commandList.joinToString(" ")
-            .also { FCTLogger.d(it, tag = command.javaClass.simpleName) }
-        )
+        val asyncResult = CoroutineScope(Dispatchers.Default).async {
+            shellProgram.run(commandList.joinToString(" ")
+                .also { FCTLogger.d(it, tag = command.javaClass.simpleName) }
+            )
+        }
+        val result = asyncResult.await()
 
         return if (result.isSuccess) {
             try {

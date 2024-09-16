@@ -63,39 +63,35 @@ object FCTLogger {
         FCTLogger.logFilter = logFilter
     }
 
-    fun w(message: String, tag: String? = null, vararg args: Any?) {
+    fun w(message: String, tag: String? = null) {
         prepareLog(
             priority = LogLevel.WARNING,
             message = message,
             tag = tag,
-            args = args
         )
     }
 
-    fun v(message: String, tag: String? = null, vararg args: Any?) {
+    fun v(message: String, tag: String? = null) {
         prepareLog(
             priority = LogLevel.VERBOSE,
             message = message,
             tag = tag,
-            args = args
         )
     }
 
-    fun d(message: String, tag: String? = null, vararg args: Any?) {
+    fun d(message: String, tag: String? = null) {
         prepareLog(
             priority = LogLevel.DEBUG,
             message = message,
             tag = tag,
-            args = args
         )
     }
 
-    fun i(message: String, tag: String? = null, vararg args: Any?) {
+    fun i(message: String, tag: String? = null) {
         prepareLog(
             priority = LogLevel.INFO,
             message = message,
             tag = tag,
-            args = args
         )
     }
 
@@ -107,21 +103,19 @@ object FCTLogger {
         )
     }
 
-    fun e(message: String, tag: String? = null, vararg args: Any?) {
+    fun e(message: String, tag: String? = null) {
         prepareLog(
             priority = LogLevel.ERROR,
             message = message,
             tag = tag,
-            args = args
         )
     }
 
-    fun wtf(message: String, tag: String? = null, vararg args: Any?) {
+    fun wtf(message: String, tag: String? = null) {
         prepareLog(
             priority = LogLevel.ASSERT,
             message = message,
             tag = tag,
-            args = args
         )
     }
 
@@ -130,7 +124,6 @@ object FCTLogger {
         message: String? = null,
         t: Throwable? = null,
         tag: String?,
-        vararg args: Any?
     ) {
         var msg = message
 
@@ -138,7 +131,7 @@ object FCTLogger {
             if (t == null) return
             getStackTraceString(t)
         } else {
-            formatMessage(msg, args)
+            msg
         }
 
         push(
@@ -165,8 +158,6 @@ object FCTLogger {
             )
         }
     }
-
-    private fun formatMessage(message: String, args: Array<out Any?>) = message.format(*args)
 
     private fun parseTag(tag: String?): String {
         return tag ?: Throwable()

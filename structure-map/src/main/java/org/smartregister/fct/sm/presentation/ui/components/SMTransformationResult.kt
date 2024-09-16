@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,20 +25,27 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.ResourceType
 import org.smartregister.fct.aurora.presentation.ui.components.ExtendedFloatingActionButton
+import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
 import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
 import org.smartregister.fct.aurora.presentation.ui.components.Tab
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
 import org.smartregister.fct.common.presentation.ui.container.Aurora
+import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberResourceUploadDialog
+import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.engine.util.readableResourceName
 import org.smartregister.fct.editor.data.controller.CodeController
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
 import org.smartregister.fct.json.JsonTreeView
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.enums.ResultType
 import org.smartregister.fct.sm.data.enums.inverse
 import org.smartregister.fct.sm.presentation.component.ResultTabComponent
@@ -57,64 +65,77 @@ internal fun SMTransformationResult(componentContext: ComponentContext, bundle: 
         it.resource.resourceType == ResourceType.StructureMap
     }?.codeController
 
+    val loading = remember { mutableStateOf(false) }
+    val info = remember { mutableStateOf<String?>(null) }
+    val error = remember { mutableStateOf<String?>(null) }
 
     Aurora(
         componentContext = componentContext
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
 
-            ConstraintLayout(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+        showSnackbar(info.value)
+        showErrorSnackbar(error.value)
 
-                val (left, right) = createRefs()
+        Box {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-                ScrollableTabRow(
-                    modifier = Modifier.constrainAs(left) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        end.linkTo(right.start)
-                        bottom.linkTo(parent.bottom)
-                        width = Dimension.preferredWrapContent
-                    },
-                    selectedTabIndex = activeTabIndex,
+                ConstraintLayout(
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    bundle.entry.forEachIndexed { index, entry ->
-                        Tab(
-                            selected = index == activeTabIndex,
-                            title = entry.resource.readableResourceName,
-                            onClick = {
-                                activeTabIndex = index
+
+                    val (left, right) = createRefs()
+
+                    ScrollableTabRow(
+                        modifier = Modifier.constrainAs(left) {
+                            start.linkTo(parent.start)
+                            top.linkTo(parent.top)
+                            end.linkTo(right.start)
+                            bottom.linkTo(parent.bottom)
+                            width = Dimension.preferredWrapContent
+                        },
+                        selectedTabIndex = activeTabIndex,
+                    ) {
+                        bundle.entry.forEachIndexed { index, entry ->
+                            Tab(
+                                selected = index == activeTabIndex,
+                                title = entry.resource.readableResourceName,
+                                onClick = {
+                                    activeTabIndex = index
+                                }
+                            )
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.surface)
+                            .height(40.dp)
+                            .constrainAs(right) {
+                                top.linkTo(parent.top)
+                                end.linkTo(parent.end)
+                                bottom.linkTo(parent.bottom)
                             }
-                        )
+                    ) {
+
+                        if (smCodeController != null && activeTabIndex == 0) {
+                            with(componentContext) {
+                                UploadOnServerButton(smCodeController)
+                                UploadOnDeviceButton(smCodeController, loading, info, error)
+                            }
+                            Spacer(Modifier.width(12.dp))
+                        }
                     }
                 }
 
-                Row(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surface)
-                        .height(40.dp)
-                        .constrainAs(right) {
-                            top.linkTo(parent.top)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
-                        }
-                ) {
-
-                    if (smCodeController != null && activeTabIndex == 0) {
-                        with(componentContext) {
-                            UploadOnServerButton(smCodeController)
-                            UploadOnDeviceButton(smCodeController)
-                        }
-                        Spacer(Modifier.width(12.dp))
+                if (component != null) {
+                    with(component) {
+                        Content()
                     }
                 }
             }
 
-            if (component != null) {
-                with(component) {
-                    Content()
-                }
+            if (loading.value) {
+                LinearIndicator()
             }
         }
     }
@@ -176,17 +197,49 @@ private fun ComponentContext.UploadOnServerButton(smCodeController: CodeControll
         label = "Upload on Server",
         shape = RectangleShape,
         onClick = {
-
             resourceUploadDialog.show(smCodeController.getText())
         }
     )
 }
 
 @Composable
-private fun ComponentContext.UploadOnDeviceButton(smCodeController: CodeController) {
+private fun ComponentContext.UploadOnDeviceButton(
+    smCodeController: CodeController,
+    loading: MutableState<Boolean>,
+    info: MutableState<String?>,
+    error: MutableState<String?>,
+) {
+
+    val confirmationDialogController = rememberConfirmationDialog<Unit>() { _, _t ->
+
+
+        componentScope.launch {
+            loading.value = true
+            val queryTabComponent = QueryTabComponent(this@UploadOnDeviceButton)
+            val result = queryTabComponent.updateRecordByResourceId(
+                serializedResource = smCodeController.getText()
+            )
+            loading.value = false
+            if (result.isSuccess) {
+                info.value = "StructureMap successfully uploaded in device."
+            } else {
+                error.value = result.exceptionOrNull()?.message
+                FCTLogger.e(result.exceptionOrNull() ?: UnknownError("Query Error"))
+            }
+            delay(200)
+            info.value = null
+            error.value = null
+        }
+    }
+
     TextButton(
         label = "Upload on Device",
         shape = RectangleShape,
-        onClick = {}
+        onClick = {
+            confirmationDialogController.show(
+                title = "Upload",
+                message ="Are you sure you want to upload this in device?"
+            )
+        }
     )
 }

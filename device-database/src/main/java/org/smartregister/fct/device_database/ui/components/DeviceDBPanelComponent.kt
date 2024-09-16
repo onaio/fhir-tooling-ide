@@ -12,11 +12,11 @@ import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
+import org.smartregister.fct.device_database.domain.model.ColumnInfo
 import org.smartregister.fct.device_database.domain.model.DBInfo
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.TableInfo
 import org.smartregister.fct.engine.util.componentScope
-import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.logger.FCTLogger
 
 internal class DeviceDBPanelComponent(componentContext: ComponentContext) : QueryDependency, ComponentContext by componentContext {
@@ -108,9 +108,12 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
     private fun parseResultToTables(result: Result<JSONObject>): List<TableInfo> {
         return try {
             val jsonArray = result.getOrThrow().getJSONArray("data")
-            jsonArray.map {
+            jsonArray
+                .filterIsInstance<JSONObject>()
+                .map {
                 TableInfo(
-                    name = (it as JSONObject).getString("tbl_name")
+                    name = it.getString("tbl_name"),
+                    columnsInfo = decodeColumns(it.getString("sql"))
                 )
             }
         } catch (ex: Exception) {
@@ -118,5 +121,42 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
             listOf()
         }
 
+    }
+
+    private fun decodeColumns(tableDetails: String) : List<ColumnInfo> {
+
+        val columnsInfo = mutableListOf<ColumnInfo>()
+        val result = "`?\\w+`?\\s(INTEGER|TEXT|BLOB|REAL)\\s?(PRIMARY\\sKEY)?\\s?(AUTOINCREMENT)?\\s?(NOT\\sNULL)?".toRegex().findAll(tableDetails)
+
+        result.forEach { matchResult ->
+            val tokens = matchResult.value.trim().split(" ")
+
+            val columnName = tokens[0].replace("`", "").trim()
+            val columnType = tokens[1]
+            var hasPrimaryKey = false
+            var isNullable = true
+
+            if (tokens.size > 2) {
+                val updatedText = matchResult.value.replace(tokens[0], "").replace(tokens[1], "")
+
+                if (updatedText.contains("PRIMARY KEY")) {
+                    hasPrimaryKey = true
+                }
+                if (updatedText.contains("NOT NULL")) {
+                    isNullable = false
+                }
+            }
+
+            columnsInfo.add(
+                ColumnInfo(
+                    name = columnName,
+                    type = columnType,
+                    hasPrimaryKey = hasPrimaryKey,
+                    isNullable = isNullable
+                )
+            )
+        }
+
+        return columnsInfo
     }
 }

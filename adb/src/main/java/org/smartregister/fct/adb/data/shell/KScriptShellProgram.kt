@@ -8,9 +8,10 @@ import org.smartregister.fct.adb.domain.program.ShellProgram
 
 class KScriptShellProgram : ShellProgram {
 
-    override suspend fun run(command: String): Result<String> {
-        val asyncResult = CoroutineScope(Dispatchers.IO).async {
-            try {
+    @Synchronized
+    override fun run(command: String): Result<String> {
+        //val asyncResult = CoroutineScope(Dispatchers.IO).async {
+          return  try {
                 val evalBash = evalBash(command)
                 val result = evalBash.getOrThrow()
 
@@ -22,13 +23,13 @@ class KScriptShellProgram : ShellProgram {
                         .trim()
                     Result.failure(RuntimeException(errorMessage))
                 } else {
-                    Result.success(evalBash(command).getOrThrow())
+                    Result.success(result)
                 }
 
             } catch (t: Throwable) {
                 Result.failure(t)
             }
-        }
-        return asyncResult.await()
+        /*}
+        return asyncResult.await()*/
     }
 }
