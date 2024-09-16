@@ -128,7 +128,7 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
         val columnsInfo = mutableListOf<ColumnInfo>()
         val result = "`?\\w+`?\\s(INTEGER|TEXT|BLOB|REAL)\\s?(PRIMARY\\sKEY)?\\s?(AUTOINCREMENT)?\\s?(NOT\\sNULL)?".toRegex().findAll(tableDetails)
 
-        result.forEach { matchResult ->
+        result.forEachIndexed { index, matchResult ->
             val tokens = matchResult.value.trim().split(" ")
 
             val columnName = tokens[0].replace("`", "").trim()

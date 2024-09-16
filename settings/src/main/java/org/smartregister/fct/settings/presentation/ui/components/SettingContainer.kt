@@ -39,7 +39,9 @@ internal fun SettingsContainer(
                         ServerConfigPanel()
                     }
                 }
-                is Setting.CodeEditor -> {}
+                is Setting.CodeEditor -> {
+                    CodeEditorSettingPanel()
+                }
             }
         }
     }

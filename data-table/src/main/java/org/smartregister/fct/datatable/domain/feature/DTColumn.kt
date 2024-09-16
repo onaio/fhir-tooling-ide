@@ -9,4 +9,5 @@ interface DTColumn {
     val name: String
     val sortable: Boolean
     val editable: Boolean
+    val isPrimary: Boolean
 }

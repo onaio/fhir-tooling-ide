@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -43,6 +44,7 @@ internal fun ColumnHeader(
     controller: DataTableController,
     columns: List<DTColumn>,
     columnWidthMapState: SnapshotStateMap<Int, Dp>,
+    columnLeadingIcon: (@Composable BoxScope.(DTColumn) -> Unit)? = null
 ) {
 
     val scope = rememberCoroutineScope()
@@ -98,11 +100,16 @@ internal fun ColumnHeader(
                 index = dtColumn.index,
                 columnWidthMapState = columnWidthMapState
             ) {
+
+
+
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = dtColumn.name,
                     style = MaterialTheme.typography.titleSmall
                 )
+
+                columnLeadingIcon?.invoke(this, dtColumn)
 
                 if (dtColumn.sortable && controller is DTSortable) {
                     Icon(

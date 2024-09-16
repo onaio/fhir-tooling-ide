@@ -124,8 +124,9 @@ internal val serialNoCellWidth = 60.dp
 
 @Composable
 fun DataTable(
-    controller: DataTableController,
     componentContext: ComponentContext,
+    controller: DataTableController,
+    columnLeadingIcon: (@Composable BoxScope.(DTColumn) -> Unit)? = null
 ) {
 
     val error by controller.error.collectAsState()
@@ -169,7 +170,8 @@ fun DataTable(
                         ColumnHeader(
                             controller = controller,
                             columns = columns,
-                            columnWidthMapState = columnWidthMapState
+                            columnWidthMapState = columnWidthMapState,
+                            columnLeadingIcon = columnLeadingIcon
                         )
                     }
                     if (controller is DTFilterable) {

@@ -7,6 +7,7 @@ import org.smartregister.fct.aurora.auroraiconpack.ExpandAll
 import org.smartregister.fct.aurora.auroraiconpack.JoinInner
 import org.smartregister.fct.aurora.auroraiconpack.JoinLeft
 import org.smartregister.fct.aurora.auroraiconpack.JoinRight
+import org.smartregister.fct.aurora.auroraiconpack.KeyVertical
 import org.smartregister.fct.aurora.auroraiconpack.KeyboardArrowDown
 import org.smartregister.fct.aurora.auroraiconpack.KeyboardArrowUp
 import org.smartregister.fct.aurora.auroraiconpack.Sync
@@ -23,6 +24,6 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
     if (__AllIcons != null) {
       return __AllIcons!!
     }
-    __AllIcons= listOf(Equal, JoinInner, JoinLeft, JoinRight, Table, TableEye, Sync, Database, KeyboardArrowDown, KeyboardArrowUp, ExpandAll)
+    __AllIcons= listOf(KeyVertical, Equal, JoinInner, JoinLeft, JoinRight, Table, TableEye, Sync, Database, KeyboardArrowDown, KeyboardArrowUp, ExpandAll)
     return __AllIcons!!
   }

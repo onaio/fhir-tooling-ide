@@ -8,6 +8,7 @@ data class DataFilterTypeColumn(
     override val name: String,
     override val sortable: Boolean,
     override val editable: Boolean,
+    override val isPrimary: Boolean,
     override val value: String,
     val filterType: DTFilterType,
 ) : DTFilterColumn

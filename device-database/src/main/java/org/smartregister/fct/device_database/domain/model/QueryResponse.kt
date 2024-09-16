@@ -32,7 +32,8 @@ internal data class QueryResponse(
                                 index = index,
                                 name = jsonObj.getString("name"),
                                 sortable = false,
-                                editable = false
+                                editable = false,
+                                isPrimary = false
                             )
                         }
 
@@ -90,13 +91,15 @@ internal data class QueryResponse(
                     .filterIsInstance<JSONObject>()
                     .mapIndexed { index, jsonObj ->
                         val columnName = jsonObj.getString("name")
+                        val isPrimary = columnsInfo.firstOrNull { it.name == columnName }?.hasPrimaryKey ?: false
                         DataFilterTypeColumn(
                             index = index,
                             name = columnName,
                             sortable = true,
                             value = "",
                             filterType = EqualFilterType,
-                            editable = columnsInfo.firstOrNull { it.name == columnName }?.hasPrimaryKey == false
+                            editable = !isPrimary,
+                            isPrimary = isPrimary
                         )
                     }
 
