@@ -90,7 +90,7 @@ class QueryTabComponent(
         } catch (ex: Exception) {
             return Result.failure(ex)
         }
-        println(resourceId)
+
         val activeDevice = DeviceManager.getActiveDevice()
         val selectedPackage = DeviceManager.getActivePackage().value
 

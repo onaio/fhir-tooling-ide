@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -39,6 +40,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -63,7 +65,6 @@ internal fun QueryEditor(component: QueryTabComponent) {
     val isDarkTheme = appSetting.isDarkTheme
     var lineNumbers by remember(component) { mutableStateOf("") }
     var lineNumbersTopPadding by remember(component) { mutableStateOf(18.dp) }
-    val horizontalScrollState = rememberScrollState()
     val verticalScrollState = rememberScrollState()
 
     LaunchedEffect(component) {
@@ -76,7 +77,14 @@ internal fun QueryEditor(component: QueryTabComponent) {
         19.dp
     }
 
-    Box {
+    var textEditorWidth by remember { mutableStateOf(0.dp) }
+    var lineNumberWidth by remember { mutableStateOf(0.dp) }
+
+    Box(
+        Modifier.fillMaxSize().onGloballyPositioned {
+            textEditorWidth = it.size.width.dp
+        }
+    ) {
         if (component.loading.collectAsState().value) {
             LinearIndicator()
         }
@@ -85,6 +93,9 @@ internal fun QueryEditor(component: QueryTabComponent) {
                 modifier = Modifier.widthIn(min = 30.dp).fillMaxHeight()
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
                     .padding(start = 5.dp, top = lineNumbersTopPadding, end = 5.dp, bottom = 4.dp)
+                    .onGloballyPositioned {
+                        lineNumberWidth = it.size.width.dp + 10.dp
+                    }
             ) {
                 Text(
                     modifier = Modifier
@@ -99,64 +110,53 @@ internal fun QueryEditor(component: QueryTabComponent) {
             }
 
             Box {
-                Row(
-                    Modifier.horizontalScroll(horizontalScrollState).widthIn(max = 2000.dp)
+                TextField(
+                    modifier = Modifier
+                        .width(textEditorWidth - lineNumberWidth)
                         .fillMaxHeight()
-                ) {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(verticalScrollState)
-                            .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
-                                when {
-                                    keyEvent.isCtrlPressed && keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp -> {
-                                        component.runQuery()
-                                        true
-                                    }
-
-                                    else -> false
+                        .verticalScroll(verticalScrollState)
+                        .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
+                            when {
+                                keyEvent.isCtrlPressed && keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp -> {
+                                    component.runQuery()
+                                    true
                                 }
-                            },
-                        value = component.query.collectAsState().value,
-                        onValueChange = {
-                            lineNumbers = getLineNumbers(it.text)
-                            component.updateTextField(it)
-                        },
 
-                        textStyle = TextStyle(
-                            fontFamily = FontFamily.Monospace,
-                            textAlign = TextAlign.Start,
+                                else -> false
+                            }
+                        },
+                    value = component.query.collectAsState().value,
+                    onValueChange = {
+                        lineNumbers = getLineNumbers(it.text)
+                        component.updateTextField(it)
+                    },
+
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily.Monospace,
+                        textAlign = TextAlign.Start,
+                    ),
+                    singleLine = false,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+                            alpha = 0.3f
                         ),
-                        singleLine = false,
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
-                                alpha = 0.3f
-                            ),
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
-                                alpha = 0.3f
-                            ),
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+                            alpha = 0.3f
                         ),
-                        visualTransformation = SQLQueryTransformation(
-                            isDarkTheme = isDarkTheme,
-                            colorScheme = MaterialTheme.colorScheme,
-                        )
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                    visualTransformation = SQLQueryTransformation(
+                        isDarkTheme = isDarkTheme,
+                        colorScheme = MaterialTheme.colorScheme,
                     )
-                }
+                )
 
                 VerticalScrollbar(
                     modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
                     adapter = rememberScrollbarAdapter(
                         scrollState = verticalScrollState
-                    )
-                )
-
-                HorizontalScrollbar(
-                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-                    adapter = rememberScrollbarAdapter(
-                        scrollState = horizontalScrollState
                     )
                 )
             }

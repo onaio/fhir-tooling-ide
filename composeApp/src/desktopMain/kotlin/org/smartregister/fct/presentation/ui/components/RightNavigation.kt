@@ -25,6 +25,7 @@ import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.enums.RightWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 
 context (ConstraintLayoutScope)
 @Composable
@@ -51,16 +52,25 @@ fun RightNavigation(
             Column {
                 Spacer(Modifier.height(12.dp))
                 SmallIconButton(
+                    tooltip = "Device Manager",
+                    tooltipPosition = TooltipPosition.Left(),
+                    delayMillis = 100,
                     icon = Icons.Outlined.PhoneAndroid,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
                 )
                 Spacer(Modifier.height(18.dp))
                 SmallIconButton(
+                    tooltip = "Package Manager",
+                    tooltipPosition = TooltipPosition.Left(),
+                    delayMillis = 100,
                     icon = Icons.AutoMirrored.Outlined.ListAlt,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
                 )
                 Spacer(Modifier.height(18.dp))
                 SmallIconButton(
+                    tooltip = "Insights",
+                    tooltipPosition = TooltipPosition.Left(),
+                    delayMillis = 100,
                     icon = Icons.Outlined.Insights,
                     onClick = {  }
                 )
@@ -68,6 +78,9 @@ fun RightNavigation(
             Column {
                 SmallIconButton(
                     icon = Icons.Outlined.ConnectedTv,
+                    tooltip = "Logcat",
+                    tooltipPosition = TooltipPosition.Left(),
+                    delayMillis = 100,
                     onClick = { subWindowManager.setBottomWindowState(BottomWindowState.Logcat) }
                 )
                 Spacer(Modifier.height(12.dp))

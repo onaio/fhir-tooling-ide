@@ -15,12 +15,14 @@ class SQLQueryTransformation(
     private var blueColor = Color(0xFF86B1FF)
     private var greenColor = Color(0xFF91BE61)
     private var yellowColor = Color(0xFFDEA834)
+    private var grayColor = Color.Gray
 
     init {
         if (!isDarkTheme) {
             blueColor = Color(0xFF0050A5)
             greenColor = Color(0xFF457700)
             yellowColor = Color(0xFFBB8800)
+            grayColor = Color.LightGray
         }
     }
 
@@ -46,6 +48,19 @@ class SQLQueryTransformation(
             addSpanStyle(greenColor, matchResult)
         }
 
+        // check comment regex
+        commentRegex.findAll(text).forEach { matchResult ->
+            var start = matchResult.range.first
+            matchResult.value.trim().split(" ").forEach { token ->
+                val end = start + token.length
+                addStyle(
+                    style = SpanStyle(grayColor),
+                    start = start,
+                    end = end
+                )
+                start = end + 1
+            }
+        }
     }
 
     private fun AnnotatedString.Builder.addSpanStyle(color: Color, matchResult: MatchResult) {
@@ -58,6 +73,7 @@ class SQLQueryTransformation(
 
     private val keywordRegex = "\\S*".toRegex()
     private val textRegex = "((?<!\\\\)['\"])((?:.(?!(?<!\\\\)\\1))*.?)\\1(?!;)".toRegex()
+    private val commentRegex = "--\\s*.*".toRegex()
 
     private val tokens = listOf(
         "ABORT",

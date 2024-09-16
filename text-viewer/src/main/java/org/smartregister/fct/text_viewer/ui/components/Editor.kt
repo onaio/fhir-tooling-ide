@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -35,6 +36,7 @@ import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -65,12 +67,22 @@ internal fun Editor(
         19.dp
     }
 
-    Box {
+    var textEditorWidth by remember { mutableStateOf(0.dp) }
+    var lineNumberWidth by remember { mutableStateOf(0.dp) }
+
+    Box(
+        Modifier.fillMaxSize().onGloballyPositioned {
+            textEditorWidth = it.size.width.dp
+        }
+    ) {
         Row {
             Box(
                 modifier = Modifier.widthIn(min = 30.dp).fillMaxHeight()
                     .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
                     .padding(start = 5.dp, top = lineNumbersTopPadding, end = 5.dp, bottom = 4.dp)
+                    .onGloballyPositioned {
+                        lineNumberWidth = it.size.width.dp + 10.dp
+                    }
             ) {
                 Text(
                     modifier = Modifier
@@ -86,70 +98,58 @@ internal fun Editor(
 
             Box {
 
-                Row(
-                    Modifier.horizontalScroll(horizontalScrollState).widthIn(max = 2000.dp)
+                TextField(
+                    modifier = Modifier
+                        .width(textEditorWidth - lineNumberWidth)
                         .fillMaxHeight()
-                ) {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(verticalScrollState)
-                            //.horizontalScroll(horizontalScrollState)
-                            .onPreviewKeyEvent { keyEvent ->
-                                when {
-                                    keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.K && keyEvent.type == KeyEventType.KeyUp -> {
-                                        textState.compactText {
-                                            showErrorSnackbar(it)
-                                        }
-                                        true
+                        .verticalScroll(verticalScrollState)
+                        .onPreviewKeyEvent { keyEvent ->
+                            when {
+                                keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.K && keyEvent.type == KeyEventType.KeyUp -> {
+                                    textState.compactText {
+                                        showErrorSnackbar(it)
                                     }
-
-                                    keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.L && keyEvent.type == KeyEventType.KeyUp -> {
-                                        textState.formatText(tabIndentState.value) {
-                                            showErrorSnackbar(it)
-                                        }
-                                        true
-                                    }
-
-                                    else -> false
+                                    true
                                 }
-                            },
-                        value = textState.value,
-                        onValueChange = {
-                            lineNumbers = getLineNumbers(it)
-                            textState.value = it
-                        },
 
-                        textStyle = TextStyle(
-                            fontFamily = FontFamily.Monospace,
-                            textAlign = TextAlign.Start,
+                                keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.L && keyEvent.type == KeyEventType.KeyUp -> {
+                                    textState.formatText(tabIndentState.value) {
+                                        showErrorSnackbar(it)
+                                    }
+                                    true
+                                }
+
+                                else -> false
+                            }
+                        },
+                    value = textState.value,
+                    onValueChange = {
+                        lineNumbers = getLineNumbers(it)
+                        textState.value = it
+                    },
+
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily.Monospace,
+                        textAlign = TextAlign.Start,
+                    ),
+                    singleLine = false,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+                            alpha = 0.3f
                         ),
-                        singleLine = false,
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
-                                alpha = 0.3f
-                            ),
-                            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
-                                alpha = 0.3f
-                            ),
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            cursorColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(
+                            alpha = 0.3f
                         ),
-                    )
-                }
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        cursorColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                )
 
                 VerticalScrollbar(
                     modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
                     adapter = rememberScrollbarAdapter(
                         scrollState = verticalScrollState
-                    )
-                )
-
-                HorizontalScrollbar(
-                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-                    adapter = rememberScrollbarAdapter(
-                        scrollState = horizontalScrollState
                     )
                 )
             }

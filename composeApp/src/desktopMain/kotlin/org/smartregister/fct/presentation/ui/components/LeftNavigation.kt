@@ -41,6 +41,8 @@ import org.smartregister.fct.aurora.AllIcons
 import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Database
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
+import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
+import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.engine.data.manager.AppSettingManager
@@ -79,17 +81,23 @@ private fun NavigationBar(rootComponent: RootComponent) {
             var selectedNav by remember { mutableStateOf(0) }
             Spacer(Modifier.height(12.dp))
             navigationMenu().forEachIndexed { index, navButton ->
-                IconButton(
-                    enabled = selectedNav != index, onClick = {
-                        navButton.onClick(rootComponent)
-                        selectedNav = index
-                    }, colors = if (selectedNav == index) IconButtonDefaults.iconButtonColors(
-                        disabledContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        disabledContentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                    ) else IconButtonDefaults.iconButtonColors()
+                Tooltip(
+                    tooltip = navButton.title,
+                    delayMillis = 100,
+                    tooltipPosition = TooltipPosition.Right(),
                 ) {
-                    Icon(icon = navButton.icon)
+                    IconButton(
+                        enabled = selectedNav != index, onClick = {
+                            navButton.onClick(rootComponent)
+                            selectedNav = index
+                        }, colors = if (selectedNav == index) IconButtonDefaults.iconButtonColors(
+                            disabledContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            disabledContentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        ) else IconButtonDefaults.iconButtonColors()
+                    ) {
+                        Icon(icon = navButton.icon)
 
+                    }
                 }
             }
         }
@@ -102,15 +110,22 @@ private fun ThemeChangerButton() {
     val appSettingManager = koinInject<AppSettingManager>()
     var appSetting = appSettingManager.appSetting
 
-    IconButton(onClick = {
-        appSetting = appSettingManager.appSetting.copy(
-            isDarkTheme = !appSetting.isDarkTheme
-        )
-        appSettingManager.update(appSetting)
-    }) {
-        val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
-        Icon(icon = icon)
+    Tooltip(
+        tooltip = if (appSetting.isDarkTheme) "Dark Mode" else "Light Mode",
+        delayMillis = 100,
+        tooltipPosition = TooltipPosition.Right(),
+    ) {
+        IconButton(onClick = {
+            appSetting = appSettingManager.appSetting.copy(
+                isDarkTheme = !appSetting.isDarkTheme
+            )
+            appSettingManager.update(appSetting)
+        }) {
+            val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
+            Icon(icon = icon)
+        }
     }
+
 }
 
 

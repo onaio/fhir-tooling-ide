@@ -57,7 +57,6 @@ internal fun FhirmanServerTabComponent.ServerTab() {
                 label = initialSelectedConfig?.title ?: "Select Config",
                 onClick = {
                     selectServerConfig(initialSelectedConfig) {
-                        println(it)
                         selectConfig(it)
                     }
                 }

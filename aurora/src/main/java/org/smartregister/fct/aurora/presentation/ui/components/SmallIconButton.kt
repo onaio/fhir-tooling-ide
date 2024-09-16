@@ -35,6 +35,7 @@ fun SmallIconButton(
     alpha: Float = 1f,
     tooltip: String? = null,
     tooltipPosition: TooltipPosition = TooltipPosition.Bottom(),
+    delayMillis: Int = 500,
     rippleRadius: Dp = 14.dp,
     onClick: () -> Unit
 ) {
@@ -68,7 +69,8 @@ fun SmallIconButton(
     } else {
         Tooltip(
             tooltip = tooltip,
-            tooltipPosition = tooltipPosition
+            tooltipPosition = tooltipPosition,
+            delayMillis = delayMillis,
         ) {
             composable()
         }
