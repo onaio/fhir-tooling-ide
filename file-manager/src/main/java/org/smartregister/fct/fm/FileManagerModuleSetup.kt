@@ -5,6 +5,8 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.smartregister.fct.engine.setup.ModuleSetup
+import org.smartregister.fct.engine.util.Platform
+import org.smartregister.fct.engine.util.PlatformType
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.data.datasource.InAppFileSystem
 import org.smartregister.fct.fm.data.datasource.MacFileSystem
@@ -17,13 +19,17 @@ class FileManagerModuleSetup : ModuleSetup {
 
     private val fileManagerModule = module {
         single<FileSystem>(createdAtStart = true) {
-            val os = System.getProperty("os.name").lowercase()
-            if (os.startsWith("mac os x")) {
-                MacFileSystem()
-            } else if (os.startsWith("windows")) {
-                WindowsFileSystem()
-            } else {
-                UnixFileSystem()
+            val platform = Platform.getPlatform()
+            when (platform) {
+                PlatformType.Mac -> {
+                    MacFileSystem()
+                }
+                PlatformType.Windows -> {
+                    WindowsFileSystem()
+                }
+                else -> {
+                    UnixFileSystem()
+                }
             }
         }
         single<FileSystem>(named("inApp"), true) { InAppFileSystem() }

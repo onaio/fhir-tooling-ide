@@ -6,9 +6,68 @@ import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.CommandConstants
 import org.smartregister.fct.adb.utils.resultAsCommandException
 import org.smartregister.fct.adb.utils.takeIfNotError
+import org.smartregister.fct.engine.util.Platform
+import org.smartregister.fct.engine.util.PlatformType
 import java.util.Queue
 
 class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
+
+    private val commandArgs: List<String>
+
+    init {
+        val platform = Platform.getPlatform()
+        when (platform) {
+            PlatformType.Windows -> {
+                commandArgs = listOf(
+                    "getprop",
+                    "|",
+                    "findstr",
+                    StringBuilder().apply {
+                        append("\"")
+                        append(CommandConstants.DEVICE_ID)
+                        append(" ")
+                        append(CommandConstants.DEVICE_API_LEVEL)
+                        append(" ")
+                        append(CommandConstants.DEVICE_OS_VERSION)
+                        append(" ")
+                        append(CommandConstants.DEVICE_MANUFACTURER)
+                        append(" ")
+                        append(CommandConstants.DEVICE_MODEL)
+                        append(" ")
+                        append(CommandConstants.DEVICE_NAME)
+                        append(" ")
+                        append(CommandConstants.DEVICE_TYPE)
+                        append("\"")
+                    }.toString(),
+                )
+            }
+
+            else -> {
+                commandArgs = listOf(
+                    "getprop",
+                    "|",
+                    "grep",
+                    StringBuilder().apply {
+                        append("\"")
+                        append(CommandConstants.DEVICE_ID)
+                        append("\\|")
+                        append(CommandConstants.DEVICE_API_LEVEL)
+                        append("\\|")
+                        append(CommandConstants.DEVICE_OS_VERSION)
+                        append("\\|")
+                        append(CommandConstants.DEVICE_MANUFACTURER)
+                        append("\\|")
+                        append(CommandConstants.DEVICE_MODEL)
+                        append("\\|")
+                        append(CommandConstants.DEVICE_NAME)
+                        append("\\|")
+                        append(CommandConstants.DEVICE_TYPE)
+                        append("\"")
+                    }.toString(),
+                )
+            }
+        }
+    }
 
     override fun process(response: String, dependentResult: Queue<Result<*>>): Result<DeviceInfo> {
 
@@ -47,27 +106,6 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
     }
 
     override fun build(): List<String> {
-        return listOf(
-            "getprop",
-            "|",
-            "grep",
-            StringBuilder().apply {
-                append("\"")
-                append(CommandConstants.DEVICE_ID)
-                append("\\|")
-                append(CommandConstants.DEVICE_API_LEVEL)
-                append("\\|")
-                append(CommandConstants.DEVICE_OS_VERSION)
-                append("\\|")
-                append(CommandConstants.DEVICE_MANUFACTURER)
-                append("\\|")
-                append(CommandConstants.DEVICE_MODEL)
-                append("\\|")
-                append(CommandConstants.DEVICE_NAME)
-                append("\\|")
-                append(CommandConstants.DEVICE_TYPE)
-                append("\"")
-            }.toString(),
-        )
+        return commandArgs
     }
 }

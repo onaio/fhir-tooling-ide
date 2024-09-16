@@ -31,6 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
@@ -127,7 +128,7 @@ private fun LoadingWindow() {
     val windowState = rememberWindowState(
         position = WindowPosition.Aligned(Alignment.Center),
         width = 600.dp,
-        height = 338.dp
+        height = 350.dp
     )
 
     Window(
@@ -162,7 +163,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             ADBModuleSetup(),
             PMModuleSetup(),
             FileManagerModuleSetup(),
-            //SMModuleSetup(),
+            SMModuleSetup(),
             ApiClientModuleSetup(),
             FhirmanModuleSetup(),
             EngineModuleSetup(),
