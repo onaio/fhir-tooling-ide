@@ -1,6 +1,9 @@
 package org.smartregister.fct.presentation.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.DarkDefaultContextMenuRepresentation
+import androidx.compose.foundation.LightDefaultContextMenuRepresentation
+import androidx.compose.foundation.LocalContextMenuRepresentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -185,31 +188,40 @@ fun MainWindow(
             val appSettingManager: AppSettingManager = koinInject()
             val isDarkTheme by appSettingManager.isDarkTheme.collectAsState()
 
-            AuroraTheme(
-                isDarkModel = isDarkTheme
-            ) {
+            val contextMenuRepresentation = if (isDarkTheme) {
+                DarkDefaultContextMenuRepresentation
+            } else {
+                LightDefaultContextMenuRepresentation
+            }
 
-                Surface(
-                    shape = RoundedCornerShape(4.dp),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
+            CompositionLocalProvider(LocalContextMenuRepresentation provides contextMenuRepresentation) {
+                AuroraTheme(
+                    isDarkModel = isDarkTheme
                 ) {
-                    CustomWindowFrame(
-                        onRequestMinimize = onRequestMinimize,
-                        onRequestClose = onCloseRequest,
-                        onRequestToggleMaximize = onRequestToggleMaximize,
-                        titleContent = titleContent
+
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline
+                        )
                     ) {
-                        Aurora(
-                            componentContext = rootComponent
+                        CustomWindowFrame(
+                            onRequestMinimize = onRequestMinimize,
+                            onRequestClose = onCloseRequest,
+                            onRequestToggleMaximize = onRequestToggleMaximize,
+                            titleContent = titleContent
                         ) {
-                            content()
+                            Aurora(
+                                componentContext = rootComponent
+                            ) {
+                                content()
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 }
