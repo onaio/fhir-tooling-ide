@@ -19,32 +19,5 @@ internal class FhirmanServerComponent(
     val auroraManager: AuroraManager
 ) : KoinComponent, ComponentContext by componentContext {
 
-    private val appSettingManager: AppSettingManager by inject()
 
-    private val _configs = MutableValue(listOf<ServerConfig>())
-    val configs: Value<List<ServerConfig>> = _configs
-
-    private val _selectedConfig = MutableStateFlow<ServerConfig?>(null)
-    val selectedConfig: StateFlow<ServerConfig?> = _selectedConfig
-
-    init {
-        listenConfigs()
-    }
-
-    private fun listenConfigs() {
-        componentScope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                _configs.value = it.serverConfigs
-                if (_selectedConfig.value != null && _selectedConfig.value !in it.serverConfigs) {
-                    _selectedConfig.emit(null)
-                }
-            }
-        }
-    }
-
-    fun selectConfig(config: ServerConfig) {
-        componentScope.launch {
-            _selectedConfig.emit(config)
-        }
-    }
 }

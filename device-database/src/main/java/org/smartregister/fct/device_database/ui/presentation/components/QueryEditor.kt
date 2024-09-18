@@ -130,7 +130,12 @@ internal fun QueryEditor(component: QueryTabComponent) {
                         lineNumbers = getLineNumbers(it.text)
                         component.updateTextField(it)
                     },
-
+                    placeholder = {
+                        Text(
+                            text = "SELECT * FROM ...",
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+                        )
+                    },
                     textStyle = TextStyle(
                         fontFamily = FontFamily.Monospace,
                         textAlign = TextAlign.Start,

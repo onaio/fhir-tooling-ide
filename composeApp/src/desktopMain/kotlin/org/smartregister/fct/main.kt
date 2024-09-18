@@ -135,6 +135,7 @@ private fun LoadingWindow() {
         state = windowState,
         undecorated = true,
         onCloseRequest = {},
+        icon = painterResource(Res.drawable.app_icon)
     ) {
         AuroraTheme {
             Box {

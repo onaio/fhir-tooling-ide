@@ -77,15 +77,24 @@ internal fun MainContent(componentContext: ComponentContext) {
             )
         }
     ) {
-        DeviceDBTabPanel(this)
+        DeviceDBTabPanel(componentContext, this)
     }
 }
 
 @Composable
-internal fun DeviceDBTabPanel(tabComponent: TabComponent) {
+internal fun DeviceDBTabPanel(
+    componentContext: ComponentContext,
+    tabComponent: TabComponent,
+) {
     when (tabComponent) {
-        is QueryTabComponent -> QueryTabPanel(tabComponent)
-        is TableTabComponent -> TableTabPanel(tabComponent)
+        is QueryTabComponent -> QueryTabPanel(
+            componentContext = componentContext,
+            tabComponent = tabComponent
+        )
+        is TableTabComponent -> TableTabPanel(
+            componentContext = componentContext,
+            tableTabComponent = tabComponent
+        )
     }
 }
 

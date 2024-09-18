@@ -5,6 +5,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -29,7 +30,10 @@ class QueryTabComponent(
     private var _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
-    private var _query = MutableStateFlow(TextFieldValue("select * from ResourceEntity"))
+    private var _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
+
+    private var _query = MutableStateFlow(TextFieldValue(""))
     val query: StateFlow<TextFieldValue> = _query
 
     private val _queryResultDataController = MutableStateFlow<QueryResultDataController?>(null)
@@ -46,8 +50,9 @@ class QueryTabComponent(
     fun runQuery() {
         if (_query.value.text.trim().isEmpty() || _loading.value) return
 
-        getRequiredParam { device, pkg ->
-            CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
+
+            getRequiredParam { device, pkg ->
                 _loading.emit(true)
                 val result = device.runAppDBQuery(
                     packageId = pkg.packageId,
@@ -113,12 +118,23 @@ class QueryTabComponent(
         )
     }
 
-    override fun getRequiredParam(
-        showErrors: Boolean,
-        info: (Device, PackageInfo) -> Unit
-    ) {
-        if (componentContext is QueryDependency) {
-            componentContext.getRequiredParam(showErrors, info)
+    override suspend fun getRequiredParam(showErrors: Boolean, info: suspend (Device, PackageInfo) -> Unit) {
+        val activeDevice = DeviceManager.getActiveDevice()
+        val selectedPackage = DeviceManager.getActivePackage().value
+
+        if (activeDevice == null) {
+            if (showErrors) showError("No Device Selected")
+            return
+        } else if (selectedPackage == null) {
+            if (showErrors) showError("No package selected")
+            return
         }
+        info(activeDevice, selectedPackage)
+    }
+
+    private suspend fun showError(message: String?) {
+        _error.emit(message)
+        delay(200)
+        _error.emit(null)
     }
 }

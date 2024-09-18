@@ -22,7 +22,7 @@ fun TitleBar(
     subWindowManager: SubWindowManager
 ) {
 
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface).fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,

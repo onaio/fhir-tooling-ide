@@ -17,6 +17,8 @@ import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.presentation.ui.components.AuroraTabs
 import org.smartregister.fct.common.presentation.ui.container.Aurora
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.fhirman.data.manager.FhirmanServerTabsManager
 import org.smartregister.fct.fhirman.presentation.components.FhirmanServerComponent
 
@@ -28,7 +30,8 @@ fun ComponentContext.FhirmanServerPanel(auroraManager: AuroraManager) {
     val tabsManager: FhirmanServerTabsManager = koinInject()
 
     with(fhirmanServerComponent) {
-        val configs by configs.subscribeAsState()
+        val appSettingManager = koinInject<AppSettingManager>()
+        val configs = appSettingManager.appSetting.serverConfigs
 
         if (configs.isNotEmpty()) {
             with(tabsManager) {
@@ -37,23 +40,27 @@ fun ComponentContext.FhirmanServerPanel(auroraManager: AuroraManager) {
                     tabsManager.addNewTab(fhirmanServerComponent, "Untitled")
                 }
 
-                AuroraTabs(
-                    tabsController = controller,
-                    noContent = { CreateNewTab() }
-                ) {
-                    Aurora(
-                        componentContext = this,
-                        fab = {
-                            NewServerTabWrapper {
-                                FloatingActionIconButton(
-                                    icon = Icons.Outlined.Add,
-                                    onClick = it::show,
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    contentColor = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
+                Aurora(
+                    componentContext = fhirmanServerComponent,
+                    fab = {
+                        NewServerTabWrapper {
+                            FloatingActionIconButton(
+                                icon = Icons.Outlined.Add,
+                                onClick = it::show,
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
+                    }
+                ) {
+                    AuroraTabs(
+                        tabsController = controller,
+                        noContent = { CreateNewTab() }
                     ) {
+                        updateScope(
+                            scope = this@FhirmanServerPanel.componentScope,
+                            auroraManager = this@Aurora
+                        )
                         ServerTab()
                     }
                 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,13 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +36,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -61,18 +57,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.datatable.data.controller.DataTableController
 import org.smartregister.fct.datatable.domain.feature.DTColumn
 import org.smartregister.fct.datatable.domain.feature.DTEditable
-import org.smartregister.fct.datatable.domain.feature.DTFilterColumn
 import org.smartregister.fct.datatable.domain.feature.DTPagination
 import org.smartregister.fct.datatable.domain.model.DataCell
-import org.smartregister.fct.datatable.domain.model.DataFilterColumn
-import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
 import org.smartregister.fct.datatable.domain.model.DataRow
 import org.smartregister.fct.datatable.presentation.ui.view.serialNoCellWidth
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
@@ -87,6 +79,7 @@ internal fun PopulateData(
     dataRowBGOdd: Color,
     dataRowBGEven: Color,
     dtWidth: Dp,
+    customContextMenuItems: ((Int, DTColumn, Int, DataRow, DataCell) -> List<ContextMenuItem>)? = null
 ) {
 
     val scope = rememberCoroutineScope()
@@ -192,6 +185,23 @@ internal fun PopulateData(
                                     tooltip = text,
                                     tooltipPosition = TooltipPosition.Top(space = 10),
                                 ) {
+
+                                    /*val dbSelectOption = customContextMenuItem?.let {
+                                        listOf(
+                                            ContextMenuItem("Select") {
+                                                it.invoke(dataCell.data ?: "")
+                                            }
+                                        )
+                                    } ?: listOf()*/
+
+                                    val extraContextMenuItems = customContextMenuItems?.invoke(
+                                        dataCell.index,
+                                        columns[dataCell.index],
+                                        rowIndex,
+                                        dataRow,
+                                        dataCell
+                                    ) ?: listOf()
+
                                     ContextMenuArea(
                                         items = {
                                             listOf(
@@ -203,7 +213,7 @@ internal fun PopulateData(
                                                 ContextMenuItem("View") {
                                                     textViewerDialog.show(dataCell.data ?: "")
                                                 },
-                                            )
+                                            ) + extraContextMenuItems
                                         },
                                     ) {
                                         Text(

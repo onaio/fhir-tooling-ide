@@ -106,9 +106,11 @@ import org.smartregister.fct.datatable.domain.feature.DTFilterableType
 import org.smartregister.fct.datatable.domain.feature.DTPagination
 import org.smartregister.fct.datatable.domain.feature.DTRefreshable
 import org.smartregister.fct.datatable.domain.feature.DTSortable
+import org.smartregister.fct.datatable.domain.model.DataCell
 import org.smartregister.fct.datatable.domain.model.DataColumn
 import org.smartregister.fct.datatable.domain.model.DataFilterColumn
 import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
+import org.smartregister.fct.datatable.domain.model.DataRow
 import org.smartregister.fct.datatable.presentation.ui.components.ColumnFilter
 import org.smartregister.fct.datatable.presentation.ui.components.ColumnHeader
 import org.smartregister.fct.datatable.presentation.ui.components.DTHorizontalDivider
@@ -126,7 +128,8 @@ internal val serialNoCellWidth = 60.dp
 fun DataTable(
     componentContext: ComponentContext,
     controller: DataTableController,
-    columnLeadingIcon: (@Composable BoxScope.(DTColumn) -> Unit)? = null
+    columnLeadingIcon: (@Composable BoxScope.(DTColumn) -> Unit)? = null,
+    customContextMenuItems: ((Int, DTColumn, Int, DataRow, DataCell) -> List<ContextMenuItem>)? = null
 ) {
 
     val error by controller.error.collectAsState()
@@ -201,7 +204,8 @@ fun DataTable(
                             columnWidthMapState = columnWidthMapState,
                             dataRowBGOdd = dataRowBGOdd,
                             dataRowBGEven = dataRowBGEven,
-                            dtWidth = dtWidth
+                            dtWidth = dtWidth,
+                            customContextMenuItems = customContextMenuItems
                         )
                     }
                 }

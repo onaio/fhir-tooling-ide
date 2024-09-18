@@ -23,7 +23,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = {
-            Config.DeviceDatabase
+            Config.ConfigManagement
         },
         key = "MainRoot"
     ) { config, childComponentContext ->

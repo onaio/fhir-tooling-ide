@@ -34,16 +34,20 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
 
     init {
         if (_listOfTables.value.isEmpty()) {
-            getRequiredParam (false) { activeDevice, selectedPackage ->
-                fetchTables(selectedDBInfo, activeDevice, selectedPackage.packageId)
+            componentScope.launch {
+                getRequiredParam (false) { activeDevice, selectedPackage ->
+                    fetchTables(selectedDBInfo, activeDevice, selectedPackage.packageId)
+                }
             }
         }
     }
 
     fun reFetchTables() {
         if (_loadingTables.value) return
-        getRequiredParam { activeDevice, selectedPackage ->
-            fetchTables(selectedDBInfo, activeDevice, selectedPackage.packageId)
+        componentScope.launch {
+            getRequiredParam { activeDevice, selectedPackage ->
+                fetchTables(selectedDBInfo, activeDevice, selectedPackage.packageId)
+            }
         }
     }
 
@@ -83,20 +87,18 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
         }
     }
 
-    override fun getRequiredParam(showErrors: Boolean, info: (Device, PackageInfo) -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val activeDevice = DeviceManager.getActiveDevice()
-            val selectedPackage = DeviceManager.getActivePackage().value
+    override suspend fun getRequiredParam(showErrors: Boolean, info: suspend (Device, PackageInfo) -> Unit) {
+        val activeDevice = DeviceManager.getActiveDevice()
+        val selectedPackage = DeviceManager.getActivePackage().value
 
-            if (activeDevice == null) {
-                if (showErrors) showError("No Device Selected")
-                return@launch
-            } else if (selectedPackage == null) {
-                if (showErrors) showError("No package selected")
-                return@launch
-            }
-            info(activeDevice, selectedPackage)
+        if (activeDevice == null) {
+            if (showErrors) showError("No Device Selected")
+            return
+        } else if (selectedPackage == null) {
+            if (showErrors) showError("No package selected")
+            return
         }
+        info(activeDevice, selectedPackage)
     }
 
     private suspend fun showError(message: String) {

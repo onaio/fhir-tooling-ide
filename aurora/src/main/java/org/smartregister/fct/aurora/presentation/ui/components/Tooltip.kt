@@ -140,7 +140,7 @@ fun Tooltip(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary
                             ),
-                            color = MaterialTheme.colorScheme.surface,
+                            color = MaterialTheme.colorScheme.background,
                             shape = RoundedCornerShape(4.dp)
                         ) {
                             Text(

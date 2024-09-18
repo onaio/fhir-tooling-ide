@@ -94,7 +94,14 @@ fun ConfigManagerScreen() {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize()) {
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            text = "..::Coming Soon::.."
+        )
+    }
+
+    /*Column(modifier = Modifier.fillMaxSize()) {
 
         TabRow(
             modifier = Modifier.fillMaxWidth(),
@@ -242,5 +249,5 @@ fun ConfigManagerScreen() {
                 }
             }
         )
-    }
+    }*/
 }

@@ -35,8 +35,8 @@ internal class TableTabComponent(
 
     fun runQuery() {
 
-        getRequiredParam { device, pkg ->
-            CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launch {
+            getRequiredParam { device, pkg ->
                 _loading.emit(true)
                 val result = device.runAppDBQuery(
                     packageId = pkg.packageId,
@@ -65,9 +65,9 @@ internal class TableTabComponent(
         }
     }
 
-    override fun getRequiredParam(
+    override suspend fun getRequiredParam(
         showErrors: Boolean,
-        info: (Device, PackageInfo) -> Unit
+        info: suspend (Device, PackageInfo) -> Unit
     ) {
         if (componentContext is QueryDependency) {
             componentContext.getRequiredParam(showErrors, info)

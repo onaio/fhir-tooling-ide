@@ -42,7 +42,7 @@ fun Aurora(
 ) {
 
     // create aurora manager instance
-    val aurora = remember { AuroraManagerImpl(componentContext) }
+    val aurora = remember(componentContext) { AuroraManagerImpl(componentContext) }
 
     // full screen loader dialog controller
     val loaderController = rememberLoaderDialogController()

@@ -110,7 +110,10 @@ private fun FrameContent(
 
     Box {
         ConstraintLayout(
-            Modifier.fillMaxWidth().height(50.dp),
+            Modifier.
+                fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceContainer.copy(0.2f))
+                .height(50.dp),
         ) {
 
             val (leftRef, rightRef) = createRefs()

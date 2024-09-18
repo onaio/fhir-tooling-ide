@@ -15,8 +15,7 @@ import org.smartregister.fct.fhirman.presentation.components.FhirmanServerTabCom
 
 internal class FhirmanServerTabsManager() {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-    val items = mutableListOf<FhirmanServerTabComponent>()
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     val options = listOf (
         HttpMethodType.Get,
@@ -26,7 +25,7 @@ internal class FhirmanServerTabsManager() {
     )
 
     val controller = TabsControllerImpl(
-        items = items,
+        items = listOf<FhirmanServerTabComponent>(),
         title = { _, tab -> tab.content.title },
         tabType = TabType.Scrollable
     )

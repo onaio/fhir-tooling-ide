@@ -5,5 +5,5 @@ import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.device_database.domain.model.DBInfo
 
 interface QueryDependency {
-    fun getRequiredParam(showErrors: Boolean = true, info: (Device, PackageInfo) -> Unit)
+    suspend fun getRequiredParam(showErrors: Boolean = true, info: suspend (Device, PackageInfo) -> Unit)
 }

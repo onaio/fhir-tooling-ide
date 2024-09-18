@@ -1,6 +1,11 @@
 package org.smartregister.fct.fhirman.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -9,20 +14,53 @@ import org.smartregister.fct.apiclient.domain.model.Response
 import org.smartregister.fct.apiclient.domain.usecase.ApiRequest
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.domain.model.Message
+import org.smartregister.fct.engine.data.manager.AppSettingManager
 import org.smartregister.fct.engine.domain.model.HttpMethodType
+import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.fhirman.domain.model.ServerTabContent
 
 internal class FhirmanServerTabComponent(
     private val parentComponent: FhirmanServerComponent,
     val content: ServerTabContent,
-    private val auroraManager: AuroraManager = parentComponent.auroraManager
 ) : KoinComponent, ComponentContext by parentComponent {
 
+    private val appSettingManager: AppSettingManager by inject()
     private val apiRequest: ApiRequest by inject()
 
+    private val _selectedConfig = MutableStateFlow<ServerConfig?>(null)
+    val selectedConfig: StateFlow<ServerConfig?> = _selectedConfig
+
+    private var scope = componentScope
+    private var auroraManager: AuroraManager = parentComponent.auroraManager
+
+    init {
+        listenConfigs()
+    }
+
+    fun updateScope(scope: CoroutineScope, auroraManager: AuroraManager) {
+        this.scope = scope
+        this.auroraManager = auroraManager
+    }
+
+    private fun listenConfigs() {
+        scope.launch {
+            appSettingManager.getAppSettingFlow().collectLatest {
+                if (_selectedConfig.value != null && _selectedConfig.value !in it.serverConfigs) {
+                    _selectedConfig.emit(null)
+                }
+            }
+        }
+    }
+
+    fun selectConfig(config: ServerConfig) {
+        scope.launch {
+            _selectedConfig.emit(config)
+        }
+    }
+
     fun send() {
-        componentScope.launch {
+        scope.launch {
             buildRequest()?.let {
                 auroraManager.showLoader()
                 when (val response = apiRequest(it)) {
@@ -50,9 +88,7 @@ internal class FhirmanServerTabComponent(
     }
 
     private fun buildRequest(): Request? {
-        val selectedConfig = parentComponent.selectedConfig.value
-
-        if (selectedConfig == null) {
+        if (_selectedConfig.value == null) {
             auroraManager.showSnackbar(Message.Error("Server config is not selected."))
             return null
         }
@@ -68,7 +104,7 @@ internal class FhirmanServerTabComponent(
         }
 
         return Request(
-            config = selectedConfig,
+            config = _selectedConfig.value!!,
             methodType = content.methodType,
             resourceType = content.resourceType,
             resourceId = content.resourceId,

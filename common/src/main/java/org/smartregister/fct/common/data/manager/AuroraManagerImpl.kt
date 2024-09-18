@@ -1,6 +1,8 @@
 package org.smartregister.fct.common.data.manager
 
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +16,8 @@ internal typealias ServerConfigOption = Pair<ServerConfig?, (ServerConfig) -> Un
 internal class AuroraManagerImpl(
     componentContext: ComponentContext
 ) : AuroraManager, ComponentContext by componentContext {
+
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     private val _showSnackbar = MutableStateFlow<Message?>(null)
     val showSnackbar: StateFlow<Message?> = _showSnackbar
@@ -37,7 +41,7 @@ internal class AuroraManagerImpl(
     }
 
     override fun showSnackbar(message: Message, onDismiss: (() -> Unit)?) {
-        componentScope.launch {
+        scope.launch {
             if (message.text.trim().isNotEmpty()) {
                 _showSnackbar.emit(null)
                 _showSnackbar.emit(message)
@@ -49,13 +53,13 @@ internal class AuroraManagerImpl(
     }
 
     override fun showLoader() {
-        componentScope.launch {
+        scope.launch {
             _showLoader.emit(true)
         }
     }
 
     override fun hideLoader() {
-        componentScope.launch {
+        scope.launch {
             _showLoader.emit(false)
         }
     }
@@ -64,7 +68,7 @@ internal class AuroraManagerImpl(
         initialConfig: ServerConfig?,
         onSelected: (ServerConfig) -> Unit
     ) {
-        componentScope.launch {
+        scope.launch {
             _showServerConfigDialog.emit(
                 Pair(initialConfig, onSelected)
             )
@@ -72,7 +76,7 @@ internal class AuroraManagerImpl(
     }
 
     fun resetServerConfig() {
-        componentScope.launch {
+        scope.launch {
             _showServerConfigDialog.emit(null)
         }
     }
