@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SmallIconButton(
-    modifier: Modifier = Modifier.size(18.dp),
+    modifier: Modifier = Modifier.size(20.dp),
     icon: ImageVector,
     enable: Boolean = true,
     tint: Color? = null,
@@ -36,7 +36,7 @@ fun SmallIconButton(
     tooltip: String? = null,
     tooltipPosition: TooltipPosition = TooltipPosition.Bottom(),
     delayMillis: Int = 500,
-    rippleRadius: Dp = 14.dp,
+    rippleRadius: Dp = 16.dp,
     onClick: () -> Unit
 ) {
 

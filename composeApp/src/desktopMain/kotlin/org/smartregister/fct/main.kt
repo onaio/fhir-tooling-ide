@@ -164,7 +164,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             ADBModuleSetup(),
             PMModuleSetup(),
             FileManagerModuleSetup(),
-            SMModuleSetup(),
+            //SMModuleSetup(),
             ApiClientModuleSetup(),
             FhirmanModuleSetup(),
             EngineModuleSetup(),

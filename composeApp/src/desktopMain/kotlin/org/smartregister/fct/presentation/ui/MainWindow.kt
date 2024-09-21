@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
@@ -203,7 +204,7 @@ fun MainWindow(
                 ) {
 
                     Surface(
-                        shape = RoundedCornerShape(4.dp),
+                        shape = if (state.placement == WindowPlacement.Maximized) RectangleShape else RoundedCornerShape(4.dp),
                         border = BorderStroke(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.outline

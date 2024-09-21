@@ -21,6 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
+import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.ConnectedTv
+import org.smartregister.fct.aurora.auroraiconpack.ListAlt
+import org.smartregister.fct.aurora.auroraiconpack.PhoneAndroid
+import org.smartregister.fct.aurora.auroraiconpack.SearchInsights
 import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.enums.RightWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
@@ -50,34 +55,34 @@ fun RightNavigation(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(14.dp))
                 SmallIconButton(
                     tooltip = "Device Manager",
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
-                    icon = Icons.Outlined.PhoneAndroid,
+                    icon = AuroraIconPack.PhoneAndroid,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
                 )
-                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(22.dp))
                 SmallIconButton(
                     tooltip = "Package Manager",
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
-                    icon = Icons.AutoMirrored.Outlined.ListAlt,
+                    icon = AuroraIconPack.ListAlt,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
                 )
-                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(22.dp))
                 SmallIconButton(
                     tooltip = "Insights",
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
-                    icon = Icons.Outlined.Insights,
+                    icon = AuroraIconPack.SearchInsights,
                     onClick = {  }
                 )
             }
             Column {
                 SmallIconButton(
-                    icon = Icons.Outlined.ConnectedTv,
+                    icon = AuroraIconPack.ConnectedTv,
                     tooltip = "Logcat",
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,

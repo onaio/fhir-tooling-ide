@@ -98,7 +98,7 @@ private fun ResourceProviderPopupMenu(
     ) {
         DropdownMenuItem(
             text = {
-                Text("File Data Provider")
+                Text("From File")
             },
             onClick = {
                 onSelected(ProviderType.File)
@@ -106,7 +106,7 @@ private fun ResourceProviderPopupMenu(
         )
         DropdownMenuItem(
             text = {
-                Text("Database Data Provider")
+                Text("From Database")
             },
             onClick = {
                 onSelected(ProviderType.Database)

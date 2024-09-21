@@ -4,6 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
+import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.EditNote
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
@@ -23,7 +25,6 @@ internal fun TextViewerButton(
         onClick = {
             textViewerDialog.show()
         },
-        icon = Icons.Outlined.Edit,
-        alpha = 0.7f
+        icon = AuroraIconPack.EditNote,
     )
 }

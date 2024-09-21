@@ -14,9 +14,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cyclone
 import androidx.compose.material.icons.outlined.DataObject
 import androidx.compose.material.icons.outlined.Dataset
+import androidx.compose.material.icons.outlined.DesignServices
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.MoveDown
+import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.material.icons.outlined.Token
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.rounded.DarkMode
@@ -39,7 +41,14 @@ import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.AllIcons
 import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.Cyclone
 import org.smartregister.fct.aurora.auroraiconpack.Database
+import org.smartregister.fct.aurora.auroraiconpack.DesignServices
+import org.smartregister.fct.aurora.auroraiconpack.Folder
+import org.smartregister.fct.aurora.auroraiconpack.LocalFireDepartment
+import org.smartregister.fct.aurora.auroraiconpack.MoveDown
+import org.smartregister.fct.aurora.auroraiconpack.Token
+import org.smartregister.fct.aurora.auroraiconpack.Widgets
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
@@ -133,20 +142,20 @@ private fun navigationMenu(): List<NavigationButton> {
 
     return listOf(
         NavigationButton(title = "Manage Configuration",
-            icon = Icons.Outlined.Widgets,
+            icon = AuroraIconPack.Widgets,
             onClick = {
                 it.changeSlot(Config.ConfigManagement)
             }),
         NavigationButton(title = "Structure Map Transformation",
-            icon = Icons.Outlined.MoveDown,
+            icon = AuroraIconPack.MoveDown,
             onClick = {
                 it.changeSlot(Config.StructureMap)
             }),
         NavigationButton(title = "Careplan Generation",
-            icon = Icons.Outlined.Cyclone,
+            icon = AuroraIconPack.Cyclone,
             onClick = {}),
-        NavigationButton(title = "CQL Transformation", icon = Icons.Outlined.Token, onClick = {}),
-        NavigationButton(title = "File Manager", icon = Icons.Outlined.Folder, onClick = {
+        NavigationButton(title = "CQL Transformation", icon = AuroraIconPack.Token, onClick = {}),
+        NavigationButton(title = "File Manager", icon = AuroraIconPack.Folder, onClick = {
             it.changeSlot(Config.FileManager)
         }),
         NavigationButton(title = "Database",
@@ -155,12 +164,12 @@ private fun navigationMenu(): List<NavigationButton> {
                 it.changeSlot(Config.DeviceDatabase)
             }),
         NavigationButton(title = "Fhirman",
-            icon = Icons.Outlined.LocalFireDepartment,
+            icon = AuroraIconPack.LocalFireDepartment,
             onClick = {
                 it.changeSlot(Config.Fhirman)
             }),
-        NavigationButton(title = "FHIR Path Expression",
-            icon = Icons.Outlined.DataObject,
+        NavigationButton(title = "Evaluate Rules",
+            icon = AuroraIconPack.DesignServices,
             onClick = {}),
     )
 }

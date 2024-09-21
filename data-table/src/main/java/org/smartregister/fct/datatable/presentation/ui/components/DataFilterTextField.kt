@@ -66,7 +66,8 @@ internal fun DataFilterTextField(
             }
         },
         textStyle = TextStyle(
-            fontSize = MaterialTheme.typography.bodySmall.fontSize
+            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+            color = MaterialTheme.colorScheme.onSurface
         ),
         singleLine = true,
         decorationBox = @Composable { innerTextField ->

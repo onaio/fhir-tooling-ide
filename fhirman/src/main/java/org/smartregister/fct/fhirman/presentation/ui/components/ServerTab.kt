@@ -16,6 +16,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -23,6 +28,8 @@ import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropD
 import org.smartregister.fct.aurora.presentation.ui.components.HorizontalButtonStrip
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
+import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
+import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.presentation.ui.components.HorizontalSplitPane
@@ -104,13 +111,23 @@ internal fun FhirmanServerTabComponent.ServerTab() {
             var resIdText by remember(this@ServerTab) { mutableStateOf(content.resourceId) }
 
             OutlinedTextField(
-                modifier = Modifier.constrainAs(resId) {
-                    start.linkTo(resType.end, margin = 12.dp)
-                    top.linkTo(parent.top)
-                    end.linkTo(btnSend.start, margin = 12.dp)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier
+                    .constrainAs(resId) {
+                        start.linkTo(resType.end, margin = 12.dp)
+                        top.linkTo(parent.top)
+                        end.linkTo(btnSend.start, margin = 12.dp)
+                        bottom.linkTo(parent.bottom)
+                        width = Dimension.fillToConstraints
+                    }
+                    .onPreviewKeyEvent { keyEvent ->
+                        when {
+                            keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp -> {
+                                send()
+                                true
+                            }
+                            else -> false
+                        }
+                    },
                 value = resIdText,
                 onValueChange = {
                     content.resourceId = it
@@ -119,76 +136,21 @@ internal fun FhirmanServerTabComponent.ServerTab() {
                 label = "Id"
             )
 
-            OutlinedButton(
+            Tooltip(
                 modifier = Modifier.constrainAs(btnSend) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                 },
-                label = "SEND",
-                onClick = ::send
-            )
-        }
-
-
-        /*HorizontalDivider()
-
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-
-            val (resType, resId, btnSend) = createRefs()
-
-            Box(modifier = Modifier
-                .width(180.dp).constrainAs(resType) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }) {
-
-                AutoCompleteDropDown(
-                    modifier = Modifier.fillMaxWidth(),
-                    items = listOfAllFhirResources,
-                    label = { it },
-                    heading = "Resource",
-                    key = this@ServerTab,
-                    defaultValue = content.resourceType,
-                    onTextChanged = { text, isMatch ->
-                        content.resourceType = text
-                    }
+                tooltip = "Ctrl+Enter",
+                tooltipPosition = TooltipPosition.Bottom(),
+            ) {
+                OutlinedButton(
+                    label = "SEND",
+                    onClick = ::send
                 )
             }
-
-            var resIdText by remember(this@ServerTab) { mutableStateOf(content.resourceId) }
-
-            OutlinedTextField(
-                modifier = Modifier.constrainAs(resId) {
-                    start.linkTo(resType.end, margin = 8.dp)
-                    top.linkTo(parent.top)
-                    end.linkTo(btnSend.start, margin = 8.dp)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                },
-                value = resIdText,
-                onValueChange = {
-                    content.resourceId = it
-                    resIdText = it
-                },
-                label = "Id"
-            )
-
-            OutlinedButton(
-                modifier = Modifier.constrainAs(btnSend) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                },
-                label = "SEND",
-                onClick = ::send
-            )
-        }*/
+        }
 
         HorizontalDivider()
         HorizontalSplitPane(

@@ -77,8 +77,8 @@ internal fun QueryEditor(component: QueryTabComponent) {
         19.dp
     }
 
-    var textEditorWidth by remember { mutableStateOf(0.dp) }
-    var lineNumberWidth by remember { mutableStateOf(0.dp) }
+    var textEditorWidth by remember { mutableStateOf(800.dp) }
+    var lineNumberWidth by remember { mutableStateOf(10.dp) }
 
     Box(
         Modifier.fillMaxSize().onGloballyPositioned {

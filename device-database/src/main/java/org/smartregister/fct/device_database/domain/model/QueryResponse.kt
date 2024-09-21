@@ -26,11 +26,11 @@ internal data class QueryResponse(
                     val count = jsonObject.getInt("count")
                     val columns = jsonObject
                         .getJSONArray("columnNames")
-                        .filterIsInstance<JSONObject>()
-                        .mapIndexed { index, jsonObj ->
+                        .filterIsInstance<String>()
+                        .mapIndexed { index, columnName ->
                             DataColumn(
                                 index = index,
-                                name = jsonObj.getString("name"),
+                                name = columnName,
                                 sortable = false,
                                 editable = false,
                                 isPrimary = false
@@ -88,9 +88,8 @@ internal data class QueryResponse(
                 val count = jsonObject.getInt("count")
                 val columns = jsonObject
                     .getJSONArray("columnNames")
-                    .filterIsInstance<JSONObject>()
-                    .mapIndexed { index, jsonObj ->
-                        val columnName = jsonObj.getString("name")
+                    .filterIsInstance<String>()
+                    .mapIndexed { index, columnName ->
                         val isPrimary = columnsInfo.firstOrNull { it.name == columnName }?.hasPrimaryKey ?: false
                         DataFilterTypeColumn(
                             index = index,

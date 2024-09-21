@@ -4,6 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
+import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.Settings
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.settings.presentation.ui.dialogs.rememberSettingsDialog
@@ -23,7 +25,6 @@ internal fun SettingButton(
         onClick = {
             settingsDialog.show()
         },
-        icon = Icons.Outlined.Settings,
-        alpha = 0.7f
+        icon = AuroraIconPack.Settings,
     )
 }

@@ -186,14 +186,6 @@ internal fun PopulateData(
                                     tooltipPosition = TooltipPosition.Top(space = 10),
                                 ) {
 
-                                    /*val dbSelectOption = customContextMenuItem?.let {
-                                        listOf(
-                                            ContextMenuItem("Select") {
-                                                it.invoke(dataCell.data ?: "")
-                                            }
-                                        )
-                                    } ?: listOf()*/
-
                                     val extraContextMenuItems = customContextMenuItems?.invoke(
                                         dataCell.index,
                                         columns[dataCell.index],
@@ -220,7 +212,8 @@ internal fun PopulateData(
                                             modifier = Modifier
                                                 .fillMaxSize()
                                                 .doubleClick(scope) {
-                                                    editMode.value = dataCell.editable && controller is DTEditable
+                                                    editMode.value =
+                                                        dataCell.editable && controller is DTEditable
                                                 }
                                                 .padding(horizontal = 8.dp),
                                             text = text,
@@ -257,9 +250,11 @@ private fun DataCellTextField(
     val scope = rememberCoroutineScope()
     val focusRequester = remember(dataCell) { FocusRequester() }
     var editText by remember(dataCell) {
-        mutableStateOf(TextFieldValue(
-            text = dataCell.data ?: "",
-        ))
+        mutableStateOf(
+            TextFieldValue(
+                text = dataCell.data ?: "",
+            )
+        )
     }
 
     LaunchedEffect(dataCell) {
@@ -292,6 +287,7 @@ private fun DataCellTextField(
                             editMode.value = false
                             true
                         }
+
                         keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp -> {
                             editMode.value = false
                             if (editText.text != dataCell.data) {
@@ -305,6 +301,7 @@ private fun DataCellTextField(
                             }
                             true
                         }
+
                         else -> false
                     }
                 },
