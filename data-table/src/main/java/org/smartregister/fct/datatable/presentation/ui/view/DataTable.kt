@@ -145,8 +145,10 @@ fun DataTable(
         componentContext = componentContext
     ) {
 
-        showErrorSnackbar(error)
-        showSnackbar(info)
+        with(it) {
+            showErrorSnackbar(error)
+            showSnackbar(info)
+        }
 
         val columnWidthMapState = remember {
             mutableStateMapOf<Int, Dp>().apply {

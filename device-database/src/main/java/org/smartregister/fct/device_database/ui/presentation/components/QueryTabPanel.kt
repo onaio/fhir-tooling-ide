@@ -23,7 +23,7 @@ fun QueryTabPanel(
         componentContext = tabComponent,
     ) {
 
-        showErrorSnackbar(tabComponent.error.collectAsState().value)
+        it.showErrorSnackbar(tabComponent.error.collectAsState().value)
 
         Column {
             QueryTabToolbar(tabComponent)

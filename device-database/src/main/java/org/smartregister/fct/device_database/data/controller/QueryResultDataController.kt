@@ -38,8 +38,7 @@ internal open class QueryResultDataController(
             Result.failure(NullPointerException("No package selected"))
         } else {
             val result = activeDevice.runAppDBQuery(
-                packageId = selectedPackage.packageId,
-                requestJson = QueryRequest(
+                arg = QueryRequest(
                     database = database,
                     query = query,
                     offset = offset,

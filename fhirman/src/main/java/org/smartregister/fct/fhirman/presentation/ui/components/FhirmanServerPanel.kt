@@ -52,16 +52,18 @@ fun ComponentContext.FhirmanServerPanel(auroraManager: AuroraManager) {
                             )
                         }
                     }
-                ) {
+                ) { auroraManager ->
                     AuroraTabs(
                         tabsController = controller,
                         noContent = { CreateNewTab() }
                     ) {
                         updateScope(
                             scope = this@FhirmanServerPanel.componentScope,
-                            auroraManager = this@Aurora
+                            auroraManager = auroraManager
                         )
-                        ServerTab()
+                        with(auroraManager) {
+                            ServerTab()
+                        }
                     }
                 }
             }

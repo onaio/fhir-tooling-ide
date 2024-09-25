@@ -11,7 +11,7 @@ fun FhirmanScreen(component: FhirmanScreenComponent) {
         Aurora(
             componentContext = component
         ) {
-            FhirmanServerPanel(this)
+            FhirmanServerPanel(it)
         }
     }
 

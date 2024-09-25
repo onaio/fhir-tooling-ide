@@ -52,6 +52,7 @@ import org.smartregister.fct.presentation.ui.App
 import org.smartregister.fct.presentation.ui.MainWindow
 import org.smartregister.fct.presentation.ui.components.BottomBar
 import org.smartregister.fct.presentation.ui.components.TitleBar
+import org.smartregister.fct.rules.RuleModuleSetup
 import org.smartregister.fct.sm.SMModuleSetup
 import org.smartregister.fct.util.runOnUiThread
 import java.awt.Toolkit
@@ -158,6 +159,9 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
 
     scope.launch {
 
+        // load engine module first
+        EngineModuleSetup().setup()
+
         listOf(
             CommonModuleSetup(),
             ConfigModuleSetup(),
@@ -167,7 +171,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             //SMModuleSetup(),
             ApiClientModuleSetup(),
             FhirmanModuleSetup(),
-            EngineModuleSetup(),
+            RuleModuleSetup(),
         ).map {
             scope.async(Dispatchers.Default) {
                 it.setup()

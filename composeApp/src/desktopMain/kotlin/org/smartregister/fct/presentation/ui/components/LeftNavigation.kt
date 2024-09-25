@@ -120,7 +120,7 @@ private fun ThemeChangerButton() {
     var appSetting = appSettingManager.appSetting
 
     Tooltip(
-        tooltip = if (appSetting.isDarkTheme) "Dark Mode" else "Light Mode",
+        tooltip = if (appSetting.isDarkTheme) "Light Mode" else "Dark Mode",
         delayMillis = 100,
         tooltipPosition = TooltipPosition.Right(),
     ) {
@@ -168,9 +168,11 @@ private fun navigationMenu(): List<NavigationButton> {
             onClick = {
                 it.changeSlot(Config.Fhirman)
             }),
-        NavigationButton(title = "Evaluate Rules",
+        NavigationButton(title = "Rule Designer",
             icon = AuroraIconPack.DesignServices,
-            onClick = {}),
+            onClick = {
+                it.changeSlot(Config.Rules)
+            }),
     )
 }
 

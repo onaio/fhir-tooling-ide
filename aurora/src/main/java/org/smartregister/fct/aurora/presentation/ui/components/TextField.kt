@@ -13,17 +13,22 @@ fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String? = null,
+    placeholder: String? = null,
     readOnly: Boolean = false,
+    singleLine: Boolean = true
 ) {
     Mat3TextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
         label = {
-            label?.let { Text(text = label) }
+            label?.let { Text(label) }
+        },
+        placeholder = {
+            placeholder?.let { Text(placeholder) }
         },
         readOnly = readOnly,
-        singleLine = true,
+        singleLine = singleLine,
         textStyle = MaterialTheme.typography.bodyMedium,
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,

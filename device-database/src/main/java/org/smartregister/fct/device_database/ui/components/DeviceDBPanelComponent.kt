@@ -1,8 +1,6 @@
 package org.smartregister.fct.device_database.ui.components
 
 import com.arkivanov.decompose.ComponentContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -70,8 +68,7 @@ internal class DeviceDBPanelComponent(componentContext: ComponentContext) : Quer
             _loadingTables.emit(true)
 
             val result = device.runAppDBQuery(
-                packageId = packageId,
-                requestJson = QueryRequest(
+                arg = QueryRequest(
                     database = dbInfo.name,
                     query = "SELECT * FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%'",
                 ).asJSONString()

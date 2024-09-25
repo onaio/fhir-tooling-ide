@@ -34,6 +34,7 @@ kotlin {
             implementation(project(":fhirman"))
             implementation(project(":device-database"))
             implementation(project(":text-viewer"))
+            implementation(project(":rules"))
         }
 
         desktopMain.dependencies {

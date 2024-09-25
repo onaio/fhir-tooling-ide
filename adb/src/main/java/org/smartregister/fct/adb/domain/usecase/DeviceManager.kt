@@ -21,7 +21,7 @@ object DeviceManager : KoinComponent {
 
     private val controller: ADBController by inject()
     private val devices = MutableSharedFlow<List<Device?>>()
-    private val selectedPackage = MutableStateFlow<PackageInfo?>(null)
+    private val selectedPackage = MutableStateFlow<PackageInfo?>(PackageInfo("org.smartregister.opensrp.gizeir"))
     private var activeDevice: Device? = null
 
     init {

@@ -43,8 +43,6 @@ fun App(
 
         val (leftNav, mainContent, rightNav) = createRefs()
 
-        LeftNavigation(rootComponent = rootComponent, leftNav = leftNav)
-
         VerticalSplitPane(
             modifier = Modifier
                 .constrainAs(mainContent) {
@@ -86,6 +84,7 @@ fun App(
             }
         )
 
+        LeftNavigation(rootComponent = rootComponent, leftNav = leftNav)
         RightNavigation(subWindowManager, rightNav)
     }
 

@@ -73,8 +73,10 @@ internal fun SMTransformationResult(componentContext: ComponentContext, bundle: 
         componentContext = componentContext
     ) {
 
-        showSnackbar(info.value)
-        showErrorSnackbar(error.value)
+        with(it) {
+            showSnackbar(info.value)
+            showErrorSnackbar(error.value)
+        }
 
         Box {
             Column(modifier = Modifier.fillMaxSize()) {

@@ -12,6 +12,7 @@ fun rememberTextViewerDialog(
     componentContext: ComponentContext,
     title: String = "Text Viewer / Formatter",
     cancelable: Boolean = true,
+    callback: ((String) -> Unit)? = null,
     onDismiss: (DialogController<String>.() -> Unit)? = null,
 ): DialogController<String> {
 
@@ -22,10 +23,16 @@ fun rememberTextViewerDialog(
         cancelable = cancelable,
         cancelOnTouchOutside = true,
         onDismiss = onDismiss
-    ) { _, text ->
+    ) { c, text ->
+
+        val cb : ((String) -> Unit)? = if (callback != null) { data ->
+            c.hide()
+            callback(data)
+        } else null
 
         TextViewer(
             componentContext = componentContext,
+            callback = cb,
             text = text ?: ""
         )
     }

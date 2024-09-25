@@ -12,6 +12,8 @@ import org.smartregister.fct.fhirman.presentation.ui.screen.FhirmanScreen
 import org.smartregister.fct.fm.presentation.ui.screen.FileManagerScreen
 import org.smartregister.fct.presentation.component.DataSpecificationScreenComponent
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
+import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
+import org.smartregister.fct.rules.presentation.ui.screen.RulesScreen
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.presentation.ui.screen.StructureMapScreen
 
@@ -26,5 +28,6 @@ fun MainRoot(component: RootComponent) {
         is FileManagerScreenComponent -> FileManagerScreen(contextComponent)
         is FhirmanScreenComponent -> FhirmanScreen(contextComponent)
         is DeviceDatabaseScreenComponent -> DeviceDatabaseScreen(contextComponent)
+        is RulesScreenComponent -> RulesScreen(contextComponent)
     }
 }

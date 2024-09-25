@@ -16,6 +16,6 @@ class GetAppSetting(private val appSettingDao: AppSettingsDaoQueries) {
             .select()
             .asFlow()
             .mapToOne(Dispatchers.IO)
-            .map { it.decodeJson() }
+            .map { it.settings.decodeJson() }
     }
 }

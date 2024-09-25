@@ -2,7 +2,6 @@ package org.smartregister.fct.device_database.ui.components
 
 import androidx.compose.ui.text.input.TextFieldValue
 import com.arkivanov.decompose.ComponentContext
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -55,8 +54,7 @@ class QueryTabComponent(
             getRequiredParam { device, pkg ->
                 _loading.emit(true)
                 val result = device.runAppDBQuery(
-                    packageId = pkg.packageId,
-                    requestJson = QueryRequest(
+                    arg = QueryRequest(
                         database = selectedDBInfo.name,
                         query = _query.value.text,
                         limit = limit
@@ -109,8 +107,7 @@ class QueryTabComponent(
             "UPDATE ResourceEntity SET serializedResource='${minifyResource.replace("'","''")}' WHERE resourceId='$resourceId'"
 
         return activeDevice.runAppDBQuery(
-            packageId = selectedPackage.packageId,
-            requestJson = QueryRequest(
+            arg = QueryRequest(
                 database = database,
                 query = query,
                 limit = 1

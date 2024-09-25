@@ -73,8 +73,7 @@ internal class TableResultDataController(
             val query = "UPDATE ${tableInfo.name} SET ${dataCell.column.name}='${dataCell.data?.replace("'","''")}' WHERE ${primaryColumn.name}='${primaryValue.data}'"
 
             val result = activeDevice.runAppDBQuery(
-                packageId = selectedPackage.packageId,
-                requestJson = QueryRequest(
+                arg = QueryRequest(
                     database = database,
                     query = query,
                     limit = 1

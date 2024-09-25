@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.padding
@@ -14,21 +15,27 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageShader
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
+import fct.common.generated.resources.Res
+import org.jetbrains.compose.resources.painterResource
 import org.smartregister.fct.common.data.locals.AuroraLocal
-import org.smartregister.fct.common.data.manager.AuroraManagerImpl
 import org.smartregister.fct.common.data.manager.AuroraManager
+import org.smartregister.fct.common.data.manager.AuroraManagerImpl
 import org.smartregister.fct.common.domain.model.Message
 import org.smartregister.fct.common.presentation.ui.dialog.rememberLoaderDialogController
 import org.smartregister.fct.common.presentation.ui.dialog.rememberServerConfigProviderDialog
@@ -38,7 +45,7 @@ fun Aurora(
     componentContext: ComponentContext,
     modifier: Modifier = Modifier,
     fab: @Composable (() -> Unit)? = null,
-    content: @Composable AuroraManager.() -> Unit
+    content: @Composable BoxScope.(AuroraManager) -> Unit
 ) {
 
     // create aurora manager instance
@@ -73,7 +80,7 @@ fun Aurora(
         floatingActionButton = { fab?.invoke() }
     ) {
         Box(
-            modifier = Modifier.padding(it)
+            modifier = modifier.padding(it)
         ) {
             CompositionLocalProvider(AuroraLocal provides aurora) {
                 content(aurora)
@@ -90,8 +97,6 @@ context (BoxScope)
 private fun Snackbar(aurora: AuroraManagerImpl) {
 
     val showSnackbar by aurora.showSnackbar.collectAsState()
-
-
 
     AnimatedVisibility(
         modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp),
@@ -122,3 +127,4 @@ private fun Snackbar(aurora: AuroraManagerImpl) {
     }
 
 }
+

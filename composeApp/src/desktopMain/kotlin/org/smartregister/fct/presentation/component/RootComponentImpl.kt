@@ -12,6 +12,8 @@ import org.smartregister.fct.common.presentation.component.ScreenComponent
 import org.smartregister.fct.device_database.ui.components.DeviceDatabaseScreenComponent
 import org.smartregister.fct.fhirman.presentation.components.FhirmanScreenComponent
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
+import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
+import org.smartregister.fct.rules.presentation.ui.screen.RulesScreen
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 
 class RootComponentImpl(componentContext: ComponentContext) :
@@ -23,7 +25,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = {
-            Config.ConfigManagement
+            Config.Rules
         },
         key = "MainRoot"
     ) { config, childComponentContext ->
@@ -34,6 +36,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
             is Config.FileManager -> FileManagerScreenComponent(childComponentContext)
             is Config.Fhirman -> FhirmanScreenComponent(childComponentContext)
             is Config.DeviceDatabase -> DeviceDatabaseScreenComponent(childComponentContext)
+            is Config.Rules -> RulesScreenComponent(childComponentContext)
         }
 
     }

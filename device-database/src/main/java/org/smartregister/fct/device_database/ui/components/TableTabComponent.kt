@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.device_database.data.controller.TableResultDataController
-import org.smartregister.fct.device_database.domain.model.ColumnType
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.QueryResponse
 import org.smartregister.fct.device_database.domain.model.TableInfo
@@ -39,8 +38,7 @@ internal class TableTabComponent(
             getRequiredParam { device, pkg ->
                 _loading.emit(true)
                 val result = device.runAppDBQuery(
-                    packageId = pkg.packageId,
-                    requestJson = QueryRequest(
+                    arg = QueryRequest(
                         database = database,
                         query = query,
                         limit = limit

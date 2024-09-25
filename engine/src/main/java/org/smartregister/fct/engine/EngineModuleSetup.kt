@@ -13,7 +13,9 @@ import sqldelight.AppSettingsDaoQueries
 class EngineModuleSetup : ModuleSetup {
 
     private val engineModule = module(createdAtStart = true) {
-        single<AppSettingsDaoQueries> { Database.getDatabase().appSettingsDaoQueries }
+        single<AppSettingsDaoQueries> {
+            Database.getDatabase().appSettingsDaoQueries
+        }
         single<AppSettingManager> {
             AppSettingManager(
                 GetAppSetting(get()),

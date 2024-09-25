@@ -8,6 +8,8 @@ import org.smartregister.fct.device_database.ui.presentation.components.AppDatab
 @Composable
 fun DeviceDatabaseScreen(component: DeviceDatabaseScreenComponent) {
     Aurora(component) {
-        AppDatabasePanel(component)
+        with (it) {
+            AppDatabasePanel(component)
+        }
     }
 }

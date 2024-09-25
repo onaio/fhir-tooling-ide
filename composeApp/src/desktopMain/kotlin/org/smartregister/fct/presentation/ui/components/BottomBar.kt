@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BottomBar() {
     Column(
-        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f))
+        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
         Divider()
         Row(

@@ -11,20 +11,27 @@ import java.util.Base64
 import java.util.Queue
 import java.util.zip.GZIPOutputStream
 
-abstract class ContentCommand : ADBCommand<JSONObject> {
+abstract class ContentCommand(
+    private val packageId: String,
+    private val arg: String
+) : ADBCommand<JSONObject> {
 
     override fun process(response: String, dependentResult: Queue<Result<*>>): Result<JSONObject> {
         return try {
             val sanitizeResponse = response.replace("Result: Bundle[{data=", "").replaceLast("}]", "")
             val jsonObject = JSONObject(sanitizeResponse.decompress())
-            if (jsonObject.getBoolean("success")) {
-                Result.success(jsonObject)
-            } else {
-                Result.failure(RuntimeException(jsonObject.getString("error")))
-            }
+            return process(jsonObject)
         } catch (ex: Exception) {
             FCTLogger.e(ex)
             Result.failure(ex)
+        }
+    }
+
+    open fun process(jsonObject: JSONObject) : Result<JSONObject> {
+        return if (jsonObject.getBoolean("success")) {
+            Result.success(jsonObject)
+        } else {
+            Result.failure(RuntimeException(jsonObject.getString("error")))
         }
     }
 
@@ -33,7 +40,7 @@ abstract class ContentCommand : ADBCommand<JSONObject> {
             "content",
             "call",
             "--uri",
-            "'content://${getPackageName()}'",
+            "'content://${packageId}.fct'",
             "--method",
             "'${getMethodName()}'",
             "--arg",
@@ -42,16 +49,10 @@ abstract class ContentCommand : ADBCommand<JSONObject> {
     }
 
     private fun getCompressedArgument(): String {
-        val arg = getArgument()
         FCTLogger.d("Content Request: $arg")
         if (arg.trim().isEmpty()) return arg
         return arg.compress()
     }
 
-    abstract fun getPackageName(): String
-
     abstract fun getMethodName(): String
-
-
-    open fun getArgument(): String = ""
 }

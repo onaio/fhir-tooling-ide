@@ -70,7 +70,7 @@ fun OutlinedTextField(
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     label: String? = null,
     //label: @Composable (() -> Unit)? = null,
-    placeholder: @Composable (() -> Unit)? = null,
+    placeholder: String? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
@@ -147,7 +147,14 @@ fun OutlinedTextField(
                     value = value,
                     visualTransformation = visualTransformation,
                     innerTextField = innerTextField,
-                    placeholder = placeholder,
+                    placeholder = {
+                        placeholder?.let {
+                            Text(
+                                text = placeholder,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+                            )
+                        }
+                    },
                     label = label?.let {
                         {
                             Text(
