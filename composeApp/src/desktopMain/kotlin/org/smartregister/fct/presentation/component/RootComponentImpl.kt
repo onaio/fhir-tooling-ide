@@ -25,7 +25,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = {
-            Config.Rules
+            Config.ConfigManagement
         },
         key = "MainRoot"
     ) { config, childComponentContext ->

@@ -141,7 +141,7 @@ private fun AllWorkspacesDialog(
             item {
                 Text(
                     modifier = Modifier.fillMaxWidth().padding(12.dp),
-                    text = "No rule setup available",
+                    text = "No workspace available",
                     textAlign = TextAlign.Center
                 )
             }

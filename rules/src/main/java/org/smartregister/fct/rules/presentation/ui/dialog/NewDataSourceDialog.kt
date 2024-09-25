@@ -114,8 +114,8 @@ private fun NewDataSourceDialog(
             onTextChanged = { text, isMatch ->
                 resourceType = if (isMatch) text else null
                 if (resourceType != null) {
-                    val limit = if (existingWidget != null && existingWidget.body.isSingle) 1 else 10
-                    query = "SELECT * FROM ResourceEntity WHERE resourceType='$resourceType' LIMIT $limit"
+                    val limit = if (existingWidget != null && existingWidget.body.isSingle) "LIMIT 1" else ""
+                    query = "SELECT * FROM ResourceEntity WHERE resourceType='$resourceType' $limit"
                 }
             }
         )
