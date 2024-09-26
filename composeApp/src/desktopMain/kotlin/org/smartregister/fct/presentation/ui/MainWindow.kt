@@ -228,6 +228,7 @@ fun MainWindow(
                 ) {
 
                     Surface(
+                        shape = if (m == WindowPlacement.Maximized) RectangleShape else RoundedCornerShape(4.dp),
                         color = Color.Transparent,
                         border = BorderStroke(
                             width = 1.dp,
