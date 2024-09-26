@@ -5,6 +5,8 @@ import androidx.compose.foundation.DarkDefaultContextMenuRepresentation
 import androidx.compose.foundation.LightDefaultContextMenuRepresentation
 import androidx.compose.foundation.LocalContextMenuRepresentation
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,11 +26,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposeWindow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.Window
@@ -45,13 +53,17 @@ import org.smartregister.fct.presentation.theme.AuroraTheme
 import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
 import org.smartregister.fct.util.ProvideWindowSpotContainer
+import java.awt.Toolkit
+import java.awt.event.ComponentAdapter
+import java.awt.event.ComponentEvent
+import java.awt.geom.RoundRectangle2D
 
 
 @Composable
 private fun FrameWindowScope.CustomWindowFrame(
     onRequestMinimize: (() -> Unit)?,
     onRequestClose: () -> Unit,
-    onRequestToggleMaximize: (() -> Unit)?,
+    onRequestToggleMaximize: ((WindowPlacement) -> Unit)?,
     titleContent: @Composable RowScope.() -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -64,6 +76,7 @@ private fun FrameWindowScope.CustomWindowFrame(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             SnapDraggableToolbar(
+                window = window,
                 onRequestMinimize = onRequestMinimize,
                 onRequestClose = onRequestClose,
                 onRequestToggleMaximize = onRequestToggleMaximize,
@@ -82,8 +95,9 @@ fun isWindowMaximized(): Boolean {
 
 @Composable
 fun FrameWindowScope.SnapDraggableToolbar(
+    window: ComposeWindow,
     onRequestMinimize: (() -> Unit)?,
-    onRequestToggleMaximize: (() -> Unit)?,
+    onRequestToggleMaximize: ((WindowPlacement) -> Unit)?,
     onRequestClose: () -> Unit,
     windowState: WindowState,
     content: @Composable RowScope.() -> Unit,
@@ -92,10 +106,10 @@ fun FrameWindowScope.SnapDraggableToolbar(
         windowState = windowState
     ) {
         if (CustomWindowDecorationAccessing.isSupported) {
-            FrameContent(onRequestMinimize, onRequestToggleMaximize, onRequestClose, content)
+            FrameContent(window, onRequestMinimize, onRequestToggleMaximize, onRequestClose, content)
         } else {
             WindowDraggableArea {
-                FrameContent(onRequestMinimize, onRequestToggleMaximize, onRequestClose, content)
+                FrameContent(window, onRequestMinimize, onRequestToggleMaximize, onRequestClose, content)
             }
         }
     }
@@ -103,8 +117,9 @@ fun FrameWindowScope.SnapDraggableToolbar(
 
 @Composable
 private fun FrameContent(
+    window: ComposeWindow,
     onRequestMinimize: (() -> Unit)?,
-    onRequestToggleMaximize: (() -> Unit)?,
+    onRequestToggleMaximize: ((WindowPlacement) -> Unit)?,
     onRequestClose: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
@@ -139,6 +154,7 @@ private fun FrameContent(
                 }
             ) {
                 WindowsActionButtons(
+                    window,
                     onRequestClose,
                     onRequestMinimize,
                     onRequestToggleMaximize,
@@ -156,13 +172,6 @@ fun MainWindow(
     onCloseRequest: () -> Unit,
     onRequestMinimize: (() -> Unit)? = {
         state.isMinimized = true
-    },
-    onRequestToggleMaximize: (() -> Unit)? = {
-        if (state.placement == WindowPlacement.Maximized) {
-            state.placement = WindowPlacement.Floating
-        } else {
-            state.placement = WindowPlacement.Maximized
-        }
     },
     title: String = "Untitled",
     appIcon: Painter,
@@ -183,11 +192,26 @@ fun MainWindow(
         onCloseRequest = onCloseRequest,
     ) {
         window.minimumSize = java.awt.Dimension(800, 600)
+        var m by remember { mutableStateOf(window.placement) }
+
+        window.addComponentListener(object: ComponentAdapter() {
+            override fun componentResized(e: ComponentEvent?) {
+                window.shape = RoundRectangle2D.Double(
+                    0.0,
+                    0.0,
+                    window.width.toDouble(),
+                    window.height.toDouble(),
+                    if (m == WindowPlacement.Maximized) 0.0 else 8.0,
+                    if (m == WindowPlacement.Maximized) 0.0 else 8.0,
+                )
+            }
+        })
 
         CompositionLocalProvider(
             LocalWindowController provides windowController,
             LocalWindowState provides state,
         ) {
+
 
             val appSettingManager: AppSettingManager = koinInject()
             val isDarkTheme by appSettingManager.isDarkTheme.collectAsState()
@@ -204,7 +228,7 @@ fun MainWindow(
                 ) {
 
                     Surface(
-                        shape = if (state.placement == WindowPlacement.Maximized) RectangleShape else RoundedCornerShape(4.dp),
+                        color = Color.Transparent,
                         border = BorderStroke(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.outline
@@ -213,7 +237,9 @@ fun MainWindow(
                         CustomWindowFrame(
                             onRequestMinimize = onRequestMinimize,
                             onRequestClose = onCloseRequest,
-                            onRequestToggleMaximize = onRequestToggleMaximize,
+                            onRequestToggleMaximize = {
+                                m = it
+                            },
                             titleContent = titleContent
                         ) {
                             Aurora(
