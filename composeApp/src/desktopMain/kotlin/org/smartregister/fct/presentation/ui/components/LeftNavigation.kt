@@ -141,10 +141,10 @@ private fun ThemeChangerButton() {
 private fun navigationMenu(): List<NavigationButton> {
 
     return listOf(
-        NavigationButton(title = "Manage Configuration",
+        NavigationButton(title = "Dashboard",
             icon = AuroraIconPack.Widgets,
             onClick = {
-                it.changeSlot(Config.ConfigManagement)
+                it.changeSlot(Config.Dashboard)
             }),
         NavigationButton(title = "Structure Map Transformation",
             icon = AuroraIconPack.MoveDown,

@@ -29,10 +29,10 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":dashboard")
 include(":device-manager")
 include(":adb")
 include(":logcat")
-include(":configs")
 include(":database")
 include(":common")
 include(":package-manager")

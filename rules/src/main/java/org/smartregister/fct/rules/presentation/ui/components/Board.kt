@@ -53,7 +53,6 @@ fun Board(
     val x by animateIntAsState(offset.x)
     val y by animateIntAsState(offset.y)
 
-
     Box(
         Modifier.scale(scale).wrapContentSize(unbounded = true)
             .onPointerEvent(PointerEventType.Scroll) {

@@ -45,8 +45,6 @@ internal fun rememberAllWorkspacesDialog(
     onDone: (Workspace) -> Unit
 ): DialogController<Workspace> {
 
-    val scope = rememberCoroutineScope()
-
     val dialogController = rememberDialog(
         width = 600.dp,
         height = 700.dp,
@@ -77,7 +75,7 @@ private fun AllWorkspacesDialog(
     val scope = rememberCoroutineScope()
     var allWorkspaceList by remember { mutableStateOf<List<Workspace>>(listOf()) }
 
-    val deleteWorkspaceDialog = rememberConfirmationDialog<Workspace>{ _, workspace ->
+    val deleteWorkspaceDialog = rememberConfirmationDialog<Workspace> { _, workspace ->
         deleteWorkspace(workspace!!.id)
     }
 
@@ -101,7 +99,7 @@ private fun AllWorkspacesDialog(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
-                    .clickable {  }
+                    .clickable { }
                     .doubleClick(scope) {
                         controller.hide()
                         onDone(item)

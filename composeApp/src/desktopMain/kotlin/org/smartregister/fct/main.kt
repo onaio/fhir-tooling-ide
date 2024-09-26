@@ -41,7 +41,6 @@ import org.smartregister.fct.common.CommonModuleSetup
 import org.smartregister.fct.common.data.locals.LocalRootComponent
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.common.data.locals.LocalSubWindowManager
-import org.smartregister.fct.configs.ConfigModuleSetup
 import org.smartregister.fct.engine.EngineModuleSetup
 import org.smartregister.fct.fhirman.FhirmanModuleSetup
 import org.smartregister.fct.fm.FileManagerModuleSetup
@@ -164,7 +163,6 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
 
         listOf(
             CommonModuleSetup(),
-            ConfigModuleSetup(),
             ADBModuleSetup(),
             PMModuleSetup(),
             FileManagerModuleSetup(),

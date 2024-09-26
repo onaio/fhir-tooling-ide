@@ -22,7 +22,7 @@ kotlin {
             Dependencies.Compose.getAll().forEach(::implementation)
 
             implementation(project(":common"))
-            implementation(project(":configs"))
+            implementation(project(":dashboard"))
             implementation(project(":adb"))
             implementation(project(":device-manager"))
             implementation(project(":package-manager"))

@@ -114,7 +114,8 @@ private fun NewDataSourceDialog(
             onTextChanged = { text, isMatch ->
                 resourceType = if (isMatch) text else null
                 if (resourceType != null) {
-                    val limit = if (existingWidget != null && existingWidget.body.isSingle) "LIMIT 1" else ""
+                    val limit =
+                        if (existingWidget != null && existingWidget.body.isSingle) "LIMIT 1" else ""
                     query = "SELECT * FROM ResourceEntity WHERE resourceType='$resourceType' $limit"
                 }
             }
@@ -138,7 +139,7 @@ private fun NewDataSourceDialog(
                     query = it
                     queryError = query.trim().isEmpty()
                 },
-                enabled = if(existingWidget != null) !existingWidget.body.isSingle else true,
+                enabled = if (existingWidget != null) !existingWidget.body.isSingle else true,
                 placeholder = "SELECT * FROM ...",
                 singleLine = false,
                 isError = queryError,
@@ -175,7 +176,8 @@ private fun NewDataSourceDialog(
                 }
 
                 Button(
-                    enable = (id.trim().isNotEmpty() || resourceType != null) && query.trim().isNotEmpty() && !nameError && !queryError,
+                    enable = (id.trim().isNotEmpty() || resourceType != null) && query.trim()
+                        .isNotEmpty() && !nameError && !queryError,
                     label = if (existingWidget != null) "Update" else "Add",
                     onClick = {
                         val widget = existingWidget?.let {
