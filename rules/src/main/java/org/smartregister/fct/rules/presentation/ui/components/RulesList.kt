@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
+import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 
@@ -37,6 +38,7 @@ internal fun RulesList(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val hasActiveWorkspace by component.workspace.collectAsState()
+    var searchText by remember { mutableStateOf("") }
 
     Box {
         Chip(
@@ -46,6 +48,7 @@ internal fun RulesList(
             ),
             modifier = Modifier.width(300.dp),
             onClick = {
+                searchText = ""
                 expanded = true && hasActiveWorkspace != null
             },
             colors = ChipDefaults.chipColors(
@@ -58,7 +61,7 @@ internal fun RulesList(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Rules",
+                    text = "Find Rules",
                     color = colorScheme.onSurface
                 )
                 Icon(
@@ -74,7 +77,25 @@ internal fun RulesList(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            component.ruleWidgets.value.forEach { widget ->
+
+            DropdownMenuItem(
+                text = {
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = searchText,
+                        onValueChange = {
+                            searchText = it
+                        },
+                        placeholder = "Search Rule"
+                    )
+                },
+                onClick = {}
+            )
+
+            component.ruleWidgets.value.filter {
+                it.body.name.contains(searchText, ignoreCase = true)
+            }.forEach { widget ->
+
                 DropdownMenuItem(
                     text = {
                         Text(widget.body.name)

@@ -17,6 +17,7 @@ import org.smartregister.fct.datatable.domain.feature.DTFilterableType
 import org.smartregister.fct.datatable.domain.model.Data
 import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
 import org.smartregister.fct.datatable.domain.model.DataRow
+import kotlin.math.max
 
 internal abstract class DeviceDBDataTableController(
     scope: CoroutineScope,
@@ -36,15 +37,20 @@ internal abstract class DeviceDBDataTableController(
     var sortConfig: Pair<DTColumn, OrderBy>? = null
 
     private var offset: Int = 0
+    private var count = totalRecords
 
     override suspend fun refreshData() {
         process(execQuery())
     }
 
-    override fun totalRecords(): Int = totalRecords
+    override fun totalRecords(): Int = count
+
+    fun setTotalRecords(totalRecords: Int) {
+        this.count = totalRecords
+    }
 
     override fun setOffset(offset: Int) {
-        this.offset = offset
+        this.offset = max(0, offset)
     }
 
     override fun getOffset(): Int = offset

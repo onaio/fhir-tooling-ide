@@ -38,6 +38,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -50,8 +51,10 @@ import org.smartregister.fct.rules.domain.model.Rule
 import org.smartregister.fct.rules.domain.model.Widget
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewRuleDialog
+import org.smartregister.fct.rules.util.appendBold
 
 private const val jexlError = "org.jeasy.rules.jexl.JexlAction."
+private const val ambiguousError = "ambiguous statement error near"
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -182,10 +185,17 @@ fun RuleWidget(
                     )
                     if (widget.body.result.trim().isNotEmpty()) {
                         Spacer(Modifier.height(8.dp))
-                        Label(
-                            prefix = "Result",
-                            text = widget.body.result.replace(jexlError, ""),
-                            theme = theme,
+                        val result = if (theme.themeType == ThemeType.Error) {
+                            buildAnnotatedString {
+                                appendBold("Result: ")
+                                append(widget.body.result.text.replace(jexlError, ""))
+                            }
+                        } else widget.body.result
+
+                        Text(
+                            text = result,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = theme.contentColor,
                         )
                     }
                     widget.warnings.forEach { warning ->
@@ -222,8 +232,10 @@ private fun Label(prefix: String, text: String, theme: RuleWidgetTheme) {
 
 @Composable
 private fun getTheme(widget: Widget<Rule>): RuleWidgetTheme {
+    val result = widget.body.result
     return when {
-        widget.body.result.contains(jexlError) -> RuleWidgetTheme(
+        result.contains(jexlError) || result.contains(ambiguousError) -> RuleWidgetTheme(
+            themeType = ThemeType.Error,
             background = Color(0xFFffdad6),
             titleBackground = Color(0xFFba1a1a),
             titleColor = Color.White,
@@ -232,6 +244,7 @@ private fun getTheme(widget: Widget<Rule>): RuleWidgetTheme {
         )
 
         widget.warnings.isNotEmpty() -> RuleWidgetTheme(
+            themeType = ThemeType.Warn,
             background = Color(0xfffff5cf),
             titleBackground = Color(0xFFFFCC00),
             titleColor = Color.Black,
@@ -240,6 +253,7 @@ private fun getTheme(widget: Widget<Rule>): RuleWidgetTheme {
         )
 
         else -> RuleWidgetTheme(
+            themeType = ThemeType.Default,
             background = colorScheme.background,
             titleBackground = colorScheme.surface,
             titleColor = colorScheme.onSurface,
@@ -250,9 +264,14 @@ private fun getTheme(widget: Widget<Rule>): RuleWidgetTheme {
 }
 
 private data class RuleWidgetTheme(
+    val themeType: ThemeType,
     val background: Color,
     val titleBackground: Color,
     val titleColor: Color,
     val border: Color,
     val contentColor: Color
 )
+
+private enum class ThemeType {
+    Default, Warn, Error
+}

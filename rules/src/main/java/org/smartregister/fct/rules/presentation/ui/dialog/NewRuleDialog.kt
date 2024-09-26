@@ -28,10 +28,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
 import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.aurora.presentation.ui.components.NumberDropDown
@@ -40,8 +43,11 @@ import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
+import org.smartregister.fct.engine.data.manager.AppSettingManager
+import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.rules.data.transformation.RuleActionTransformation
 import org.smartregister.fct.rules.domain.model.DataSource
 import org.smartregister.fct.rules.domain.model.Rule
 import org.smartregister.fct.rules.domain.model.Widget
@@ -56,7 +62,7 @@ internal fun rememberNewRuleDialog(
 ): DialogController<Widget<Rule>> {
 
     val dialogController = rememberDialog(
-        width = 700.dp,
+        width = 800.dp,
         height = 500.dp,
         title = title,
         onDismiss = onDismiss,
@@ -81,6 +87,9 @@ private fun NewRuleDialog(
     onDeleteRule: ((Widget<Rule>) -> Unit)?,
     onDone: (Widget<Rule>, Boolean) -> Unit,
 ) {
+
+    val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
+    val isDarkTheme = appSetting.isDarkTheme
 
     val existingRule = existingRuleWidget?.body
     var name by remember { mutableStateOf(existingRule?.name ?: "") }
@@ -186,6 +195,13 @@ private fun NewRuleDialog(
                     onValueChange = {
                         actions[index] = it
                     },
+                    visualTransformation = RuleActionTransformation(
+                        isDarkTheme = isDarkTheme,
+                        colorScheme = colorScheme,
+                    ),
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily.Monospace
+                    ),
                     placeholder = "Action ${index + 1}",
                 )
 

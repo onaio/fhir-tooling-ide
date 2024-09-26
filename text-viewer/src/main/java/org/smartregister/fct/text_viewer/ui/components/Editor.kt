@@ -67,8 +67,8 @@ internal fun Editor(
         19.dp
     }
 
-    var textEditorWidth by remember { mutableStateOf(0.dp) }
-    var lineNumberWidth by remember { mutableStateOf(0.dp) }
+    var textEditorWidth by remember { mutableStateOf(1000.dp) }
+    var lineNumberWidth by remember { mutableStateOf(10.dp) }
 
     Box(
         Modifier.fillMaxSize().onGloballyPositioned {

@@ -1,5 +1,7 @@
 package org.smartregister.fct.rules.domain.model
 
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import kotlinx.serialization.Serializable
 
 
@@ -13,5 +15,5 @@ internal data class Rule(
     val actions: List<String>,
 
     @kotlinx.serialization.Transient
-    var result: String = ""
+    var result: AnnotatedString = buildAnnotatedString {  }
 ) : java.io.Serializable

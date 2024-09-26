@@ -49,6 +49,7 @@ internal open class QueryResultDataController(
             val response = buildResponse(result)
             return if (response.error == null) {
                 setOffset(offset)
+                setTotalRecords(response.count)
                 Result.success(response.data)
             } else {
                 Result.failure(result.exceptionOrNull() ?: UnknownError("Query Error"))

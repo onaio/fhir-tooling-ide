@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -67,20 +69,21 @@ internal fun DataFilterTextField(
         },
         textStyle = TextStyle(
             fontSize = MaterialTheme.typography.bodySmall.fontSize,
-            color = MaterialTheme.colorScheme.onSurface
+            color = colorScheme.onSurface
         ),
+        cursorBrush = SolidColor(colorScheme.onSurface),
         singleLine = true,
         decorationBox = @Composable { innerTextField ->
             // places leading icon, text field with label and placeholder, trailing icon
             TextFieldDefaults.DecorationBox(
-                value = filterText ?: "",
+                value = filterText,
                 visualTransformation = VisualTransformation.None,
                 innerTextField = innerTextField,
                 placeholder = {
                     Text(
                         text = dtColumn.name,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                        color = colorScheme.onSurface.copy(0.5f)
                     )
                 },
                 label = null,
@@ -96,12 +99,13 @@ internal fun DataFilterTextField(
                 interactionSource = remember { MutableInteractionSource() },
                 contentPadding = PaddingValues(8.dp),
                 colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.2f),
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    unfocusedContainerColor = colorScheme.surfaceContainer.copy(alpha = 0.2f),
+                    focusedContainerColor = colorScheme.surfaceContainer,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    focusedTextColor = colorScheme.onSurface,
+                    unfocusedTextColor = colorScheme.onSurface,
+                    cursorColor = colorScheme.onSurface,
                 ),
             )
         }

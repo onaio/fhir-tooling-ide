@@ -2,6 +2,8 @@ package org.smartregister.fct.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import org.smartregister.fct.aurora.AuroraIconPack
@@ -25,6 +27,7 @@ internal fun SettingButton(
         onClick = {
             settingsDialog.show()
         },
+        tint = colorScheme.onSurface,
         icon = AuroraIconPack.Settings,
     )
 }

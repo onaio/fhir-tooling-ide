@@ -11,6 +11,45 @@ import org.smartregister.fct.rules.domain.model.MethodInfo
 internal object RulesEngineMethods {
 
     val methodList = listOf(
+
+        MethodInfo(
+            name = buildAnnotatedString {
+                appendColor("fun ")
+                appendBold("extractValue(")
+                append("base: ")
+                appendBold("Base?")
+                append(", expression: ")
+                appendBold("String): String")
+            },
+            description = "Function to extract value based on the provided FHIR path [expression] on the given [base].\n" +
+                          "@return the value of the first item in the returned list of [Base] as String, empty otherwise."
+        ),
+
+        MethodInfo(
+            name = buildAnnotatedString {
+                appendColor("fun ")
+                appendBold("extractData(")
+                append("base: ")
+                appendBold("Base")
+                append(", expressions: ")
+                appendBold("Map<String, String>): Map<String, List<Base>>")
+            },
+            description = ""
+        ),
+
+        MethodInfo(
+            name = buildAnnotatedString {
+                appendColor("fun ")
+                appendBold("extractData(")
+                append("base: ")
+                appendBold("Base")
+                append(", expression: ")
+                appendBold("String): List<Base>")
+            },
+            description = "Function to extract value for the [base] using the on the provided FHIR path [expression].\n" +
+                          "@return a list of [Base]."
+        ),
+
         MethodInfo(
             name = buildAnnotatedString {
                 appendColor("fun ")
@@ -405,23 +444,4 @@ internal object RulesEngineMethods {
             description = ""
         ),
     )
-}
-
-private fun AnnotatedString.Builder.appendBold(text: String) {
-    withStyle(
-        style = SpanStyle(
-            fontWeight = FontWeight.Bold,
-            //color = Color(0xff7878ff)
-        )) {
-        append(text)
-    }
-}
-
-private fun AnnotatedString.Builder.appendColor(text: String, color: Color = Color(0xff7878ff)) {
-    withStyle(
-        style = SpanStyle(
-            color = color
-        )) {
-        append(text)
-    }
 }

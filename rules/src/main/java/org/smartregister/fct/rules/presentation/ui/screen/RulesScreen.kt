@@ -53,6 +53,7 @@ import org.smartregister.fct.rules.presentation.ui.components.RuleWidget
 import org.smartregister.fct.rules.presentation.ui.components.RulesEngineMethodList
 import org.smartregister.fct.rules.presentation.ui.components.RulesList
 import org.smartregister.fct.rules.presentation.ui.components.SaveWorkspaceButton
+import org.smartregister.fct.rules.presentation.ui.components.WorkspaceName
 
 @Composable
 fun RulesScreen(component: RulesScreenComponent) {
@@ -124,6 +125,7 @@ fun RulesScreen(component: RulesScreenComponent) {
                 RulesList(component)
             }
 
+            WorkspaceName(component)
             CenterBoardButton(component)
             ImportExportButton(component)
             ExecuteRulesButton(component)

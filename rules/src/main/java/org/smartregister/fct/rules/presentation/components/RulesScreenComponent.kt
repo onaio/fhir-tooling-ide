@@ -1,6 +1,7 @@
 package org.smartregister.fct.rules.presentation.components
 
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.IntOffset
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.delay
@@ -32,6 +33,7 @@ import org.smartregister.fct.rules.domain.model.Workspace
 import org.smartregister.fct.rules.domain.usecase.CreateNewWorkspace
 import org.smartregister.fct.rules.domain.usecase.UpdateWorkspace
 import org.smartregister.fct.rules.util.WorkspaceConfig
+import org.smartregister.fct.rules.util.appendBold
 import java.io.Serializable
 
 class RulesScreenComponent(componentContext: ComponentContext) :
@@ -220,13 +222,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
             _loading.emit(true)
             val requestBundle = RequestBundle(
                 dataSources = _dataSourceWidgets.value.map { it.body },
-                rules = _ruleWidgets.value.map { it.body }.map { rule ->
-                    rule.copy(
-                        actions = rule.actions.map {
-                            "data.put('${rule.name}', $it)"
-                        }
-                    )
-                }
+                rules = _ruleWidgets.value.map { it.body }
             )
 
             val result = device.executeRules(requestBundle.encodeJson())
@@ -238,10 +234,32 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                     FCTLogger.e(ruleResponse.error)
                     _error.emit(ruleResponse.error)
                 } else {
-                    _ruleWidgets.value.forEach {
-                        val ruleResult = ruleResponse.result[it.body.name]!!
-                        it.body.result = ruleResult
-                        FCTLogger.d("Rule executed: ${it.body.name} -> $ruleResult")
+                    val widgets = _ruleWidgets.value
+
+                    // clear previous results
+                    widgets.forEach {
+                        it.body.result = buildAnnotatedString {  }
+                    }
+
+                    // build result
+                    ruleResponse.result.entries.forEach { entry ->
+
+                        val foundWidget = widgets.firstOrNull {
+                            it.body.actions.any { action ->
+                                "${entry.key}(?='\\s*,)".toRegex().find(action) != null
+                            }
+                        }
+
+                        foundWidget?.body?.let {
+                            it.result = buildAnnotatedString {
+                                append(it.result)
+                                if (it.result.isNotEmpty()) append("\n")
+                                appendBold("${entry.key} : ")
+                                append(entry.value)
+
+                            }
+                        }
+                        FCTLogger.d("Rule executed: ${entry.key} -> ${entry.value}")
                     }
                 }
             } else {
@@ -327,12 +345,6 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                                     priority = obj.optInt("priority", 1),
                                     description = obj.optString("description", ""),
                                     actions = obj.getJSONArray("actions").filterIsInstance<String>()
-                                        .map {
-                                            it.replace(
-                                                "data\\.put\\([\"']\\w+[\"']\\s*,\\s*".toRegex(),
-                                                ""
-                                            ).dropLast(1)
-                                        }
                                 ),
                                 placement = if (index < rulesJsonArray.size / 2) Placement.Left else Placement.Right
                             )
