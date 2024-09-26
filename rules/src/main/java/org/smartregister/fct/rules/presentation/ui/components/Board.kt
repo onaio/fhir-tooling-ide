@@ -37,6 +37,8 @@ import org.smartregister.fct.aurora.util.pxToDp
 import org.smartregister.fct.rules.domain.model.BoardProperty
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import java.awt.Point
+import java.awt.event.InputEvent
+import java.awt.event.MouseWheelEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -46,6 +48,7 @@ fun Board(
 ) {
 
     val scrollSpeed = remember { 30 }
+    val scaleSpeed = remember { 3f }
     val boardSize = component.boardSize
     val offset by component.boardOffset.collectAsState(IntOffset.Zero)
     val scale by component.boardScaling.collectAsState()
@@ -56,12 +59,24 @@ fun Board(
     Box(
         Modifier.scale(scale).wrapContentSize(unbounded = true)
             .onPointerEvent(PointerEventType.Scroll) {
-                component.updateBoardOffset(
-                    IntOffset(
-                        x = offset.x + (it.changes.first().scrollDelta.x.toInt() * scrollSpeed).inv(),
-                        y = offset.y + (it.changes.first().scrollDelta.y.toInt() * scrollSpeed).inv()
+                val scrollX = it.changes.first().scrollDelta.x
+                val scrollY = it.changes.first().scrollDelta.y
+
+                if (it.nativeEvent is MouseWheelEvent && (it.nativeEvent as MouseWheelEvent).modifiersEx == InputEvent.CTRL_DOWN_MASK) {
+                    component.changeBoardScale(
+                        ((scrollY * scaleSpeed) + (100 * component.boardScaling.value)).coerceIn(
+                            50f,
+                            150f
+                        )
                     )
-                )
+                } else {
+                    component.updateBoardOffset(
+                        IntOffset(
+                            x = offset.x + (scrollX.toInt() * scrollSpeed).inv(),
+                            y = offset.y + (scrollY.toInt() * scrollSpeed).inv()
+                        )
+                    )
+                }
             }) {
 
         Box(modifier = Modifier

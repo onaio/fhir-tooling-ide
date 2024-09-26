@@ -38,6 +38,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     ScreenComponent, KoinComponent, ComponentContext by componentContext {
 
     internal val boardSize = Size(15000f, 15000f)
+    internal val widgetWidth = 300
 
     private val createNewWorkspace: CreateNewWorkspace by inject()
     private val updateWorkspace: UpdateWorkspace by inject()
@@ -343,7 +344,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
 
                 // place rule widgets on left side
                 rulesList.filter { it.placement == Placement.Left }.let {
-                    var x = boardSize.width / 2 - 500
+                    var x = boardSize.width / 2 - (widgetWidth + 200)
                     var y = boardSize.height / 2 - 330
                     var i = 0
 
@@ -352,7 +353,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                         widget.y = y + (i++ * 170)
 
                         if (index > 0 && index % 5 == 0) {
-                            x -= 400
+                            x -= (widgetWidth + 100)
                             y = boardSize.height / 2 - 330
                             i = 0
                         }
@@ -370,7 +371,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                         widget.y = y + (i++ * 170)
 
                         if (index > 0 && index % 5 == 0) {
-                            x += 400
+                            x += (widgetWidth + 100)
                             y = boardSize.height / 2 - 330
                             i = 0
                         }

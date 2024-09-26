@@ -92,7 +92,7 @@ fun RuleWidget(
 
         Card(
             modifier = Modifier
-                .width(300.dp)
+                .width(component.widgetWidth.dp)
                 .zIndex(zIndex)
                 .offset(x = offset.x.dp, y = offset.y.dp)
                 .onPointerEvent(PointerEventType.Press) {
