@@ -25,7 +25,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -80,6 +82,9 @@ internal fun RulesList(
                     onClick = {
                         expanded = false
                         component.focus(widget)
+                        component.componentScope.launch {
+                            widget.setFlash(true)
+                        }
                     }
                 )
             }

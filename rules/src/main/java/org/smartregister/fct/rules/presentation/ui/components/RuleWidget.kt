@@ -1,8 +1,8 @@
 package org.smartregister.fct.rules.presentation.ui.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.PointerMatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.onClick
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Card
@@ -30,20 +28,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerButton
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
@@ -81,13 +76,24 @@ fun RuleWidget(
 
         var offset by remember(widget.body.id) { mutableStateOf(Offset(widget.x, widget.y)) }
         var zIndex by remember(widget.body.id) { mutableStateOf(topMostZIndex) }
-        var highlight by remember(widget.body.id) { mutableStateOf(false) }
+        var highlightConnections by remember(widget.body.id) { mutableStateOf(false) }
+        val flash by widget.flash.collectAsState()
         val theme = getTheme(widget)
+
+        val titleBackgroundColor by animateColorAsState(
+            targetValue = if (flash) colorScheme.tertiary else theme.titleBackground,
+            animationSpec = tween(300),
+            finishedListener = {
+                component.componentScope.launch {
+                    widget.setFlash(false)
+                }
+            }
+        )
 
         DrawConnections(
             component = component,
             widget = widget,
-            highlight = highlight
+            highlight = highlightConnections
         )
 
         Card(
@@ -100,10 +106,10 @@ fun RuleWidget(
                     zIndex = topMostZIndex
                 }
                 .onPointerEvent(PointerEventType.Enter) {
-                    highlight = true
+                    highlightConnections = true
                 }
                 .onPointerEvent(PointerEventType.Exit) {
-                    highlight = false
+                    highlightConnections = false
                 }
                 .pointerInput(widget.body.id) {
 
@@ -139,7 +145,7 @@ fun RuleWidget(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(theme.titleBackground)
+                        .background(titleBackgroundColor)
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Text(
