@@ -95,7 +95,7 @@ object FCTLogger {
         )
     }
 
-    fun e(t: Throwable, tag: String? = null) {
+    fun e(t: Throwable?, tag: String? = null) {
         prepareLog(
             priority = LogLevel.ERROR,
             t = t,
@@ -103,7 +103,7 @@ object FCTLogger {
         )
     }
 
-    fun e(message: String, tag: String? = null) {
+    fun e(message: String?, tag: String? = null) {
         prepareLog(
             priority = LogLevel.ERROR,
             message = message,

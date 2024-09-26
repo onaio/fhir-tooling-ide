@@ -21,13 +21,14 @@ import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeJson
 import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.rules.data.enums.Placement
-import org.smartregister.fct.rules.domain.model.Workspace
 import org.smartregister.fct.rules.domain.model.DataSource
 import org.smartregister.fct.rules.domain.model.RequestBundle
-import org.smartregister.fct.rules.domain.model.Widget
 import org.smartregister.fct.rules.domain.model.Rule
 import org.smartregister.fct.rules.domain.model.RuleResponse
+import org.smartregister.fct.rules.domain.model.Widget
+import org.smartregister.fct.rules.domain.model.Workspace
 import org.smartregister.fct.rules.domain.usecase.CreateNewWorkspace
 import org.smartregister.fct.rules.domain.usecase.UpdateWorkspace
 import org.smartregister.fct.rules.util.WorkspaceConfig
@@ -86,12 +87,16 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     internal fun addDataSource(dataSource: DataSource) {
         componentScope.launch {
 
-            if (dataSource.id.trim().isNotEmpty() && dataSource.id in _dataSourceWidgets.value.map { it.body.id }) {
+            if (dataSource.id.trim()
+                    .isNotEmpty() && dataSource.id in _dataSourceWidgets.value.map { it.body.id }
+            ) {
                 _error.emit("${dataSource.id} id is already exists")
                 return@launch
             }
 
-            if (dataSource.resourceType.trim().isNotEmpty() && dataSource.resourceType in _dataSourceWidgets.value.map { it.body.resourceType }) {
+            if (dataSource.resourceType.trim()
+                    .isNotEmpty() && dataSource.resourceType in _dataSourceWidgets.value.map { it.body.resourceType }
+            ) {
                 _error.emit("${dataSource.resourceType} resourceType is already exists")
                 return@launch
             }
@@ -166,13 +171,14 @@ class RulesScreenComponent(componentContext: ComponentContext) :
         }
     }
 
-    internal fun findParents(widget: Widget<Rule>) : List<Widget<out Serializable>> {
-        //if (widget.parents.isNotEmpty()) return widget.parents
+    internal fun findParents(widget: Widget<Rule>): List<Widget<out Serializable>> {
 
         val dsWidgets = _dataSourceWidgets.value.filter { dsWidget ->
 
             widget.body.actions.any {
-                "${dsWidget.body.id.trim().ifEmpty { dsWidget.body.resourceType }}(?=\\s*([,).]))".toRegex().find(it) != null
+                "${
+                    dsWidget.body.id.trim().ifEmpty { dsWidget.body.resourceType }
+                }(?=\\s*([,).]))".toRegex().find(it) != null
             }
         }
 
@@ -228,13 +234,17 @@ class RulesScreenComponent(componentContext: ComponentContext) :
             if (result.isSuccess) {
                 val ruleResponse = result.getOrThrow().toString().decodeJson<RuleResponse>()
                 if (ruleResponse.error != null) {
+                    FCTLogger.e(ruleResponse.error)
                     _error.emit(ruleResponse.error)
                 } else {
                     _ruleWidgets.value.forEach {
-                        it.body.result = ruleResponse.result[it.body.name]!!
+                        val ruleResult = ruleResponse.result[it.body.name]!!
+                        it.body.result = ruleResult
+                        FCTLogger.d("Rule executed: ${it.body.name} -> $ruleResult")
                     }
                 }
             } else {
+                FCTLogger.e(result.exceptionOrNull())
                 _error.emit(result.exceptionOrNull()?.message ?: "Execution error")
             }
         }
@@ -315,13 +325,19 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                                     condition = obj.getString("condition"),
                                     priority = obj.optInt("priority", 1),
                                     description = obj.optString("description", ""),
-                                    actions = obj.getJSONArray("actions").filterIsInstance<String>().map {
-                                        it.replace("data\\.put\\([\"']\\w+[\"']\\s*,\\s*".toRegex(), "").dropLast(1)
-                                    }
+                                    actions = obj.getJSONArray("actions").filterIsInstance<String>()
+                                        .map {
+                                            it.replace(
+                                                "data\\.put\\([\"']\\w+[\"']\\s*,\\s*".toRegex(),
+                                                ""
+                                            ).dropLast(1)
+                                        }
                                 ),
                                 placement = if (index < rulesJsonArray.size / 2) Placement.Left else Placement.Right
                             )
                         )
+                    } else {
+                        FCTLogger.w("Skipping... Rule $name already exists")
                     }
                 }
 
@@ -368,32 +384,35 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 )
 
                 focusCenter()
+
+                FCTLogger.d("Total ${rulesList.size} rules imported.")
             } catch (ex: Exception) {
+                FCTLogger.e(ex)
                 _error.emit(ex.message ?: "Import Error")
             }
         }
     }
 
-    internal fun getRulesJsonString() : String {
+    internal fun getRulesJsonString(): String {
         return _ruleWidgets.value
-        .map { it.body }
-        .map { rule ->
-            rule.copy(
-                actions = rule.actions.map {
-                    "data.put('${rule.name}', $it)"
+            .map { it.body }
+            .map { rule ->
+                rule.copy(
+                    actions = rule.actions.map {
+                        "data.put('${rule.name}', $it)"
+                    }
+                )
+            }.map {
+                linkedMapOf<String, Any>().apply {
+                    put("name", it.name)
+                    put("condition", it.condition)
+                    if (it.description.trim().isNotEmpty()) {
+                        put("description", it.description)
+                    }
+                    put("priority", it.priority)
+                    put("actions", it.actions)
                 }
-            )
-        }.map {
-            linkedMapOf<String, Any>().apply {
-                put("name", it.name)
-                put("condition", it.condition)
-                if (it.description.trim().isNotEmpty()) {
-                    put("description", it.description)
-                }
-                put("priority", it.priority)
-                put("actions", it.actions)
             }
-        }
-        .let { JSONObject().apply { put("rules", it) } }.toString()
+            .let { JSONObject().apply { put("rules", it) } }.toString()
     }
 }
