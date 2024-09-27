@@ -25,9 +25,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -41,6 +44,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.text_viewer.util.compactText
 import org.smartregister.fct.text_viewer.util.formatText
@@ -50,8 +54,10 @@ context (AuroraManager)
 internal fun Editor(
     textState: MutableState<String>,
     tabIndentState: MutableState<Int>,
+    formatOnStart: Boolean
 ) {
 
+    val scope = rememberCoroutineScope()
     var lineNumbers by remember { mutableStateOf("") }
     var lineNumbersTopPadding by remember { mutableStateOf(18.dp) }
     val horizontalScrollState = rememberScrollState()
@@ -59,6 +65,11 @@ internal fun Editor(
 
     LaunchedEffect(textState.value) {
         lineNumbers = getLineNumbers(textState.value)
+        if (formatOnStart) {
+            textState.formatText(tabIndentState.value) {
+                showErrorSnackbar(it)
+            }
+        }
     }
 
     lineNumbersTopPadding = if (lineNumbers.contains("2")) {
@@ -98,11 +109,16 @@ internal fun Editor(
 
             Box {
 
+                val focusRequester = remember { FocusRequester() }
+                scope.launch {
+                    focusRequester.requestFocus()
+                }
                 TextField(
                     modifier = Modifier
                         .width(textEditorWidth - lineNumberWidth)
                         .fillMaxHeight()
                         .verticalScroll(verticalScrollState)
+                        .focusRequester(focusRequester)
                         .onPreviewKeyEvent { keyEvent ->
                             when {
                                 keyEvent.isCtrlPressed && keyEvent.isAltPressed && keyEvent.key == Key.K && keyEvent.type == KeyEventType.KeyUp -> {

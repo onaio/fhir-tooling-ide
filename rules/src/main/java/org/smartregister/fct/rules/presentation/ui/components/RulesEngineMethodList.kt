@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
+import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
 import org.smartregister.fct.rules.util.RulesEngineMethods
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
@@ -50,11 +51,13 @@ import org.smartregister.fct.rules.util.RulesEngineMethods
 fun RulesEngineMethodList() {
 
     var expanded by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
 
     Box {
         Chip(
             modifier = Modifier.width(300.dp),
             onClick = {
+                searchText = ""
                 expanded = true
             },
             colors = ChipDefaults.chipColors(
@@ -88,7 +91,24 @@ fun RulesEngineMethodList() {
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            RulesEngineMethods.methodList.forEachIndexed { index, methodInfo ->
+
+            DropdownMenuItem(
+                text = {
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = searchText,
+                        onValueChange = {
+                            searchText = it
+                        },
+                        placeholder = "Search Method"
+                    )
+                },
+                onClick = {}
+            )
+
+            RulesEngineMethods.methodList.filter {
+                it.name.contains(searchText, ignoreCase = true)
+            }.forEachIndexed { index, methodInfo ->
 
                 var visible by remember { mutableStateOf(false) }
                 DropdownMenuItem(

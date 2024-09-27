@@ -18,6 +18,7 @@ import org.smartregister.fct.text_viewer.ui.components.Toolbar
 @Composable
 fun TextViewer(
     text: String = "",
+    formatOnStart: Boolean = false,
     callback: ((String) -> Unit)? = null,
     componentContext: ComponentContext
 ) {
@@ -43,7 +44,7 @@ fun TextViewer(
             Column {
                 Toolbar(textState, tabIndentState)
                 HorizontalDivider()
-                Editor(textState, tabIndentState)
+                Editor(textState, tabIndentState, formatOnStart)
             }
         }
     }

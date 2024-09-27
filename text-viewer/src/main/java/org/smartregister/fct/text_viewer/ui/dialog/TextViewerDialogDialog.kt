@@ -11,6 +11,7 @@ import org.smartregister.fct.text_viewer.ui.view.TextViewer
 fun rememberTextViewerDialog(
     componentContext: ComponentContext,
     title: String = "Text Viewer / Formatter",
+    formatOnStart: Boolean = false,
     cancelable: Boolean = true,
     callback: ((String) -> Unit)? = null,
     onDismiss: (DialogController<String>.() -> Unit)? = null,
@@ -32,6 +33,7 @@ fun rememberTextViewerDialog(
 
         TextViewer(
             componentContext = componentContext,
+            formatOnStart = formatOnStart,
             callback = cb,
             text = text ?: ""
         )

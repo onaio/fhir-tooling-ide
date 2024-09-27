@@ -28,6 +28,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -90,7 +92,8 @@ private fun NewRuleDialog(
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val isDarkTheme = appSetting.isDarkTheme
-
+    val scope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
     val existingRule = existingRuleWidget?.body
     var name by remember { mutableStateOf(existingRule?.name ?: "") }
     var priority by remember { mutableStateOf(existingRule?.priority ?: 1) }
@@ -111,11 +114,15 @@ private fun NewRuleDialog(
         onDeleteRule?.invoke(widget!!)
     }
 
+    scope.launch {
+        focusRequester.requestFocus()
+    }
+
     Column(
         modifier = Modifier.padding(12.dp).verticalScroll(rememberScrollState())
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
             value = name,
             onValueChange = {
                 val input = it.trim()

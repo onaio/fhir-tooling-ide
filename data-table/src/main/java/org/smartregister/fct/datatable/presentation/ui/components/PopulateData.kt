@@ -4,6 +4,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ContextMenuArea
 import androidx.compose.foundation.ContextMenuItem
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +20,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -57,6 +60,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.aurora.util.doubleClick
@@ -67,6 +71,7 @@ import org.smartregister.fct.datatable.domain.feature.DTPagination
 import org.smartregister.fct.datatable.domain.model.DataCell
 import org.smartregister.fct.datatable.domain.model.DataRow
 import org.smartregister.fct.datatable.presentation.ui.view.serialNoCellWidth
+import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -85,24 +90,33 @@ internal fun PopulateData(
     val scope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
     val textViewerDialog = rememberTextViewerDialog(componentContext)
+    val textViewerDialogFormatted = rememberTextViewerDialog(componentContext, formatOnStart = true)
     val data by controller.records.collectAsState()
     var dataRowHover by remember { mutableStateOf(-1) }
     var dataCellHover by remember { mutableStateOf(-1) }
+    val selectedRow by controller.selectedRowIndex.collectAsState()
 
     LazyColumn {
 
         itemsIndexed(data) { rowIndex, dataRow ->
 
             val dataRowBG = if (dataRowHover == rowIndex) {
-                MaterialTheme.colorScheme.surfaceContainer
+                colorScheme.surfaceContainer
             } else {
                 if (rowIndex % 2 == 0) dataRowBGEven else dataRowBGOdd
             }
 
+            var rowModifier = Modifier.height(40.dp).background(dataRowBG)
+
+            if (selectedRow == rowIndex) {
+                rowModifier = rowModifier.border(border = BorderStroke(
+                    width = 1.dp,
+                    color = colorScheme.onSurface.copy(0.4f)
+                ))
+            }
+
             Row(
-                modifier = Modifier
-                    .height(40.dp)
-                    .background(dataRowBG),
+                modifier = rowModifier,
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
@@ -110,7 +124,7 @@ internal fun PopulateData(
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(serialNoCellWidth)
-                        .background(MaterialTheme.colorScheme.surfaceContainer),
+                        .background(colorScheme.surfaceContainer),
                 ) {
 
                     val serialNo = if (controller is DTPagination) {
@@ -196,6 +210,9 @@ internal fun PopulateData(
 
                                     ContextMenuArea(
                                         items = {
+                                            scope.launch {
+                                                controller.updateSelectedRowIndex(rowIndex)
+                                            }
                                             listOf(
                                                 ContextMenuItem("Copy") {
                                                     clipboardManager.setText(
@@ -203,7 +220,11 @@ internal fun PopulateData(
                                                     )
                                                 },
                                                 ContextMenuItem("View") {
-                                                    textViewerDialog.show(dataCell.data ?: "")
+                                                    if (columns[dataCell.index].name == "serializedResource") {
+                                                        textViewerDialogFormatted.show(dataCell.data ?: "")
+                                                    } else {
+                                                        textViewerDialog.show(dataCell.data ?: "")
+                                                    }
                                                 },
                                             ) + extraContextMenuItems
                                         },
@@ -211,7 +232,15 @@ internal fun PopulateData(
                                         Text(
                                             modifier = Modifier
                                                 .fillMaxSize()
+                                                .clickable {
+                                                    scope.launch {
+                                                        controller.updateSelectedRowIndex(rowIndex)
+                                                    }
+                                                }
                                                 .doubleClick(scope) {
+                                                    scope.launch {
+                                                        controller.updateSelectedRowIndex(rowIndex)
+                                                    }
                                                     editMode.value =
                                                         dataCell.editable && controller is DTEditable
                                                 }

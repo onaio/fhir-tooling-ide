@@ -31,6 +31,9 @@ abstract class DataTableController(
     private var _info = MutableStateFlow<String?>(null)
     internal val info: StateFlow<String?> = _info
 
+    private val _selectedRowIndex = MutableStateFlow(-1)
+    internal val selectedRowIndex: StateFlow<Int> = _selectedRowIndex
+
     internal val tempFilterValue = mutableMapOf<Int, String>()
 
     internal val columns = data.columns
@@ -49,6 +52,10 @@ abstract class DataTableController(
                 put(it.index, MutableStateFlow(it))
             }
         }
+    }
+
+    internal suspend fun updateSelectedRowIndex(rowIndex: Int) {
+        _selectedRowIndex.emit(rowIndex)
     }
 
     private fun getFilteredColumns(): List<DTFilterColumn> {
@@ -92,6 +99,7 @@ abstract class DataTableController(
     }
 
     suspend fun process(result: Result<List<DataRow>>) {
+        updateSelectedRowIndex(-1)
         if (result.isSuccess) {
             updateRecords(result.getOrThrow())
         } else {

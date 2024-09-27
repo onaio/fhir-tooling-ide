@@ -17,9 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
 import org.smartregister.fct.aurora.presentation.ui.components.Button
@@ -74,7 +77,8 @@ private fun NewDataSourceDialog(
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val isDarkTheme = appSetting.isDarkTheme
-
+    val scope = rememberCoroutineScope()
+    val focusRequester = remember { FocusRequester() }
     val idRegex = "^\\w+".toRegex()
 
     val existingDataSource = existingWidget?.body
@@ -90,11 +94,15 @@ private fun NewDataSourceDialog(
         onDeleteDataSource?.invoke(widget!!)
     }
 
+    scope.launch {
+        focusRequester.requestFocus()
+    }
+
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
             value = id,
             onValueChange = {
                 val input = it.trim()
