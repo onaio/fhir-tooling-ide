@@ -1,13 +1,9 @@
 package org.smartregister.fct.rules.presentation.ui.components
 
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.AuroraIconPack
@@ -18,7 +14,7 @@ import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 
 @Composable
-internal fun BoxScope.ImportExportButton(
+internal fun ImportExportButton(
     component: RulesScreenComponent
 ) {
 
@@ -28,23 +24,20 @@ internal fun BoxScope.ImportExportButton(
 
     val exportRuleDialog = rememberTextViewerDialog(component)
 
-    Row(
-        modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
-    ) {
-        CircleButton(icon = AuroraIconPack.Publish,
-            tooltip = "Import Rules",
-            tooltipPosition = TooltipPosition.Top(),
-            enable = component.workspace.collectAsState().value != null,
-            onClick = {
-                importRuleJsonDialog.show()
-            })
-        Spacer(Modifier.width(12.dp))
-        CircleButton(icon = AuroraIconPack.Download,
-            tooltip = "Export Rules",
-            tooltipPosition = TooltipPosition.Top(),
-            enable = component.workspace.collectAsState().value != null,
-            onClick = {
-                exportRuleDialog.show(component.getRulesJsonString())
-            })
-    }
+    CircleButton(icon = AuroraIconPack.Publish,
+        tooltip = "Import Rules",
+        tooltipPosition = TooltipPosition.Top(),
+        enable = component.workspace.collectAsState().value != null,
+        onClick = {
+            importRuleJsonDialog.show()
+        })
+    Spacer(Modifier.width(12.dp))
+    CircleButton(icon = AuroraIconPack.Download,
+        tooltip = "Export Rules",
+        tooltipPosition = TooltipPosition.Top(),
+        enable = component.workspace.collectAsState().value != null,
+        onClick = {
+            exportRuleDialog.show(component.getRulesJsonString())
+        }
+    )
 }

@@ -20,6 +20,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -92,7 +93,6 @@ private fun NewRuleDialog(
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val isDarkTheme = appSetting.isDarkTheme
-    val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     val existingRule = existingRuleWidget?.body
     var name by remember { mutableStateOf(existingRule?.name ?: "") }
@@ -114,7 +114,7 @@ private fun NewRuleDialog(
         onDeleteRule?.invoke(widget!!)
     }
 
-    scope.launch {
+    LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 

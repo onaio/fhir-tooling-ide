@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import org.json.JSONArray
@@ -54,14 +55,17 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     private var _loading = MutableStateFlow(false)
     internal val loading: StateFlow<Boolean> = _loading
 
-    private var _boardScaling = MutableStateFlow(1f)
+    private var _boardScaling = MutableStateFlow(WorkspaceConfig.defaultBoardScale)
     internal val boardScaling: StateFlow<Float> = _boardScaling
 
-    private var _boardOffset = MutableSharedFlow<IntOffset>()
-    internal val boardOffset: SharedFlow<IntOffset> = _boardOffset
+    private var _boardOffset = MutableStateFlow(WorkspaceConfig.defaultBoardOffset)
+    internal val boardOffset: StateFlow<IntOffset> = _boardOffset
 
     private var _activeWorkspace = MutableStateFlow(WorkspaceConfig.workspace)
     internal val workspace: StateFlow<Workspace?> = _activeWorkspace
+
+    private var _showConnection = MutableStateFlow(WorkspaceConfig.showConnection)
+    internal val showConnection: StateFlow<Boolean> = _showConnection
 
     private val _dataSourceWidgets = MutableStateFlow(listOf<Widget<DataSource>>())
     internal val dataSourceWidgets: StateFlow<List<Widget<DataSource>>> = _dataSourceWidgets
@@ -81,9 +85,30 @@ class RulesScreenComponent(componentContext: ComponentContext) :
         }
     }
 
+    override fun onDestroy() {
+        saveActiveWorkspaceInConfig()
+    }
+
     internal fun updateBoardOffset(offset: IntOffset) {
         componentScope.launch {
             _boardOffset.emit(offset)
+        }
+    }
+
+    internal fun toggleConnection() {
+        componentScope.launch {
+            val canShow = !_showConnection.value
+            _showConnection.emit(canShow)
+            WorkspaceConfig.showConnection = canShow
+        }
+    }
+
+    internal fun selectRuleWidget(widget: Widget<Rule>?) {
+        componentScope.launch {
+            _ruleWidgets.value.forEach {
+                it.setIsSelected(false)
+            }
+            widget?.setIsSelected(true)
         }
     }
 
@@ -109,6 +134,8 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                     add(Widget(dataSource))
                 }
             )
+
+            focusCenter()
         }
     }
 
@@ -198,7 +225,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
             warnings.add("No parent available")
         }
 
-        ruleWidgets.minOfOrNull { it.body.priority }?.takeIf { it >= widget.body.priority }?.run {
+        ruleWidgets.maxOfOrNull { it.body.priority }?.takeIf { it >= widget.body.priority }?.run {
             warnings.add("Set priority to ${this + 1}")
         }
 
@@ -408,14 +435,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
 
     internal fun getRulesJsonString(): String {
         return _ruleWidgets.value
-            .map { it.body }
-            .map { rule ->
-                rule.copy(
-                    actions = rule.actions.map {
-                        "data.put('${rule.name}', $it)"
-                    }
-                )
-            }.map {
+            .map { it.body }.map {
                 linkedMapOf<String, Any>().apply {
                     put("name", it.name)
                     put("condition", it.condition)
@@ -427,5 +447,16 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 }
             }
             .let { JSONObject().apply { put("rules", it) } }.toString()
+    }
+
+    private fun saveActiveWorkspaceInConfig() {
+        with(WorkspaceConfig) {
+            defaultBoardScale = _boardScaling.value
+            defaultBoardOffset = _boardOffset.value
+            workspace = _activeWorkspace.value?.copy(
+                dataSources = _dataSourceWidgets.value,
+                rules = _ruleWidgets.value
+            )
+        }
     }
 }

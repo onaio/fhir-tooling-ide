@@ -1,21 +1,13 @@
 package org.smartregister.fct.rules.presentation.ui.screen
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderColors
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,17 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
-import org.smartregister.fct.aurora.presentation.ui.components.VerticalSlider
 import org.smartregister.fct.common.presentation.ui.container.Aurora
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.components.Board
@@ -53,6 +37,7 @@ import org.smartregister.fct.rules.presentation.ui.components.RuleWidget
 import org.smartregister.fct.rules.presentation.ui.components.RulesEngineMethodList
 import org.smartregister.fct.rules.presentation.ui.components.RulesList
 import org.smartregister.fct.rules.presentation.ui.components.SaveWorkspaceButton
+import org.smartregister.fct.rules.presentation.ui.components.TogglePathButton
 import org.smartregister.fct.rules.presentation.ui.components.WorkspaceName
 
 @Composable
@@ -112,6 +97,8 @@ fun RulesScreen(component: RulesScreenComponent) {
                 SaveWorkspaceButton(component)
             }
 
+            WorkspaceName(component)
+
             Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -127,7 +114,15 @@ fun RulesScreen(component: RulesScreenComponent) {
 
             WorkspaceName(component)
             CenterBoardButton(component)
-            ImportExportButton(component)
+
+            Row(
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)
+            ) {
+                TogglePathButton(component)
+                Spacer(Modifier.width(12.dp))
+                ImportExportButton(component)
+            }
+
             ExecuteRulesButton(component)
             BoardScaleSlider(component)
         }

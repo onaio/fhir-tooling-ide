@@ -1,3 +1,6 @@
 package org.smartregister.fct.common.presentation.component
 
-interface ScreenComponent
+interface ScreenComponent {
+
+    fun onDestroy() {}
+}

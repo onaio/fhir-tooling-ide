@@ -1,9 +1,12 @@
 package org.smartregister.fct.rules.presentation.ui.components
 
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -50,7 +53,7 @@ fun Board(
     val scrollSpeed = remember { 30 }
     val scaleSpeed = remember { 3f }
     val boardSize = component.boardSize
-    val offset by component.boardOffset.collectAsState(IntOffset.Zero)
+    val offset by component.boardOffset.collectAsState()
     val scale by component.boardScaling.collectAsState()
 
     val x by animateIntAsState(offset.x)
@@ -94,6 +97,13 @@ fun Board(
                 }
             }
         ) {
+            Box(Modifier.fillMaxSize().clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {
+                    component.selectRuleWidget(null)
+                }
+            ))
             content(
                 BoardProperty(
                     width = boardSize.width.toInt(),

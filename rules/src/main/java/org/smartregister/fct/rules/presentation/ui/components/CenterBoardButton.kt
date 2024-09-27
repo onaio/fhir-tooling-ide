@@ -15,19 +15,20 @@ import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.CenterFocusWeak
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
+import org.smartregister.fct.rules.util.WorkspaceConfig
 
 @Composable
 internal fun BoxScope.CenterBoardButton(
     component: RulesScreenComponent
 ) {
 
-    val offset by component.boardOffset.collectAsState(IntOffset.Zero)
+    val offset by component.boardOffset.collectAsState()
     if (offset.x != 0 || offset.y != 0) {
         CircleButton(
             modifier = Modifier.align(Alignment.BottomStart).padding(start = 12.dp, bottom = 12.dp),
             icon = AuroraIconPack.CenterFocusWeak,
             tooltip = "Center Board",
-            tooltipPosition = TooltipPosition.Top(),
+            tooltipPosition = TooltipPosition.Left(),
             onClick = {
                 component.focusCenter()
             }

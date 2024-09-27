@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,7 +78,6 @@ private fun NewDataSourceDialog(
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val isDarkTheme = appSetting.isDarkTheme
-    val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     val idRegex = "^\\w+".toRegex()
 
@@ -94,7 +94,7 @@ private fun NewDataSourceDialog(
         onDeleteDataSource?.invoke(widget!!)
     }
 
-    scope.launch {
+    LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 

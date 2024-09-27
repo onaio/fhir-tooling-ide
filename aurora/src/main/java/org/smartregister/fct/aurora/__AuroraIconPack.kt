@@ -34,6 +34,8 @@ import org.smartregister.fct.aurora.auroraiconpack.Sync
 import org.smartregister.fct.aurora.auroraiconpack.Table
 import org.smartregister.fct.aurora.auroraiconpack.TableEye
 import org.smartregister.fct.aurora.auroraiconpack.Token
+import org.smartregister.fct.aurora.auroraiconpack.Visibility
+import org.smartregister.fct.aurora.auroraiconpack.VisibilityOff
 import org.smartregister.fct.aurora.auroraiconpack.Widgets
 import kotlin.collections.List as ____KtList
 
@@ -80,7 +82,9 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
       Send,
       FolderOpen,
       Download,
-      CenterFocusWeak
+      CenterFocusWeak,
+      Visibility,
+      VisibilityOff
     )
     return __AllIcons!!
   }

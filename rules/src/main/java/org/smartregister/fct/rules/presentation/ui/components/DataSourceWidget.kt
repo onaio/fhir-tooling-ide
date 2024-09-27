@@ -1,5 +1,6 @@
 package org.smartregister.fct.rules.presentation.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.Chip
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import org.smartregister.fct.rules.domain.model.BoardProperty
 import org.smartregister.fct.rules.domain.model.IntSize
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
@@ -51,6 +53,7 @@ fun DataSourceWidget(
 
         Chip(
             modifier = Modifier
+                .zIndex(1f)
                 .offset(x = offset.x.dp, y = offset.y.dp)
                 .height(chipHeight.dp)
                 .onGloballyPositioned {
@@ -70,6 +73,10 @@ fun DataSourceWidget(
                         y = y
                     )
                 },
+            border = BorderStroke(
+                width = 0.5.dp,
+                color = colorScheme.onSurface.copy(0.6f)
+            ),
             colors = ChipDefaults.chipColors(
                 backgroundColor = colorScheme.surface,
             ),

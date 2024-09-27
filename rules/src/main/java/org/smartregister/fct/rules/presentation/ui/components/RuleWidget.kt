@@ -32,8 +32,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
@@ -80,6 +82,7 @@ fun RuleWidget(
         var offset by remember(widget.body.id) { mutableStateOf(Offset(widget.x, widget.y)) }
         var zIndex by remember(widget.body.id) { mutableStateOf(topMostZIndex) }
         var highlightConnections by remember(widget.body.id) { mutableStateOf(false) }
+        val isSelected by widget.isSelected.collectAsState()
         val flash by widget.flash.collectAsState()
         val theme = getTheme(widget)
 
@@ -96,7 +99,8 @@ fun RuleWidget(
         DrawConnections(
             component = component,
             widget = widget,
-            highlight = highlightConnections
+            highlight = highlightConnections,
+            isSelected = isSelected
         )
 
         Card(
@@ -107,6 +111,7 @@ fun RuleWidget(
                 .onPointerEvent(PointerEventType.Press) {
                     topMostZIndex += 1f
                     zIndex = topMostZIndex
+                    component.selectRuleWidget(widget)
                 }
                 .onPointerEvent(PointerEventType.Enter) {
                     highlightConnections = true
@@ -132,16 +137,19 @@ fun RuleWidget(
                         height = it.size.height
                     )
                     widget.updatePlacement(boardProperty)
+                }
+                .graphicsLayer {
+                    shadowElevation = if (isSelected || highlightConnections) 10f else 0f
                 },
             colors = CardDefaults.cardColors(
                 containerColor = theme.background
             ),
             elevation = CardDefaults.cardElevation(
-                defaultElevation = 6.dp
+                defaultElevation = 5.dp
             ),
             border = BorderStroke(
                 width = 1.dp,
-                color = theme.border
+                color = if (isSelected || highlightConnections) colorScheme.onSurface else theme.border
             )
         ) {
             Column(Modifier.fillMaxWidth()) {

@@ -17,7 +17,8 @@ internal data class Widget<T : java.io.Serializable>(
     var parents: List<Widget<out java.io.Serializable>> = listOf(),
 
     @kotlinx.serialization.Transient
-    var warnings: List<String> = listOf()
+    var warnings: List<String> = listOf(),
+
 ) {
 
     @kotlinx.serialization.Transient
@@ -25,6 +26,16 @@ internal data class Widget<T : java.io.Serializable>(
 
     @kotlinx.serialization.Transient
     internal val flash: StateFlow<Boolean> = _flash
+
+    @kotlinx.serialization.Transient
+    private var _isSelected = MutableStateFlow(false)
+
+    @kotlinx.serialization.Transient
+    internal val isSelected: StateFlow<Boolean> = _isSelected
+
+    suspend fun setIsSelected(selected: Boolean) {
+        _isSelected.emit(selected)
+    }
 
     suspend fun setFlash(isFlash: Boolean) {
         _flash.emit(isFlash)

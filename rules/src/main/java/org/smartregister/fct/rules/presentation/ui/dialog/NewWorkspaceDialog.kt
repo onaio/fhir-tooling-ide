@@ -11,12 +11,15 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
 import org.smartregister.fct.aurora.presentation.ui.components.Button
@@ -68,17 +71,21 @@ private fun NewWorkspaceDialog(
     var logicalId by remember { mutableStateOf("") }
     var resourceType by remember { mutableStateOf("") }
     var matchResource by remember { mutableStateOf(MatchResource.UseRandom) }
+    val focusRequester = remember { FocusRequester() }
 
     var nameError by remember { mutableStateOf(false) }
     var idError by remember { mutableStateOf(false) }
     var logicalIdError by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Column(
         modifier = Modifier.padding(12.dp)
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
             value = name,
             onValueChange = {
                 val input = it.trim()
