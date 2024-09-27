@@ -23,7 +23,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
 import org.smartregister.fct.aurora.presentation.ui.components.Button
@@ -84,9 +83,10 @@ private fun NewDataSourceDialog(
     val existingDataSource = existingWidget?.body
     var id by remember { mutableStateOf(existingDataSource?.id ?: "") }
     var query by remember { mutableStateOf(existingDataSource?.query ?: "") }
+    val isSingle = remember { existingDataSource?.isSingle ?: false }
     var resourceType = existingDataSource?.resourceType
 
-    var nameError by remember { mutableStateOf(false) }
+    var idError by remember { mutableStateOf(false) }
     var queryError by remember { mutableStateOf(false) }
 
     val deleteDataSourceDialog = rememberConfirmationDialog<Widget<DataSource>> { _, widget ->
@@ -98,6 +98,7 @@ private fun NewDataSourceDialog(
         focusRequester.requestFocus()
     }
 
+
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
@@ -106,11 +107,11 @@ private fun NewDataSourceDialog(
             value = id,
             onValueChange = {
                 val input = it.trim()
-                nameError = if (input.isNotEmpty()) idRegex.matchEntire(input) == null else true
+                idError = !isSingle && if (input.isNotEmpty()) idRegex.matchEntire(input) == null else true
                 id = it
             },
             placeholder = "Id",
-            isError = nameError
+            isError = idError
         )
         Spacer(Modifier.height(10.dp))
         AutoCompleteDropDown(
@@ -185,7 +186,7 @@ private fun NewDataSourceDialog(
 
                 Button(
                     enable = (id.trim().isNotEmpty() || resourceType != null) && query.trim()
-                        .isNotEmpty() && !nameError && !queryError,
+                        .isNotEmpty() && !idError && !queryError,
                     label = if (existingWidget != null) "Update" else "Add",
                     onClick = {
                         val widget = existingWidget?.let {

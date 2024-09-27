@@ -57,11 +57,10 @@ internal fun Editor(
     formatOnStart: Boolean
 ) {
 
-    val scope = rememberCoroutineScope()
     var lineNumbers by remember { mutableStateOf("") }
     var lineNumbersTopPadding by remember { mutableStateOf(18.dp) }
-    val horizontalScrollState = rememberScrollState()
     val verticalScrollState = rememberScrollState()
+    val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(textState.value) {
         lineNumbers = getLineNumbers(textState.value)
@@ -70,6 +69,7 @@ internal fun Editor(
                 showErrorSnackbar(it)
             }
         }
+        focusRequester.requestFocus()
     }
 
     lineNumbersTopPadding = if (lineNumbers.contains("2")) {
@@ -109,10 +109,6 @@ internal fun Editor(
 
             Box {
 
-                val focusRequester = remember { FocusRequester() }
-                scope.launch {
-                    focusRequester.requestFocus()
-                }
                 TextField(
                     modifier = Modifier
                         .width(textEditorWidth - lineNumberWidth)
