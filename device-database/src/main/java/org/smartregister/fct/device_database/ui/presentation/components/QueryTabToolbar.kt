@@ -39,8 +39,7 @@ internal fun QueryTabToolbar(component: QueryTabComponent) {
         VerticalDivider()
         Spacer(Modifier.width(14.dp))
         SmallIconButton(
-            modifier = Modifier.size(16.dp),
-            rippleRadius = 16.dp,
+            iconModifier = Modifier.size(16.dp),
             tooltip = "Run\nCtrl + Enter",
             icon = Icons.AutoMirrored.Outlined.Send,
             onClick = component::runQuery

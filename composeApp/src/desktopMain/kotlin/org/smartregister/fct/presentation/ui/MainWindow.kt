@@ -47,6 +47,7 @@ import androidx.constraintlayout.compose.Dimension
 import org.koin.compose.koinInject
 import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.presentation.ui.container.Aurora
+import org.smartregister.fct.common.util.LocalWindowState
 import org.smartregister.fct.engine.data.manager.AppSettingManager
 import org.smartregister.fct.presentation.component.RootComponentImpl
 import org.smartregister.fct.presentation.theme.AuroraTheme
@@ -261,5 +262,4 @@ class WindowController {}
 
 private val LocalWindowController =
     compositionLocalOf<WindowController> { error("window controller not provided") }
-private val LocalWindowState =
-    compositionLocalOf<WindowState> { error("window controller not provided") }
+

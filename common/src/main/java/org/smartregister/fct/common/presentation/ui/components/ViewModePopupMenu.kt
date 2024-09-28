@@ -27,8 +27,7 @@ fun ViewModePopupMenu(
 
     Box {
         SmallIconButton(
-            modifier = modifier.size(18.dp),
-            rippleRadius = 14.dp,
+            iconModifier = modifier.size(18.dp),
             icon = Icons.Outlined.MoreVert,
             onClick = {
                 expanded = !expanded

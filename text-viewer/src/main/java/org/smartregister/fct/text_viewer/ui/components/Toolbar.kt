@@ -77,7 +77,7 @@ internal fun Toolbar(
                 tooltipPosition = TooltipPosition.Bottom(),
             ) {
                 SmallIconButton(
-                    modifier = Modifier.height(16.dp),
+                    iconModifier = Modifier.height(16.dp),
                     icon = Icons.Outlined.ContentCopy,
                     onClick = {
                         clipboardManager.setText(AnnotatedString(textState.value))

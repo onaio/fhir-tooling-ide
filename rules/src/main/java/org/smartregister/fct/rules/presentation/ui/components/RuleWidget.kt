@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -40,11 +39,14 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
+import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisText
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.rules.domain.model.BoardProperty
@@ -157,20 +159,22 @@ fun RuleWidget(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(titleBackgroundColor)
-                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
                 ) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
+                    MiddleEllipsisText(
+                        modifier = Modifier.width(240.dp).align(Alignment.Center),
                         text = widget.body.name,
                         style = MaterialTheme.typography.titleSmall,
-                        color = theme.titleColor
+                        color = theme.titleColor,
+                        textAlign = TextAlign.Center
                     )
 
                     SmallIconButton(
-                        modifier = Modifier
+                        mainModifier = Modifier
                             .align(Alignment.CenterEnd)
+                            .size(22.dp),
+                        iconModifier = Modifier
                             .size(14.dp),
-                        rippleRadius = 12.dp,
                         icon = Icons.Outlined.Edit,
                         tint = theme.titleColor,
                         onClick = {

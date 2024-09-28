@@ -20,7 +20,7 @@ internal fun BackButton(
     val activePath by component.getActivePath().collectAsState()
 
     SmallIconButton(
-        modifier = modifier,
+        iconModifier = modifier,
         icon = Icons.AutoMirrored.Outlined.ArrowBack,
         enable = activePath.toString() !in component.getCommonDirs().map { it.path.toString() },
         onClick = {

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
+import org.smartregister.fct.common.data.controller.DialogController
 import androidx.compose.ui.window.Dialog as MatDialog
 
 enum class DialogType {
@@ -123,11 +124,37 @@ internal fun <T> Dialog(
             }
         ) {
 
+            /*val density = LocalDensity.current
+            val configuration = LocalWindowState.current
+            var offset by remember { mutableStateOf(Offset.Zero) }
+            var horizontalRange = remember { Pair(0f, 0f) }
+            var verticalRange = remember { Pair(0f, 0f) }*/
             var rootModifier = Modifier.width(width)
             if (height != null) rootModifier = rootModifier.height(height)
 
             Card(
-                modifier = rootModifier,
+                modifier = rootModifier
+                /*.offset(x = offset.x.dp, y = offset.y.dp)
+                .onGloballyPositioned {
+                    val dialogWidth = it.size.width
+                    val dialogHeight = it.size.height
+                    val screenWidth = configuration.size.width
+                    val screenHeight = configuration.size.height
+                    val safeDelta = 20f
+
+                    val minMaxHorizontal = (with(density) { screenWidth.toPx() } / 2f - dialogWidth / 2f) - safeDelta
+                    val minMaxVertical = (with(density) { screenHeight.toPx() } / 2f - dialogHeight / 2f) - safeDelta
+
+                    horizontalRange = Pair(
+                        minMaxHorizontal * -1f,
+                        minMaxHorizontal
+                    )
+
+                    verticalRange = Pair(
+                        minMaxVertical * -1f,
+                        minMaxVertical
+                    )
+                }*/,
                 shape = RoundedCornerShape(6.dp),
                 border = BorderStroke(
                     width = 1.dp,
@@ -141,6 +168,25 @@ internal fun <T> Dialog(
                     modifier = Modifier.background(titleBackground)
                         .padding(horizontal = 16.dp, vertical = 12.dp)
                         .fillMaxWidth(),
+                    /*.pointerInput(Unit) {
+                        detectDragGestures { _, dragAmount ->
+
+                            val x = (offset.x + dragAmount.x).coerceIn(
+                                horizontalRange.first,
+                                horizontalRange.second
+                            )
+
+                            val y = (offset.y + dragAmount.y).coerceIn(
+                                verticalRange.first,
+                                verticalRange.second
+                            )
+
+                            offset = Offset(
+                                x = x,
+                                y = y
+                            )
+                        }
+                    }*/
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
@@ -151,7 +197,8 @@ internal fun <T> Dialog(
 
                     if (cancelable) {
                         SmallIconButton(
-                            modifier = Modifier.width(18.dp).align(Alignment.CenterEnd),
+                            mainModifier = Modifier.size(24.dp).align(Alignment.CenterEnd),
+                            iconModifier = Modifier.size(18.dp),
                             icon = Icons.Outlined.Close,
                             tint = titleForeground,
                             onClick = {

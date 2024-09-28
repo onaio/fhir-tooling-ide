@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +17,6 @@ import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Sync
 import org.smartregister.fct.aurora.auroraiconpack.TableEye
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
-import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 
 @Composable
 internal fun PanelOptions(
@@ -29,22 +27,19 @@ internal fun PanelOptions(
         modifier = Modifier
             .fillMaxWidth()
             .height(39.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(10.dp),
+            .background(MaterialTheme.colorScheme.surfaceContainer),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         SmallIconButton(
-            modifier = Modifier.size(18.dp),
-            rippleRadius = 14.dp,
+            iconModifier = Modifier.size(18.dp),
             icon = AuroraIconPack.Sync,
             tooltip = "Refresh",
             onClick = refreshTables
         )
         Spacer(Modifier.width(12.dp))
         SmallIconButton(
-            modifier = Modifier.size(18.dp),
-            rippleRadius = 14.dp,
+            iconModifier = Modifier.size(18.dp),
             tooltip = "New Tab",
             icon = AuroraIconPack.TableEye,
             onClick = openNewTab

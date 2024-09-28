@@ -55,7 +55,7 @@ internal fun TopBar(
                 Row {
                     Spacer(Modifier.width(12.dp))
                     SmallIconButton(
-                        modifier = Modifier.size(18.dp),
+                        iconModifier = Modifier.size(18.dp),
                         icon = AuroraIconPack.Sync,
                         onClick = {
                             scope.launch {
@@ -80,7 +80,7 @@ internal fun TopBar(
 
                 if (controller is DTPagination) {
                     SmallIconButton(
-                        modifier = Modifier.size(22.dp),
+                        iconModifier = Modifier.size(22.dp),
                         icon = Icons.Outlined.FirstPage,
                         enable = controller.canGoFirstPage(),
                         onClick = {
@@ -91,7 +91,7 @@ internal fun TopBar(
                     )
                     Spacer(Modifier.width(12.dp))
                     SmallIconButton(
-                        modifier = Modifier.size(22.dp),
+                        iconModifier = Modifier.size(22.dp),
                         icon = Icons.Outlined.ChevronLeft,
                         enable = controller.canGoPreviousPage(),
                         onClick = {
@@ -121,7 +121,7 @@ internal fun TopBar(
                     )
                     Spacer(Modifier.width(12.dp))
                     SmallIconButton(
-                        modifier = Modifier.size(22.dp),
+                        iconModifier = Modifier.size(22.dp),
                         icon = Icons.Outlined.ChevronRight,
                         enable = controller.canGoNextPage(),
                         onClick = {
@@ -132,7 +132,7 @@ internal fun TopBar(
                     )
                     Spacer(Modifier.width(12.dp))
                     SmallIconButton(
-                        modifier = Modifier.size(22.dp),
+                        iconModifier = Modifier.size(22.dp),
                         icon = Icons.AutoMirrored.Outlined.LastPage,
                         enable = controller.canGoLastPage(),
                         onClick = {

@@ -112,7 +112,8 @@ private fun AllWorkspacesDialog(
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = item.name

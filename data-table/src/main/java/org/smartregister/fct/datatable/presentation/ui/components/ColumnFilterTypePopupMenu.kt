@@ -3,6 +3,7 @@ package org.smartregister.fct.datatable.presentation.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -48,7 +49,8 @@ fun ColumnFilterTypePopupMenu(
             tooltipPosition = TooltipPosition.Bottom(),
         ) {
             SmallIconButton(
-                rippleRadius = 13.dp,
+                mainModifier = Modifier.size(22.dp),
+                iconModifier = Modifier.size(16.dp),
                 icon = dataFilterTypeColumn.filterType.icon,
                 onClick = {
                     expanded = !expanded

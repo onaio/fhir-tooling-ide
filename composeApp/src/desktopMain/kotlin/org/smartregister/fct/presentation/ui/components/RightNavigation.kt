@@ -16,6 +16,8 @@ import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,6 +40,8 @@ fun RightNavigation(
     subWindowManager: SubWindowManager,
     rightNav: ConstrainedLayoutReference
 ) {
+    val rightWindowState by subWindowManager.getRightWindowState().collectAsState()
+    val bottomWindowState by subWindowManager.getBottomWindowState().collectAsState()
 
     Row(
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
@@ -61,6 +65,7 @@ fun RightNavigation(
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
                     icon = AuroraIconPack.PhoneAndroid,
+                    selected = rightWindowState == RightWindowState.DeviceManager,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
                 )
                 Spacer(Modifier.height(22.dp))
@@ -69,6 +74,8 @@ fun RightNavigation(
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
                     icon = AuroraIconPack.ListAlt,
+                    enable = true,
+                    selected = rightWindowState == RightWindowState.PackageManager,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
                 )
                 Spacer(Modifier.height(22.dp))
@@ -86,6 +93,7 @@ fun RightNavigation(
                     tooltip = "Logcat",
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
+                    selected = bottomWindowState == BottomWindowState.Logcat,
                     onClick = { subWindowManager.setBottomWindowState(BottomWindowState.Logcat) }
                 )
                 Spacer(Modifier.height(12.dp))
