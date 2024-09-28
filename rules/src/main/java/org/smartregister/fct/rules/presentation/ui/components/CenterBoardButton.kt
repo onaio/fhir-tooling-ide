@@ -28,7 +28,7 @@ internal fun BoxScope.CenterBoardButton(
             modifier = Modifier.align(Alignment.BottomStart).padding(start = 12.dp, bottom = 12.dp),
             icon = AuroraIconPack.CenterFocusWeak,
             tooltip = "Center Board",
-            tooltipPosition = TooltipPosition.Left(),
+            tooltipPosition = TooltipPosition.Right(),
             onClick = {
                 component.focusCenter()
             }

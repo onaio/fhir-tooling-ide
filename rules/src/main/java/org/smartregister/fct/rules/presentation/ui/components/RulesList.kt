@@ -1,10 +1,14 @@
 package org.smartregister.fct.rules.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Chip
@@ -39,12 +43,15 @@ internal fun RulesList(
     var expanded by remember { mutableStateOf(false) }
     val hasActiveWorkspace by component.workspace.collectAsState()
     var searchText by remember { mutableStateOf("") }
+    val title by component.ruleListTitle.collectAsState()
 
     Box {
         Chip(
             border = BorderStroke(
                 width = 0.5.dp,
-                color = if (hasActiveWorkspace != null) colorScheme.onSurface.copy(0.6f) else colorScheme.onSurface.copy(0.4f)
+                color = if (hasActiveWorkspace != null) colorScheme.onSurface.copy(0.6f) else colorScheme.onSurface.copy(
+                    0.4f
+                )
             ),
             modifier = Modifier.width(300.dp),
             onClick = {
@@ -61,7 +68,7 @@ internal fun RulesList(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Find Rules",
+                    text = title ?: "Find Rule",
                     color = colorScheme.onSurface
                 )
                 Icon(
@@ -80,14 +87,17 @@ internal fun RulesList(
 
             DropdownMenuItem(
                 text = {
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = searchText,
-                        onValueChange = {
-                            searchText = it
-                        },
-                        placeholder = "Search Rule"
-                    )
+                    Column {
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = searchText,
+                            onValueChange = {
+                                searchText = it
+                            },
+                            placeholder = "Search Rule"
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
                 },
                 onClick = {}
             )
@@ -97,12 +107,16 @@ internal fun RulesList(
             }.forEach { widget ->
 
                 DropdownMenuItem(
+                    modifier = Modifier.background(
+                        if (title == widget.body.name) colorScheme.surface else colorScheme.surfaceContainer
+                    ),
                     text = {
                         Text(widget.body.name)
                     },
                     onClick = {
                         expanded = false
                         component.focus(widget)
+                        component.selectRuleWidget(widget)
                         component.componentScope.launch {
                             widget.setFlash(true)
                         }

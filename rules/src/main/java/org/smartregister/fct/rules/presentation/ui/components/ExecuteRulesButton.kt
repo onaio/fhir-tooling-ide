@@ -21,7 +21,7 @@ internal fun BoxScope.ExecuteRulesButton(
         modifier = Modifier.align(Alignment.BottomEnd).padding(end = 12.dp, bottom = 12.dp),
         icon = AuroraIconPack.Send,
         tooltip = "Execute Rules",
-        tooltipPosition = TooltipPosition.Right(),
+        tooltipPosition = TooltipPosition.Left(),
         enable = component.workspace.collectAsState().value != null,
         onClick = {
             component.executeRules()

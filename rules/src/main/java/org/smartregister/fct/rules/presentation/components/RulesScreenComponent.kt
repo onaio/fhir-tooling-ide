@@ -67,6 +67,9 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     private var _showConnection = MutableStateFlow(WorkspaceConfig.showConnection)
     internal val showConnection: StateFlow<Boolean> = _showConnection
 
+    private var _ruleListTitle = MutableStateFlow<String?>(null)
+    internal val ruleListTitle: StateFlow<String?> = _ruleListTitle
+
     private val _dataSourceWidgets = MutableStateFlow(listOf<Widget<DataSource>>())
     internal val dataSourceWidgets: StateFlow<List<Widget<DataSource>>> = _dataSourceWidgets
 
@@ -109,6 +112,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 it.setIsSelected(false)
             }
             widget?.setIsSelected(true)
+            _ruleListTitle.emit(widget?.body?.name)
         }
     }
 
@@ -198,6 +202,9 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 }
             )
             parentWidget.lastOrNull()?.let(::focus)
+            if (ruleWidget.body.name == _ruleListTitle.value) {
+                _ruleListTitle.emit(null)
+            }
         }
     }
 
@@ -307,6 +314,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     internal fun openWorkspace(workspace: Workspace) {
         WorkspaceConfig.workspace = workspace
         componentScope.launch {
+            _ruleListTitle.emit(null)
             _activeWorkspace.emit(workspace)
         }
     }

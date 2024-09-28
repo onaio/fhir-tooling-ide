@@ -27,16 +27,16 @@ import org.smartregister.fct.rules.presentation.ui.components.Board
 import org.smartregister.fct.rules.presentation.ui.components.BoardScaleSlider
 import org.smartregister.fct.rules.presentation.ui.components.CenterBoardButton
 import org.smartregister.fct.rules.presentation.ui.components.CreateDataSourceButton
+import org.smartregister.fct.rules.presentation.ui.components.CreateNewWorkspaceButton
 import org.smartregister.fct.rules.presentation.ui.components.CreateRuleButton
-import org.smartregister.fct.rules.presentation.ui.components.ShowAllWorkspacesButton
 import org.smartregister.fct.rules.presentation.ui.components.DataSourceWidget
 import org.smartregister.fct.rules.presentation.ui.components.ExecuteRulesButton
-import org.smartregister.fct.rules.presentation.ui.components.CreateNewWorkspaceButton
 import org.smartregister.fct.rules.presentation.ui.components.ImportExportButton
 import org.smartregister.fct.rules.presentation.ui.components.RuleWidget
 import org.smartregister.fct.rules.presentation.ui.components.RulesEngineMethodList
 import org.smartregister.fct.rules.presentation.ui.components.RulesList
 import org.smartregister.fct.rules.presentation.ui.components.SaveWorkspaceButton
+import org.smartregister.fct.rules.presentation.ui.components.ShowAllWorkspacesButton
 import org.smartregister.fct.rules.presentation.ui.components.TogglePathButton
 import org.smartregister.fct.rules.presentation.ui.components.WorkspaceName
 
