@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +31,6 @@ import fct.composeapp.generated.resources.maximize
 import fct.composeapp.generated.resources.minimize
 import fct.composeapp.generated.resources.restore
 import org.jetbrains.compose.resources.painterResource
-import org.smartregister.fct.presentation.ui.isWindowMaximized
 import java.awt.Toolkit
 
 @Composable
