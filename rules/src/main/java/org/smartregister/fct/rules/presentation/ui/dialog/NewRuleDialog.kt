@@ -1,19 +1,23 @@
 package org.smartregister.fct.rules.presentation.ui.dialog
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -28,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -150,18 +155,32 @@ private fun NewRuleDialog(
                 )
             }
             Row(
-                modifier = Modifier.weight(1f).padding(start = 12.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .height(38.dp)
+                    .padding(start = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Condition "
-                )
-                Switch(
-                    checked = condition == "true",
-                    onCheckedChange = {
-                        condition = "$it"
-                    }
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .border(
+                            width = 1.dp,
+                            color = colorScheme.primary,
+                            shape = RoundedCornerShape(4.dp)
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = condition == "true",
+                        onCheckedChange = {
+                            condition = "$it"
+                        }
+                    )
+                    Text(
+                        text = "Condition "
+                    )
+                }
             }
         }
         Spacer(Modifier.height(12.dp))

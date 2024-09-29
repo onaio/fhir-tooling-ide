@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -48,6 +50,8 @@ import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
 import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisText
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
+import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.rules.domain.model.BoardProperty
 import org.smartregister.fct.rules.domain.model.IntSize
@@ -161,13 +165,19 @@ fun RuleWidget(
                         .background(titleBackgroundColor)
                         .padding(horizontal = 8.dp, vertical = 8.dp)
                 ) {
-                    MiddleEllipsisText(
-                        modifier = Modifier.width(240.dp).align(Alignment.Center),
-                        text = widget.body.name,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = theme.titleColor,
-                        textAlign = TextAlign.Center
-                    )
+                    Tooltip(
+                        modifier = Modifier.requiredWidthIn(max = 240.dp).align(Alignment.Center),
+                        tooltip = widget.body.name,
+                        tooltipPosition = TooltipPosition.Top(),
+                    ) {
+                        MiddleEllipsisText(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = widget.body.name,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = theme.titleColor,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     SmallIconButton(
                         mainModifier = Modifier
