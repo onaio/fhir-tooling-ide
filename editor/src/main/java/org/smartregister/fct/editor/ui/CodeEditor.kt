@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.rememberScrollbarAdapter
@@ -131,7 +132,7 @@ fun CodeEditor(
                     }
                 },
                 readOnly = readOnly,
-                modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 3.dp)
+                modifier = Modifier.width(3000.dp).fillMaxHeight().padding(horizontal = 5.dp, vertical = 3.dp)
                     .pointerHoverIcon(PointerIcon.Text).onPreviewKeyEvent { keyEvent ->
                         when {
                             keyEvent.isCtrlPressed && keyEvent.key == Key.F && keyEvent.type == KeyEventType.KeyUp -> {

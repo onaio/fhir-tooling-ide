@@ -7,6 +7,7 @@ import org.smartregister.fct.aurora.auroraiconpack.ConnectedTv
 import org.smartregister.fct.aurora.auroraiconpack.Cyclone
 import org.smartregister.fct.aurora.auroraiconpack.Database
 import org.smartregister.fct.aurora.auroraiconpack.Dataset
+import org.smartregister.fct.aurora.auroraiconpack.Description
 import org.smartregister.fct.aurora.auroraiconpack.DesignServices
 import org.smartregister.fct.aurora.auroraiconpack.Download
 import org.smartregister.fct.aurora.auroraiconpack.EditNote
@@ -23,6 +24,7 @@ import org.smartregister.fct.aurora.auroraiconpack.KeyboardArrowUp
 import org.smartregister.fct.aurora.auroraiconpack.ListAlt
 import org.smartregister.fct.aurora.auroraiconpack.LocalFireDepartment
 import org.smartregister.fct.aurora.auroraiconpack.MoveDown
+import org.smartregister.fct.aurora.auroraiconpack.NoteAdd
 import org.smartregister.fct.aurora.auroraiconpack.PhoneAndroid
 import org.smartregister.fct.aurora.auroraiconpack.Publish
 import org.smartregister.fct.aurora.auroraiconpack.Save
@@ -84,7 +86,9 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
       Download,
       CenterFocusWeak,
       Visibility,
-      VisibilityOff
+      VisibilityOff,
+      NoteAdd,
+      Description
     )
     return __AllIcons!!
   }

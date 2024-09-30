@@ -38,7 +38,6 @@ import org.smartregister.fct.rules.presentation.ui.components.RulesList
 import org.smartregister.fct.rules.presentation.ui.components.SaveWorkspaceButton
 import org.smartregister.fct.rules.presentation.ui.components.ShowAllWorkspacesButton
 import org.smartregister.fct.rules.presentation.ui.components.TogglePathButton
-import org.smartregister.fct.rules.presentation.ui.components.WorkspaceName
 
 @Composable
 fun RulesScreen(component: RulesScreenComponent) {
@@ -97,8 +96,6 @@ fun RulesScreen(component: RulesScreenComponent) {
                 SaveWorkspaceButton(component)
             }
 
-            WorkspaceName(component)
-
             Row(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -112,7 +109,6 @@ fun RulesScreen(component: RulesScreenComponent) {
                 RulesList(component)
             }
 
-            WorkspaceName(component)
             CenterBoardButton(component)
 
             Row(

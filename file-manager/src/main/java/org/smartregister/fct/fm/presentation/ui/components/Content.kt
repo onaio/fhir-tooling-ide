@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
@@ -20,12 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstrainedLayoutReference
-import androidx.constraintlayout.compose.ConstraintLayoutScope
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,6 +31,7 @@ import org.smartregister.fct.common.data.controller.ConfirmationDialogController
 import org.smartregister.fct.common.presentation.ui.dialog.DialogType
 import org.smartregister.fct.common.presentation.ui.dialog.rememberAlertDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.getKoinInstance
 import org.smartregister.fct.fm.data.communication.InterCommunication
 import org.smartregister.fct.fm.domain.model.ContextMenu
@@ -42,11 +40,9 @@ import org.smartregister.fct.fm.domain.model.ContextMenuType
 import org.smartregister.fct.fm.presentation.components.FileManagerComponent
 
 @Composable
-internal fun ConstraintLayoutScope.Content(
-    pathRef: ConstrainedLayoutReference,
-    contentRef: ConstrainedLayoutReference,
+internal fun Content(
     component: FileManagerComponent,
-    contentOption: @Composable ColumnScope.() -> Unit,
+    //activePath: Path,
 ) {
     val activePathContent by component.getActivePathContent().collectAsState()
     val verticalScrollState = rememberScrollState()
@@ -69,18 +65,17 @@ internal fun ConstraintLayoutScope.Content(
         }
     }
 
-    Column(
-        modifier = Modifier.constrainAs(contentRef) {
-            start.linkTo(parent.start)
-            top.linkTo(parent.top)
-            end.linkTo(parent.end)
-            bottom.linkTo(pathRef.top)
-            height = Dimension.preferredWrapContent
-        }
-    ) {
-        contentOption(this)
+    ConstraintLayout(Modifier.fillMaxSize()) {
+        val (contentRef, pathRef) = createRefs()
+
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.constrainAs(contentRef) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+                bottom.linkTo(pathRef.top)
+                height = Dimension.fillToConstraints
+            }
         ) {
             Column(
                 modifier = Modifier.fillMaxSize().verticalScroll(verticalScrollState),
@@ -101,7 +96,10 @@ internal fun ConstraintLayoutScope.Content(
                 )
             )
         }
+
+        Breadcrumb(component, pathRef)
     }
+
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -112,7 +110,7 @@ private fun Items(
     activePathContent: List<Path>,
     deleteDialog: ConfirmationDialogController<ContextMenuPath>
 ) {
-    val scope = rememberCoroutineScope()
+
     Spacer(Modifier.height(12.dp))
     AnimatedVisibility(
         visible = visible,
@@ -124,13 +122,14 @@ private fun Items(
         ) {
             activePathContent.forEach { path ->
                 ContentItem(
+                    scope = component.componentScope,
                     path = path,
                     contextMenuList = component.getContextMenuList(),
                     onDoubleClick = { component.onDoubleClick(it) },
                     onContextMenuClick = { menu, _ ->
                         handleContextMenuClick(
                             component = component,
-                            scope = scope,
+                            scope = component.componentScope,
                             deleteDialog = deleteDialog,
                             menu = menu,
                             path = path

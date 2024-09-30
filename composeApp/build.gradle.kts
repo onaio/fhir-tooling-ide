@@ -35,6 +35,7 @@ kotlin {
             implementation(project(":device-database"))
             implementation(project(":text-viewer"))
             implementation(project(":rules"))
+            implementation(project(":workflow"))
         }
 
         desktopMain.dependencies {

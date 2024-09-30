@@ -5,6 +5,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.adb.data.commands.AppDatabaseQueryCommand
 import org.smartregister.fct.adb.data.commands.ExecuteRulesCommand
+import org.smartregister.fct.adb.data.commands.ExecuteWorkflowCommand
 import org.smartregister.fct.adb.data.commands.GetAllPackagesCommand
 import org.smartregister.fct.adb.data.controller.ADBController
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
@@ -33,6 +34,15 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
         return runContentCommand(arg) { packageId ->
             controller.executeCommand(
                 ExecuteRulesCommand(packageId, arg),
+                deviceId = deviceId
+            )
+        }
+    }
+
+    suspend fun executeWorkflow(arg: String): Result<JSONObject> {
+        return runContentCommand(arg) { packageId ->
+            controller.executeCommand(
+                ExecuteWorkflowCommand(packageId, arg),
                 deviceId = deviceId
             )
         }

@@ -1,19 +1,16 @@
 package org.smartregister.fct.fm.presentation.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -38,7 +35,6 @@ fun InAppFileManager(
     }
 
     val scope = rememberCoroutineScope()
-    val activePath by component.getActivePath().collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (mode is FileManagerMode.Edit) Title("App File Manager")
@@ -46,7 +42,7 @@ fun InAppFileManager(
             modifier = Modifier.fillMaxSize()
         ) {
             CommonNavigation(
-                activePath = activePath,
+                activePath = component.getActivePath().collectAsState().value,
                 commonDirs = component.getCommonDirs(),
                 onDirectoryClick = { activePath ->
                     scope.launch {
@@ -55,20 +51,12 @@ fun InAppFileManager(
                 },
             )
 
-            ConstraintLayout {
-                val (contentRef, pathRef) = createRefs()
-
+            Column(Modifier.fillMaxSize()) {
+                DefaultContentOptions(component)
                 Content(
-                    pathRef = pathRef,
-                    contentRef = contentRef,
-                    component = component
-                ) {
-                    DefaultContentOptions(component)
-                }
-
-                Breadcrumb(pathRef, activePath)
+                    component = component,
+                )
             }
-
         }
     }
 
@@ -81,12 +69,8 @@ private fun DefaultContentOptions(component: InAppFileManagerComponent) {
     ContentOptions(
         component = component
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            CreateNewFolder(component)
-        }
+        Spacer(Modifier.width(12.dp))
+        CreateNewFolder(component)
     }
 }
 

@@ -13,7 +13,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 
 @Composable
 internal fun BackButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     component: FileManagerComponent
 ) {
     val scope = rememberCoroutineScope()

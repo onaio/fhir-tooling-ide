@@ -1,6 +1,7 @@
 package org.smartregister.fct.fm.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -94,16 +95,14 @@ internal abstract class FileManagerComponent(
         }
     }
 
-    suspend fun onPathSelected(path: Path) : Result<Unit> {
+    fun onPathSelected(path: Path) : Result<Unit> {
         return try {
             if (mode is FileManagerMode.View) {
                 val fileSelected = mode.onFileSelected
                 val pathSelected = mode.onPathSelected
 
                 fileSelected?.let {
-                    withContext(Dispatchers.IO) {
-                        fileSelected(FileUtils.readFileToString(path.toFile(), Charset.defaultCharset()))
-                    }
+                    fileSelected(FileUtils.readFileToString(path.toFile(), Charset.defaultCharset()))
                 }
 
                 pathSelected?.invoke(path)

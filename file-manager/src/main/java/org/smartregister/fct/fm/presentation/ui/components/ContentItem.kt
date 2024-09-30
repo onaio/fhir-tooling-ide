@@ -26,16 +26,19 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.Path
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
+import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.fm.domain.model.Applicable
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.util.getFileTypeImage
 
 @Composable
 internal fun ContentItem(
+    scope: CoroutineScope,
     path: Path,
     onDoubleClick: (Path) -> Unit,
     contextMenuList: List<ContextMenu>,
@@ -48,7 +51,7 @@ internal fun ContentItem(
     ) {
 
         ContextMenu(path, contextMenuList, onContextMenuClick) {
-            ContentIcon(path, onDoubleClick)
+            ContentIcon(scope, path, onDoubleClick)
         }
 
         Text(
@@ -64,10 +67,9 @@ internal fun ContentItem(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ContentIcon(path: Path, onDoubleClick: (Path) -> Unit) {
-    val scope = rememberCoroutineScope()
+private fun ContentIcon(scope: CoroutineScope, path: Path, onDoubleClick: (Path) -> Unit) {
 
     Card(
         modifier = Modifier.width(84.dp).padding(horizontal = 12.dp)
@@ -78,20 +80,10 @@ private fun ContentIcon(path: Path, onDoubleClick: (Path) -> Unit) {
     ) {
         Box(
             modifier = Modifier.align(Alignment.CenterHorizontally)
-                .clickable { }.onPointerEvent(
-                    PointerEventType.Press
-                ) {
-                    when {
-                        it.buttons.isPrimaryPressed -> when (it.awtEventOrNull?.clickCount) {
-                            2 -> {
-                                scope.launch {
-                                    delay(200)
-                                    onDoubleClick(path)
-                                }
-                            }
-                        }
-                    }
-                },
+                .clickable { }
+                .doubleClick(scope) {
+                    onDoubleClick(path)
+                }
         ) {
             Icon(
                 modifier = Modifier.size(50.dp).align(Alignment.Center),

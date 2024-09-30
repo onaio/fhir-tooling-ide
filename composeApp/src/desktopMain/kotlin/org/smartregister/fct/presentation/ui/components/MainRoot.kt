@@ -1,5 +1,6 @@
 package org.smartregister.fct.presentation.ui.components
 
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
@@ -16,7 +17,10 @@ import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.screen.RulesScreen
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.presentation.ui.screen.StructureMapScreen
+import org.smartregister.fct.workflow.presentation.components.WorkflowScreenComponent
+import org.smartregister.fct.workflow.presentation.ui.screen.WorkflowScreen
 
+context (BoxScope)
 @Composable
 fun MainRoot(component: RootComponent) {
 
@@ -25,6 +29,7 @@ fun MainRoot(component: RootComponent) {
     when (val contextComponent = mainSlot.child?.instance) {
         is DashboardScreenComponent -> DashboardScreen(contextComponent)
         is StructureMapScreenComponent -> StructureMapScreen(contextComponent)
+        is WorkflowScreenComponent -> WorkflowScreen(contextComponent)
         is FileManagerScreenComponent -> FileManagerScreen(contextComponent)
         is FhirmanScreenComponent -> FhirmanScreen(contextComponent)
         is DeviceDatabaseScreenComponent -> DeviceDatabaseScreen(contextComponent)

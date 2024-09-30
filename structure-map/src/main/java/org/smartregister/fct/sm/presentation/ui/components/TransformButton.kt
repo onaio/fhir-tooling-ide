@@ -35,16 +35,9 @@ internal fun TransformButton(component: TabComponent) {
         )
     }
 
-    val resultDialogController = rememberDialog<Bundle>(
-        title = "Transformation Result",
-        width = 1200.dp,
-        height = 800.dp,
-    ) { _, bundle ->
-        SMTransformationResult(
-            componentContext = component,
-            bundle = bundle ?: Bundle()
-        )
-    }
+    val resultDialogController = rememberTransformationResultDialog(
+        componentContext = component,
+    )
 
     OutlinedButton(
         modifier = Modifier.fillMaxWidth(),

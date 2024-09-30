@@ -19,6 +19,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.common.presentation.component.ScreenComponent
+import org.smartregister.fct.common.util.windowTitle
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeJson
 import org.smartregister.fct.engine.util.encodeJson
@@ -83,7 +84,8 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                     _dataSourceWidgets.emit(it.dataSources)
                     _ruleWidgets.emit(it.rules)
                     it.rules.forEach(::findParents)
-                }
+                    setWindowTitle(it.name)
+                } ?: setWindowTitle(null)
             }
         }
     }
@@ -465,6 +467,13 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 dataSources = _dataSourceWidgets.value,
                 rules = _ruleWidgets.value
             )
+        }
+    }
+
+    private fun setWindowTitle(workspaceName: String?) {
+        componentScope.launch {
+            val name = if (workspaceName != null) " - $workspaceName" else ""
+            windowTitle.emit("Rule Designer$name")
         }
     }
 }

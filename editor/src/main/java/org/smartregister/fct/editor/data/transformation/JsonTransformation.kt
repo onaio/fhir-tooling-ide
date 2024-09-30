@@ -39,12 +39,12 @@ internal class JsonTransformation(
     private val valueRegexContinuation = Regex("(false|true|\\d*\\.?\\d)(?=\\s*\\n?\\r?([,}\\]]))")
 
     override fun AnnotatedString.Builder.transform(text: String) {
-        styleText(text, openCurlyBracketRegex, yellowColorStyle)
-        styleText(text, closeCurlyBracketRegex, yellowColorStyle)
-        styleText(text, openBracketRegex, yellowColorStyle)
-        styleText(text, closeBracketRegex, yellowColorStyle)
+        //styleText(text, openCurlyBracketRegex, yellowColorStyle)
+        //styleText(text, closeCurlyBracketRegex, yellowColorStyle)
+        //styleText(text, openBracketRegex, yellowColorStyle)
+        //styleText(text, closeBracketRegex, yellowColorStyle)
         styleText(text, keyRegex, blueColorStyle)
-        styleText(text, valueRegex, greenColorStyle)
-        styleText(text, valueRegexContinuation, greenColorStyle)
+        //styleText(text, valueRegex, greenColorStyle)
+        //styleText(text, valueRegexContinuation, greenColorStyle)
     }
 }

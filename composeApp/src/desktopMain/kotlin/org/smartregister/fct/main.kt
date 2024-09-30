@@ -31,7 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.core.context.startKoin
@@ -54,6 +53,7 @@ import org.smartregister.fct.presentation.ui.components.TitleBar
 import org.smartregister.fct.rules.RuleModuleSetup
 import org.smartregister.fct.sm.SMModuleSetup
 import org.smartregister.fct.util.runOnUiThread
+import org.smartregister.fct.workflow.WorkflowModuleSetup
 import java.awt.Toolkit
 
 
@@ -166,10 +166,11 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             ADBModuleSetup(),
             PMModuleSetup(),
             FileManagerModuleSetup(),
-            //SMModuleSetup(),
+            SMModuleSetup(),
             ApiClientModuleSetup(),
             FhirmanModuleSetup(),
             RuleModuleSetup(),
+            WorkflowModuleSetup(),
         ).map {
             scope.async(Dispatchers.Default) {
                 it.setup()

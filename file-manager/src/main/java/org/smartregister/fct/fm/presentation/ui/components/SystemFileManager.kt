@@ -7,12 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.presentation.components.SystemFileManagerComponent
@@ -32,7 +31,6 @@ fun SystemFileManager(
         )
     }
 
-    val scope = rememberCoroutineScope()
     val activePath by component.getActivePath().collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -41,28 +39,22 @@ fun SystemFileManager(
             modifier = Modifier.fillMaxSize()
         ) {
             CommonNavigation(
-                activePath = activePath,
+                activePath = component.getActivePath().collectAsState().value,
                 commonDirs = component.getCommonDirs(),
                 rootDirs = component.getRootDirs(),
                 onDirectoryClick = { activePath ->
-                    scope.launch {
+                    component.componentScope.launch {
                         component.setActivePath(activePath)
                     }
                 },
             )
 
-            ConstraintLayout {
-                val (contentRef, pathRef) = createRefs()
-
+            Column {
+                ContentOptions(component)
                 Content(
-                    pathRef = pathRef,
-                    contentRef = contentRef,
                     component = component,
-                ) {
-                    ContentOptions(component)
-                }
-
-                Breadcrumb(pathRef, activePath)
+                    //activePath = activePath
+                )
             }
 
         }

@@ -146,14 +146,16 @@ private fun navigationMenu(): List<NavigationButton> {
             onClick = {
                 it.changeSlot(Config.Dashboard)
             }),
-        NavigationButton(title = "Structure Map Transformation",
+        NavigationButton(title = "StructureMap Transformation",
             icon = AuroraIconPack.MoveDown,
             onClick = {
                 it.changeSlot(Config.StructureMap)
             }),
-        NavigationButton(title = "Careplan Generation",
+        NavigationButton(title = "Workflow",
             icon = AuroraIconPack.Cyclone,
-            onClick = {}),
+            onClick = {
+                it.changeSlot(Config.Workflow)
+            }),
         NavigationButton(title = "CQL Transformation", icon = AuroraIconPack.Token, onClick = {}),
         NavigationButton(title = "File Manager", icon = AuroraIconPack.Folder, onClick = {
             it.changeSlot(Config.FileManager)

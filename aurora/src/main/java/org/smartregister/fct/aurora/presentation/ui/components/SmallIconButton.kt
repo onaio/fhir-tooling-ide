@@ -37,7 +37,7 @@ fun SmallIconButton(
 
     if (selected) {
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = colorScheme.background.copy(0.7f)
+            containerColor = colorScheme.primary
         )
     }
 
@@ -53,7 +53,7 @@ fun SmallIconButton(
                     modifier = iconModifier,
                     imageVector = icon,
                     contentDescription = null,
-                    tint = tint?.copy(alpha = alpha)
+                    tint = if (selected) colorScheme.onPrimary else tint?.copy(alpha = alpha)
                         ?: LocalContentColor.current.copy(alpha = alpha)
                 )
             }

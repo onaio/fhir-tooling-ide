@@ -41,8 +41,10 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -59,7 +61,7 @@ import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.logger.FCTLogger
 
 @Composable
-internal fun QueryEditor(component: QueryTabComponent) {
+internal fun QueryEditor(component: QueryTabComponent, defaultQuery: String) {
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val isDarkTheme = appSetting.isDarkTheme
@@ -69,6 +71,10 @@ internal fun QueryEditor(component: QueryTabComponent) {
 
     LaunchedEffect(component) {
         lineNumbers = getLineNumbers(component.query.value.text)
+        component.updateTextField(TextFieldValue(
+            text = defaultQuery,
+            selection = TextRange(start = defaultQuery.length, end = defaultQuery.length)
+        ))
     }
 
     lineNumbersTopPadding = if (lineNumbers.contains("2")) {

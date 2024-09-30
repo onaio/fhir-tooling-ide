@@ -84,3 +84,6 @@ fun String.compare(anotherString: String): Boolean =
 
 fun String.spaceByUppercase() =
     this.split(Regex("(?=\\p{Upper})")).joinToString(separator = " ").trim()
+
+fun String.capitalizeWords(): String =
+    split(" ").joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }

@@ -19,10 +19,14 @@ internal fun ImportExportButton(
 ) {
 
     val importRuleJsonDialog = rememberTextViewerDialog(
-        componentContext = component, callback = component::importRules
+        componentContext = component,
+        callback = component::importRules
     )
 
-    val exportRuleDialog = rememberTextViewerDialog(component)
+    val exportRuleDialog = rememberTextViewerDialog(
+        componentContext = component,
+        formatOnStart = true,
+    )
 
     CircleButton(icon = AuroraIconPack.Publish,
         tooltip = "Import Rules",

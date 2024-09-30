@@ -34,14 +34,16 @@ import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
 import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
 import org.smartregister.fct.aurora.presentation.ui.components.Tab
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
+import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.common.presentation.ui.container.Aurora
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
+import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberResourceUploadDialog
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
-import org.smartregister.fct.editor.ui.CodeEditor
-import org.smartregister.fct.engine.util.readableResourceName
 import org.smartregister.fct.editor.data.controller.CodeController
+import org.smartregister.fct.editor.ui.CodeEditor
 import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.readableResourceName
 import org.smartregister.fct.json.JsonStyle
 import org.smartregister.fct.json.JsonTree
 import org.smartregister.fct.json.JsonTreeView
@@ -52,7 +54,33 @@ import org.smartregister.fct.sm.presentation.component.ResultTabComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapResultTabComponent
 
 @Composable
-internal fun SMTransformationResult(componentContext: ComponentContext, bundle: Bundle) {
+fun rememberTransformationResultDialog(
+    componentContext: ComponentContext,
+    title: String = "Transformation Result",
+): DialogController<Bundle> {
+
+    val dialogController = rememberDialog<Bundle>(
+        width = 1200.dp,
+        height = 800.dp,
+        title = title,
+    ) { _, bundle ->
+
+        SMTransformationResult(
+            //controller = controller,
+            componentContext = componentContext,
+            bundle = bundle ?: Bundle()
+        )
+    }
+
+    return dialogController
+}
+
+
+@Composable
+private fun SMTransformationResult(
+    componentContext: ComponentContext,
+    bundle: Bundle
+) {
 
     var activeTabIndex by remember { mutableStateOf(0) }
 
@@ -240,7 +268,7 @@ private fun ComponentContext.UploadOnDeviceButton(
         onClick = {
             confirmationDialogController.show(
                 title = "Upload",
-                message ="Are you sure you want to upload this in device?"
+                message = "Are you sure you want to upload this in device?"
             )
         }
     )

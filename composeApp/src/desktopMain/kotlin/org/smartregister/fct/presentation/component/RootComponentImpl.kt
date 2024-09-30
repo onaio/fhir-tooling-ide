@@ -18,6 +18,7 @@ import org.smartregister.fct.fhirman.presentation.components.FhirmanScreenCompon
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
+import org.smartregister.fct.workflow.presentation.components.WorkflowScreenComponent
 
 @OptIn(ExperimentalStateKeeperApi::class)
 class RootComponentImpl(componentContext: ComponentContext) :
@@ -30,7 +31,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = {
-            Config.Dashboard
+            Config.Workflow
         },
         key = "MainRoot"
     ) { config, childComponentContext ->
@@ -40,6 +41,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
         val activeComponent = when (config) {
             is Config.Dashboard -> DashboardScreenComponent(childComponentContext)
             is Config.StructureMap -> StructureMapScreenComponent(childComponentContext)
+            is Config.Workflow -> WorkflowScreenComponent(childComponentContext)
             is Config.FileManager -> FileManagerScreenComponent(childComponentContext)
             is Config.Fhirman -> FhirmanScreenComponent(childComponentContext)
             is Config.DeviceDatabase -> DeviceDatabaseScreenComponent(childComponentContext)

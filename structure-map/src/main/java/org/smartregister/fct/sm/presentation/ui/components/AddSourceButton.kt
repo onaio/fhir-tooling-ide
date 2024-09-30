@@ -156,6 +156,7 @@ private fun dbDataProviderDialog(
     component: TabComponent,
     parsingErrorDialog: DialogController<String>
 ) = rememberDBDataProviderDialog(
+    defaultQuery = "SELECT * FROM ResourceEntity LIMIT 1",
     componentContext = component,
 ) { source ->
 
