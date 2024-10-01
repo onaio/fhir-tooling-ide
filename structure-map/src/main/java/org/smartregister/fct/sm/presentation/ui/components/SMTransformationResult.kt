@@ -50,7 +50,6 @@ import org.smartregister.fct.json.JsonTreeView
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.enums.ResultType
 import org.smartregister.fct.sm.data.enums.inverse
-import org.smartregister.fct.sm.presentation.component.ResultTabComponent
 import org.smartregister.fct.sm.presentation.component.StructureMapResultTabComponent
 
 @Composable
@@ -171,7 +170,7 @@ private fun SMTransformationResult(
     }
 }
 
-context (ResultTabComponent)
+context (StructureMapResultTabComponent)
 @Composable
 private fun Content() {
     var resultType by remember { mutableStateOf(ResultType.Json) }

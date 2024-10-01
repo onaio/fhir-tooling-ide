@@ -5,16 +5,14 @@ import app.cash.sqldelight.coroutines.mapToList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.smartregister.fct.engine.util.compress
-import org.smartregister.fct.engine.util.decompress
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
-import org.smartregister.fct.sm.domain.model.SMDetail
+import org.smartregister.fct.sm.domain.model.SMModel
 import sqldelight.SMDaoQueries
 
-class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
+internal class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
 
-    override fun getAll(): Flow<List<SMDetail>> {
+    override fun getAll(): Flow<List<SMModel>> {
         return smDao
             .selectAll()
             .asFlow()
@@ -22,11 +20,11 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
             .map {
                 it.mapNotNull { sm ->
                     try {
-                        SMDetail(
+                        SMModel(
                             id = sm.id,
-                            title = sm.title,
-                            body = sm.body.decompress(),
-                            source = if (sm.source.isEmpty()) null else sm.source.decompress(),
+                            name = sm.name,
+                            mapPath = sm.map_path,
+                            sourcePath = sm.source_path,
                         )
                     } catch (t: Throwable) {
                         FCTLogger.e(t)
@@ -36,21 +34,21 @@ class SMSqlDelightDataSource(private val smDao: SMDaoQueries) : SMDataSource {
             }
     }
 
-    override suspend fun insert(smDetail: SMDetail) {
+    override suspend fun insert(smModel: SMModel) {
         smDao.insert(
-            id = smDetail.id,
-            title = smDetail.title,
-            body = smDetail.body.compress(),
-            source = smDetail.source?.compress() ?: ""
+            id = smModel.id,
+            name = smModel.name,
+            map_path = smModel.mapPath,
+            source_path = smModel.sourcePath
         )
     }
 
-    override suspend fun update(smDetail: SMDetail) {
+    override suspend fun update(smModel: SMModel) {
         smDao.update(
-            id = smDetail.id,
-            title = smDetail.title,
-            body = smDetail.body.compress(),
-            source = smDetail.source?.compress() ?: ""
+            id = smModel.id,
+            name = smModel.name,
+            map_path = smModel.mapPath,
+            source_path = smModel.sourcePath
         )
     }
 

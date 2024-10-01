@@ -11,11 +11,10 @@ import org.smartregister.fct.engine.util.logicalId
 
 internal class StructureMapResultTabComponent(
     componentContext: ComponentContext,
-    override val resource: Resource
-) :
-    ResultTabComponent, ComponentContext by componentContext {
+    val resource: Resource
+) : ComponentContext by componentContext {
 
-    override val codeController =
+    val codeController =
         instanceKeeper.getOrCreate("code-controller-${resource.logicalId}-${resource.hashCode()}") {
             CodeController(
                 scope = componentScope,

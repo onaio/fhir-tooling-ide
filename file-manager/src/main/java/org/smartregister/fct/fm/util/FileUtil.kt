@@ -11,6 +11,10 @@ import java.nio.charset.Charset
 
 object FileUtil {
 
+    fun getFileExtension(path: String): String {
+        return FilenameUtils.getExtension(path)
+    }
+
     fun getFilename(path: String) : String {
         return FilenameUtils.getBaseName(path)
     }

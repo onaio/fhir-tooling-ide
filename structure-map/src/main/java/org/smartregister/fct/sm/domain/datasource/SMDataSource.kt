@@ -1,12 +1,12 @@
 package org.smartregister.fct.sm.domain.datasource
 
 import kotlinx.coroutines.flow.Flow
-import org.smartregister.fct.sm.domain.model.SMDetail
+import org.smartregister.fct.sm.domain.model.SMModel
 
-interface SMDataSource {
+internal interface SMDataSource {
 
-    fun getAll(): Flow<List<SMDetail>>
-    suspend fun insert(smDetail: SMDetail)
-    suspend fun update(smDetail: SMDetail)
+    fun getAll(): Flow<List<SMModel>>
+    suspend fun insert(smModel: SMModel)
+    suspend fun update(smModel: SMModel)
     suspend fun delete(id: String)
 }

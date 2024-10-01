@@ -31,11 +31,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 
 @Composable
 internal fun GroupListAndOutResources(title: String, showLinkIcon: Boolean, items: List<String>) {
 
-    Box(
+/*    Box(
         Modifier.fillMaxWidth().height(35.dp)
             .background(MaterialTheme.colorScheme.surface)
     ) {
@@ -46,14 +47,15 @@ internal fun GroupListAndOutResources(title: String, showLinkIcon: Boolean, item
             style = MaterialTheme.typography.titleSmall
         )
         HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
-    }
+    }*/
+    //PanelHeading(title)
 
     Box {
 
         val scrollState = rememberScrollState()
         val uriHandler = LocalUriHandler.current
 
-        LazyColumn(Modifier.verticalScroll(scrollState).heightIn(min = 50.dp, max = 145.dp)) {
+        LazyColumn(Modifier.verticalScroll(scrollState).heightIn(min = 50.dp, max = 250.dp)) {
             items(items) { item ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -88,7 +90,7 @@ internal fun GroupListAndOutResources(title: String, showLinkIcon: Boolean, item
         }
 
         VerticalScrollbar(
-            modifier = Modifier.align(Alignment.CenterEnd).heightIn(min = 50.dp, max = 145.dp),
+            modifier = Modifier.align(Alignment.CenterEnd).heightIn(min = 50.dp, max = 250.dp),
             adapter = rememberScrollbarAdapter(
                 scrollState = scrollState
             )

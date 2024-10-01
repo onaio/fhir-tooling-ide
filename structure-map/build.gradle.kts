@@ -13,7 +13,10 @@ dependencies {
     implementation(Dependencies.ApacheCommon.compress)
     implementation(Dependencies.gson)
     implementation(Dependencies.KotlinX.serializationJson)
+    implementation(Dependencies.json)
+    implementation(Dependencies.Squareup.okio)
     implementation(project(":common"))
+
 
     implementation(project(":database"))
     implementation(project(":editor"))

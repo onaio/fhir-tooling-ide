@@ -34,7 +34,8 @@ internal fun ImportExportButton(
         enable = component.workspace.collectAsState().value != null,
         onClick = {
             importRuleJsonDialog.show()
-        })
+        }
+    )
     Spacer(Modifier.width(12.dp))
     CircleButton(icon = AuroraIconPack.Download,
         tooltip = "Export Rules",

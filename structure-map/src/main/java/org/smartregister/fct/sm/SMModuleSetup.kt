@@ -3,14 +3,13 @@ package org.smartregister.fct.sm
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
 import org.smartregister.fct.database.Database
-import org.smartregister.fct.engine.util.getKoinInstance
 import org.smartregister.fct.engine.setup.ModuleSetup
+import org.smartregister.fct.engine.util.getKoinInstance
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.datasource.SMSqlDelightDataSource
 import org.smartregister.fct.sm.data.repository.SMSqlDelightRepository
 import org.smartregister.fct.sm.data.transformation.SMTransformService
 import org.smartregister.fct.sm.domain.datasource.SMDataSource
-import org.smartregister.fct.sm.domain.model.TabIndex
 import org.smartregister.fct.sm.domain.repository.SMRepository
 import org.smartregister.fct.sm.domain.usecase.CreateNewSM
 import org.smartregister.fct.sm.domain.usecase.DeleteSM
@@ -27,7 +26,6 @@ class SMModuleSetup : ModuleSetup {
         single<UpdateSM> { UpdateSM(get()) }
         single<DeleteSM> { DeleteSM(get()) }
         single<SMTransformService> { SMTransformService() }
-        single<TabIndex> { TabIndex() }
     }
 
     override suspend fun setup() {

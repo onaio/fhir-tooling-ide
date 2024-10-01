@@ -1,20 +1,20 @@
 CREATE TABLE IF NOT EXISTS `sm` (
     `id` TEXT PRIMARY KEY NOT NULL,
-    `title` TEXT NOT NULL,
-    `body` TEXT NOT NULL,
-    `source` TEXT NOT NULL
+    `name` TEXT NOT NULL,
+    `map_path` TEXT NOT NULL,
+    `source_path` TEXT NOT NULL
 );
 
 selectAll:
 SELECT * FROM `sm`;
 
 insert:
-INSERT INTO `sm` (`id`, `title`, `body`, `source`)
+INSERT INTO `sm` (`id`, `name`, `map_path`, `source_path`)
 VALUES (?, ?, ?, ?);
 
 update:
 UPDATE `sm`
-SET `title` = ?, `body` = ?, `source` = ?
+SET `name` = ?, `map_path` = ?, `source_path` = ?
 WHERE `id` = ?;
 
 delete:

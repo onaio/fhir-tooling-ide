@@ -31,7 +31,7 @@ class RootComponentImpl(componentContext: ComponentContext) :
         source = navigation,
         serializer = Config.serializer(),
         initialConfiguration = {
-            Config.Workflow
+            Config.Dashboard
         },
         key = "MainRoot"
     ) { config, childComponentContext ->

@@ -21,6 +21,7 @@ class CodeController(
     private val textFlow = MutableStateFlow(initialText)
     internal val initTextFlow = MutableStateFlow(initialText)
     internal val postInitTextFlow = MutableStateFlow(initialText)
+    private var _fileType = fileType
 
     private val _isReadOnly = MutableStateFlow(readOnly)
     val isReadOnly: StateFlow<Boolean> = _isReadOnly
@@ -59,7 +60,12 @@ class CodeController(
     suspend fun setPostText(text: String) {
         this.text = text
         postInitTextFlow.emit(text)
+        textFlow.emit(text)
     }
 
-    fun getFileType() = fileType
+    fun setFileType(fileType: FileType?) {
+        _fileType = fileType
+    }
+
+    fun getFileType() = _fileType
 }
