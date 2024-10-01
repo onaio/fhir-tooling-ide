@@ -11,6 +11,7 @@ import org.smartregister.fct.aurora.auroraiconpack.Description
 import org.smartregister.fct.aurora.auroraiconpack.DesignServices
 import org.smartregister.fct.aurora.auroraiconpack.Download
 import org.smartregister.fct.aurora.auroraiconpack.EditNote
+import org.smartregister.fct.aurora.auroraiconpack.Encrypted
 import org.smartregister.fct.aurora.auroraiconpack.Equal
 import org.smartregister.fct.aurora.auroraiconpack.ExpandAll
 import org.smartregister.fct.aurora.auroraiconpack.Folder
@@ -88,7 +89,8 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
       Visibility,
       VisibilityOff,
       NoteAdd,
-      Description
+      Description,
+      Encrypted
     )
     return __AllIcons!!
   }

@@ -36,6 +36,7 @@ kotlin {
             implementation(project(":text-viewer"))
             implementation(project(":rules"))
             implementation(project(":workflow"))
+            implementation(project(":base64"))
         }
 
         desktopMain.dependencies {

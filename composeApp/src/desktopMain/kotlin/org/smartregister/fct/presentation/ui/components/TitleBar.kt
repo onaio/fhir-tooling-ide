@@ -54,8 +54,10 @@ fun TitleBar(
                     color = colorScheme.onSurface
                 )
                 Spacer(Modifier.width(16.dp))
+                Base64EncodeDecodeButton(componentContext)
+                Spacer(Modifier.width(12.dp))
                 TextViewerButton(componentContext)
-                Spacer(Modifier.width(16.dp))
+                Spacer(Modifier.width(12.dp))
                 SettingButton(componentContext)
             }
         }
