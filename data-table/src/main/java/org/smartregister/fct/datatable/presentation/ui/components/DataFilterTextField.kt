@@ -54,7 +54,7 @@ internal fun DataFilterTextField(
         modifier = modifier.fillMaxSize(),
         value = filterText,
         onValueChange = { text ->
-            if (text.length > 40) return@BasicTextField
+            if (text.length > 100) return@BasicTextField
             scope.launch {
                 controller.filterColumns[dtColumn.index]?.emit(
                     dtColumn

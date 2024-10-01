@@ -98,7 +98,6 @@ private fun NewDataSourceDialog(
         focusRequester.requestFocus()
     }
 
-
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
@@ -148,7 +147,6 @@ private fun NewDataSourceDialog(
                     query = it
                     queryError = query.trim().isEmpty()
                 },
-                enabled = if (existingWidget != null) !existingWidget.body.isSingle else true,
                 placeholder = "SELECT * FROM ...",
                 singleLine = false,
                 isError = queryError,
