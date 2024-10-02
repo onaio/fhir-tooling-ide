@@ -26,10 +26,12 @@ internal class GetAllPackagesCommand(private val packageFilterList: List<String>
     override fun build(): List<String> {
 
         return listOf(
-            "pm",
-            "list",
-            "packages",
-        ) + packageFilterList
+            (listOf(
+                "pm",
+                "list",
+                "packages",
+            ) + packageFilterList).joinToString(" ")
+        )
     }
 
     companion object {

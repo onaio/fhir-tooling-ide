@@ -15,16 +15,14 @@ import org.smartregister.fct.logger.FCTLogger
 
 class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
 
-    private val commandArgs: List<String>
+    private val commandArgs: String
 
     init {
         val platform = Platform.getPlatform()
         when (platform) {
             PlatformType.Windows -> {
                 commandArgs = listOf(
-                    "getprop",
-                    "|",
-                    "findstr",
+                    "getprop | findstr ",
                     StringBuilder().apply {
                         append("\"")
                         append(CommandConstants.DEVICE_ID)
@@ -44,14 +42,12 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
                         append(CommandConstants.DEVICE_TYPE)
                         append("\"")
                     }.toString(),
-                )
+                ).joinToString("")
             }
 
             else -> {
                 commandArgs = listOf(
-                    "getprop",
-                    "|",
-                    "grep",
+                    "getprop | grep ",
                     StringBuilder().apply {
                         append("\"")
                         append(CommandConstants.DEVICE_ID)
@@ -71,7 +67,7 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
                         append(CommandConstants.DEVICE_TYPE)
                         append("\"")
                     }.toString(),
-                )
+                ).joinToString("")
             }
         }
     }
@@ -156,7 +152,7 @@ class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
     }
 
     override fun build(): List<String> {
-        return commandArgs
+        return listOf(commandArgs)
     }
 
     override fun getDependentCommands(): List<ADBCommand<*>> {

@@ -37,16 +37,7 @@ abstract class ContentCommand(
     }
 
     override fun build(): List<String> {
-        return listOf(
-            "content",
-            "call",
-            "--uri",
-            "'content://${packageId}.fct'",
-            "--method",
-            "'${getMethodName()}'",
-            "--arg",
-            "'${getCompressedArgument()}'"
-        )
+        return listOf("content call --uri 'content://${packageId}.fct' --method '${getMethodName()}' --arg '${getCompressedArgument()}'")
     }
 
     private fun getCompressedArgument(): String {

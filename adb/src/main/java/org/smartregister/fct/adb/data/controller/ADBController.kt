@@ -50,13 +50,20 @@ class ADBController(private val shellProgram: ShellProgram) {
     ): CommandResult<*> {
 
         val commandList = mutableListOf<String>().apply {
-            add("adb")
-            if (deviceId != null) {
-                add("-s")
-                add(deviceId)
+            command.build().forEachIndexed { index, cmd ->
+
+                if (index > 0) {
+                    add("&")
+                }
+
+                add("adb")
+                if (deviceId != null) {
+                    add("-s")
+                    add(deviceId)
+                }
+                if (shell) add("shell")
+                add(cmd)
             }
-            if (shell) add("shell")
-            addAll(command.build())
         }
 
         val asyncResult = CoroutineScope(Dispatchers.Default).async {

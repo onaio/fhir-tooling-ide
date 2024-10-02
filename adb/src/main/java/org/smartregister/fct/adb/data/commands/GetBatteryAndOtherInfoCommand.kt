@@ -31,11 +31,16 @@ class GetBatteryAndOtherInfoCommand : ADBCommand<Map<String, String>> {
 
     override fun build(): List<String> {
         val platform = Platform.getPlatform()
+
         val searchCommand = if (platform == PlatformType.Windows) {
             "findstr"
         } else {
             "grep"
         }
-        return listOf("\"dumpsys battery && dumpsys display | $searchCommand '${CommandConstants.DEVICE_RESOLUTION}'\"")
+
+        return listOf(
+            "dumpsys battery",
+            "dumpsys display | $searchCommand \"${CommandConstants.DEVICE_RESOLUTION}\""
+        )
     }
 }
