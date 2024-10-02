@@ -1,9 +1,9 @@
-package org.smartregister.fct.rules.domain.model
+package org.smartregister.fct.engine.domain.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class IntSize(
+data class IntSize(
     val width: Int,
     val height: Int
 ) {

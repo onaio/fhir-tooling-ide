@@ -2,6 +2,7 @@ package org.smartregister.fct.adb
 
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
+import org.smartregister.fct.adb.data.commands.GetBatteryAndOtherInfoCommand
 import org.smartregister.fct.adb.data.commands.GetAllDevicesCommand
 import org.smartregister.fct.adb.data.commands.GetDeviceInfoCommand
 import org.smartregister.fct.adb.data.controller.ADBController
@@ -29,7 +30,11 @@ class ADBModuleSetup : ModuleSetup {
     private class ADBCommandFilter : LogFilter {
 
         override fun isLoggable(log: Log): Boolean {
-            return log.tag.let { it != GetAllDevicesCommand::class.java.simpleName && it != GetDeviceInfoCommand::class.java.simpleName }
+            return log.tag.let {
+                it != GetAllDevicesCommand::class.java.simpleName &&
+                it != GetDeviceInfoCommand::class.java.simpleName &&
+                it != GetBatteryAndOtherInfoCommand::class.java.simpleName
+            }
         }
 
     }

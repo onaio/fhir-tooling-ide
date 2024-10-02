@@ -22,7 +22,7 @@ object DeviceManager : KoinComponent {
     private val controller: ADBController by inject()
     private val devices = MutableSharedFlow<List<Device?>>()
     private val selectedPackage = MutableStateFlow<PackageInfo?>(null)
-    private var activeDevice: Device? = null
+    private val activeDevice = MutableStateFlow<Device?>(null)
 
     init {
         start()
@@ -45,9 +45,15 @@ object DeviceManager : KoinComponent {
                         }
                     }
 
-                    deviceList.getOrDefault(listOf()).takeIf { it.isEmpty() }?.run {
-                        activeDevice = null
-                    }
+                    deviceList.getOrDefault(listOf())
+                        .run {
+                            activeDevice.emit(
+                                firstOrNull {
+                                    activeDevice.value == null || it.deviceId == activeDevice.value!!.deviceId
+                                }
+                            )
+                        }
+
                     devices.emit(deviceList.getOrDefault(listOf(null)))
                 } catch (ex: Throwable) {
                     FCTLogger.e(ex)
@@ -57,11 +63,15 @@ object DeviceManager : KoinComponent {
         }
     }
 
-    fun setActiveDevice(device: Device?) {
-        activeDevice = device
+    suspend fun setActiveDevice(device: Device?) {
+        activeDevice.emit(device)
     }
 
     fun getActiveDevice() : Device? {
+        return activeDevice.value
+    }
+
+    fun listenActiveDevice() : StateFlow<Device?> {
         return activeDevice
     }
 

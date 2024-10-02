@@ -61,7 +61,7 @@ fun RulesEngineMethodList() {
                 expanded = true
             },
             colors = ChipDefaults.chipColors(
-                backgroundColor = MaterialTheme.colorScheme.surface,
+                backgroundColor = colorScheme.surface,
             ),
             border = BorderStroke(
                 width = 0.5.dp,
@@ -86,22 +86,24 @@ fun RulesEngineMethodList() {
         DropdownMenu(
             modifier = Modifier
                 .width(900.dp)
-                .requiredHeightIn(max = 700.dp)
-                .background(colorScheme.surfaceContainer),
+                .requiredHeightIn(max = 700.dp),
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
 
             DropdownMenuItem(
                 text = {
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = searchText,
-                        onValueChange = {
-                            searchText = it
-                        },
-                        placeholder = "Search Method"
-                    )
+                    Column {
+                        OutlinedTextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = searchText,
+                            onValueChange = {
+                                searchText = it
+                            },
+                            placeholder = "Search Method"
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
                 },
                 onClick = {}
             )
@@ -112,6 +114,9 @@ fun RulesEngineMethodList() {
 
                 var visible by remember { mutableStateOf(false) }
                 DropdownMenuItem(
+                    modifier = Modifier.background(
+                        colorScheme.surfaceContainer
+                    ),
                     text = {
                         Column(
                             modifier = Modifier

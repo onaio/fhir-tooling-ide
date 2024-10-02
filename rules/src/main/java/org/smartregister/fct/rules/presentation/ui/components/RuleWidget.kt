@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,7 +40,6 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,9 +50,9 @@ import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisTex
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
+import org.smartregister.fct.engine.domain.model.IntSize
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.rules.domain.model.BoardProperty
-import org.smartregister.fct.rules.domain.model.IntSize
 import org.smartregister.fct.rules.domain.model.Rule
 import org.smartregister.fct.rules.domain.model.Widget
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent

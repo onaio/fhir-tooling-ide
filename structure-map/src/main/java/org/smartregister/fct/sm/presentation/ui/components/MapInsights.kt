@@ -48,10 +48,10 @@ internal fun MapInsights(component: StructureMapScreenComponent) {
             val outputResources by component.outputResources.collectAsState()
 
             PanelHeading("Groups")
-            GroupListAndOutResources("Groups", false, totalGroups)
+            GroupListAndOutResources(false, totalGroups)
 
             OutputResourcesPanelHeading()
-            GroupListAndOutResources("Output Resources", true, outputResources)
+            GroupListAndOutResources( true, outputResources)
 
         }
 

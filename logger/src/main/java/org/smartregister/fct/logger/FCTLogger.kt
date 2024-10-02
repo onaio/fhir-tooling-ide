@@ -19,7 +19,7 @@ object FCTLogger {
 
     private const val MAXIMUM_LOG_LIMIT = 1000
     private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
-    private var logFilter: LogFilter? = null
+    private var logFilters = mutableListOf<LogFilter>()
     private val isPause = MutableStateFlow(false)
     private val allLogs = MutableStateFlow<List<Log>>(listOf())
     private val logChain = CircularFifoQueue<Log>(MAXIMUM_LOG_LIMIT)
@@ -60,7 +60,7 @@ object FCTLogger {
     }
 
     fun addFilter(logFilter: LogFilter) {
-        FCTLogger.logFilter = logFilter
+        logFilters.add(logFilter)
     }
 
     fun w(message: String, tag: String? = null) {
@@ -147,7 +147,7 @@ object FCTLogger {
 
     private fun push(log: Log) {
 
-        val isLoggable = logFilter?.isLoggable(log) ?: true
+        val isLoggable = logFilters.all { it.isLoggable(log) }
         if (!isLoggable || isPause.value) return
 
         CoroutineScope(Dispatchers.IO).launch {

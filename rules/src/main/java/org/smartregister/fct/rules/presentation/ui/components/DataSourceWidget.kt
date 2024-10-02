@@ -19,11 +19,10 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import org.smartregister.fct.engine.domain.model.IntSize
 import org.smartregister.fct.rules.domain.model.BoardProperty
-import org.smartregister.fct.rules.domain.model.IntSize
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewDataSourceDialog
-import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewRuleDialog
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -59,7 +58,10 @@ fun DataSourceWidget(
                 .onGloballyPositioned {
 
                     val x = (0 - it.size.width / 2) + boardProperty.center.x
-                    val y = ((chipHeight * index + chipSpace * index) - (chipHeight / 2) * dsSize + (chipSpace / 2 * dsSize.minus(1))) + boardProperty.center.y
+                    val y =
+                        ((chipHeight * index + chipSpace * index) - (chipHeight / 2) * dsSize + (chipSpace / 2 * dsSize.minus(
+                            1
+                        ))) + boardProperty.center.y
 
                     widget.x = x.toFloat()
                     widget.y = y.toFloat()

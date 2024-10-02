@@ -1,6 +1,7 @@
 package org.smartregister.fct.adb.data.commands
 
 import org.json.JSONObject
+import org.smartregister.fct.adb.domain.model.CommandResult
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.engine.util.compress
 import org.smartregister.fct.engine.util.decompress
@@ -16,7 +17,7 @@ abstract class ContentCommand(
     private val arg: String
 ) : ADBCommand<JSONObject> {
 
-    override fun process(response: String, dependentResult: Queue<Result<*>>): Result<JSONObject> {
+    override fun process(response: String, dependentResult: List<CommandResult<*>>): Result<JSONObject> {
         return try {
             val sanitizeResponse = response.replace("Result: Bundle[{data=", "").replaceLast("}]", "")
             val jsonObject = JSONObject(sanitizeResponse.decompress())

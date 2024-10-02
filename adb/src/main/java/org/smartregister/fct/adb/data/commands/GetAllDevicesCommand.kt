@@ -1,5 +1,6 @@
 package org.smartregister.fct.adb.data.commands
 
+import org.smartregister.fct.adb.domain.model.CommandResult
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.CommandConstants
@@ -8,7 +9,7 @@ import java.util.Queue
 
 class GetAllDevicesCommand : ADBCommand<List<Device>> {
 
-    override fun process(response: String, dependentResult: Queue<Result<*>>): Result<List<Device>> {
+    override fun process(response: String, dependentResult: List<CommandResult<*>>): Result<List<Device>> {
         return response
             .takeIf { it.contains("\t") }
             ?.split("\n")

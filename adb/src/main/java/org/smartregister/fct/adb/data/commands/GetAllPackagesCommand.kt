@@ -1,5 +1,6 @@
 package org.smartregister.fct.adb.data.commands
 
+import org.smartregister.fct.adb.domain.model.CommandResult
 import org.smartregister.fct.adb.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.resultAsCommandException
@@ -11,7 +12,7 @@ internal class GetAllPackagesCommand(private val packageFilterList: List<String>
 
     override fun process(
         response: String,
-        dependentResult: Queue<Result<*>>
+        dependentResult: List<CommandResult<*>>
     ): Result<List<PackageInfo>> {
         return response
             .takeIfNotError()

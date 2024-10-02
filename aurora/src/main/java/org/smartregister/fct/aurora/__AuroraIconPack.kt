@@ -11,6 +11,7 @@ import org.smartregister.fct.aurora.auroraiconpack.Description
 import org.smartregister.fct.aurora.auroraiconpack.DesignServices
 import org.smartregister.fct.aurora.auroraiconpack.Download
 import org.smartregister.fct.aurora.auroraiconpack.EditNote
+import org.smartregister.fct.aurora.auroraiconpack.ElectricBoltFill
 import org.smartregister.fct.aurora.auroraiconpack.Encrypted
 import org.smartregister.fct.aurora.auroraiconpack.Equal
 import org.smartregister.fct.aurora.auroraiconpack.ExpandAll
@@ -26,6 +27,7 @@ import org.smartregister.fct.aurora.auroraiconpack.ListAlt
 import org.smartregister.fct.aurora.auroraiconpack.LocalFireDepartment
 import org.smartregister.fct.aurora.auroraiconpack.MoveDown
 import org.smartregister.fct.aurora.auroraiconpack.NoteAdd
+import org.smartregister.fct.aurora.auroraiconpack.OpenInNew
 import org.smartregister.fct.aurora.auroraiconpack.PhoneAndroid
 import org.smartregister.fct.aurora.auroraiconpack.Publish
 import org.smartregister.fct.aurora.auroraiconpack.Save
@@ -90,7 +92,9 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
       VisibilityOff,
       NoteAdd,
       Description,
-      Encrypted
+      Encrypted,
+      OpenInNew,
+      ElectricBoltFill
     )
     return __AllIcons!!
   }

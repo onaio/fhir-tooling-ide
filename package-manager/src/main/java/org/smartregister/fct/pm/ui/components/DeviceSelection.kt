@@ -122,13 +122,11 @@ internal fun DeviceSelectionMenu() {
 
 
 private fun Device?.getOptionName(): String {
-    return this?.getDeviceInfo()?.model ?: "No Device"
+    return this?.getDeviceInfo()?.name ?: "No Device"
 }
 
 private fun Device?.getInfo(): String {
     return this
         ?.getDeviceInfo()
-        ?.let {
-            "${it.model} Android ${it.version}, API ${it.apiLevel}"
-        } ?: "No Device"
+        ?.getAllBasicDetail() ?: "No Device"
 }

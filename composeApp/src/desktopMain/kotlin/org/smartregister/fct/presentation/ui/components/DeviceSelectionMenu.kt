@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 
@@ -35,6 +37,7 @@ import org.smartregister.fct.adb.domain.usecase.DeviceManager
 @Composable
 internal fun DeviceSelectionMenu() {
 
+    val scope = rememberCoroutineScope()
     val devices by DeviceManager.getAllDevices().collectAsState(initial = listOf(null))
     var expanded by remember { mutableStateOf(false) }
     var selectedValue by remember { mutableStateOf(devices[0]) }
@@ -42,7 +45,7 @@ internal fun DeviceSelectionMenu() {
     if (devices.isNotEmpty()) {
         if (devices[0] == null) {
             selectedValue = null
-            DeviceManager.setActiveDevice(null)
+            scope.launch { DeviceManager.setActiveDevice(null) }
         } else {
             devices.filterNotNull()
                 .map {
@@ -50,7 +53,7 @@ internal fun DeviceSelectionMenu() {
                 }.run {
                     if (selectedValue?.getDeviceInfo()?.id !in this) {
                         selectedValue = devices[0]
-                        DeviceManager.setActiveDevice(selectedValue)
+                        scope.launch { DeviceManager.setActiveDevice(selectedValue) }
                     }
                 }
         }
@@ -131,7 +134,7 @@ internal fun DeviceSelectionMenu() {
                     onClick = {
                         selectedValue = selectionOption
                         expanded = false
-                        DeviceManager.setActiveDevice(selectedValue)
+                        scope.launch { DeviceManager.setActiveDevice(selectedValue) }
                     }
                 )
             }
@@ -141,13 +144,11 @@ internal fun DeviceSelectionMenu() {
 }
 
 private fun Device?.getOptionName(): String {
-    return this?.getDeviceInfo()?.model ?: "No Device"
+    return this?.getDeviceInfo()?.name ?: "No Device"
 }
 
 private fun Device?.getInfo(): String {
     return this
         ?.getDeviceInfo()
-        ?.let {
-            "${it.model} (${it.id}) Android ${it.version}, API ${it.apiLevel}"
-        } ?: "No Device"
+        ?.getAllBasicDetail() ?: "No Device"
 }

@@ -8,5 +8,7 @@ internal object CommandConstants {
     const val DEVICE_MANUFACTURER = "ro.product.manufacturer"
     const val DEVICE_MODEL = "ro.product.model"
     const val DEVICE_NAME = "ro.product.name"
+    const val DEVICE_NAME_DEFAULT = "ro.product.product.tran.device.name.default"
     const val DEVICE_TYPE = "ro.product.system.device"
+    const val DEVICE_RESOLUTION = "mStableDisplaySize"
 }

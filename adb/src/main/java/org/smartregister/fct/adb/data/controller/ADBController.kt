@@ -3,6 +3,7 @@ package org.smartregister.fct.adb.data.controller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import org.smartregister.fct.adb.domain.model.CommandResult
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.logger.FCTLogger
@@ -16,25 +17,26 @@ class ADBController(private val shellProgram: ShellProgram) {
         command: ADBCommand<T>,
         deviceId: String? = null,
         shell: Boolean = true,
-        strictDependent: Boolean = true
     ): Result<T> {
 
-        val dependentResult: Queue<Result<*>> = LinkedList()
-        if (command.getDependentCommands().isNotEmpty()) {
-            executeBatch(command.getDependentCommands().remove(), deviceId, shell, dependentResult)
+        val dependentResult = mutableListOf<CommandResult<*>>()
+        command.getDependentCommands().forEach {
+            executeBatch(it, deviceId, shell, dependentResult)
         }
 
-        return execute(command, deviceId, shell, dependentResult) as Result<T>
+        return execute(command, deviceId, shell, dependentResult).result as Result<T>
     }
 
     private suspend fun executeBatch(
         command: ADBCommand<*>,
         deviceId: String? = null,
         shell: Boolean = true,
-        dependentResult: Queue<Result<*>>
+        dependentResult: MutableList<CommandResult<*>>
     ) {
         if (command.getDependentCommands().isNotEmpty()) {
-            executeBatch(command.getDependentCommands().remove(), deviceId, shell, dependentResult)
+            command.getDependentCommands().forEach {
+                executeBatch(it, deviceId, shell, dependentResult)
+            }
         } else {
             dependentResult.add(execute(command, deviceId, shell, dependentResult))
         }
@@ -44,8 +46,8 @@ class ADBController(private val shellProgram: ShellProgram) {
         command: ADBCommand<*>,
         deviceId: String? = null,
         shell: Boolean = true,
-        dependentResult: Queue<Result<*>>
-    ): Result<*> {
+        dependentResult: List<CommandResult<*>>
+    ): CommandResult<*> {
 
         val commandList = mutableListOf<String>().apply {
             add("adb")
@@ -66,13 +68,22 @@ class ADBController(private val shellProgram: ShellProgram) {
 
         return if (result.isSuccess) {
             try {
-                command.process(result.getOrThrow(), dependentResult)
+                CommandResult(
+                    command = command,
+                    result = command.process(result.getOrThrow(), dependentResult)
+                )
             } catch (t: Throwable) {
                 FCTLogger.e(t)
-                result
+                CommandResult(
+                    command = command,
+                    result = result
+                )
             }
         } else {
-            result
+            CommandResult(
+                command = command,
+                result = result
+            )
         }
     }
 }

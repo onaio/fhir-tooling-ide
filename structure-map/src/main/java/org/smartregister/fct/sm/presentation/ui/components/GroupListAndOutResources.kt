@@ -34,21 +34,7 @@ import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 
 @Composable
-internal fun GroupListAndOutResources(title: String, showLinkIcon: Boolean, items: List<String>) {
-
-/*    Box(
-        Modifier.fillMaxWidth().height(35.dp)
-            .background(MaterialTheme.colorScheme.surface)
-    ) {
-        HorizontalDivider(modifier = Modifier.align(Alignment.TopCenter))
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = title,
-            style = MaterialTheme.typography.titleSmall
-        )
-        HorizontalDivider(modifier = Modifier.align(Alignment.BottomCenter))
-    }*/
-    //PanelHeading(title)
+internal fun GroupListAndOutResources(showLinkIcon: Boolean, items: List<String>) {
 
     Box {
 

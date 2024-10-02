@@ -1,11 +1,11 @@
 package org.smartregister.fct.adb.domain.program
 
-import java.util.LinkedList
+import org.smartregister.fct.adb.domain.model.CommandResult
 import java.util.Queue
 
 interface ADBCommand<T> {
 
-    fun process(response: String, dependentResult: Queue<Result<*>>): Result<T>
+    fun process(response: String, dependentResult: List<CommandResult<*>>): Result<T>
     fun build(): List<String>
-    fun getDependentCommands(): Queue<ADBCommand<*>> = LinkedList()
+    fun getDependentCommands(): List<ADBCommand<*>> = ArrayList()
 }

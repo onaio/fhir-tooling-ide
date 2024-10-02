@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 import org.smartregister.fct.common.domain.model.Config
 import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.presentation.component.ScreenComponent
-import org.smartregister.fct.dashboard.ui.presentation.components.DashboardScreenComponent
+import org.smartregister.fct.dashboard.ui.components.DashboardScreenComponent
 import org.smartregister.fct.device_database.ui.components.DeviceDatabaseScreenComponent
 import org.smartregister.fct.fhirman.presentation.components.FhirmanScreenComponent
 import org.smartregister.fct.fm.presentation.components.FileManagerScreenComponent

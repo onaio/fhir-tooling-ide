@@ -3,6 +3,7 @@ package org.smartregister.fct.rules.domain.model
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import org.smartregister.fct.engine.domain.model.IntSize
 import org.smartregister.fct.rules.data.enums.Placement
 
 @Serializable
@@ -19,7 +20,7 @@ internal data class Widget<T : java.io.Serializable>(
     @kotlinx.serialization.Transient
     var warnings: List<String> = listOf(),
 
-) {
+    ) {
 
     @kotlinx.serialization.Transient
     private var _flash = MutableStateFlow(false)

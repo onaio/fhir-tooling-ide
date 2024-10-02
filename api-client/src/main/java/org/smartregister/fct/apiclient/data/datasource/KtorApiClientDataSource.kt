@@ -178,7 +178,7 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
             }
 
             when (response.status) {
-                HttpStatusCode.OK -> Response.Success(response.bodyAsText())
+                HttpStatusCode.OK, HttpStatusCode.Created -> Response.Success(response.bodyAsText())
 
                 HttpStatusCode.Unauthorized -> {
 
