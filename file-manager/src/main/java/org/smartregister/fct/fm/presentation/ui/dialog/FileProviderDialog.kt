@@ -17,7 +17,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.Tabs
 import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.editor.ui.CodeEditor
+import org.smartregister.fct.editor.presentation.ui.view.CodeEditor
 import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.domain.model.FPInitialConfig
 import org.smartregister.fct.fm.presentation.ui.components.InAppFileManager

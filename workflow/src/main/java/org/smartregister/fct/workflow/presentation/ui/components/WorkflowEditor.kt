@@ -26,7 +26,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.device_database.ui.presentation.dialog.rememberDBDataProviderDialog
 import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.editor.ui.CodeEditor
+import org.smartregister.fct.editor.presentation.ui.view.CodeEditor
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.workflow.presentation.components.BaseWorkflowComponent
 import org.smartregister.fct.workflow.util.WorkflowConfig

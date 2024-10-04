@@ -41,7 +41,7 @@ import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberResourceUploadDialog
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 import org.smartregister.fct.editor.data.controller.CodeController
-import org.smartregister.fct.editor.ui.CodeEditor
+import org.smartregister.fct.editor.presentation.ui.view.CodeEditor
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.readableResourceName
 import org.smartregister.fct.json.JsonStyle

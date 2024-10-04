@@ -1,4 +1,4 @@
-package org.smartregister.fct.editor.ui.components
+package org.smartregister.fct.editor.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource

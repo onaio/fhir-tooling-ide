@@ -1,4 +1,4 @@
-package org.smartregister.fct.editor.ui
+package org.smartregister.fct.editor.presentation.ui.view
 
 import androidx.compose.foundation.HorizontalScrollbar
 import androidx.compose.foundation.VerticalScrollbar
@@ -55,7 +55,7 @@ import org.smartregister.fct.editor.data.controller.CodeController
 import org.smartregister.fct.editor.data.enums.FileType
 import org.smartregister.fct.editor.data.transformation.JsonTransformation
 import org.smartregister.fct.editor.data.transformation.SMVisualTransformation
-import org.smartregister.fct.editor.ui.components.Toolbox
+import org.smartregister.fct.editor.presentation.ui.components.Toolbox
 import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.engine.data.manager.AppSettingManager
 import org.smartregister.fct.engine.util.prettyJson

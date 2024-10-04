@@ -33,7 +33,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.presentation.ui.components.HorizontalSplitPane
-import org.smartregister.fct.editor.ui.CodeEditor
+import org.smartregister.fct.editor.presentation.ui.view.CodeEditor
 import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.fhirman.data.manager.FhirmanServerTabsManager
 import org.smartregister.fct.fhirman.presentation.components.FhirmanServerComponent
