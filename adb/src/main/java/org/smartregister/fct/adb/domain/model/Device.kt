@@ -7,8 +7,10 @@ import org.smartregister.fct.adb.data.commands.AppDatabaseQueryCommand
 import org.smartregister.fct.adb.data.commands.ExecuteRulesCommand
 import org.smartregister.fct.adb.data.commands.ExecuteWorkflowCommand
 import org.smartregister.fct.adb.data.commands.GetAllPackagesCommand
+import org.smartregister.fct.adb.data.commands.GetInsightsCommand
 import org.smartregister.fct.adb.data.controller.ADBController
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
+import org.smartregister.fct.engine.domain.model.PackageInfo
 
 class Device internal constructor(internal val deviceId: String) : KoinComponent {
 
@@ -43,6 +45,15 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
         return runContentCommand(arg) { packageId ->
             controller.executeCommand(
                 ExecuteWorkflowCommand(packageId, arg),
+                deviceId = deviceId
+            )
+        }
+    }
+
+    suspend fun getInsights(arg: String): Result<JSONObject> {
+        return runContentCommand(arg) { packageId ->
+            controller.executeCommand(
+                GetInsightsCommand(packageId, arg),
                 deviceId = deviceId
             )
         }

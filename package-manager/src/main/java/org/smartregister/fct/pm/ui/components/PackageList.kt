@@ -19,11 +19,13 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.getKoin
-import org.smartregister.fct.adb.domain.model.PackageInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisText
 import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
@@ -39,6 +41,7 @@ internal fun PackageList(
 ) {
 
     val snackbarHost = LocalSnackbarHost.current
+    val scope = rememberCoroutineScope()
     val saveNewPackage = getKoin().get<SaveNewPackage>()
     val deletePackage = getKoin().get<DeletePackage>()
     val state = rememberLazyListState()
@@ -84,7 +87,9 @@ internal fun PackageList(
                                     packageInfo.id?.let { deletePackage(it) }
                                     DeviceManager.getActivePackage().value?.packageId?.let { pid ->
                                         if (packageInfo.packageId == pid) {
-                                            DeviceManager.setActivePackage(packageInfo.copy(name = null))
+                                            scope.launch {
+                                                DeviceManager.setActivePackage(packageInfo.copy(name = null))
+                                            }
                                         }
                                     }
                                 }
@@ -101,7 +106,11 @@ internal fun PackageList(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { DeviceManager.setActivePackage(packageInfo) }
+                            .clickable {
+                                scope.launch {
+                                    DeviceManager.setActivePackage(packageInfo)
+                                }
+                            }
                             .padding(vertical = 3.dp, horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {

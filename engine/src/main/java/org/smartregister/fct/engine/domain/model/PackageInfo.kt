@@ -1,5 +1,8 @@
-package org.smartregister.fct.adb.domain.model
+package org.smartregister.fct.engine.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PackageInfo(
     val packageId: String,
     val id: String? = null,

@@ -36,7 +36,7 @@ abstract class DataTableController(
 
     internal val tempFilterValue = mutableMapOf<Int, String>()
 
-    internal val columns = data.columns
+    internal val columns = MutableStateFlow(data.columns)
     internal val filterColumns: Map<Int, MutableStateFlow<DTFilterColumn>>
 
     private val _activeSortColumnInfo = MutableStateFlow<Triple<Int, ImageVector, OrderBy>?>(null)
@@ -48,7 +48,7 @@ abstract class DataTableController(
 
     init {
         filterColumns = mutableMapOf<Int, MutableStateFlow<DTFilterColumn>>().apply {
-            columns.filterIsInstance<DTFilterColumn>().forEach {
+            columns.value.filterIsInstance<DTFilterColumn>().forEach {
                 put(it.index, MutableStateFlow(it))
             }
         }

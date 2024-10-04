@@ -117,7 +117,7 @@ private fun NavigationBar(rootComponent: RootComponent) {
 @Composable
 private fun ThemeChangerButton() {
     val appSettingManager = koinInject<AppSettingManager>()
-    var appSetting = appSettingManager.appSetting
+    val appSetting = appSettingManager.appSetting
 
     Tooltip(
         tooltip = if (appSetting.isDarkTheme) "Light Mode" else "Dark Mode",
@@ -125,10 +125,8 @@ private fun ThemeChangerButton() {
         tooltipPosition = TooltipPosition.Right(),
     ) {
         IconButton(onClick = {
-            appSetting = appSettingManager.appSetting.copy(
-                isDarkTheme = !appSetting.isDarkTheme
-            )
-            appSettingManager.update(appSetting)
+            appSetting.isDarkTheme = !appSetting.isDarkTheme
+            appSettingManager.update()
         }) {
             val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
             Icon(icon = icon)

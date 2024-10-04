@@ -15,7 +15,7 @@ import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 fun QueryTabPanel(
     tabComponent: QueryTabComponent,
     componentContext: ComponentContext,
-    defaultQuery: String = "",
+    defaultQuery: String? = null,
     onDataSelect: ((String) -> Unit)? = null
 ) {
     val resultComponent by tabComponent.queryResultDataController.collectAsState()

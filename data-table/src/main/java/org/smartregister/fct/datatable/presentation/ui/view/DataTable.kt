@@ -139,7 +139,7 @@ fun DataTable(
     val dataRowBGOdd = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f)
     val dataRowBGEven = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f)
     var dtWidth by remember { mutableStateOf(0.dp) }
-    val columns = controller.columns
+    val columns by controller.columns.collectAsState()
 
     Aurora(
         componentContext = componentContext

@@ -11,13 +11,14 @@ import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Resource
 import org.json.JSONObject
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.adb.domain.model.PackageInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.device_database.data.controller.QueryResultDataController
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.QueryResponse
 import org.smartregister.fct.engine.util.compactJson
+import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeResourceFromString
 
 class QueryTabComponent(
@@ -26,13 +27,13 @@ class QueryTabComponent(
 
     var selectedDBInfo = DeviceDBConfigPersistence.listOfDB[0]
 
-    private var _loading = MutableStateFlow(false)
+    private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
-    private var _error = MutableStateFlow<String?>(null)
+    private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    private var _query = MutableStateFlow(TextFieldValue(""))
+    private val _query = MutableStateFlow(TextFieldValue(""))
     val query: StateFlow<TextFieldValue> = _query
 
     private val _queryResultDataController = MutableStateFlow<QueryResultDataController?>(null)

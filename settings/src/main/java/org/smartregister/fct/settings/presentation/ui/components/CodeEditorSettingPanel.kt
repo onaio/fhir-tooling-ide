@@ -88,10 +88,6 @@ internal fun CodeEditorSettingPanel() {
 
 private fun updateTabIndentSetting(tabIndent: Int, appSettingManager: AppSettingManager) {
     val appSetting = appSettingManager.appSetting
-    val updatedAppSetting = appSetting.copy(
-        codeEditorConfig = appSetting.codeEditorConfig.copy(
-            indent = tabIndent
-        )
-    )
-    appSettingManager.update(updatedAppSetting)
+    appSetting.codeEditorConfig.indent = tabIndent
+    appSettingManager.update()
 }

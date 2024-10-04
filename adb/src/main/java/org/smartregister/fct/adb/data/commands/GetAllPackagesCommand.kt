@@ -1,11 +1,10 @@
 package org.smartregister.fct.adb.data.commands
 
 import org.smartregister.fct.adb.domain.model.CommandResult
-import org.smartregister.fct.adb.domain.model.PackageInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.resultAsCommandException
 import org.smartregister.fct.adb.utils.takeIfNotError
-import java.util.Queue
 
 internal class GetAllPackagesCommand(private val packageFilterList: List<String>) :
     ADBCommand<List<PackageInfo>> {

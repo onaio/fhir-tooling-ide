@@ -19,14 +19,6 @@ class ImportConfigDialogComponent(
     private val appSettingManager: AppSettingManager by inject()
     private var appSetting = appSettingManager.appSetting
 
-    init {
-        componentScope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                appSetting = it
-            }
-        }
-    }
-
     fun loadConfigs(configJson: String) {
         componentScope.launch {
             try {
@@ -55,11 +47,8 @@ class ImportConfigDialogComponent(
                     )
                 }
 
-            val updatedAppSetting = appSetting.copy(
-                serverConfigs = mergedConfigs
-            )
-
-            appSettingManager.update(updatedAppSetting)
+            appSetting.updateServerConfigs(mergedConfigs)
+            appSettingManager.update()
             serverConfigPanelComponent.hideImportConfigDialog()
         }
     }

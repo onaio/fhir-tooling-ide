@@ -61,7 +61,7 @@ import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.logger.FCTLogger
 
 @Composable
-internal fun QueryEditor(component: QueryTabComponent, defaultQuery: String) {
+internal fun QueryEditor(component: QueryTabComponent, defaultQuery: String?) {
 
     val appSetting: AppSetting = koinInject<AppSettingManager>().appSetting
     val isDarkTheme = appSetting.isDarkTheme
@@ -71,10 +71,12 @@ internal fun QueryEditor(component: QueryTabComponent, defaultQuery: String) {
 
     LaunchedEffect(component) {
         lineNumbers = getLineNumbers(component.query.value.text)
-        component.updateTextField(TextFieldValue(
-            text = defaultQuery,
-            selection = TextRange(start = defaultQuery.length, end = defaultQuery.length)
-        ))
+        if (defaultQuery != null) {
+            component.updateTextField(TextFieldValue(
+                text = defaultQuery,
+                selection = TextRange(start = defaultQuery.length, end = defaultQuery.length)
+            ))
+        }
     }
 
     lineNumbersTopPadding = if (lineNumbers.contains("2")) {

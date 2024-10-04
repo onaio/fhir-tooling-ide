@@ -92,10 +92,8 @@ class ServerConfigPanelComponent(
 
     private fun loadConfigs() {
         componentScope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                appSetting = it
-                _tabComponents.value = appSetting
-                    .serverConfigs
+            appSetting.getServerConfigsAsFlow().collectLatest {
+                _tabComponents.value = it
                     .map { serverConfig ->
                         ServerConfigComponent(
                             componentContext = componentContext,
@@ -108,10 +106,10 @@ class ServerConfigPanelComponent(
     }
 
     private fun updateSetting() {
-        val configs = _tabComponents.value.map { it.serverConfig }
-        val updatedSetting = appSetting.copy(
-            serverConfigs = configs
-        )
-        appSettingManager.update(updatedSetting)
+        componentScope.launch {
+            val configs = _tabComponents.value.map { it.serverConfig }
+            appSetting.updateServerConfigs(configs)
+            appSettingManager.update()
+        }
     }
 }

@@ -2,7 +2,7 @@ package org.smartregister.fct.pm.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.adb.domain.model.PackageInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.pm.domain.datasource.PackageDataSource
 import org.smartregister.fct.pm.domain.repository.PackageRepository
 

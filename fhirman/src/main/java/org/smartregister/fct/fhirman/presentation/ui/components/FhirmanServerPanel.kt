@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,7 +32,7 @@ fun ComponentContext.FhirmanServerPanel(auroraManager: AuroraManager) {
 
     with(fhirmanServerComponent) {
         val appSettingManager = koinInject<AppSettingManager>()
-        val configs = appSettingManager.appSetting.serverConfigs
+        val configs by appSettingManager.appSetting.getServerConfigsAsFlow().collectAsState()
 
         if (configs.isNotEmpty()) {
             with(tabsManager) {

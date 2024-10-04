@@ -1,4 +1,4 @@
-package org.smartregister.fct.dashboard.ui.presentation.components
+package org.smartregister.fct.aurora.presentation.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.ColumnScope
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun Widget(
+fun CardWidget(
     modifier: Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {

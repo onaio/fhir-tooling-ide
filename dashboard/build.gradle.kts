@@ -11,5 +11,6 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":adb"))
+    implementation(project(":insights"))
 
 }

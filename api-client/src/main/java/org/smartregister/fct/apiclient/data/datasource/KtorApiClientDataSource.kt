@@ -224,9 +224,16 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
         password = config.password
     )
 
-    private fun updateServerConfig(serverConfig: ServerConfig) {
+    private suspend fun updateServerConfig(serverConfig: ServerConfig) {
         val appSettingManager = getKoinInstance<AppSettingManager>()
-        appSettingManager.updateServerConfig(serverConfig)
+        val appSetting = appSettingManager.appSetting
+
+        val configs = appSetting.serverConfigs.map {
+            if (it.id == serverConfig.id) serverConfig else it
+        }
+
+        appSetting.updateServerConfigs(configs)
+        appSettingManager.update()
     }
 
     private fun <T> T.asPrettyJson(): String {

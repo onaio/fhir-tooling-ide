@@ -45,8 +45,8 @@ internal class FhirmanServerTabComponent(
 
     private fun listenConfigs() {
         scope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                if (_selectedConfig.value != null && _selectedConfig.value !in it.serverConfigs) {
+            appSettingManager.appSetting.getServerConfigsAsFlow().collectLatest {
+                if (_selectedConfig.value != null && _selectedConfig.value !in it) {
                     _selectedConfig.emit(null)
                 }
             }

@@ -40,24 +40,7 @@ internal fun DeviceSelectionMenu() {
     val scope = rememberCoroutineScope()
     val devices by DeviceManager.getAllDevices().collectAsState(initial = listOf(null))
     var expanded by remember { mutableStateOf(false) }
-    var selectedValue by remember { mutableStateOf(devices[0]) }
-
-    if (devices.isNotEmpty()) {
-        if (devices[0] == null) {
-            selectedValue = null
-            scope.launch { DeviceManager.setActiveDevice(null) }
-        } else {
-            devices.filterNotNull()
-                .map {
-                    it.getDeviceInfo().id
-                }.run {
-                    if (selectedValue?.getDeviceInfo()?.id !in this) {
-                        selectedValue = devices[0]
-                        scope.launch { DeviceManager.setActiveDevice(selectedValue) }
-                    }
-                }
-        }
-    }
+    val selectedValue by DeviceManager.listenActiveDevice().collectAsState()
 
     val dropdownModifier =
         if (selectedValue == null) Modifier.width(230.dp) else Modifier.wrapContentSize()
@@ -132,9 +115,8 @@ internal fun DeviceSelectionMenu() {
                         Text(text = selectionOption.getOptionName())
                     },
                     onClick = {
-                        selectedValue = selectionOption
                         expanded = false
-                        scope.launch { DeviceManager.setActiveDevice(selectedValue) }
+                        scope.launch { DeviceManager.setActiveDevice(selectionOption) }
                     }
                 )
             }

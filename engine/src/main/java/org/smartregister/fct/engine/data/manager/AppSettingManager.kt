@@ -20,35 +20,26 @@ class AppSettingManager(
     private val _isDarkTheme = MutableStateFlow(false)
     val isDarkTheme: StateFlow<Boolean> = _isDarkTheme
 
-    var appSetting = AppSetting()
-        private set
+    val appSetting = AppSetting()
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
             getAppSettingFlow().collectLatest {
-                appSetting = it
+                appSetting.isDarkTheme = it.isDarkTheme
+                appSetting.updateServerConfigs(it.serverConfigs)
+                appSetting.codeEditorConfig = it.codeEditorConfig
+                appSetting.updatePackageInfo(it.packageInfo)
                 _isDarkTheme.emit(it.isDarkTheme)
             }
         }
     }
 
-    fun update(appSetting: AppSetting) {
+    fun update() {
         updateAppSetting(appSetting)
     }
 
-    fun getAppSettingFlow(): Flow<AppSetting> {
+    private fun getAppSettingFlow(): Flow<AppSetting> {
         return getAppSetting()
     }
 
-    fun updateServerConfig(config: ServerConfig) {
-        val configs = appSetting.serverConfigs.map {
-            if (it.id == config.id) config else it
-        }
-
-        val updatedAppSetting = appSetting.copy(
-            serverConfigs = configs
-        )
-
-        update(updatedAppSetting)
-    }
 }

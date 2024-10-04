@@ -55,8 +55,8 @@ internal class UploadResourceDialogComponent(
 
     private fun loadConfigs() {
         componentScope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                _configs.value = it.serverConfigs
+            appSettingManager.appSetting.getServerConfigsAsFlow().collectLatest {
+                _configs.value = it
             }
         }
     }
@@ -152,7 +152,7 @@ internal class UploadResourceDialogComponent(
         }
     }
 
-    private fun updateSetting(updatedConfig: ServerConfig) {
+    private suspend fun updateSetting(updatedConfig: ServerConfig) {
         _configs.value.map {
             if (it.id == updatedConfig.id) {
                 _selectedConfig.value = updatedConfig
@@ -161,11 +161,8 @@ internal class UploadResourceDialogComponent(
                 it
             }
         }.let {
-            appSettingManager.appSetting.copy(
-                serverConfigs = it
-            )
-        }.run {
-            appSettingManager.update(this)
+            appSettingManager.appSetting.updateServerConfigs(it)
+            appSettingManager.update()
         }.also {
             _selectedConfig.value?.authToken?.trim()?.isNotEmpty()?.run {
                 upload()

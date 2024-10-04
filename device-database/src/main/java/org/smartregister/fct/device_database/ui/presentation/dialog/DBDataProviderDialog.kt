@@ -14,7 +14,7 @@ import org.smartregister.fct.device_database.ui.presentation.components.QueryTab
 fun rememberDBDataProviderDialog(
     componentContext: ComponentContext,
     title: String = "Database Data Provider",
-    defaultQuery: String = "",
+    defaultQuery: String? = null,
     onDismiss: ((DialogController<String>) -> Unit)? = null,
     onDataSelect: (String) -> Unit
 ): DialogController<String> {
@@ -41,7 +41,7 @@ fun rememberDBDataProviderDialog(
 private fun DBDataProviderDialog(
     controller: DialogController<String>,
     componentContext: ComponentContext,
-    defaultQuery: String,
+    defaultQuery: String?,
     onDataSelect: (String) -> Unit
 ) {
     val queryTabComponent = remember { QueryTabComponent(componentContext) }

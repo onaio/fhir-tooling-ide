@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.adb.domain.model.PackageInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.pm.domain.datasource.PackageDataSource
 import sqldelight.PackageInfoDaoQueries

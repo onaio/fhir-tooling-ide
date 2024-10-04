@@ -23,15 +23,7 @@ class ServerConfigComponent(
 
     private val authenticateClient: AuthenticateClient by inject()
     private val appSettingManager: AppSettingManager by inject()
-    private lateinit var appSetting: AppSetting
-
-    init {
-        componentScope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                appSetting = it
-            }
-        }
-    }
+    private val appSetting = appSettingManager.appSetting
 
     private val _fhirBaseUrl = MutableValue(serverConfig.fhirBaseUrl)
     val fhirBaseUrl: Value<String> = _fhirBaseUrl
@@ -98,10 +90,9 @@ class ServerConfigComponent(
                 .map {
                     if (it.id == updatedConfig.id) updatedConfig
                     else it
-                }.let {
-                    appSetting.copy(serverConfigs = it)
                 }.run {
-                    appSettingManager.update(this)
+                    appSetting.updateServerConfigs(this)
+                    appSettingManager.update()
                 }.also {
                     if (showSnackbar) settingSaved.value = true
                 }

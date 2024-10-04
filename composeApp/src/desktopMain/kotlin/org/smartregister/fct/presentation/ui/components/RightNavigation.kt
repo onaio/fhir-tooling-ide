@@ -64,7 +64,7 @@ fun RightNavigation(
                     tooltip = "Device Manager",
                     tooltipPosition = TooltipPosition.Left(),
                     delayMillis = 100,
-                    icon = AuroraIconPack.PhoneAndroid,
+                    icon = Icons.Outlined.PhoneAndroid,
                     selected = rightWindowState == RightWindowState.DeviceManager,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.DeviceManager) }
                 )
@@ -77,14 +77,6 @@ fun RightNavigation(
                     enable = true,
                     selected = rightWindowState == RightWindowState.PackageManager,
                     onClick = { subWindowManager.setRightWindowState(RightWindowState.PackageManager) }
-                )
-                Spacer(Modifier.height(22.dp))
-                SmallIconButton(
-                    tooltip = "Insights",
-                    tooltipPosition = TooltipPosition.Left(),
-                    delayMillis = 100,
-                    icon = AuroraIconPack.SearchInsights,
-                    onClick = {  }
                 )
             }
             Column {

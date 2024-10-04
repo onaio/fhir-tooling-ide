@@ -43,8 +43,8 @@ internal class ServerConfigProviderDialogComponent(
 
     private fun loadConfigs() {
         componentScope.launch {
-            appSettingManager.getAppSettingFlow().collectLatest {
-                _configs.value = it.serverConfigs
+            appSettingManager.appSetting.getServerConfigsAsFlow().collectLatest {
+                _configs.value = it
             }
         }
     }
