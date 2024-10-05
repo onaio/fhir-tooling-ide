@@ -8,13 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.arkivanov.decompose.ComponentContext
 import org.smartregister.fct.common.data.manager.AuroraManager
-import org.smartregister.fct.common.domain.model.ResizeOption
 import org.smartregister.fct.common.presentation.ui.components.AuroraTabs
-import org.smartregister.fct.common.presentation.ui.components.HorizontalSplitPane
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
 import org.smartregister.fct.device_database.ui.components.DeviceDBPanelComponent
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
-import org.smartregister.fct.device_database.ui.components.TabComponent
+import org.smartregister.fct.device_database.ui.components.QueryTabBaseComponent
 import org.smartregister.fct.device_database.ui.components.TableTabComponent
 
 context (AuroraManager)
@@ -84,16 +82,16 @@ internal fun MainContent(componentContext: ComponentContext) {
 @Composable
 internal fun DeviceDBTabPanel(
     componentContext: ComponentContext,
-    tabComponent: TabComponent,
+    queryTabBaseComponent: QueryTabBaseComponent,
 ) {
-    when (tabComponent) {
+    when (queryTabBaseComponent) {
         is QueryTabComponent -> QueryTabPanel(
             componentContext = componentContext,
-            tabComponent = tabComponent
+            tabComponent = queryTabBaseComponent
         )
         is TableTabComponent -> TableTabPanel(
             componentContext = componentContext,
-            tableTabComponent = tabComponent
+            tableTabComponent = queryTabBaseComponent
         )
     }
 }

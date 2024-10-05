@@ -3,9 +3,8 @@ package org.smartregister.fct.sm.presentation.component
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import org.hl7.fhir.r4.model.Resource
-import org.smartregister.fct.editor.data.controller.CodeController
-import org.smartregister.fct.editor.data.enums.FileType
-import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.editor.presentation.components.CodeEditorComponent
+import org.smartregister.fct.engine.data.enums.FileType
 import org.smartregister.fct.engine.util.encodeResourceToString
 import org.smartregister.fct.engine.util.logicalId
 
@@ -14,11 +13,11 @@ internal class StructureMapResultTabComponent(
     val resource: Resource
 ) : ComponentContext by componentContext {
 
-    val codeController =
-        instanceKeeper.getOrCreate("code-controller-${resource.logicalId}-${resource.hashCode()}") {
-            CodeController(
-                scope = componentScope,
-                initialText = resource.encodeResourceToString(),
+    val codeEditorComponent =
+        instanceKeeper.getOrCreate("code-editor-component-${resource.logicalId}-${resource.hashCode()}") {
+            CodeEditorComponent(
+                componentContext = componentContext,
+                text = resource.encodeResourceToString(),
                 fileType = FileType.Json
             )
         }

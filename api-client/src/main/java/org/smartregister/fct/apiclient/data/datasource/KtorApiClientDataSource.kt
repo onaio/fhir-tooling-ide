@@ -64,10 +64,14 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
 
             if (response.status == HttpStatusCode.OK) {
                 val success: AuthResponse.Success = response.body()
+                success.httpStatusCode = response.status.value
+                success.httpStatus = HttpStatusCode.fromValue(success.httpStatusCode).description
                 FCTLogger.i(success.asPrettyJson())
                 success
             } else {
                 val failed: AuthResponse.Failed = response.body()
+                failed.httpStatusCode = response.status.value
+                failed.httpStatus = HttpStatusCode.fromValue(failed.httpStatusCode).description
                 FCTLogger.e(failed.asPrettyJson())
                 failed
             }
@@ -178,7 +182,13 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
             }
 
             when (response.status) {
-                HttpStatusCode.OK, HttpStatusCode.Created -> Response.Success(response.bodyAsText())
+                HttpStatusCode.OK, HttpStatusCode.Created -> {
+                    Response.Success(
+                        httpStatusCode = response.status.value,
+                        httpStatus = HttpStatusCode.fromValue(response.status.value).description,
+                        response = response.bodyAsText(),
+                    )
+                }
 
                 HttpStatusCode.Unauthorized -> {
 
@@ -189,7 +199,7 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
                             request(request)
                         }
                         is AuthResponse.Failed -> {
-                            Response.Failed(authResponse.asOperationOutcome())
+                            createFailedResponse(HttpStatusCode.fromValue(authResponse.httpStatusCode), authResponse.asOperationOutcome())
                         }
                     }
                 }
@@ -197,16 +207,27 @@ internal class KtorApiClientDataSource(private val gson: Gson) : ApiClientDataSo
                 else -> {
                     val outcome: OperationOutcome = response.body()
                     FCTLogger.e(response.bodyAsText())
-                    Response.Failed(outcome)
+                    createFailedResponse(response.status, outcome)
                 }
             }
         } catch (ex: Exception) {
             FCTLogger.e(ex)
-            Response.Failed(ex.asOperationOutcome())
+            createFailedResponse(
+                status = HttpStatusCode.fromValue(0),
+                ex.asOperationOutcome()
+            )
 
         } finally {
             client.close()
         }
+    }
+
+    private fun createFailedResponse(status: HttpStatusCode, outcome: OperationOutcome): Response {
+        return Response.Failed(
+            httpStatusCode = status.value,
+            httpStatus = HttpStatusCode.fromValue(status.value).description,
+            outcome = outcome
+        )
     }
 
     private fun resolveMethod(httpMethodType: HttpMethodType) : HttpMethod = when (httpMethodType) {

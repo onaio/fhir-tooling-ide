@@ -10,7 +10,6 @@ dependencies {
     Dependencies.Compose.getAll().forEach(::implementation)
     Dependencies.HapiFhir.getAll().forEach(::implementation)
 
-    //implementation(Dependencies.composeView)
     implementation(Dependencies.json)
 
     implementation(project(":common"))

@@ -14,5 +14,4 @@ dependencies {
 
     implementation(project(":common"))
     implementation(project(":database"))
-    implementation(project(":editor"))
 }

@@ -18,12 +18,11 @@ import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPers
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.QueryResponse
 import org.smartregister.fct.engine.util.compactJson
-import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeResourceFromString
 
 class QueryTabComponent(
     componentContext: ComponentContext,
-) : TabComponent(componentContext), QueryDependency {
+) : QueryTabBaseComponent(componentContext), QueryDependency {
 
     var selectedDBInfo = DeviceDBConfigPersistence.listOfDB[0]
 

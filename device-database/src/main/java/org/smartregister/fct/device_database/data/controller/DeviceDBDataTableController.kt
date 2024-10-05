@@ -23,7 +23,7 @@ internal abstract class DeviceDBDataTableController(
     scope: CoroutineScope,
     private val initialQuery: String,
     data: Data,
-    private val totalRecords: Int,
+    totalRecords: Int,
     initialLimit: Int
 ) : DataTableController(
     scope = scope,

@@ -42,5 +42,11 @@ sealed class AuthResponse {
         @SerialName("error_description")
         val description: String? = null,
     ) : AuthResponse()
+
+    @kotlinx.serialization.Transient
+    var httpStatusCode: Int = -1
+
+    @kotlinx.serialization.Transient
+    var httpStatus: String = "Unknown Status Code"
 }
 

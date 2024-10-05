@@ -5,13 +5,13 @@ import org.smartregister.fct.common.domain.model.TabType
 import org.smartregister.fct.device_database.domain.model.DBInfo
 import org.smartregister.fct.device_database.domain.model.TableInfo
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
-import org.smartregister.fct.device_database.ui.components.TabComponent
+import org.smartregister.fct.device_database.ui.components.QueryTabBaseComponent
 import org.smartregister.fct.device_database.ui.components.TableTabComponent
 
 internal object DeviceDBConfigPersistence {
 
     val controller = TabsControllerImpl(
-        items = listOf<TabComponent>(),
+        items = listOf<QueryTabBaseComponent>(),
         title = { index, tab ->
             when (tab) {
                 is QueryTabComponent -> "Query [${(index + 1)}]"
@@ -40,7 +40,7 @@ internal object DeviceDBConfigPersistence {
         Pair(listOfDB[1].name, listOf()),
     )
 
-    fun addNewTab(tabComponent: TabComponent) {
-        controller.add(tabComponent)
+    fun addNewTab(queryTabBaseComponent: QueryTabBaseComponent) {
+        controller.add(queryTabBaseComponent)
     }
 }

@@ -15,10 +15,10 @@ import org.smartregister.fct.aurora.presentation.ui.components.OutlinedButton
 import org.smartregister.fct.settings.presentation.ui.dialogs.rememberSettingsDialog
 
 @Composable
-internal fun ComponentContext.NoConfig() {
+internal fun NoConfig(componentContext: ComponentContext) {
 
     val settingsDialog = rememberSettingsDialog(
-        componentContext = this
+        componentContext = componentContext
     )
 
     Box(Modifier.fillMaxSize()) {

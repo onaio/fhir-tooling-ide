@@ -9,6 +9,8 @@ dependencies {
 
     implementation(Dependencies.gson)
     implementation(project(":common"))
+    implementation(project(":file-manager"))
+    implementation(project(":device-database"))
 
 }
 

@@ -15,9 +15,11 @@ import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.domain.model.FileManagerMode
+import org.smartregister.fct.fm.domain.model.FileManagerMode.*
 import org.smartregister.fct.logger.FCTLogger
 import java.io.File
 import java.nio.charset.Charset
+import kotlin.io.path.absolutePathString
 
 
 internal abstract class FileManagerComponent(
@@ -28,7 +30,9 @@ internal abstract class FileManagerComponent(
 
     private val showHiddenFile = MutableStateFlow(false)
     protected val okioFileSystem = okio.FileSystem.SYSTEM
-    private val activeDir = MutableStateFlow(fileSystem.defaultActivePath())
+    private val activeDir = MutableStateFlow(
+        mode.activeDirPath?.toPath() ?: fileSystem.defaultActivePath()
+    )
     private val activeDirContent = MutableStateFlow(getFilteredPathList(activeDir.value))
 
     var visibleItem = MutableStateFlow(true)
@@ -61,8 +65,8 @@ internal abstract class FileManagerComponent(
             if (it.toFile().isHidden) showHiddenFile.value else true
         }
         .filter {
-            if (mode is FileManagerMode.View && it.toFile().isFile) {
-                it.toFile().extension in (mode as FileManagerMode.View).extensions
+            if (mode is View && mode.extensions.isNotEmpty() && it.toFile().isFile) {
+                it.toFile().extension in mode.extensions
             } else true
         }
 
@@ -97,15 +101,15 @@ internal abstract class FileManagerComponent(
 
     fun onPathSelected(path: Path) : Result<Unit> {
         return try {
-            if (mode is FileManagerMode.View) {
+            if (mode is View) {
                 val fileSelected = mode.onFileSelected
                 val pathSelected = mode.onPathSelected
 
                 fileSelected?.let {
-                    fileSelected(FileUtils.readFileToString(path.toFile(), Charset.defaultCharset()))
+                    fileSelected(path.parent?.toNioPath()?.absolutePathString() ?: "", FileUtils.readFileToString(path.toFile(), Charset.defaultCharset()))
                 }
 
-                pathSelected?.invoke(path)
+                pathSelected?.invoke(path.parent?.toNioPath()?.absolutePathString() ?: "", path.toString())
             }
 
             return Result.success(Unit)

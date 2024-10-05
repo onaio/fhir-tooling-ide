@@ -13,8 +13,8 @@ import org.hl7.fhir.r4.model.StructureMap
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
-import org.smartregister.fct.editor.data.controller.CodeController
-import org.smartregister.fct.editor.data.enums.FileType
+import org.smartregister.fct.editor.presentation.components.CodeEditorComponent
+import org.smartregister.fct.engine.data.enums.FileType
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeJson
 import org.smartregister.fct.engine.util.decodeResourceFromString
@@ -37,7 +37,8 @@ internal abstract class BaseWorkflowComponent(
 
     private val transformService: SMTransformService by inject()
 
-    internal val codeController = CodeController(componentScope, fileType = FileType.Json)
+    internal val codeEditorComponent =
+        CodeEditorComponent(screenComponent, fileType = FileType.Json)
 
     private val _openPath = MutableStateFlow<String?>(null)
     internal val openPath: StateFlow<String?> = _openPath
@@ -56,11 +57,23 @@ internal abstract class BaseWorkflowComponent(
             // save current file
             saveOpenedWorkflowFile()
 
+            // update open path
             _openPath.emit(path)
 
-            codeController.setPostText(
-                FileUtil.readFile(path.toPath())
+            // read file content
+            val content = FileUtil.readFile(path.toPath())
+
+            // set file type
+            codeEditorComponent.setFileType(
+                if (isStructureMapContent(content)) {
+                    FileType.StructureMap
+                } else {
+                    FileType.Json
+                }
             )
+
+            // update content on editor
+            codeEditorComponent.setText(content)
 
             // update last open path in config
             workflow.config.updateLastOpenPath(path)
@@ -126,7 +139,7 @@ internal abstract class BaseWorkflowComponent(
                     return@launch
                 }
 
-                codeController.setPostText(text.prettyJson())
+                codeEditorComponent.setText(text.prettyJson())
             } catch (ex: Exception) {
                 FCTLogger.e(ex)
                 screenComponent.showError(ex.message)
@@ -251,7 +264,7 @@ internal abstract class BaseWorkflowComponent(
 
     private fun saveOpenedWorkflowFile() {
         _openPath.value?.let { path ->
-            FileUtil.writeFile(path.toPath(), codeController.getText())
+            FileUtil.writeFile(path.toPath(), codeEditorComponent.getText())
         }
     }
 

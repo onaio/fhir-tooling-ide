@@ -10,7 +10,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.common.presentation.ui.dialog.DialogType
 import org.smartregister.fct.common.presentation.ui.dialog.rememberAlertDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
-import org.smartregister.fct.editor.data.enums.FileType
+import org.smartregister.fct.engine.data.enums.FileType
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 import org.smartregister.fct.serverconfig.domain.model.ImportDialogState
 import org.smartregister.fct.serverconfig.presentation.components.ImportConfigDialogComponent
@@ -25,8 +25,8 @@ internal fun ServerConfigPanelComponent.ImportConfigsDialog() {
         componentContext = this,
         title = "Import Server Configs",
         fileType = FileType.Json,
-        onFileContent = {
-            (state as ImportDialogState.ImportFileDialog).component.loadConfigs(it)
+        onFileContent = { _, fileContent ->
+            (state as ImportDialogState.ImportFileDialog).component.loadConfigs(fileContent)
         }
     )
 

@@ -22,7 +22,7 @@ import org.smartregister.fct.fm.presentation.components.InAppFileManagerComponen
 @Composable
 fun InAppFileManager(
     componentContext: ComponentContext,
-    mode: FileManagerMode = FileManagerMode.Edit
+    mode: FileManagerMode = FileManagerMode.Edit()
 ) {
 
     val fileSystem: FileSystem = koinInject(qualifier = named("inApp"))

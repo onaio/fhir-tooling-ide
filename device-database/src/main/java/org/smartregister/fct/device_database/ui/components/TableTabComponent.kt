@@ -17,7 +17,7 @@ internal class TableTabComponent(
     componentContext: ComponentContext,
     val tableInfo: TableInfo,
     private val database: String,
-) : TabComponent(componentContext), QueryDependency {
+) : QueryTabBaseComponent(componentContext), QueryDependency {
 
     private var _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading

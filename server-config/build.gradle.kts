@@ -18,7 +18,6 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":api-client"))
     implementation(project(":file-manager"))
-    implementation(project(":editor"))
 
 }
 

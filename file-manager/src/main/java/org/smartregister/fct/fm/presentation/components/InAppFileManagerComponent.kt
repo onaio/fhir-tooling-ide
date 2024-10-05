@@ -65,7 +65,7 @@ internal class InAppFileManagerComponent(
                 listOf(
                     ContextMenu(
                         ContextMenuType.SelectFile,
-                        Applicable.File((mode as FileManagerMode.View).extensions)
+                        Applicable.File(mode.extensions)
                     )
                 )
             }

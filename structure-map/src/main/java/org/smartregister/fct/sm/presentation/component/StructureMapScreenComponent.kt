@@ -15,8 +15,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.smartregister.fct.common.presentation.component.ScreenComponent
 import org.smartregister.fct.common.util.windowTitle
-import org.smartregister.fct.editor.data.controller.CodeController
-import org.smartregister.fct.editor.data.enums.FileType
+import org.smartregister.fct.editor.presentation.components.CodeEditorComponent
+import org.smartregister.fct.engine.data.enums.FileType
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeResourceFromString
 import org.smartregister.fct.engine.util.listOfAllFhirResources
@@ -61,7 +61,7 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
 
     private val transformService: SMTransformService by inject()
 
-    internal val codeController = CodeController(componentScope)
+    internal val codeEditorComponent = CodeEditorComponent(this)
 
     private val _openPath = MutableStateFlow<String?>(null)
     internal val openPath: StateFlow<String?> = _openPath
@@ -96,11 +96,11 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
 
     private fun listenEditorChanges() {
         componentScope.launch {
-            codeController.getTextAsFlow().collectLatest {
+            codeEditorComponent.textField.collectLatest {
                 if (_openPath.value == _activeStructureMap.value?.mapPath) {
 
-                    val groupsResult = async { getTotalGroups(it) }
-                    val outputResourcesResult = async { getOutputResources(it) }
+                    val groupsResult = async { getTotalGroups(it.text) }
+                    val outputResourcesResult = async { getOutputResources(it.text) }
 
                     val awaitGroup = groupsResult.await()
                     val awaitOutputResource = outputResourcesResult.await()
@@ -225,8 +225,8 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
             _openPath.emit(path)
             val content = FileUtil.readFile(path.toPath())
 
-            codeController.setFileType(findFileType(path))
-            codeController.setPostText(content)
+            codeEditorComponent.setFileType(findFileType(path))
+            codeEditorComponent.setText(content)
 
             // update last open path in config
             _activeStructureMap.value?.updateLastOpenPath(path)
@@ -242,10 +242,10 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
             try {
 
                 if (_openPath.value == _activeStructureMap.value?.sourcePath) {
-                    codeController.setPostText(text.prettyJson())
+                    codeEditorComponent.setText(text.prettyJson())
                     updateSourceFileType(text)
                 } else {
-                    codeController.setPostText(text)
+                    codeEditorComponent.setText(text)
                 }
 
             } catch (ex: Exception) {
@@ -303,7 +303,7 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
 
     private fun saveOpenedFile() {
         _openPath.value?.let { path ->
-            FileUtil.writeFile(path.toPath(), codeController.getText())
+            FileUtil.writeFile(path.toPath(), codeEditorComponent.getText())
         }
     }
 

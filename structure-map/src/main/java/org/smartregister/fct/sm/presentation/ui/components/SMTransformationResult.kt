@@ -40,7 +40,7 @@ import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationD
 import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberResourceUploadDialog
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
-import org.smartregister.fct.editor.data.controller.CodeController
+import org.smartregister.fct.editor.presentation.components.CodeEditorComponent
 import org.smartregister.fct.editor.presentation.ui.view.CodeEditor
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.readableResourceName
@@ -65,7 +65,6 @@ fun rememberTransformationResultDialog(
     ) { _, bundle ->
 
         SMTransformationResult(
-            //controller = controller,
             componentContext = componentContext,
             bundle = bundle ?: Bundle()
         )
@@ -88,9 +87,9 @@ private fun SMTransformationResult(
         resource = bundle.entry[activeTabIndex].resource
     ) else null
 
-    val smCodeController = component?.takeIf {
+    val codeEditorComponent = component?.takeIf {
         it.resource.resourceType == ResourceType.StructureMap
-    }?.codeController
+    }?.codeEditorComponent
 
     val loading = remember { mutableStateOf(false) }
     val info = remember { mutableStateOf<String?>(null) }
@@ -146,10 +145,10 @@ private fun SMTransformationResult(
                             }
                     ) {
 
-                        if (smCodeController != null && activeTabIndex == 0) {
+                        if (codeEditorComponent != null && activeTabIndex == 0) {
                             with(componentContext) {
-                                UploadOnServerButton(smCodeController)
-                                UploadOnDeviceButton(smCodeController, loading, info, error)
+                                UploadOnServerButton(codeEditorComponent)
+                                UploadOnDeviceButton(codeEditorComponent, loading, info, error)
                             }
                             Spacer(Modifier.width(12.dp))
                         }
@@ -192,21 +191,21 @@ private fun Content() {
             when (resultType) {
                 ResultType.Json -> {
                     CodeEditor(
-                        controller = codeController
+                        component = codeEditorComponent
                     )
                 }
 
                 ResultType.Tree -> {
                     val jsonTree = JsonTree(
-                        key = codeController,
-                        json = codeController.getText()
+                        key = codeEditorComponent,
+                        json = codeEditorComponent.getText()
                     )
                     JsonTreeView(
                         modifier = Modifier.fillMaxSize(),
                         tree = jsonTree,
                         style = JsonStyle(MaterialTheme.colorScheme)
                     )
-                    LaunchedEffect(codeController) {
+                    LaunchedEffect(codeEditorComponent) {
                         jsonTree.expandRoot()
                     }
                 }
@@ -216,7 +215,7 @@ private fun Content() {
 }
 
 @Composable
-private fun ComponentContext.UploadOnServerButton(smCodeController: CodeController) {
+private fun ComponentContext.UploadOnServerButton(component: CodeEditorComponent) {
 
     val resourceUploadDialog = rememberResourceUploadDialog(
         componentContext = this
@@ -226,14 +225,14 @@ private fun ComponentContext.UploadOnServerButton(smCodeController: CodeControll
         label = "Upload on Server",
         shape = RectangleShape,
         onClick = {
-            resourceUploadDialog.show(smCodeController.getText())
+            resourceUploadDialog.show(component.getText())
         }
     )
 }
 
 @Composable
 private fun ComponentContext.UploadOnDeviceButton(
-    smCodeController: CodeController,
+    component: CodeEditorComponent,
     loading: MutableState<Boolean>,
     info: MutableState<String?>,
     error: MutableState<String?>,
@@ -246,7 +245,7 @@ private fun ComponentContext.UploadOnDeviceButton(
             loading.value = true
             val queryTabComponent = QueryTabComponent(this@UploadOnDeviceButton)
             val result = queryTabComponent.updateRecordByResourceId(
-                serializedResource = smCodeController.getText()
+                serializedResource = component.getText()
             )
             loading.value = false
             if (result.isSuccess) {

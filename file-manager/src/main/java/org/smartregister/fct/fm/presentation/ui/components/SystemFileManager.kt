@@ -19,7 +19,7 @@ import org.smartregister.fct.fm.presentation.components.SystemFileManagerCompone
 @Composable
 fun SystemFileManager(
     componentContext: ComponentContext,
-    mode: FileManagerMode = FileManagerMode.Edit
+    mode: FileManagerMode = FileManagerMode.Edit()
 ) {
 
     val fileSystem: FileSystem = koinInject()
@@ -30,8 +30,6 @@ fun SystemFileManager(
             mode = mode
         )
     }
-
-    val activePath by component.getActivePath().collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (mode is FileManagerMode.Edit) Title("System File Manager")
@@ -53,7 +51,6 @@ fun SystemFileManager(
                 ContentOptions(component)
                 Content(
                     component = component,
-                    //activePath = activePath
                 )
             }
 

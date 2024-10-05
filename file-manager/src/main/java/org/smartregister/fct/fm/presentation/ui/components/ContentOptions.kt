@@ -38,7 +38,7 @@ internal fun ContentOptions(
                 component = component
             )
 
-            if (component.mode == FileManagerMode.Edit) {
+            if (component.mode == FileManagerMode.Edit()) {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
