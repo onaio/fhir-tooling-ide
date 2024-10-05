@@ -2,7 +2,9 @@ package org.smartregister.fct.logger
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.apache.commons.collections4.queue.CircularFifoQueue
@@ -24,6 +26,9 @@ object FCTLogger {
     private val allLogs = MutableStateFlow<List<Log>>(listOf())
     private val logChain = CircularFifoQueue<Log>(MAXIMUM_LOG_LIMIT)
     private var priorityFilter: LogLevel? = null
+    private val lastLog = MutableSharedFlow<Log?>()
+
+    fun listen(): SharedFlow<Log?> = lastLog
 
     fun clearLogs() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -151,6 +156,7 @@ object FCTLogger {
         if (!isLoggable || isPause.value) return
 
         CoroutineScope(Dispatchers.IO).launch {
+            lastLog.emit(log)
             logChain.add(log)
             allLogs.emit(
                 priorityFilter?.let { logChain.filter { it.priority == priorityFilter } }

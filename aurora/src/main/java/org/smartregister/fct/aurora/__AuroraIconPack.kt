@@ -7,6 +7,7 @@ import org.smartregister.fct.aurora.auroraiconpack.ConnectedTv
 import org.smartregister.fct.aurora.auroraiconpack.Cyclone
 import org.smartregister.fct.aurora.auroraiconpack.Database
 import org.smartregister.fct.aurora.auroraiconpack.Dataset
+import org.smartregister.fct.aurora.auroraiconpack.Delete
 import org.smartregister.fct.aurora.auroraiconpack.Description
 import org.smartregister.fct.aurora.auroraiconpack.DesignServices
 import org.smartregister.fct.aurora.auroraiconpack.Download
@@ -28,6 +29,7 @@ import org.smartregister.fct.aurora.auroraiconpack.LocalFireDepartment
 import org.smartregister.fct.aurora.auroraiconpack.MoveDown
 import org.smartregister.fct.aurora.auroraiconpack.NoteAdd
 import org.smartregister.fct.aurora.auroraiconpack.OpenInNew
+import org.smartregister.fct.aurora.auroraiconpack.Pause
 import org.smartregister.fct.aurora.auroraiconpack.PhoneAndroid
 import org.smartregister.fct.aurora.auroraiconpack.Publish
 import org.smartregister.fct.aurora.auroraiconpack.Save
@@ -39,9 +41,11 @@ import org.smartregister.fct.aurora.auroraiconpack.Sync
 import org.smartregister.fct.aurora.auroraiconpack.Table
 import org.smartregister.fct.aurora.auroraiconpack.TableEye
 import org.smartregister.fct.aurora.auroraiconpack.Token
+import org.smartregister.fct.aurora.auroraiconpack.VerticalAlignBottom
 import org.smartregister.fct.aurora.auroraiconpack.Visibility
 import org.smartregister.fct.aurora.auroraiconpack.VisibilityOff
 import org.smartregister.fct.aurora.auroraiconpack.Widgets
+import org.smartregister.fct.aurora.auroraiconpack.WrapText
 import kotlin.collections.List as ____KtList
 
 public object AuroraIconPack
@@ -94,7 +98,11 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
       Description,
       Encrypted,
       OpenInNew,
-      ElectricBoltFill
+      ElectricBoltFill,
+      WrapText,
+      Pause,
+      Delete,
+      VerticalAlignBottom
     )
     return __AllIcons!!
   }

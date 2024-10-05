@@ -18,6 +18,7 @@ import org.smartregister.fct.engine.data.manager.AppSettingManager
 import org.smartregister.fct.engine.domain.model.HttpMethodType
 import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.encodeResourceToString
 import org.smartregister.fct.fhirman.util.FhirmanConfig
 import org.smartregister.fct.logger.FCTLogger
 
@@ -135,26 +136,33 @@ class FhirmanScreenComponent(
         componentScope.launch {
             buildRequest()?.let {
                 _loading.emit(true)
-                when (val response = apiRequest(it)) {
-                    is Response.Success -> {
-                        _loading.emit(false)
 
-                        _responseStatus.emit("Status: ${response.httpStatusCode} ${response.httpStatus}")
+                try {
+                    when (val response = apiRequest(it)) {
+                        is Response.Success -> {
+                            _loading.emit(false)
 
-                        if (_methodType.value is HttpMethodType.Delete) {
-                            showInfo("${_resourceType.value}/${_resourceId.value} successfully deleted")
+                            _responseStatus.emit("Status: ${response.httpStatusCode} ${response.httpStatus}")
+
+                            if (_methodType.value is HttpMethodType.Delete) {
+                                showInfo("${_resourceType.value}/${_resourceId.value} successfully deleted")
+                            }
+                            responseCodeEditorComponent.setText(response.response)
+                            responseCodeEditorComponent.formatJson()
                         }
-                        responseCodeEditorComponent.setText(response.response)
-                        responseCodeEditorComponent.formatJson()
-                    }
 
-                    is Response.Failed -> {
-                        _loading.emit(false)
-                        _responseStatus.emit("Status: ${response.httpStatusCode} ${response.httpStatus}")
-                        val error = response.outcome.issue.firstOrNull()?.diagnostics
-                        FCTLogger.e(error)
-                        showError(error)
+                        is Response.Failed -> {
+                            _loading.emit(false)
+                            _responseStatus.emit("Status: ${response.httpStatusCode} ${response.httpStatus}")
+                            val error = response.outcome.issue.firstOrNull()?.diagnostics
+                            responseCodeEditorComponent.setText(response.outcome.encodeResourceToString())
+                            FCTLogger.e(error)
+                            showError(error)
+                        }
                     }
+                } catch (ex: Exception) {
+                    FCTLogger.e(ex)
+                    showError(ex.message)
                 }
 
             }
