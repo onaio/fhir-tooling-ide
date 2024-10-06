@@ -14,7 +14,7 @@ fun CreateNewWorkspaceButton(
     component: RulesScreenComponent
 ) {
 
-    val createNewWorkspaceDialog = rememberNewWorkspaceDialog {
+    val createNewWorkspaceDialog = rememberNewWorkspaceDialog(component) {
         component.createWorkspace(it)
     }
 

@@ -39,6 +39,7 @@ import org.smartregister.fct.aurora.auroraiconpack.NoteAdd
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
@@ -97,9 +98,8 @@ internal fun WorkflowFiles(
                     listOf(planDefinitionPath, subjectPath).forEach { path ->
                         Row(modifier = Modifier.fillMaxWidth()
                             .background(itemBackground(component, path))
-                            .clickable { }.doubleClick(component.componentScope) {
-                                component.openPath(path)
-                            }, verticalAlignment = Alignment.CenterVertically
+                            .clickable {component.openPath(path) },
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(Modifier.width(12.dp))
                             Icon(
@@ -119,8 +119,7 @@ internal fun WorkflowFiles(
 
                     ConstraintLayout(modifier = Modifier.fillMaxWidth()
                         .background(itemBackground(component, path))
-                        .clickable { }
-                        .doubleClick(component.componentScope) {
+                        .clickable {
                             component.openPath(path)
                         }
                     ) {
@@ -139,12 +138,17 @@ internal fun WorkflowFiles(
                             Icon(
                                 modifier = Modifier.size(20.dp), icon = AuroraIconPack.Description
                             )
-                            Text(
-                                modifier = Modifier.padding(12.dp),
-                                text = WorkflowConfig.getFileName(path),
-                                overflow = TextOverflow.Ellipsis,
-                                softWrap = false
-                            )
+                            Tooltip(
+                                tooltip = WorkflowConfig.getFileName(path),
+                                tooltipPosition = TooltipPosition.Bottom()
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(12.dp),
+                                    text = WorkflowConfig.getFileName(path),
+                                    overflow = TextOverflow.Ellipsis,
+                                    softWrap = false
+                                )
+                            }
                         }
 
                         Row(modifier = Modifier.constrainAs(deleteBtnRef) {
@@ -157,11 +161,10 @@ internal fun WorkflowFiles(
                                 onClick = {
                                     deleteWorkflowFileDialog.show(
                                         title = "Delete Workflow File",
-                                        message = "Are you sure you want to delete this file?",
+                                        message = "Are you sure you want to delete this ${WorkflowConfig.getFileName(path)} file?",
                                         data = path
                                     )
                                 },
-                                enable = path != openPath,
                                 tooltip = "Delete",
                                 tooltipPosition = TooltipPosition.Bottom()
                             )

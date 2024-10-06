@@ -141,7 +141,7 @@ internal fun InfoCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(0.7f)
+            containerColor = colorScheme.surface.copy(0.7f)
         )
     ) {
         Column(

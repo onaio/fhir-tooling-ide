@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.MoveDown
@@ -141,8 +142,7 @@ private fun WorkflowList(component: WorkflowScreenComponent) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
-                    .clickable { }
-                    .doubleClick(component.componentScope) {
+                    .clickable {
                         component.toggleAllWorkflowPanel()
                         component.openWorkflow(workflow)
                     },
@@ -180,6 +180,16 @@ private fun WorkflowList(component: WorkflowScreenComponent) {
                         )
                     }
                 }
+            }
+        }
+
+        if (component.allWorkflows.isEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    text = "No workflow available",
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

@@ -1,6 +1,7 @@
 package org.smartregister.fct.workflow.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -106,6 +107,9 @@ internal abstract class BaseWorkflowComponent(
 
                 // save/update active workflow
                 screenComponent.saveWorkflow(workflow)
+
+                // open workflow file
+                openPath(filePath)
             }
 
 
@@ -115,8 +119,8 @@ internal abstract class BaseWorkflowComponent(
     internal fun deleteWorkflowFile(path: String) {
         componentScope.launch {
 
-            // delete file from storage
-            FileUtil.deleteFile(path.toPath())
+            // open plan-def file
+            openPath(workflow.config.planDefinitionPath)
 
             // delete file path from other resources list
             workflow.config.removeOtherResourcePath(path)
@@ -126,6 +130,11 @@ internal abstract class BaseWorkflowComponent(
 
             // show info
             screenComponent.showInfo("${WorkflowConfig.getFileName(path)} has been successfully deleted")
+
+            delay(1000)
+
+            // delete file from storage
+            FileUtil.deleteFile(path.toPath())
         }
     }
 
@@ -139,10 +148,16 @@ internal abstract class BaseWorkflowComponent(
                     return@launch
                 }
 
+                codeEditorComponent.setFileType(FileType.Json)
                 codeEditorComponent.setText(text.prettyJson())
             } catch (ex: Exception) {
-                FCTLogger.e(ex)
-                screenComponent.showError(ex.message)
+                codeEditorComponent.setText(text)
+                if (isStructureMapContent(text)) {
+                    codeEditorComponent.setFileType(FileType.StructureMap)
+                } else {
+                    FCTLogger.e(ex)
+                    screenComponent.showError(ex.message)
+                }
             }
         }
     }

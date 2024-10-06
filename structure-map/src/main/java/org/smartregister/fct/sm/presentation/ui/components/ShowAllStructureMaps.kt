@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.MoveDown
@@ -139,8 +140,7 @@ private fun StructureMapList(component: StructureMapScreenComponent) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp)
-                    .clickable { }
-                    .doubleClick(component.componentScope) {
+                    .clickable {
                         component.toggleAllStructureMapPanel()
                         component.openStructureMap(smModel, smModel.mapPath)
                     },
@@ -178,6 +178,16 @@ private fun StructureMapList(component: StructureMapScreenComponent) {
                         )
                     }
                 }
+            }
+        }
+
+        if (component.allStructureMaps.isEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    text = "No structure-map available",
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

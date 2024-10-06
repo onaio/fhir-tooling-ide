@@ -59,8 +59,7 @@ internal fun SourceFiles(
                     listOf(mapPath, sourcePath).forEach { path ->
                         Row(modifier = Modifier.fillMaxWidth()
                             .background(itemBackground(component, path))
-                            .clickable { }
-                            .doubleClick(component.componentScope) {
+                            .clickable {
                                 component.openPath(path)
                             },
                             verticalAlignment = Alignment.CenterVertically

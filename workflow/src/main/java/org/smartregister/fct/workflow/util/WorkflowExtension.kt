@@ -8,5 +8,5 @@ internal fun Workflow.createWorkflowFilePath(fileName: String): String {
             " ",
             "_"
         )
-    }.json"
+    }.txt"
 }

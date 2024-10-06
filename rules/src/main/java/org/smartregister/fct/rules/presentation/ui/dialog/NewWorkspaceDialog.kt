@@ -21,19 +21,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Resource
+import org.smartregister.fct.aurora.AuroraIconPack
+import org.smartregister.fct.aurora.auroraiconpack.Database
 import org.smartregister.fct.aurora.presentation.ui.components.AutoCompleteDropDown
 import org.smartregister.fct.aurora.presentation.ui.components.Button
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
+import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
+import org.smartregister.fct.device_database.ui.presentation.dialog.rememberDBDataProviderDialog
+import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.engine.util.decodeResourceFromString
 import org.smartregister.fct.engine.util.listOfAllFhirResources
+import org.smartregister.fct.engine.util.logicalId
 import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.rules.domain.model.DataSource
 import org.smartregister.fct.rules.domain.model.Widget
 import org.smartregister.fct.rules.domain.model.Workspace
 
 @Composable
 internal fun rememberNewWorkspaceDialog(
+    componentContext: ComponentContext,
     title: String = "New Workspace",
     onDismiss: ((DialogController<Workspace>) -> Unit)? = null,
     onDone: (Workspace) -> Unit
@@ -48,6 +60,7 @@ internal fun rememberNewWorkspaceDialog(
     ) { controller, existingDataSource ->
 
         NewWorkspaceDialog(
+            componentContext = componentContext,
             controller = controller,
             existingDataSource = existingDataSource,
             onDone = onDone,
@@ -59,6 +72,7 @@ internal fun rememberNewWorkspaceDialog(
 
 @Composable
 private fun NewWorkspaceDialog(
+    componentContext: ComponentContext,
     controller: DialogController<Workspace>,
     existingDataSource: Workspace?,
     onDone: (Workspace) -> Unit,
@@ -70,7 +84,7 @@ private fun NewWorkspaceDialog(
     var id by remember { mutableStateOf("") }
     var logicalId by remember { mutableStateOf("") }
     var resourceType by remember { mutableStateOf("") }
-    var matchResource by remember { mutableStateOf(MatchResource.UseRandom) }
+    var matchResource by remember { mutableStateOf(MatchResource.UseAny) }
     val focusRequester = remember { FocusRequester() }
 
     var nameError by remember { mutableStateOf(false) }
@@ -79,6 +93,20 @@ private fun NewWorkspaceDialog(
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    val dbDataProviderDialog = rememberDBDataProviderDialog(
+        componentContext = componentContext,
+        defaultQuery = "SELECT * FROM ResourceEntity",
+    ) { data ->
+        componentContext.componentScope.launch {
+            logicalId = try {
+                data.decodeResourceFromString<Resource>().logicalId
+            } catch (ex :Exception) {
+                FCTLogger.e(ex)
+                data
+            }
+        }
     }
 
     Column(
@@ -127,28 +155,41 @@ private fun NewWorkspaceDialog(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = matchResource == MatchResource.UseRandom,
+                    selected = matchResource == MatchResource.UseAny,
                     onClick = {
-                        matchResource = MatchResource.UseRandom
+                        matchResource = MatchResource.UseAny
                     }
                 )
                 Text(
-                    text = "Use Random"
+                    text = "Use Any"
                 )
             }
             Row(
                 modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                RadioButton(
-                    selected = matchResource == MatchResource.UseLogicalId,
-                    onClick = {
-                        matchResource = MatchResource.UseLogicalId
-                    }
-                )
-                Text(
-                    text = "Use Logical Id"
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = matchResource == MatchResource.UseLogicalId,
+                        onClick = {
+                            matchResource = MatchResource.UseLogicalId
+                        }
+                    )
+                    Text(
+                        text = "Use Logical Id"
+                    )
+                }
+                if (matchResource == MatchResource.UseLogicalId) {
+                    SmallIconButton(
+                        icon = AuroraIconPack.Database,
+                        onClick = {
+                            dbDataProviderDialog.show()
+                        }
+                    )
+                }
             }
         }
         Spacer(Modifier.height(8.dp))
@@ -207,5 +248,5 @@ private fun NewWorkspaceDialog(
 }
 
 private enum class MatchResource {
-    UseRandom, UseLogicalId
+    UseAny, UseLogicalId
 }

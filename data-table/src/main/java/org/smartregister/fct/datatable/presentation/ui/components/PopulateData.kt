@@ -72,6 +72,7 @@ import org.smartregister.fct.datatable.domain.model.DataCell
 import org.smartregister.fct.datatable.domain.model.DataRow
 import org.smartregister.fct.datatable.presentation.ui.view.serialNoCellWidth
 import org.smartregister.fct.engine.util.uuid
+import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -96,172 +97,180 @@ internal fun PopulateData(
     var dataCellHover by remember { mutableStateOf(-1) }
     val selectedRow by controller.selectedRowIndex.collectAsState()
 
-    LazyColumn {
+    if (data.isNotEmpty() && data.first().data.isNotEmpty() && (data.first().data.size - 1) <= columns.size) {
+        LazyColumn {
 
-        itemsIndexed(data) { rowIndex, dataRow ->
+            itemsIndexed(data) { rowIndex, dataRow ->
 
-            val dataRowBG = if (dataRowHover == rowIndex) {
-                colorScheme.surfaceContainer
-            } else {
-                if (rowIndex % 2 == 0) dataRowBGEven else dataRowBGOdd
-            }
-
-            var rowModifier = Modifier.height(40.dp).background(dataRowBG)
-
-            if (selectedRow == rowIndex) {
-                rowModifier = rowModifier.border(border = BorderStroke(
-                    width = 1.dp,
-                    color = colorScheme.onSurface.copy(0.4f)
-                ))
-            }
-
-            Row(
-                modifier = rowModifier,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(serialNoCellWidth)
-                        .background(colorScheme.surfaceContainer),
-                ) {
-
-                    val serialNo = if (controller is DTPagination) {
-                        controller.getOffset() + rowIndex + 1
-                    } else {
-                        rowIndex + 1
-                    }
-
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = "$serialNo"
-                    )
-
-                    DTVerticalDivider(
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd),
-                        alpha = 0.5f
-                    )
+                val dataRowBG = if (dataRowHover == rowIndex) {
+                    colorScheme.surfaceContainer
+                } else {
+                    if (rowIndex % 2 == 0) dataRowBGEven else dataRowBGOdd
                 }
 
-                dataRow.data.forEachIndexed { cellIndex, dataCell ->
+                var rowModifier = Modifier.height(40.dp).background(dataRowBG)
 
-                    val dataCellBorder =
-                        if (rowIndex == dataRowHover && cellIndex == dataCellHover) BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-                        ) else null
+                if (selectedRow == rowIndex) {
+                    rowModifier = rowModifier.border(border = BorderStroke(
+                        width = 1.dp,
+                        color = colorScheme.onSurface.copy(0.4f)
+                    ))
+                }
 
-                    DataBox(
+                Row(
+                    modifier = rowModifier,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Box(
                         modifier = Modifier
-                            .onPointerEvent(PointerEventType.Enter) {
-                                dataRowHover = rowIndex
-                                dataCellHover = cellIndex
-                            }
-                            .onPointerEvent(PointerEventType.Exit) {
-                                dataRowHover = -1
-                                dataCellHover = -1
-                            },
-                        index = dataCell.index,
-                        columnWidthMapState = columnWidthMapState,
-                        enableDivider = cellIndex == columns.size.minus(1)
+                            .fillMaxHeight()
+                            .width(serialNoCellWidth)
+                            .background(colorScheme.surfaceContainer),
                     ) {
 
-
-                        val editMode = remember { mutableStateOf(false) }
-
-                        val text = dataCell.data?.let {
-                            if (it.length > 100) {
-                                "${it.substring(0, 100)}..."
-                            } else it
-                        } ?: "NULL"
-
-                        if (editMode.value) {
-                            if (controller is DTEditable) {
-                                DataCellTextField(
-                                    editMode = editMode,
-                                    controller = controller,
-                                    placeholder = "",
-                                    dataCell = dataCell,
-                                    dataRow = dataRow,
-                                    dataRows = data,
-                                )
-                            }
+                        val serialNo = if (controller is DTPagination) {
+                            controller.getOffset() + rowIndex + 1
                         } else {
-                            Surface(
-                                modifier = Modifier.fillMaxSize().background(Color.Transparent),
-                                border = dataCellBorder,
-                                color = Color.Transparent
-                            ) {
-                                Tooltip(
-                                    modifier = Modifier.fillMaxSize(),
-                                    tooltip = text,
-                                    tooltipPosition = TooltipPosition.Top(space = 10),
+                            rowIndex + 1
+                        }
+
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = "$serialNo"
+                        )
+
+                        DTVerticalDivider(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd),
+                            alpha = 0.5f
+                        )
+                    }
+
+                    dataRow.data.forEachIndexed { cellIndex, dataCell ->
+
+                        val dataCellBorder =
+                            if (rowIndex == dataRowHover && cellIndex == dataCellHover) BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                            ) else null
+
+                        DataBox(
+                            modifier = Modifier
+                                .onPointerEvent(PointerEventType.Enter) {
+                                    dataRowHover = rowIndex
+                                    dataCellHover = cellIndex
+                                }
+                                .onPointerEvent(PointerEventType.Exit) {
+                                    dataRowHover = -1
+                                    dataCellHover = -1
+                                },
+                            index = dataCell.index,
+                            columnWidthMapState = columnWidthMapState,
+                            enableDivider = cellIndex == columns.size.minus(1)
+                        ) {
+
+
+                            val editMode = remember { mutableStateOf(false) }
+
+                            val text = dataCell.data?.let {
+                                if (it.length > 100) {
+                                    "${it.substring(0, 100)}..."
+                                } else it
+                            } ?: "NULL"
+
+                            if (editMode.value) {
+                                if (controller is DTEditable) {
+                                    DataCellTextField(
+                                        editMode = editMode,
+                                        controller = controller,
+                                        placeholder = "",
+                                        dataCell = dataCell,
+                                        dataRow = dataRow,
+                                        dataRows = data,
+                                    )
+                                }
+                            } else {
+                                Surface(
+                                    modifier = Modifier.fillMaxSize().background(Color.Transparent),
+                                    border = dataCellBorder,
+                                    color = Color.Transparent
                                 ) {
-
-                                    val extraContextMenuItems = customContextMenuItems?.invoke(
-                                        dataCell.index,
-                                        columns[dataCell.index],
-                                        rowIndex,
-                                        dataRow,
-                                        dataCell
-                                    ) ?: listOf()
-
-                                    ContextMenuArea(
-                                        items = {
-                                            scope.launch {
-                                                controller.updateSelectedRowIndex(rowIndex)
-                                            }
-                                            listOf(
-                                                ContextMenuItem("Copy") {
-                                                    clipboardManager.setText(
-                                                        AnnotatedString(dataCell.data ?: "")
-                                                    )
-                                                },
-                                                ContextMenuItem("View") {
-                                                    if (columns[dataCell.index].name == "serializedResource") {
-                                                        textViewerDialogFormatted.show(dataCell.data ?: "")
-                                                    } else {
-                                                        textViewerDialog.show(dataCell.data ?: "")
-                                                    }
-                                                },
-                                            ) + extraContextMenuItems
-                                        },
+                                    Tooltip(
+                                        modifier = Modifier.fillMaxSize(),
+                                        tooltip = text,
+                                        tooltipPosition = TooltipPosition.Top(space = 10),
                                     ) {
-                                        Text(
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .clickable {
-                                                    scope.launch {
-                                                        controller.updateSelectedRowIndex(rowIndex)
-                                                    }
+
+                                        val extraContextMenuItems = try {
+                                            customContextMenuItems?.invoke(
+                                                dataCell.index,
+                                                columns[dataCell.index],
+                                                rowIndex,
+                                                dataRow,
+                                                dataCell
+                                            ) ?: listOf()
+                                        } catch (ex: Exception) {
+                                            FCTLogger.e(ex)
+                                            listOf()
+                                        }
+
+                                        ContextMenuArea(
+                                            items = {
+                                                scope.launch {
+                                                    controller.updateSelectedRowIndex(rowIndex)
                                                 }
-                                                .doubleClick(scope) {
-                                                    scope.launch {
-                                                        controller.updateSelectedRowIndex(rowIndex)
+                                                listOf(
+                                                    ContextMenuItem("Copy") {
+                                                        clipboardManager.setText(
+                                                            AnnotatedString(dataCell.data ?: "")
+                                                        )
+                                                    },
+                                                    ContextMenuItem("View") {
+                                                        if (columns[dataCell.index].name == "serializedResource") {
+                                                            textViewerDialogFormatted.show(dataCell.data ?: "")
+                                                        } else {
+                                                            textViewerDialog.show(dataCell.data ?: "")
+                                                        }
+                                                    },
+                                                ) + extraContextMenuItems
+                                            },
+                                        ) {
+                                            Text(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .clickable {
+                                                        scope.launch {
+                                                            controller.updateSelectedRowIndex(rowIndex)
+                                                        }
                                                     }
-                                                    editMode.value =
-                                                        dataCell.editable && controller is DTEditable
-                                                }
-                                                .padding(horizontal = 8.dp),
-                                            text = text,
-                                            softWrap = false,
-                                            lineHeight = 32.sp
-                                        )
+                                                    .doubleClick(scope) {
+                                                        scope.launch {
+                                                            controller.updateSelectedRowIndex(rowIndex)
+                                                        }
+                                                        editMode.value =
+                                                            dataCell.editable && controller is DTEditable
+                                                    }
+                                                    .padding(horizontal = 8.dp),
+                                                text = text,
+                                                softWrap = false,
+                                                lineHeight = 32.sp
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if (rowIndex == data.size.minus(1)) {
-                DTHorizontalDivider(dtWidth)
+                if (rowIndex == data.size.minus(1)) {
+                    DTHorizontalDivider(dtWidth)
+                }
             }
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
