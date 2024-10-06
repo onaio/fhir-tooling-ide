@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AttachMoney
+import androidx.compose.material.icons.rounded.MoveDown
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +34,10 @@ internal fun BlankWorkspace(
         componentContext = component
     ) {
 
-        Box(Modifier.wrapContentSize(unbounded = true)) {
+        Box(Modifier.fillMaxSize().wrapContentSize(unbounded = true)) {
             Icon(
-                modifier = Modifier.size(1000.dp).offset(x = (-400).dp),
-                icon = Icons.Rounded.AttachMoney,
+                modifier = Modifier.size(1000.dp).align(Alignment.Center),
+                icon = Icons.Rounded.MoveDown,
                 tint = LocalContentColor.current.copy(0.01f)
             )
         }

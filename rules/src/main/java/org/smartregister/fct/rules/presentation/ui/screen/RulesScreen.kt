@@ -37,6 +37,7 @@ import org.smartregister.fct.rules.presentation.ui.components.RulesEngineMethodL
 import org.smartregister.fct.rules.presentation.ui.components.RulesList
 import org.smartregister.fct.rules.presentation.ui.components.SaveWorkspaceButton
 import org.smartregister.fct.rules.presentation.ui.components.ShowAllWorkspacesButton
+import org.smartregister.fct.rules.presentation.ui.components.ShowAllWorkspacesPanel
 import org.smartregister.fct.rules.presentation.ui.components.TogglePathButton
 
 @Composable
@@ -122,6 +123,8 @@ fun RulesScreen(component: RulesScreenComponent) {
             ExecuteRulesButton(component)
             BoardScaleSlider(component)
         }
+
+        ShowAllWorkspacesPanel(component)
     }
 
 }

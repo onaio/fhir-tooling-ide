@@ -1,4 +1,4 @@
-package org.smartregister.fct.workflow.presentation.ui.components
+package org.smartregister.fct.rules.presentation.ui.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -34,10 +34,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.AuroraIconPack
-import org.smartregister.fct.aurora.auroraiconpack.MoveDown
-import org.smartregister.fct.aurora.auroraiconpack.Token
+import org.smartregister.fct.aurora.auroraiconpack.DesignServices
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
@@ -46,13 +46,12 @@ import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
 import org.smartregister.fct.engine.util.componentScope
-import org.smartregister.fct.workflow.data.enums.WorkflowType
-import org.smartregister.fct.workflow.domain.model.Workflow
-import org.smartregister.fct.workflow.presentation.components.WorkflowScreenComponent
-import org.smartregister.fct.workflow.util.WorkflowConfig
+import org.smartregister.fct.rules.domain.model.Workspace
+import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
+import org.smartregister.fct.rules.util.WorkspaceConfig
 
 @Composable
-internal fun ShowAllWorkflows(component: WorkflowScreenComponent) {
+internal fun ShowAllWorkspacesPanel(component: RulesScreenComponent) {
 
     var alpha by remember { mutableStateOf(0f) }
     var offsetX by remember { mutableStateOf((-400).dp) }
@@ -65,7 +64,6 @@ internal fun ShowAllWorkflows(component: WorkflowScreenComponent) {
             isShow = component.showAllWorkflowPanel.value
         }
     )
-
 
     if (component.showAllWorkflowPanel.collectAsState().value) {
         isShow = true
@@ -111,8 +109,8 @@ internal fun ShowAllWorkflows(component: WorkflowScreenComponent) {
                             onClick = {}
                         )
                 ) {
-                    PanelHeading("All Workflows")
-                    WorkflowList(component)
+                    PanelHeading("All Workspaces")
+                    WorkspaceList(component)
                 }
 
                 VerticalDivider(
@@ -124,18 +122,19 @@ internal fun ShowAllWorkflows(component: WorkflowScreenComponent) {
 }
 
 @Composable
-private fun WorkflowList(component: WorkflowScreenComponent) {
+private fun WorkspaceList(component: RulesScreenComponent) {
 
-    val deleteWorkflowDialog = rememberConfirmationDialog<Workflow> { _, workflow ->
+    val deleteWorkspaceDialog = rememberConfirmationDialog<Workspace> { _, workspace ->
         component.toggleAllWorkflowPanel()
-        component.deleteWorkflow(workflow!!)
+        component.deleteWorkspace(workspace!!)
     }
 
+    val allWorkspaces by component.allWorkspaces.collectAsState()
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        itemsIndexed(component.allWorkflows) { index, workflow ->
+        itemsIndexed(allWorkspaces) { index, workspace ->
 
             Row(
                 modifier = Modifier
@@ -144,13 +143,13 @@ private fun WorkflowList(component: WorkflowScreenComponent) {
                     .clickable { }
                     .doubleClick(component.componentScope) {
                         component.toggleAllWorkflowPanel()
-                        component.openWorkflow(workflow)
+                        component.openWorkspace(workspace)
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp).padding(start = 12.dp),
-                    icon = if (workflow.type == WorkflowType.Lite) AuroraIconPack.MoveDown else AuroraIconPack.Token
+                    icon = AuroraIconPack.DesignServices
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 16.dp),
@@ -158,21 +157,21 @@ private fun WorkflowList(component: WorkflowScreenComponent) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Tooltip(
-                        tooltip = "Workflow ${workflow.type.name}",
+                        tooltip = workspace.name,
                         tooltipPosition = TooltipPosition.Top(),
                     ) {
                         Text(
-                            text = workflow.name
+                            text = workspace.name
                         )
                     }
-                    if (workflow.id != WorkflowConfig.activeWorkflow?.id) {
+                    if (workspace.id != WorkspaceConfig.workspace?.id) {
                         SmallIconButton(
                             icon = Icons.Outlined.Delete,
                             onClick = {
-                                deleteWorkflowDialog.show(
-                                    title = "Delete Workflow",
-                                    message = "Are you sure you want to delete this workflow?",
-                                    data = workflow
+                                deleteWorkspaceDialog.show(
+                                    title = "Delete Workspace",
+                                    message = "Are you sure you want to delete this ${workspace.name} workspace?",
+                                    data = workspace
                                 )
                             },
                             tooltip = "Delete",
@@ -180,6 +179,16 @@ private fun WorkflowList(component: WorkflowScreenComponent) {
                         )
                     }
                 }
+            }
+        }
+
+        if (allWorkspaces.isEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(12.dp),
+                    text = "No workspace available",
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

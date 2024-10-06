@@ -33,6 +33,8 @@ import org.smartregister.fct.rules.domain.model.RuleResponse
 import org.smartregister.fct.rules.domain.model.Widget
 import org.smartregister.fct.rules.domain.model.Workspace
 import org.smartregister.fct.rules.domain.usecase.CreateNewWorkspace
+import org.smartregister.fct.rules.domain.usecase.DeleteWorkspace
+import org.smartregister.fct.rules.domain.usecase.GetAllWorkspace
 import org.smartregister.fct.rules.domain.usecase.UpdateWorkspace
 import org.smartregister.fct.rules.util.WorkspaceConfig
 import org.smartregister.fct.rules.util.appendBold
@@ -46,6 +48,8 @@ class RulesScreenComponent(componentContext: ComponentContext) :
 
     private val createNewWorkspace: CreateNewWorkspace by inject()
     private val updateWorkspace: UpdateWorkspace by inject()
+    private val deleteWorkspace: DeleteWorkspace by inject()
+    private val getAllWorkspaces: GetAllWorkspace by inject()
 
     private var _error = MutableSharedFlow<String?>()
     internal val error: SharedFlow<String?> = _error
@@ -55,6 +59,12 @@ class RulesScreenComponent(componentContext: ComponentContext) :
 
     private var _loading = MutableStateFlow(false)
     internal val loading: StateFlow<Boolean> = _loading
+
+    private val _showAllWorkflowPanel = MutableStateFlow(false)
+    internal val showAllWorkflowPanel: StateFlow<Boolean> = _showAllWorkflowPanel
+
+    private val _allWorkspaces = MutableStateFlow(listOf<Workspace>())
+    internal val allWorkspaces: StateFlow<List<Workspace>> = _allWorkspaces
 
     private var _boardScaling = MutableStateFlow(WorkspaceConfig.defaultBoardScale)
     internal val boardScaling: StateFlow<Float> = _boardScaling
@@ -78,6 +88,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     internal val ruleWidgets: StateFlow<List<Widget<Rule>>> = _ruleWidgets
 
     init {
+        // open active workspace if any
         componentScope.launch {
             _activeWorkspace.collectLatest {
                 it?.let {
@@ -88,10 +99,21 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 } ?: setWindowTitle(null)
             }
         }
+
+        // get and load all workspaces from db
+        componentScope.launch {
+            getAllWorkspaces().collectLatest(_allWorkspaces::emit)
+        }
     }
 
     override fun onDestroy() {
         saveActiveWorkspaceInConfig()
+    }
+
+    internal fun toggleAllWorkflowPanel() {
+        componentScope.launch {
+            _showAllWorkflowPanel.emit(!_showAllWorkflowPanel.value)
+        }
     }
 
     internal fun updateBoardOffset(offset: IntOffset) {
@@ -457,6 +479,12 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                 }
             }
             .let { JSONObject().apply { put("rules", it) } }.toString()
+    }
+
+    internal fun deleteWorkspace(workspace: Workspace) {
+        componentScope.launch {
+            deleteWorkspace(workspace.id)
+        }
     }
 
     private fun saveActiveWorkspaceInConfig() {

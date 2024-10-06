@@ -1,6 +1,5 @@
 package org.smartregister.fct.workflow.presentation.ui.screen
 
-import BlankWorkspace
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -12,6 +11,7 @@ import org.smartregister.fct.common.util.fileNameValidation
 import org.smartregister.fct.sm.presentation.ui.components.rememberTransformationResultDialog
 import org.smartregister.fct.workflow.data.enums.WorkflowType
 import org.smartregister.fct.workflow.presentation.components.WorkflowScreenComponent
+import org.smartregister.fct.workflow.presentation.ui.components.BlankWorkspace
 import org.smartregister.fct.workflow.presentation.ui.components.ShowAllWorkflows
 import org.smartregister.fct.workflow.presentation.ui.components.WorkflowContainer
 

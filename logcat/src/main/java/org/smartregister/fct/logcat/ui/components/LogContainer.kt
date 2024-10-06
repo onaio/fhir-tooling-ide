@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 @Composable
 internal fun LogContainer() {
 
-    val wrapText = remember { mutableStateOf(false) }
+    val wrapText = remember { mutableStateOf(true) }
     val stickScrollToBottom = remember { mutableStateOf(true) }
 
     Row(

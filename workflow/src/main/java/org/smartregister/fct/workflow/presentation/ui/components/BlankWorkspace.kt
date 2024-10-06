@@ -1,13 +1,14 @@
+package org.smartregister.fct.workflow.presentation.ui.components
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AttachMoney
+import androidx.compose.material.icons.rounded.Cyclone
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,10 +33,10 @@ internal fun BlankWorkspace(
         componentContext = component
     ) {
 
-        Box(Modifier.wrapContentSize(unbounded = true)) {
+        Box(Modifier.fillMaxSize().wrapContentSize(unbounded = true)) {
             Icon(
-                modifier = Modifier.size(1000.dp).offset(x = (-400).dp),
-                icon = Icons.Rounded.AttachMoney,
+                modifier = Modifier.size(1000.dp).align(Alignment.Center),
+                icon = Icons.Rounded.Cyclone,
                 tint = LocalContentColor.current.copy(0.01f)
             )
         }
