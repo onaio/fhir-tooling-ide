@@ -8,8 +8,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import androidx.compose.material3.Icon as Mat3Icon
 import androidx.compose.foundation.Image as MatImage
+import androidx.compose.material3.Icon as Mat3Icon
 
 @Composable
 fun Icon(

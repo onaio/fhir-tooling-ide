@@ -2,14 +2,11 @@ package org.smartregister.fct.dashboard.ui.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
@@ -28,8 +25,6 @@ import org.smartregister.fct.aurora.auroraiconpack.OpenInNew
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.aurora.presentation.ui.components.OutlinedTextField
 import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
-import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
-import org.smartregister.fct.aurora.presentation.ui.components.TextButton
 import org.smartregister.fct.engine.util.listOfAllFhirResources
 
 @Composable

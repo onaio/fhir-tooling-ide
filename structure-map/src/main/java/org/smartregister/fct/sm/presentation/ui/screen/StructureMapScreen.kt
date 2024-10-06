@@ -9,8 +9,8 @@ import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDi
 import org.smartregister.fct.common.util.fileNameValidation
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.presentation.ui.components.BlankWorkspace
-import org.smartregister.fct.sm.presentation.ui.components.ShowAllStructureMaps
 import org.smartregister.fct.sm.presentation.ui.components.MainContainer
+import org.smartregister.fct.sm.presentation.ui.components.ShowAllStructureMaps
 import org.smartregister.fct.sm.presentation.ui.components.rememberTransformationResultDialog
 
 @Composable

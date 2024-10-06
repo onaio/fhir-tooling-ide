@@ -1,7 +1,5 @@
 package org.smartregister.fct.fm.domain.model
 
-import okio.Path
-
 sealed class FileManagerMode(val activeDirPath: String?) {
     data class View(
         val defaultDirPath: String? = null,

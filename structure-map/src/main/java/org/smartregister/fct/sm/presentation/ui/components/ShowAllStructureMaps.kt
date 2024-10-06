@@ -43,9 +43,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
-import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
-import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.sm.domain.model.SMModel
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.util.SMConfig

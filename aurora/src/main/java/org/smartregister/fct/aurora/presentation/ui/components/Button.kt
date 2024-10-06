@@ -21,8 +21,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button as Mat3Button
-import androidx.compose.material3.TextButton as Mat3TextButton
 import androidx.compose.material3.OutlinedButton as Mat3OutlinedButton
+import androidx.compose.material3.TextButton as Mat3TextButton
 
 val auroraButtonShape = RoundedCornerShape(8.dp)
 

@@ -1,7 +1,5 @@
 package org.smartregister.fct.presentation.ui.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext

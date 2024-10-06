@@ -52,4 +52,4 @@ private val stringMap: Map<StringResource, String> = mapOf(
 fun StringResource.asString(vararg formatArgs: Any) = stringMap[this]!!
 
 context (CoroutineScope)
-suspend fun StringResource.asString() = stringMap[this]!!
+fun StringResource.asString() = stringMap[this]!!

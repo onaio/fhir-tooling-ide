@@ -3,7 +3,6 @@ package org.smartregister.fct.serverconfig.presentation.components
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -11,7 +10,6 @@ import org.smartregister.fct.apiclient.domain.model.AuthRequest
 import org.smartregister.fct.apiclient.domain.model.AuthResponse
 import org.smartregister.fct.apiclient.domain.usecase.AuthenticateClient
 import org.smartregister.fct.engine.data.manager.AppSettingManager
-import org.smartregister.fct.engine.domain.model.AppSetting
 import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.serverconfig.domain.model.VerifyConfigState

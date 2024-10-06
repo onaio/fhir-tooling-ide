@@ -24,7 +24,7 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
     }
 
     suspend fun runAppDBQuery(arg: String): Result<JSONObject> {
-        return runContentCommand(arg) { packageId ->
+        return runContentCommand { packageId ->
             controller.executeCommand(
                 AppDatabaseQueryCommand(packageId, arg),
                 deviceId = deviceId
@@ -33,7 +33,7 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
     }
 
     suspend fun executeRules(arg: String): Result<JSONObject> {
-        return runContentCommand(arg) { packageId ->
+        return runContentCommand { packageId ->
             controller.executeCommand(
                 ExecuteRulesCommand(packageId, arg),
                 deviceId = deviceId
@@ -42,7 +42,7 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
     }
 
     suspend fun executeWorkflow(arg: String): Result<JSONObject> {
-        return runContentCommand(arg) { packageId ->
+        return runContentCommand { packageId ->
             controller.executeCommand(
                 ExecuteWorkflowCommand(packageId, arg),
                 deviceId = deviceId
@@ -51,7 +51,7 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
     }
 
     suspend fun getInsights(arg: String): Result<JSONObject> {
-        return runContentCommand(arg) { packageId ->
+        return runContentCommand { packageId ->
             controller.executeCommand(
                 GetInsightsCommand(packageId, arg),
                 deviceId = deviceId
@@ -59,7 +59,7 @@ class Device internal constructor(internal val deviceId: String) : KoinComponent
         }
     }
 
-    private suspend fun<T> runContentCommand(arg: String, run: suspend (String) -> Result<T>) : Result<T> {
+    private suspend fun<T> runContentCommand(run: suspend (String) -> Result<T>) : Result<T> {
         val packageId = getPackageId() ?: return Result.failure(NullPointerException("Select Package Id"))
         return run(packageId)
     }

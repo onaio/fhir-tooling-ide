@@ -71,7 +71,6 @@ import org.smartregister.fct.datatable.domain.feature.DTPagination
 import org.smartregister.fct.datatable.domain.model.DataCell
 import org.smartregister.fct.datatable.domain.model.DataRow
 import org.smartregister.fct.datatable.presentation.ui.view.serialNoCellWidth
-import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.text_viewer.ui.dialog.rememberTextViewerDialog
 

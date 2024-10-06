@@ -4,7 +4,6 @@ import org.smartregister.fct.datatable.data.filtertype.EqualFilterType
 import org.smartregister.fct.datatable.data.filtertype.MatchAnyFilterType
 import org.smartregister.fct.datatable.data.filtertype.MatchEndFilterType
 import org.smartregister.fct.datatable.data.filtertype.MatchStartFilterType
-import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
 
 interface DTFilterableType : DTFilterable {
 

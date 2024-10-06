@@ -6,8 +6,6 @@ import okio.Path
 import okio.Path.Companion.toPath
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.Directory
-import java.io.File
-import javax.swing.filechooser.FileSystemView
 
 internal class InAppFileSystem : FileSystem {
 

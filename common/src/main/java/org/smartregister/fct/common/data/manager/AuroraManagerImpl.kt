@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.smartregister.fct.common.domain.model.Message
 import org.smartregister.fct.engine.domain.model.ServerConfig
-import org.smartregister.fct.engine.util.componentScope
 
 internal typealias ServerConfigOption = Pair<ServerConfig?, (ServerConfig) -> Unit>
 

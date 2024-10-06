@@ -9,7 +9,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import org.smartregister.fct.json.tree.TreeScope
 
 @Composable
-public fun <T> TreeScope.Leaf(
+fun <T> TreeScope.Leaf(
     content: T,
     customIcon: NodeComponent<T>? = null,
     customName: NodeComponent<T>? = null,
@@ -35,7 +35,7 @@ public fun <T> TreeScope.Leaf(
 }
 
 @Composable
-public fun <T> TreeScope.Branch(
+fun <T> TreeScope.Branch(
     content: T,
     customIcon: NodeComponent<T>? = null,
     customName: NodeComponent<T>? = null,

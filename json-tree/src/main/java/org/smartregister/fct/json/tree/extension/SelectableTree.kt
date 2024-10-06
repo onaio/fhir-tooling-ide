@@ -4,17 +4,17 @@ import org.smartregister.fct.json.node.BranchNode
 import org.smartregister.fct.json.node.LeafNode
 import org.smartregister.fct.json.node.Node
 
-public interface SelectableTree<T> {
+interface SelectableTree<T> {
 
-    public val selectedNodes: List<Node<T>>
+    val selectedNodes: List<Node<T>>
 
-    public fun toggleSelection(node: Node<T>)
+    fun toggleSelection(node: Node<T>)
 
-    public fun selectNode(node: Node<T>)
+    fun selectNode(node: Node<T>)
 
-    public fun unselectNode(node: Node<T>)
+    fun unselectNode(node: Node<T>)
 
-    public fun clearSelection()
+    fun clearSelection()
 }
 
 internal class SelectableTreeHandler<T>(

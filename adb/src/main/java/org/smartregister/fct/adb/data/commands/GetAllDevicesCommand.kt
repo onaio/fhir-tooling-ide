@@ -5,7 +5,6 @@ import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.CommandConstants
 import org.smartregister.fct.adb.utils.resultAsCommandException
-import java.util.Queue
 
 class GetAllDevicesCommand : ADBCommand<List<Device>> {
 

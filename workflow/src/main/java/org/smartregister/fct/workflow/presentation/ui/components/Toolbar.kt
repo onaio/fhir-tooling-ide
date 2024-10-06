@@ -13,7 +13,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,9 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.AuroraIconPack
-import org.smartregister.fct.aurora.auroraiconpack.Add
 import org.smartregister.fct.aurora.auroraiconpack.FolderOpen
-import org.smartregister.fct.aurora.auroraiconpack.ListAlt
 import org.smartregister.fct.aurora.auroraiconpack.NoteAdd
 import org.smartregister.fct.aurora.auroraiconpack.Send
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton

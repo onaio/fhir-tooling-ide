@@ -31,8 +31,6 @@ import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Description
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
-import org.smartregister.fct.aurora.util.doubleClick
-import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.sm.presentation.component.StructureMapScreenComponent
 import org.smartregister.fct.sm.util.SMConfig
 

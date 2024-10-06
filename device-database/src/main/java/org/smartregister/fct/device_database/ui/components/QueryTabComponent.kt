@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Resource
 import org.json.JSONObject
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.device_database.data.controller.QueryResultDataController
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.QueryResponse
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.engine.util.compactJson
 import org.smartregister.fct.engine.util.decodeResourceFromString
 

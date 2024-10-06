@@ -28,7 +28,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.logger.model.LogLevel
 
 @OptIn(ExperimentalMaterial3Api::class)

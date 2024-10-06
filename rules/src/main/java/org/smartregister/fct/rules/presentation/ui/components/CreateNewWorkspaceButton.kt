@@ -1,7 +1,5 @@
 package org.smartregister.fct.rules.presentation.ui.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
 import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Add

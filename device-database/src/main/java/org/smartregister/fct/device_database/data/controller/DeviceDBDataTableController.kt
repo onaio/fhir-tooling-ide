@@ -8,12 +8,10 @@ import org.smartregister.fct.datatable.data.controller.DataTableController
 import org.smartregister.fct.datatable.data.enums.OrderBy
 import org.smartregister.fct.datatable.data.filtertype.EqualFilterType
 import org.smartregister.fct.datatable.domain.feature.DTColumn
+import org.smartregister.fct.datatable.domain.feature.DTCountable
 import org.smartregister.fct.datatable.domain.feature.DTFilterColumn
 import org.smartregister.fct.datatable.domain.feature.DTPagination
 import org.smartregister.fct.datatable.domain.feature.DTRefreshable
-import org.smartregister.fct.datatable.domain.feature.DTSortable
-import org.smartregister.fct.datatable.domain.feature.DTCountable
-import org.smartregister.fct.datatable.domain.feature.DTFilterableType
 import org.smartregister.fct.datatable.domain.model.Data
 import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
 import org.smartregister.fct.datatable.domain.model.DataRow

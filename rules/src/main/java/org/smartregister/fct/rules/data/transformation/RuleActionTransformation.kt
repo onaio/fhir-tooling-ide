@@ -64,7 +64,6 @@ internal class RuleActionTransformation(
         )
     }
 
-    private val keywordRegex = "\\S*".toRegex()
     private val entryRegex = "data\\.put\\s*\\(|\\)(?=[^)]*\$)".toRegex()
     private val textRegex = "((?<!\\\\)['\"])((?:.(?!(?<!\\\\)\\1))*.?)\\1(?!;)".toRegex()
 

@@ -80,7 +80,7 @@ fun NumberDropDown(
     }
 
     val scope = rememberCoroutineScope()
-    var searchText by remember(key) { mutableStateOf(TextFieldValue("${defaultValue}" ?: "")) }
+    var searchText by remember(key) { mutableStateOf(TextFieldValue(defaultValue?.toString() ?: "")) }
     var isError by remember(key) { mutableStateOf(false) }
     var expanded by remember(key) { mutableStateOf(false) }
     var textFieldWidth by remember(key) { mutableStateOf(0f) }

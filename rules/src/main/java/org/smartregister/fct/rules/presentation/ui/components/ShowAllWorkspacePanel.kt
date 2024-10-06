@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -44,9 +43,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
-import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
-import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.rules.domain.model.Workspace
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.util.WorkspaceConfig

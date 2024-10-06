@@ -1,7 +1,6 @@
 package org.smartregister.fct.adb.data.commands
 
 import org.json.JSONObject
-import org.smartregister.fct.logger.FCTLogger
 
 class ExecuteRulesCommand(packageId: String, arg: String) : ContentCommand(packageId, arg) {
 

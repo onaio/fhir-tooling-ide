@@ -27,7 +27,6 @@ internal class SMVisualTransformation(
     private val baseColorStyle = SpanStyle(color = colorScheme.onBackground)
     private val blueColorStyle = SpanStyle(color = blueColor)
     private val greenColorStyle = SpanStyle(color = greenColor)
-    private val yellowColorStyle = SpanStyle(color = yellowColor)
     private val greyColorStyle = SpanStyle(color = Color(0xFFA0A0A0))
 
     private val groupTagRegex = Regex("(?<=\\n|\\s)group(?=\\s+)")
@@ -36,7 +35,6 @@ internal class SMVisualTransformation(
     private val ruleLabelRegex = Regex("(\"[a-zA-Z_]+\";)(\\s*\\n|\\n)")
     private val sourceInputRegex = Regex("(?<=\\s)->(?=\\s+.)")
 
-    //private val dataAssignRegex = Regex("\\b([a-zA-Z._]+)(?=\\s*(<|>|<=|>=|!|!=|=|as\\s*))")
     private val createObjectRegex = Regex("(?<=\\s|\\n)create(?=\\((['\"]).*(['\"])\\)\\s+)")
     private val sourceAndTargetRegex =
         Regex("(?<=\\(|,|,\\s|,\\s{2}|,\\s{3})\\n*\\s*(source|target)(?=\\s+.)")
@@ -51,7 +49,6 @@ internal class SMVisualTransformation(
         styleText(text, mapTagRegex, blueColorStyle)
         styleText(text, usesTagRegex, blueColorStyle)
         styleText(text, asKeywordRegex, blueColorStyle)
-        //styleText(transformText, ASSIGNING_REGEX, YELLOW_COLOR_STYLE)
         styleText(text, ruleLabelRegex, greyColorStyle)
         styleText(text, sourceInputRegex, blueColorStyle)
         styleText(text, thenTagRegex, blueColorStyle)

@@ -129,7 +129,7 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
         }
     }
 
-    internal fun showLoader(isShow: Boolean) {
+    private fun showLoader(isShow: Boolean) {
         componentScope.launch {
             _showLoader.emit(isShow)
         }
@@ -170,7 +170,7 @@ class StructureMapScreenComponent(private val componentContext: ComponentContext
         }
     }
 
-    internal fun saveStructureMap(smModel: SMModel) {
+    private fun saveStructureMap(smModel: SMModel) {
         componentScope.launch {
             updateStructureMap(smModel)
         }

@@ -1,8 +1,5 @@
 package org.smartregister.fct.sm.domain.model
 
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
-
 
 internal data class SMModel(
     val id: String,

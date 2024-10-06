@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.device_database.data.controller.TableResultDataController
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.QueryResponse
 import org.smartregister.fct.device_database.domain.model.TableInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 
 internal class TableTabComponent(
     componentContext: ComponentContext,

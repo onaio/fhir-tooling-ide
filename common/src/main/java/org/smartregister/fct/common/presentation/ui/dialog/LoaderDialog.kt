@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import io.github.alexzhirkevich.compottie.Compottie
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
-import org.smartregister.fct.common.data.controller.LoaderDialogController
 import org.smartregister.fct.aurora.presentation.ui.components.getLottieFireComposition
+import org.smartregister.fct.common.data.controller.LoaderDialogController
 import androidx.compose.ui.window.Dialog as MatDialog
 
 @Composable

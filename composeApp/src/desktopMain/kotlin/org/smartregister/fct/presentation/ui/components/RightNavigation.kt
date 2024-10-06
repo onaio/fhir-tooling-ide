@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ListAlt
-import androidx.compose.material.icons.outlined.ConnectedTv
-import androidx.compose.material.icons.outlined.Insights
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
@@ -26,13 +23,11 @@ import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.ConnectedTv
 import org.smartregister.fct.aurora.auroraiconpack.ListAlt
-import org.smartregister.fct.aurora.auroraiconpack.PhoneAndroid
-import org.smartregister.fct.aurora.auroraiconpack.SearchInsights
+import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
+import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.enums.RightWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
-import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
-import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 
 context (ConstraintLayoutScope)
 @Composable

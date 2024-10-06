@@ -1,16 +1,14 @@
 package org.smartregister.fct.fm.util
 
-import androidx.compose.material3.ColorScheme
-import androidx.compose.ui.graphics.Color
 import fct.file_manager.generated.resources.Res
+import fct.file_manager.generated.resources.empty_file
 import fct.file_manager.generated.resources.folder
 import fct.file_manager.generated.resources.hidden_file
+import fct.file_manager.generated.resources.hidden_folder
 import fct.file_manager.generated.resources.html_file
 import fct.file_manager.generated.resources.image_file
 import fct.file_manager.generated.resources.json_file
 import fct.file_manager.generated.resources.map_file
-import fct.file_manager.generated.resources.empty_file
-import fct.file_manager.generated.resources.hidden_folder
 import fct.file_manager.generated.resources.pdf_file
 import fct.file_manager.generated.resources.text_file
 import fct.file_manager.generated.resources.unknown_file

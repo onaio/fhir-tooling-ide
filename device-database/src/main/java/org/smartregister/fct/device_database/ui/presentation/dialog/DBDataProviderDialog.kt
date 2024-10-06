@@ -2,7 +2,6 @@ package org.smartregister.fct.device_database.ui.presentation.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import org.smartregister.fct.common.data.controller.DialogController

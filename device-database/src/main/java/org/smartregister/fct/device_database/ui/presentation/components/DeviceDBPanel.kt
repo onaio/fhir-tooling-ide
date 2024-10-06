@@ -11,8 +11,8 @@ import org.smartregister.fct.common.data.manager.AuroraManager
 import org.smartregister.fct.common.presentation.ui.components.AuroraTabs
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
 import org.smartregister.fct.device_database.ui.components.DeviceDBPanelComponent
-import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 import org.smartregister.fct.device_database.ui.components.QueryTabBaseComponent
+import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 import org.smartregister.fct.device_database.ui.components.TableTabComponent
 
 context (AuroraManager)

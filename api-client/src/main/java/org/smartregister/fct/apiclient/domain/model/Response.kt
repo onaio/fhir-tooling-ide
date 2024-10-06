@@ -1,6 +1,5 @@
 package org.smartregister.fct.apiclient.domain.model
 
-import io.ktor.http.HttpStatusCode
 import org.hl7.fhir.r4.model.OperationOutcome
 
 sealed class Response {

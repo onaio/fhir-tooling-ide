@@ -2,7 +2,6 @@ package org.smartregister.fct.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,16 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Cyclone
-import androidx.compose.material.icons.outlined.DataObject
-import androidx.compose.material.icons.outlined.Dataset
-import androidx.compose.material.icons.outlined.DesignServices
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.LocalFireDepartment
-import androidx.compose.material.icons.outlined.MoveDown
-import androidx.compose.material.icons.outlined.SquareFoot
-import androidx.compose.material.icons.outlined.Token
-import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material3.IconButton
@@ -39,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.koin.compose.koinInject
-import org.smartregister.fct.aurora.AllIcons
 import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Cyclone
 import org.smartregister.fct.aurora.auroraiconpack.Database
@@ -62,7 +50,7 @@ fun LeftNavigation(
     rootComponent: RootComponent,
     leftNav: ConstrainedLayoutReference
 ) {
-    Row (
+    Row(
         modifier = Modifier
             .width(60.dp)
             .fillMaxHeight()
@@ -128,7 +116,8 @@ private fun ThemeChangerButton() {
             appSetting.isDarkTheme = !appSetting.isDarkTheme
             appSettingManager.update()
         }) {
-            val icon = if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
+            val icon =
+                if (appSetting.isDarkTheme) Icons.Rounded.LightMode else Icons.Rounded.DarkMode
             Icon(icon = icon)
         }
     }

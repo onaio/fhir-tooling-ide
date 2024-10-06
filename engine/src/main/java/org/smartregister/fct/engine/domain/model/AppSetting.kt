@@ -3,7 +3,6 @@ package org.smartregister.fct.engine.domain.model
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
-import org.smartregister.fct.engine.domain.model.ServerConfig
 
 @Serializable
 data class AppSetting(

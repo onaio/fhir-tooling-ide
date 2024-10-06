@@ -18,7 +18,7 @@ internal object UnsafeAccessing {
         ModuleLayer.boot().findModule("java.desktop").get()
     }
 
-    val ownerModule by lazy {
+    private val ownerModule by lazy {
         this.javaClass.module
     }
 

@@ -5,8 +5,6 @@ import androidx.compose.foundation.DarkDefaultContextMenuRepresentation
 import androidx.compose.foundation.LightDefaultContextMenuRepresentation
 import androidx.compose.foundation.LocalContextMenuRepresentation
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,8 +33,6 @@ import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.Window
@@ -45,7 +41,6 @@ import androidx.compose.ui.window.WindowState
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.koin.compose.koinInject
-import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.presentation.ui.container.Aurora
 import org.smartregister.fct.common.util.LocalWindowState
 import org.smartregister.fct.engine.data.manager.AppSettingManager
@@ -54,7 +49,6 @@ import org.smartregister.fct.presentation.theme.AuroraTheme
 import org.smartregister.fct.presentation.ui.components.WindowsActionButtons
 import org.smartregister.fct.util.CustomWindowDecorationAccessing
 import org.smartregister.fct.util.ProvideWindowSpotContainer
-import java.awt.Toolkit
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
 import java.awt.geom.RoundRectangle2D

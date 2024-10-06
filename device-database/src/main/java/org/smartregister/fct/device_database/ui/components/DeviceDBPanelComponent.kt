@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.device_database.data.persistence.DeviceDBConfigPersistence
 import org.smartregister.fct.device_database.domain.model.ColumnInfo
 import org.smartregister.fct.device_database.domain.model.DBInfo
 import org.smartregister.fct.device_database.domain.model.QueryRequest
 import org.smartregister.fct.device_database.domain.model.TableInfo
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.logger.FCTLogger
 

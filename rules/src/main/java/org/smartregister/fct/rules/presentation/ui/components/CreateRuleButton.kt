@@ -6,7 +6,6 @@ import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Schema
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
-import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewDataSourceDialog
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewRuleDialog
 
 @Composable

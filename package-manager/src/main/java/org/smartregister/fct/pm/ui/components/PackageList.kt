@@ -25,11 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.getKoin
-import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.aurora.presentation.ui.components.MiddleEllipsisText
-import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
+import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
+import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.pm.domain.usecase.DeletePackage
 import org.smartregister.fct.pm.domain.usecase.SaveNewPackage

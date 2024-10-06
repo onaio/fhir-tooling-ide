@@ -23,13 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.smartregister.fct.common.data.controller.TabsControllerImpl
-import org.smartregister.fct.common.domain.model.TabType
 import org.smartregister.fct.aurora.presentation.ui.components.Icon
 import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
 import org.smartregister.fct.aurora.presentation.ui.components.Tab
 import org.smartregister.fct.aurora.presentation.ui.components.TabRow
+import org.smartregister.fct.common.data.controller.TabsControllerImpl
 import org.smartregister.fct.common.domain.controller.TabsController
+import org.smartregister.fct.common.domain.model.TabType
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
 
 @Composable

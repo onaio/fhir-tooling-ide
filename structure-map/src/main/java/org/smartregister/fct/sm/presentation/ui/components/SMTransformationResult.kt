@@ -238,8 +238,7 @@ private fun ComponentContext.UploadOnDeviceButton(
     error: MutableState<String?>,
 ) {
 
-    val confirmationDialogController = rememberConfirmationDialog<Unit>() { _, _t ->
-
+    val confirmationDialogController = rememberConfirmationDialog<Unit> { _, _ ->
 
         componentScope.launch {
             loading.value = true

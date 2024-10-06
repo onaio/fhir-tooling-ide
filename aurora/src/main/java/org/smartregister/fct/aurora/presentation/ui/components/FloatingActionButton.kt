@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.material3.SmallFloatingActionButton as Mat3SmallFloatingActionButton
-import androidx.compose.material3.FloatingActionButton as Mat3FloatingActionButton
 import androidx.compose.material3.ExtendedFloatingActionButton as Mat3ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton as Mat3FloatingActionButton
+import androidx.compose.material3.SmallFloatingActionButton as Mat3SmallFloatingActionButton
 
 @Composable
 fun SmallFloatingActionIconButton(

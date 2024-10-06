@@ -27,9 +27,7 @@ import androidx.constraintlayout.compose.Dimension
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.common.data.enums.RightWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
-import org.smartregister.fct.common.domain.model.ViewMode
 import org.smartregister.fct.common.presentation.ui.components.RightWindowHeader
-import org.smartregister.fct.common.presentation.ui.components.ViewModePopupMenu
 
 @Composable
 fun DeviceManagerWindow(subWindowManager: SubWindowManager) {

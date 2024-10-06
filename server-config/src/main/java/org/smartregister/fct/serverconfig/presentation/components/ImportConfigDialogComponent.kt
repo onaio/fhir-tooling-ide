@@ -1,6 +1,5 @@
 package org.smartregister.fct.serverconfig.presentation.components
 
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

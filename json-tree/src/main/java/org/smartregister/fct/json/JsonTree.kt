@@ -4,12 +4,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import org.smartregister.fct.json.node.Branch
-import org.smartregister.fct.json.node.Leaf
-import org.smartregister.fct.json.tree.Tree
-import org.smartregister.fct.json.tree.TreeScope
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -17,6 +12,10 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
+import org.smartregister.fct.json.node.Branch
+import org.smartregister.fct.json.node.Leaf
+import org.smartregister.fct.json.tree.Tree
+import org.smartregister.fct.json.tree.TreeScope
 
 fun JsonStyle(colorScheme: ColorScheme): FCTJsonStyle<JsonElement> =
     FCTJsonStyle(
@@ -29,7 +28,7 @@ fun JsonStyle(colorScheme: ColorScheme): FCTJsonStyle<JsonElement> =
     )
 
 @Composable
-public fun JsonTree(
+fun JsonTree(
     json: String,
     key: Any? = null,
 ): Tree<JsonElement> =

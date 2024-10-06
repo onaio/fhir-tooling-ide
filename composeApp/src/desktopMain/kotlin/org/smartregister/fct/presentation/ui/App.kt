@@ -1,8 +1,6 @@
 package org.smartregister.fct.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -12,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.common.domain.model.ResizeOption
+import org.smartregister.fct.common.presentation.component.RootComponent
 import org.smartregister.fct.common.presentation.ui.components.HorizontalSplitPane
 import org.smartregister.fct.common.presentation.ui.components.VerticalSplitPane
 import org.smartregister.fct.presentation.ui.components.BottomWindow

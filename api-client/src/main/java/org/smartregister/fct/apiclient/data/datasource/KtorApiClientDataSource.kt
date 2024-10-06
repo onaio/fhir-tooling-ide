@@ -21,7 +21,6 @@ import io.ktor.http.parameters
 import io.ktor.serialization.gson.gson
 import io.ktor.serialization.kotlinx.json.json
 import org.hl7.fhir.r4.model.OperationOutcome
-import org.koin.compose.getKoin
 import org.smartregister.fct.apiclient.data.deserializer.OperationOutcomeTypeAdapter
 import org.smartregister.fct.apiclient.domain.datasource.ApiClientDataSource
 import org.smartregister.fct.apiclient.domain.model.AuthRequest

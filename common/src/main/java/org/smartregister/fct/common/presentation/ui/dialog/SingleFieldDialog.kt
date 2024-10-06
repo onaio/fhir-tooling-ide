@@ -17,8 +17,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.smartregister.fct.common.data.controller.SingleFieldDialogController
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
+import org.smartregister.fct.common.data.controller.SingleFieldDialogController
 import java.util.UUID
 
 typealias TextFieldValidation = (String) -> Pair<Boolean, String>

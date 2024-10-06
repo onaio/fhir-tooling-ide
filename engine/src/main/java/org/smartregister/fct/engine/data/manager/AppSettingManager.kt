@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.smartregister.fct.engine.domain.model.AppSetting
-import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.engine.domain.usecase.GetAppSetting
 import org.smartregister.fct.engine.domain.usecase.UpdateAppSetting
 

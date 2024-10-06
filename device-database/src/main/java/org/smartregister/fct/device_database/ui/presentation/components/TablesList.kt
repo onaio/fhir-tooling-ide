@@ -38,7 +38,7 @@ import java.awt.event.MouseEvent
 @Composable
 internal fun TablesList(
     listOfTables: List<TableInfo>,
-    onTableDoubleClickc: (TableInfo) -> Unit,
+    onTableDoubleClick: (TableInfo) -> Unit,
     isTablesLoading: Boolean,
 ) {
 
@@ -102,7 +102,7 @@ internal fun TablesList(
                                         2 -> {
                                             scope.launch {
                                                 delay(200)
-                                                onTableDoubleClickc(tableInfo)
+                                                onTableDoubleClick(tableInfo)
                                             }
                                         }
                                     }

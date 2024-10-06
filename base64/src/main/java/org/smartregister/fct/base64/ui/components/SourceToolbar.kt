@@ -29,7 +29,6 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 context (AuroraManager)
-@OptIn(ExperimentalEncodingApi::class)
 @Composable
 internal fun SourceToolbar(
     sourceTextState: MutableState<String>,

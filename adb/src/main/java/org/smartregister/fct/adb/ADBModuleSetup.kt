@@ -2,8 +2,8 @@ package org.smartregister.fct.adb
 
 import org.koin.core.context.GlobalContext
 import org.koin.dsl.module
-import org.smartregister.fct.adb.data.commands.GetBatteryAndOtherInfoCommand
 import org.smartregister.fct.adb.data.commands.GetAllDevicesCommand
+import org.smartregister.fct.adb.data.commands.GetBatteryAndOtherInfoCommand
 import org.smartregister.fct.adb.data.commands.GetDeviceInfoCommand
 import org.smartregister.fct.adb.data.controller.ADBController
 import org.smartregister.fct.adb.data.shell.KScriptShellProgram

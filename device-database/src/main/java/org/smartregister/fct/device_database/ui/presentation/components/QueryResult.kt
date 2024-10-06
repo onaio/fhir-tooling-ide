@@ -22,7 +22,7 @@ internal fun QueryResult(
     val queryResponse = component.queryResponse
     CheckQueryResponseError(queryResponse)
 
-    if (queryResponse.queryMethod == QueryMethod.execSql) {
+    if (queryResponse.queryMethod == QueryMethod.ExecSql) {
         if (queryResponse.error == null) {
             Text(
                 modifier = Modifier.padding(12.dp),

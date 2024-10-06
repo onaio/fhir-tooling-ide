@@ -49,10 +49,10 @@ import org.smartregister.fct.logger.FCTLogger
  * Immunization.Reaction
  */
 
-class TransformSupportServices constructor(val simpleWorkerContext: SimpleWorkerContext) :
+class TransformSupportServices(private val simpleWorkerContext: SimpleWorkerContext) :
   ITransformerServices {
 
-  val outputs: MutableList<Base> = mutableListOf()
+  private val outputs: MutableList<Base> = mutableListOf()
 
   override fun log(message: String) {
     FCTLogger.i(message)

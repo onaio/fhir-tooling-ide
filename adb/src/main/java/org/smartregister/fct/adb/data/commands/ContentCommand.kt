@@ -7,10 +7,6 @@ import org.smartregister.fct.engine.util.compress
 import org.smartregister.fct.engine.util.decompress
 import org.smartregister.fct.engine.util.replaceLast
 import org.smartregister.fct.logger.FCTLogger
-import java.io.ByteArrayOutputStream
-import java.util.Base64
-import java.util.Queue
-import java.util.zip.GZIPOutputStream
 
 abstract class ContentCommand(
     private val packageId: String,

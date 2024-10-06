@@ -7,8 +7,6 @@ import org.smartregister.fct.adb.domain.model.CommandResult
 import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.logger.FCTLogger
-import java.util.LinkedList
-import java.util.Queue
 
 @Suppress("UNCHECKED_CAST")
 class ADBController(private val shellProgram: ShellProgram) {

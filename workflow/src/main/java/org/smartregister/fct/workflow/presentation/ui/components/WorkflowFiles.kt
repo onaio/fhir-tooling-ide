@@ -41,11 +41,9 @@ import org.smartregister.fct.aurora.presentation.ui.components.PanelHeading
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
 import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
-import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.common.presentation.ui.dialog.rememberConfirmationDialog
 import org.smartregister.fct.common.presentation.ui.dialog.rememberSingleFieldDialog
 import org.smartregister.fct.common.util.fileNameValidation
-import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.workflow.presentation.components.BaseWorkflowComponent
 import org.smartregister.fct.workflow.util.WorkflowConfig
 

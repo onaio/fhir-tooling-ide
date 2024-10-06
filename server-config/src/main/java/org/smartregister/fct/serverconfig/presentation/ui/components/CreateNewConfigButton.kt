@@ -5,8 +5,8 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
 import fct.server_config.generated.resources.Res
 import fct.server_config.generated.resources.create_new
-import org.smartregister.fct.common.data.controller.SingleFieldDialogController
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
+import org.smartregister.fct.common.data.controller.SingleFieldDialogController
 import org.smartregister.fct.serverconfig.util.asString
 
 @Composable

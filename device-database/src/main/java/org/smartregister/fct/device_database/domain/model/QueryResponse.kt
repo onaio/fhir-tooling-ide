@@ -59,13 +59,13 @@ internal data class QueryResponse(
                         columns = columns,
                         data = data,
                         error = null,
-                        queryMethod = QueryMethod.rawQuery
+                        queryMethod = QueryMethod.RawQuery
                     )
                 } else {
                     QueryResponse(
                         count = 0,
                         error = null,
-                        queryMethod = QueryMethod.execSql
+                        queryMethod = QueryMethod.ExecSql
                     )
                 }
 
@@ -124,12 +124,12 @@ internal data class QueryResponse(
                     columns = columns,
                     data = data,
                     error = null,
-                    queryMethod = QueryMethod.rawQuery
+                    queryMethod = QueryMethod.RawQuery
                 )
             } else {
                 QueryResponse(
                     error = result.exceptionOrNull()?.message ?: "Query Error",
-                    queryMethod = QueryMethod.rawQuery
+                    queryMethod = QueryMethod.RawQuery
                 )
             }
         }

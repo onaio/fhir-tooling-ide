@@ -24,26 +24,26 @@ internal class JsonTransformation(
         }
     }
 
-    private val baseColor = SpanStyle(color = colorScheme.onBackground)
     private val blueColorStyle = SpanStyle(color = blueColor)
+    /*private val baseColor = SpanStyle(color = colorScheme.onBackground)
     private val greenColorStyle = SpanStyle(color = greenColor)
-    private val yellowColorStyle = SpanStyle(color = yellowColor)
+    private val yellowColorStyle = SpanStyle(color = yellowColor)*/
 
-    private val openCurlyBracketRegex = Regex("(?<!\\w)\\{(?=\\s*\")")
+    private val keyRegex = Regex("((?<!\\\\)['\"])((?:.(?!(?<!\\\\)\\1))*.?)\\1(?=\\s*\\n?\\r?:)")
+    /*private val openCurlyBracketRegex = Regex("(?<!\\w)\\{(?=\\s*\")")
     private val closeCurlyBracketRegex = Regex("\\}(?=\\s*,|\\n)")
     private val openBracketRegex = Regex("\\[(?=\\s*(\\{|\\[|\"|'|false|true|\\.?\\d))")
     private val closeBracketRegex = Regex("(?<=(false|true|\\n|\\s|\\}|]|\"|'|\\d))]")
-    private val keyRegex = Regex("((?<!\\\\)['\"])((?:.(?!(?<!\\\\)\\1))*.?)\\1(?=\\s*\\n?\\r?:)")
     private val valueRegex =
         Regex("((?<!\\\\)['\"])((?:.(?!(?<!\\\\)\\1))*.?)\\1(?=\\s*(\\n?\\r?\\}|]|,))")
-    private val valueRegexContinuation = Regex("(false|true|\\d*\\.?\\d)(?=\\s*\\n?\\r?([,}\\]]))")
+    private val valueRegexContinuation = Regex("(false|true|\\d*\\.?\\d)(?=\\s*\\n?\\r?([,}\\]]))")*/
 
     override fun AnnotatedString.Builder.transform(text: String) {
+        styleText(text, keyRegex, blueColorStyle)
         //styleText(text, openCurlyBracketRegex, yellowColorStyle)
         //styleText(text, closeCurlyBracketRegex, yellowColorStyle)
         //styleText(text, openBracketRegex, yellowColorStyle)
         //styleText(text, closeBracketRegex, yellowColorStyle)
-        styleText(text, keyRegex, blueColorStyle)
         //styleText(text, valueRegex, greenColorStyle)
         //styleText(text, valueRegexContinuation, greenColorStyle)
     }

@@ -42,7 +42,6 @@ import org.smartregister.fct.engine.domain.model.HttpMethodType
 import org.smartregister.fct.engine.util.listOfAllFhirResources
 import org.smartregister.fct.fhirman.presentation.components.FhirmanScreenComponent
 import org.smartregister.fct.fhirman.presentation.ui.components.NoConfig
-import org.smartregister.fct.fhirman.util.FhirmanConfig
 
 @Composable
 fun FhirmanScreen(component: FhirmanScreenComponent) {

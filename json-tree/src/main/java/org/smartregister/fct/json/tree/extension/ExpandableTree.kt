@@ -3,25 +3,25 @@ package org.smartregister.fct.json.tree.extension
 import org.smartregister.fct.json.node.BranchNode
 import org.smartregister.fct.json.node.Node
 
-public interface ExpandableTree<T> {
+interface ExpandableTree<T> {
 
-    public fun toggleExpansion(node: Node<T>)
+    fun toggleExpansion(node: Node<T>)
 
-    public fun collapseRoot()
+    fun collapseRoot()
 
-    public fun expandRoot()
+    fun expandRoot()
 
-    public fun collapseAll()
+    fun collapseAll()
 
-    public fun expandAll()
+    fun expandAll()
 
-    public fun collapseFrom(depth: Int)
+    fun collapseFrom(depth: Int)
 
-    public fun expandUntil(depth: Int)
+    fun expandUntil(depth: Int)
 
-    public fun collapseNode(node: Node<T>)
+    fun collapseNode(node: Node<T>)
 
-    public fun expandNode(node: Node<T>)
+    fun expandNode(node: Node<T>)
 }
 
 internal class ExpandableTreeHandler<T>(

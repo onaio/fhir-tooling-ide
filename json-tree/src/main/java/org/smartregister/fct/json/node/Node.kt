@@ -8,26 +8,26 @@ import org.smartregister.fct.json.node.extension.SelectableNode
 import org.smartregister.fct.json.node.extension.SelectableNodeHandler
 import org.smartregister.fct.json.util.randomUUID
 
-public typealias NodeComponent<T> = @Composable JsonScope<T>.(Node<T>) -> Unit
+typealias NodeComponent<T> = @Composable JsonScope<T>.(Node<T>) -> Unit
 
-public sealed interface Node<T> {
+sealed interface Node<T> {
 
-    public val key: String
+    val key: String
 
-    public val content: T
+    val content: T
 
-    public val name: String
+    val name: String
 
-    public val depth: Int
+    val depth: Int
 
-    public val isSelected: Boolean
+    val isSelected: Boolean
 
-    public val iconComponent: NodeComponent<T>
+    val iconComponent: NodeComponent<T>
 
-    public val nameComponent: NodeComponent<T>
+    val nameComponent: NodeComponent<T>
 }
 
-public class LeafNode<T> internal constructor(
+class LeafNode<T> internal constructor(
     override val content: T,
     override val depth: Int,
     override val key: String = randomUUID,
@@ -37,7 +37,7 @@ public class LeafNode<T> internal constructor(
 ) : Node<T>,
     SelectableNode by SelectableNodeHandler()
 
-public class BranchNode<T> internal constructor(
+class BranchNode<T> internal constructor(
     override val content: T,
     override val depth: Int,
     override val key: String = randomUUID,

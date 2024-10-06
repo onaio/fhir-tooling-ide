@@ -6,7 +6,11 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 
-data class BashResult(val exitCode: Int, val stdout: Iterable<String>, val stderr: Iterable<String>) {
+data class BashResult(
+    val exitCode: Int,
+    val stdout: Iterable<String>,
+    val stderr: Iterable<String>
+) {
     fun sout() = stdout.joinToString("\n").trim()
 
     fun serr() = stderr.joinToString("\n").trim()
@@ -43,7 +47,12 @@ fun BashResult.throwIfError(): BashResult {
 }
 
 
-fun evalBash(cmd: String, showOutput: Boolean = false, wd: File? = null, env: Map<String, String>? = null): BashResult {
+fun evalBash(
+    cmd: String,
+    showOutput: Boolean = false,
+    wd: File? = null,
+    env: Map<String, String>? = null
+): BashResult {
     return cmd.runCommand(0) {
         redirectOutput(ProcessBuilder.Redirect.PIPE)
         redirectInput(ProcessBuilder.Redirect.PIPE)
@@ -90,6 +99,7 @@ fun String.runCommand(
                 return process
             }
         }
+
         else -> {
             ProcessBuilder("/bin/bash", "-c", this).run {
                 directory(File("."))
@@ -108,7 +118,11 @@ fun String.runCommand(
 }
 
 @JvmName("evalBashForKotlinStringExtension")
-fun String.evalBash(showOutput: Boolean = false, wd: File? = null, env: Map<String, String>?): BashResult {
+fun String.evalBash(
+    showOutput: Boolean = false,
+    wd: File? = null,
+    env: Map<String, String>?
+): BashResult {
     return evalBash(this, showOutput, wd, env)
 }
 

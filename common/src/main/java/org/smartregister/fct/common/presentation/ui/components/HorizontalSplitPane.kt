@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.VerticalDivider
@@ -57,7 +56,7 @@ fun HorizontalSplitPane(
     }
 
     var left by remember { mutableStateOf(resizeOption.sizeRatio) }
-    val right = 1f - left;
+    val right = 1f - left
     var rawX by remember { mutableStateOf(left) }
 
     val draggableArea = remember { 4.dp }
