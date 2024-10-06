@@ -3,6 +3,7 @@ package org.smartregister.fct.aurora.presentation.ui.components
 import androidx.compose.animation.core.EaseOutElastic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -31,7 +32,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.util.pxToDp
-import java.util.UUID
 
 @Composable
 fun <T> HorizontalButtonStrip(
@@ -41,9 +41,9 @@ fun <T> HorizontalButtonStrip(
     isExpanded: Boolean = false,
     initialSelectedIndex: Int? = null,
     onInitialSelected: (T.(Int) -> Unit)? = null,
-    selectedButtonBackground: Color = MaterialTheme.colorScheme.primary,
-    selectedLabelColor: Color = MaterialTheme.colorScheme.onPrimary,
-    stripBackgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    selectedButtonBackground: Color = colorScheme.primary,
+    selectedLabelColor: Color = colorScheme.onPrimary,
+    stripBackgroundColor: Color = colorScheme.surfaceContainer,
     key: Any? = null,
     onClick: T.(Int) -> Unit,
 ) {
@@ -109,6 +109,10 @@ fun <T> HorizontalButtonStrip(
             colors = CardDefaults.cardColors(
                 containerColor = stripBackgroundColor
             ),
+            border = BorderStroke(
+                width = 1.dp,
+                color = colorScheme.onSurface.copy(0.3f)
+            )
         ) {
             Box {
                 Box(

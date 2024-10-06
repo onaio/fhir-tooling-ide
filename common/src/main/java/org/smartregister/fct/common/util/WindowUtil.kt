@@ -9,3 +9,6 @@ val LocalWindowState =
     compositionLocalOf<WindowState> { error("window controller not provided") }
 
 val windowTitle = MutableStateFlow("Dashboard")
+val allResourcesSyncedStatus = MutableStateFlow<List<Pair<String, Int>>?>(null)
+val appVersion = MutableStateFlow<String?>(null)
+val buildDate = MutableStateFlow<String?>(null)

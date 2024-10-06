@@ -7,11 +7,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.smartregister.fct.adb.domain.model.Device
-import org.smartregister.fct.adb.domain.model.DeviceInfo
 import org.smartregister.fct.adb.domain.usecase.DeviceManager
+import org.smartregister.fct.common.util.allResourcesSyncedStatus
+import org.smartregister.fct.common.util.appVersion
+import org.smartregister.fct.common.util.buildDate
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.decodeJson
-import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.insights.domain.model.Insights
 import org.smartregister.fct.insights.util.InsightsConfig
 import org.smartregister.fct.logger.FCTLogger
@@ -33,7 +34,7 @@ class InsightsComponent(
 
     init {
         componentScope.launch {
-            _insights.emit(InsightsConfig.activeInsights)
+            updateInsights(InsightsConfig.activeInsights)
 
             DeviceManager.listenActiveDevice().collectLatest {
 
@@ -42,7 +43,7 @@ class InsightsComponent(
                         InsightsConfig.activeDeviceId = it.getDeviceInfo().id
                         fetchInsights(it, false)
                     }
-                } ?: _insights.emit(null)
+                } ?: updateInsights(null)
             }
         }
     }
@@ -64,28 +65,16 @@ class InsightsComponent(
                 if (result.isSuccess) {
                     val response = result.getOrThrow().toString().decodeJson<Response>()
                     if (response.error == null) {
-                        _insights.emit(response.result/*?.copy(
-                            unSyncedResources = listOf(
-                                Pair("Task", 1),
-                                Pair("Conditions", 10),
-                                Pair("Encounters", 3),
-                                Pair("AdverseEvent", 8),
-                                Pair("Immunization", 22),
-                                Pair("Patient", 54),
-                                Pair("Careplan", 42),
-                                Pair("Questionnaire", 2),
-                                Pair("QuestionnaireResponse", 4),
-                            )
-                        )*/)
+                        updateInsights(response.result)
                         InsightsConfig.activeInsights = response.result
                     } else {
-                        _insights.emit(null)
+                        updateInsights(null)
                         InsightsConfig.activeInsights = null
                         FCTLogger.e(response.error)
                         setError(response.error)
                     }
                 } else {
-                    _insights.emit(null)
+                    updateInsights(null)
                     InsightsConfig.activeInsights = null
                     FCTLogger.e(result.exceptionOrNull())
                     setError(result.exceptionOrNull()?.message)
@@ -100,4 +89,12 @@ class InsightsComponent(
         val result: Insights? = null,
     )
 
+    private fun updateInsights(insights: Insights?) {
+        componentScope.launch {
+            allResourcesSyncedStatus.emit(insights?.unSyncedResources)
+            appVersion.emit(insights?.appVersion)
+            buildDate.emit(insights?.buildDate)
+            _insights.emit(insights)
+        }
+    }
 }

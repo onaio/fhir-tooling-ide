@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.logger.model.Log
@@ -41,6 +42,10 @@ internal fun LogWindow(
 
     LaunchedEffect(Unit) {
         logs.addAll(FCTLogger.getAllLogs().value)
+        delay(100)
+        if (logs.isNotEmpty()) {
+            state.animateScrollToItem(logs.size - 1)
+        }
         FCTLogger.listen().collectLatest {
             it?.let(logs::add)
             if (stickScrollToBottom.value) {

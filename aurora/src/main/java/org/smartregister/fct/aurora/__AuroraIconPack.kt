@@ -10,6 +10,7 @@ import org.smartregister.fct.aurora.auroraiconpack.Dataset
 import org.smartregister.fct.aurora.auroraiconpack.Delete
 import org.smartregister.fct.aurora.auroraiconpack.Description
 import org.smartregister.fct.aurora.auroraiconpack.DesignServices
+import org.smartregister.fct.aurora.auroraiconpack.Dns
 import org.smartregister.fct.aurora.auroraiconpack.Download
 import org.smartregister.fct.aurora.auroraiconpack.EditNote
 import org.smartregister.fct.aurora.auroraiconpack.ElectricBoltFill
@@ -37,6 +38,7 @@ import org.smartregister.fct.aurora.auroraiconpack.Schema
 import org.smartregister.fct.aurora.auroraiconpack.SearchInsights
 import org.smartregister.fct.aurora.auroraiconpack.Send
 import org.smartregister.fct.aurora.auroraiconpack.Settings
+import org.smartregister.fct.aurora.auroraiconpack.Subtitles
 import org.smartregister.fct.aurora.auroraiconpack.Sync
 import org.smartregister.fct.aurora.auroraiconpack.Table
 import org.smartregister.fct.aurora.auroraiconpack.TableEye
@@ -102,7 +104,9 @@ public val AuroraIconPack.AllIcons: ____KtList<ImageVector>
       WrapText,
       Pause,
       Delete,
-      VerticalAlignBottom
+      VerticalAlignBottom,
+      Subtitles,
+      Dns
     )
     return __AllIcons!!
   }

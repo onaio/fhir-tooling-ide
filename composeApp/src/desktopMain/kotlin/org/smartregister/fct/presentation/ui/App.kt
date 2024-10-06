@@ -65,7 +65,7 @@ fun App(
                 HorizontalSplitPane(
                     modifier = Modifier.fillMaxSize(),
                     resizeOption = ResizeOption.Flexible(
-                        sizeRatio = 0.7f,
+                        sizeRatio = 0.75f,
                         minSizeRatio = 0.2f,
                         maxSizeRatio = 0.9f,
                         viewMode = rightWindowViewMode

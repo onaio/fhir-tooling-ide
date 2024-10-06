@@ -47,7 +47,7 @@ import org.smartregister.fct.presentation.component.RootComponentImpl
 import org.smartregister.fct.presentation.theme.AuroraTheme
 import org.smartregister.fct.presentation.ui.App
 import org.smartregister.fct.presentation.ui.MainWindow
-import org.smartregister.fct.presentation.ui.components.BottomBar
+import org.smartregister.fct.presentation.ui.components.StatusBar
 import org.smartregister.fct.presentation.ui.components.TitleBar
 import org.smartregister.fct.rules.RuleModuleSetup
 import org.smartregister.fct.sm.SMModuleSetup
@@ -95,7 +95,7 @@ fun main() = application {
                     snackbarHost = {
                         SnackbarHost(LocalSnackbarHost.current)
                     },
-                    bottomBar = { BottomBar() },
+                    bottomBar = { StatusBar() },
                     containerColor = Color.Transparent,
                 ) {
                     Box(modifier = Modifier.padding(it)) {
@@ -165,7 +165,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             ADBModuleSetup(),
             PMModuleSetup(),
             FileManagerModuleSetup(),
-            //SMModuleSetup(),
+            SMModuleSetup(),
             ApiClientModuleSetup(),
             RuleModuleSetup(),
             WorkflowModuleSetup(),

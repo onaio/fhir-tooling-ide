@@ -17,7 +17,7 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             Dependencies.Compose.getAll().forEach(::implementation)
 
@@ -46,13 +46,14 @@ kotlin {
 }
 
 compose.desktop {
+
     application {
         mainClass = "org.smartregister.fct.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.smartregister.fct"
-            packageVersion = "1.0.0"
+            packageName = BuildConfigs.packageName
+            packageVersion = BuildConfigs.packageVersion
 
             macOS {
                 iconFile.set(project.file("/icon/app_icon.icns"))
