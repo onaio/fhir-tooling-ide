@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import org.smartregister.fct.logger.model.LogLevel
 
 @Composable
-internal fun LogContainer() {
+internal fun LogContainer(logLevelFilter: State<LogLevel?>) {
 
     val wrapText = remember { mutableStateOf(true) }
     val stickScrollToBottom = remember { mutableStateOf(true) }
@@ -19,6 +21,6 @@ internal fun LogContainer() {
     ) {
         LogConfiguration(wrapText, stickScrollToBottom)
         VerticalDivider()
-        LogWindow(wrapText, stickScrollToBottom)
+        LogWindow(wrapText, stickScrollToBottom, logLevelFilter)
     }
 }

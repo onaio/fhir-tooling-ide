@@ -29,11 +29,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.logger.model.Log
+import org.smartregister.fct.logger.model.LogFilter
+import org.smartregister.fct.logger.model.LogLevel
 
 @Composable
 internal fun LogWindow(
     wrapText: State<Boolean>,
     stickScrollToBottom: MutableState<Boolean>,
+    logLevelFilter: State<LogLevel?>
 ) {
 
     val logs = remember { mutableStateListOf<Log>() }
@@ -41,7 +44,7 @@ internal fun LogWindow(
     val horizontalScrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
-        logs.addAll(FCTLogger.getAllLogs().value)
+        logs.addAll(FCTLogger.getAllLogs())
         delay(100)
         if (logs.isNotEmpty()) {
             state.animateScrollToItem(logs.size - 1)
@@ -55,9 +58,11 @@ internal fun LogWindow(
     }
 
     LaunchedEffect(Unit) {
-        FCTLogger.getAllLogs().collectLatest {
-            if (it.isEmpty()) logs.clear()
-        }
+        FCTLogger.addFilter("logcat", object: LogFilter{
+            override fun onClear() {
+                logs.clear()
+            }
+        })
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -75,7 +80,11 @@ internal fun LogWindow(
                 state = state
             ) {
 
-                items(logs) { log ->
+                items(logs.filter {
+                    if (logLevelFilter.value != null && logLevelFilter.value != LogLevel.VERBOSE) {
+                        it.priority == logLevelFilter.value
+                    } else true
+                }) { log ->
                     LogView(log, wrapText.value)
                 }
             }

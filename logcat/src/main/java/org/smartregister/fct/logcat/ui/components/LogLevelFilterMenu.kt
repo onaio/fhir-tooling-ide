@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +33,9 @@ import org.smartregister.fct.logger.model.LogLevel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun LogLevelFilterMenu() {
+internal fun LogLevelFilterMenu(
+    logLevelFilter: MutableState<LogLevel?>
+) {
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -57,7 +60,7 @@ internal fun LogLevelFilterMenu() {
 
         BasicTextField(
             value = selectedValue.getOptionName(),
-            onValueChange = { /*type = it*/ },
+            onValueChange = { },
             readOnly = true,
             singleLine = true,
             textStyle = LocalTextStyle.current.copy(
@@ -116,11 +119,9 @@ internal fun LogLevelFilterMenu() {
                         Text(text = selectionOption.getOptionName())
                     },
                     onClick = {
-                        //type = selectionOption
-                        selectedValue = selectionOption
                         expanded = false
-                        selectionOption?.let { FCTLogger.filterByPriority(it) }
-                            ?: FCTLogger.clearPriorityFilter()
+                        selectedValue = selectionOption
+                        logLevelFilter.value = selectionOption
                     }
                 )
             }

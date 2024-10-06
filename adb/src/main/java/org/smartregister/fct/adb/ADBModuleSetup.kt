@@ -23,7 +23,7 @@ class ADBModuleSetup : ModuleSetup {
     override suspend fun setup() {
         FCTLogger.d("Loading... ADB Module")
         GlobalContext.get().loadModules(listOf(adbModule))
-        FCTLogger.addFilter(ADBCommandFilter())
+        FCTLogger.addFilter(this, ADBCommandFilter())
         FCTLogger.d("ADB Module Loaded")
     }
 

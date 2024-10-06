@@ -21,11 +21,9 @@ object FCTLogger {
 
     private const val MAXIMUM_LOG_LIMIT = 1000
     private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
-    private var logFilters = mutableListOf<LogFilter>()
+    private var logFilters = mutableMapOf<Any, LogFilter>()
     private val isPause = MutableStateFlow(false)
-    private val allLogs = MutableStateFlow<List<Log>>(listOf())
     private val logChain = CircularFifoQueue<Log>(MAXIMUM_LOG_LIMIT)
-    private var priorityFilter: LogLevel? = null
     private val lastLog = MutableSharedFlow<Log?>()
 
     fun listen(): SharedFlow<Log?> = lastLog
@@ -33,7 +31,9 @@ object FCTLogger {
     fun clearLogs() {
         CoroutineScope(Dispatchers.IO).launch {
             logChain.clear()
-            allLogs.emit(listOf())
+            logFilters.entries.forEach {
+                it.value.onClear()
+            }
         }
     }
 
@@ -43,29 +43,12 @@ object FCTLogger {
         }
     }
 
-    fun getAllLogs(): StateFlow<List<Log>> = allLogs
+    fun getAllLogs(): List<Log> = logChain.toList()
 
     fun getPause(): StateFlow<Boolean> = isPause
 
-    fun clearPriorityFilter() {
-        priorityFilter = null
-        CoroutineScope(Dispatchers.IO).launch {
-            allLogs.emit(logChain.toList())
-        }
-    }
-
-    fun filterByPriority(priority: LogLevel) {
-        priorityFilter = priority
-        CoroutineScope(Dispatchers.IO).launch {
-            allLogs.emit(
-                logChain
-                    .filter { it.priority == priorityFilter }
-            )
-        }
-    }
-
-    fun addFilter(logFilter: LogFilter) {
-        logFilters.add(logFilter)
+    fun addFilter(key: Any, logFilter: LogFilter) {
+        logFilters[key] = logFilter
     }
 
     fun w(message: String, tag: String? = null) {
@@ -152,16 +135,12 @@ object FCTLogger {
 
     private fun push(log: Log) {
 
-        val isLoggable = logFilters.all { it.isLoggable(log) }
+        val isLoggable = logFilters.entries.all { it.value.isLoggable(log) }
         if (!isLoggable || isPause.value) return
 
         CoroutineScope(Dispatchers.IO).launch {
             lastLog.emit(log)
             logChain.add(log)
-            allLogs.emit(
-                priorityFilter?.let { logChain.filter { it.priority == priorityFilter } }
-                    ?: logChain.toList()
-            )
         }
     }
 
@@ -182,8 +161,6 @@ object FCTLogger {
     }
 
     private fun getStackTraceString(t: Throwable): String {
-        // Don't replace this with Log.getStackTraceString() - it hides
-        // UnknownHostException, which is not what we want.
         val sw = StringWriter(256)
         val pw = PrintWriter(sw, false)
         t.printStackTrace(pw)

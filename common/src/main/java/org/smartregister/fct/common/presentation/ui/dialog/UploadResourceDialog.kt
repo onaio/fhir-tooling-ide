@@ -135,7 +135,7 @@ private fun ConfigList(configs: List<ServerConfig>) {
 
     val selectedConfig by selectedConfig.collectAsState()
 
-    // TODO scrollbar indicator not showing right now will need to figure out
+    // TODO add scrollbar indicator
     LazyColumn(Modifier.fillMaxSize()) {
 
         items(configs) { item ->

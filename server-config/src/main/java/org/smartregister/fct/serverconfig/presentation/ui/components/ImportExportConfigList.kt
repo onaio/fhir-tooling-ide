@@ -25,7 +25,7 @@ context (ConfigDialogComponent, ServerConfigPanelComponent, BoxScope)
 @Composable
 internal fun ImportExportConfigList(configs: List<ServerConfig>) {
 
-    // TODO scrollbar indicator not showing right now will need to figure out
+    // TODO add scrollbar indicator
     LazyColumn(Modifier.fillMaxSize()) {
 
         items(configs) { item ->

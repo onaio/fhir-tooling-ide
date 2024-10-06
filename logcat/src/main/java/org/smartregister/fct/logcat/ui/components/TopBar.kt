@@ -14,6 +14,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,9 +25,13 @@ import androidx.compose.ui.unit.dp
 import org.smartregister.fct.aurora.presentation.ui.components.SmallIconButton
 import org.smartregister.fct.common.domain.model.ViewMode
 import org.smartregister.fct.common.presentation.ui.components.ViewModePopupMenu
+import org.smartregister.fct.logger.model.LogLevel
 
 @Composable
-internal fun TopBar(onViewModeSelected: (ViewMode) -> Unit) {
+internal fun TopBar(
+    onViewModeSelected: (ViewMode) -> Unit,
+    logLevelFilter: MutableState<LogLevel?>
+) {
 
     Row(
         modifier = Modifier
@@ -36,7 +41,7 @@ internal fun TopBar(onViewModeSelected: (ViewMode) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        LogLevelFilterMenu()
+        LogLevelFilterMenu(logLevelFilter)
         ViewModePopupMenu(
             onSelected = onViewModeSelected,
         )
