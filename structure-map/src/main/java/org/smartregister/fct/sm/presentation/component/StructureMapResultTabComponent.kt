@@ -18,7 +18,9 @@ internal class StructureMapResultTabComponent(
             CodeEditorComponent(
                 componentContext = componentContext,
                 text = resource.encodeResourceToString(),
-                fileType = FileType.Json
-            )
+                fileType = FileType.Json,
+            ).apply {
+                formatJson()
+            }
         }
 }

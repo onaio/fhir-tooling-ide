@@ -295,7 +295,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
 
                     // clear previous results
                     widgets.forEach {
-                        it.body.result = buildAnnotatedString {  }
+                        it.body.result = buildAnnotatedString { }
                     }
 
                     // build result
@@ -316,7 +316,15 @@ class RulesScreenComponent(componentContext: ComponentContext) :
 
                             }
                         }
-                        FCTLogger.d("Rule executed: ${entry.key} -> ${entry.value}")
+
+                        if (entry.value.contains(WorkspaceConfig.jexlError) || entry.value.contains(
+                                WorkspaceConfig.ambiguousError
+                            )
+                        ) {
+                            FCTLogger.e("Rule executed: ${entry.key} -> ${entry.value}")
+                        } else {
+                            FCTLogger.d("Rule executed: ${entry.key} -> ${entry.value}")
+                        }
                     }
                 }
             } else {

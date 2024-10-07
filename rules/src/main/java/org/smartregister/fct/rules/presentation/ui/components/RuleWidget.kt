@@ -57,10 +57,8 @@ import org.smartregister.fct.rules.domain.model.Rule
 import org.smartregister.fct.rules.domain.model.Widget
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewRuleDialog
+import org.smartregister.fct.rules.util.WorkspaceConfig
 import org.smartregister.fct.rules.util.appendBold
-
-private const val jexlError = "org.jeasy.rules.jexl.JexlAction."
-private const val ambiguousError = "ambiguous statement error near"
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -208,7 +206,7 @@ fun RuleWidget(
                         val result = if (theme.themeType == ThemeType.Error) {
                             buildAnnotatedString {
                                 appendBold("Result: ")
-                                append(widget.body.result.text.replace(jexlError, ""))
+                                append(widget.body.result.text.replace(WorkspaceConfig.jexlError, ""))
                             }
                         } else widget.body.result
 
@@ -254,7 +252,7 @@ private fun Label(prefix: String, text: String, theme: RuleWidgetTheme) {
 private fun getTheme(widget: Widget<Rule>): RuleWidgetTheme {
     val result = widget.body.result
     return when {
-        result.contains(jexlError) || result.contains(ambiguousError) -> RuleWidgetTheme(
+        result.contains(WorkspaceConfig.jexlError) || result.contains(WorkspaceConfig.ambiguousError) -> RuleWidgetTheme(
             themeType = ThemeType.Error,
             background = Color(0xFFffdad6),
             titleBackground = Color(0xFFba1a1a),

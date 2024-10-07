@@ -31,6 +31,9 @@ import org.smartregister.fct.aurora.AuroraIconPack
 import org.smartregister.fct.aurora.auroraiconpack.Table
 import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
 import org.smartregister.fct.aurora.presentation.ui.components.TextButton
+import org.smartregister.fct.aurora.presentation.ui.components.Tooltip
+import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
+import org.smartregister.fct.aurora.util.doubleClick
 import org.smartregister.fct.device_database.domain.model.TableInfo
 import java.awt.event.MouseEvent
 
@@ -92,29 +95,24 @@ internal fun TablesList(
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp)
                 ) {
-                    TextButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onPointerEvent(PointerEventType.Press) {
-                                when (it.awtEventOrNull?.button) {
-                                    MouseEvent.BUTTON1 -> when (it.awtEventOrNull?.clickCount) {
-                                        1 -> {}
-                                        2 -> {
-                                            scope.launch {
-                                                delay(200)
-                                                onTableDoubleClick(tableInfo)
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                        iconModifier = Modifier.size(18.dp),
-                        label = tableInfo.name,
-                        icon = AuroraIconPack.Table,
-                        textAlign = TextAlign.Start,
-                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
-                        onClick = {}
-                    )
+                    Tooltip(
+                        tooltip = tableInfo.name,
+                        tooltipPosition = TooltipPosition.Top()
+                    ) {
+                        TextButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .doubleClick(scope) {
+                                    onTableDoubleClick(tableInfo)
+                                },
+                            iconModifier = Modifier.size(18.dp),
+                            label = tableInfo.name,
+                            icon = AuroraIconPack.Table,
+                            textAlign = TextAlign.Start,
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                            onClick = {}
+                        )
+                    }
                 }
             }
             item {

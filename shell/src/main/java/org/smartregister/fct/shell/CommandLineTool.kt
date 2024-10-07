@@ -62,7 +62,7 @@ fun evalBash(
     }.run {
         val stdout = inputStream.reader().readLines()
         val stderr = errorStream.reader().readLines()
-        waitFor(1, TimeUnit.HOURS)
+        waitFor(3, TimeUnit.MINUTES)
         val exitCode = exitValue()
         BashResult(exitCode, stdout, stderr).also {
             if (showOutput) {
@@ -78,7 +78,7 @@ fun evalBash(
 
 
 fun String.runCommand(
-    timeoutValue: Long = 60,
+    timeoutValue: Long = 3,
     timeoutUnit: TimeUnit = TimeUnit.MINUTES,
     processConfig: ProcessBuilder.() -> Unit = {}
 ): Process {

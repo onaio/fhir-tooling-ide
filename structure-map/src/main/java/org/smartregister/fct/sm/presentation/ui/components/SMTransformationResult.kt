@@ -191,7 +191,9 @@ private fun Content() {
             when (resultType) {
                 ResultType.Json -> {
                     CodeEditor(
-                        component = codeEditorComponent
+                        component = codeEditorComponent,
+                        enableFileImport = false,
+                        enableDBImport = false
                     )
                 }
 

@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Button as Mat3Button
 import androidx.compose.material3.OutlinedButton as Mat3OutlinedButton
@@ -98,18 +99,19 @@ fun TextButton(
         }
 
         if (textAlign == TextAlign.Start) {
-            Text(
+
+            MiddleEllipsisText(
                 modifier = Modifier.weight(1f),
                 text = label,
                 color = labelColor ?: MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
                 textAlign = textAlign,
-                style = textStyle
+                style = textStyle,
             )
         } else {
-            Text(
+            MiddleEllipsisText(
                 text = label,
                 color = labelColor ?: MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
-                style = textStyle
+                style = textStyle,
             )
         }
     }

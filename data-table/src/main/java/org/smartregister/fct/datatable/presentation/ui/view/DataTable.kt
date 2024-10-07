@@ -80,63 +80,54 @@ fun DataTable(
         Column(modifier = Modifier.fillMaxSize()) {
             TopBar(controller)
             DTHorizontalDivider(dtWidth, alpha = 0.5f)
-            Box(Modifier.fillMaxSize()) {
-                Column(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f))
+                        .horizontalScroll(horizontalScrollState)
+                        .onGloballyPositioned { layoutCoords ->
+                            dtWidth = layoutCoords.size.width.dp
+                        }
+                ) {
+                    ColumnHeader(
+                        controller = controller,
+                        columns = columns,
+                        columnWidthMapState = columnWidthMapState,
+                        columnLeadingIcon = columnLeadingIcon
+                    )
+                }
+                if (controller is DTFilterable) {
                     Row(
                         modifier = Modifier
                             .height(40.dp)
-                            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.3f))
-                            .horizontalScroll(horizontalScrollState)
-                            .onGloballyPositioned { layoutCoords ->
-                                dtWidth = layoutCoords.size.width.dp
-                            }
-                    ) {
-                        ColumnHeader(
-                            controller = controller,
-                            columns = columns,
-                            columnWidthMapState = columnWidthMapState,
-                            columnLeadingIcon = columnLeadingIcon
-                        )
-                    }
-                    if (controller is DTFilterable) {
-                        Row(
-                            modifier = Modifier
-                                .height(40.dp)
-                                .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
-                                .horizontalScroll(horizontalScrollState)
-                        ) {
-                            ColumnFilter(
-                                controller = controller,
-                                columns = columns,
-                                columnWidthMapState = columnWidthMapState
-                            )
-                        }
-                    }
-                    DTHorizontalDivider(dtWidth, alpha = 0.5f)
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.6f))
                             .horizontalScroll(horizontalScrollState)
                     ) {
-                        PopulateData(
+                        ColumnFilter(
                             controller = controller,
-                            componentContext = componentContext,
                             columns = columns,
-                            columnWidthMapState = columnWidthMapState,
-                            dataRowBGOdd = dataRowBGOdd,
-                            dataRowBGEven = dataRowBGEven,
-                            dtWidth = dtWidth,
-                            customContextMenuItems = customContextMenuItems
+                            columnWidthMapState = columnWidthMapState
                         )
                     }
                 }
-
-                HorizontalScrollbar(
-                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth(),
-                    adapter = rememberScrollbarAdapter(
-                        scrollState = horizontalScrollState
+                DTHorizontalDivider(dtWidth, alpha = 0.5f)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                    //.horizontalScroll(horizontalScrollState)
+                ) {
+                    PopulateData(
+                        controller = controller,
+                        componentContext = componentContext,
+                        columns = columns,
+                        columnWidthMapState = columnWidthMapState,
+                        dataRowBGOdd = dataRowBGOdd,
+                        dataRowBGEven = dataRowBGEven,
+                        dtWidth = dtWidth,
+                        customContextMenuItems = customContextMenuItems
                     )
-                )
+                }
             }
         }
     }
