@@ -1,6 +1,7 @@
 package org.smartregister.fct.fhirman.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -61,25 +62,29 @@ class FhirmanScreenComponent(
             windowTitle.emit("Fhirman")
         }
 
-        requestCodeEditorComponent = CodeEditorComponent(
-            componentContext = this,
-            fileType = FileType.Json,
-            text = FhirmanConfig.requestText
-        )
-
-        responseCodeEditorComponent = CodeEditorComponent(
-            componentContext = this,
-            fileType = FileType.Json,
-            text = FhirmanConfig.responseText,
-            readOnly = true
-        )
-
         componentScope.launch {
             _selectedConfig.emit(FhirmanConfig.selectedConfig)
             _methodType.emit(FhirmanConfig.methodType)
             _resourceType.emit(FhirmanConfig.resourceType)
             _resourceId.emit(FhirmanConfig.resourceId)
             _responseStatus.emit(FhirmanConfig.responseStatus)
+        }
+
+        requestCodeEditorComponent = CodeEditorComponent(
+            componentContext = this,
+            fileType = FileType.Json
+        )
+        componentScope.launch(Dispatchers.IO) {
+            requestCodeEditorComponent.setText(FhirmanConfig.requestText)
+        }
+
+        responseCodeEditorComponent = CodeEditorComponent(
+            componentContext = this,
+            fileType = FileType.Json,
+            readOnly = true
+        )
+        componentScope.launch(Dispatchers.IO) {
+            responseCodeEditorComponent.setText(FhirmanConfig.responseText)
         }
 
         listenConfigs()

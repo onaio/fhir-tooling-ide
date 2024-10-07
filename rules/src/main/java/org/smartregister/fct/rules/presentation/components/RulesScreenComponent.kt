@@ -477,7 +477,7 @@ class RulesScreenComponent(componentContext: ComponentContext) :
                     put("actions", it.actions)
                 }
             }
-            .let { JSONObject().apply { put("rules", it) } }.toString()
+            .let { JSONArray(it) }.toString()
     }
 
     internal fun deleteWorkspace(workspace: Workspace) {

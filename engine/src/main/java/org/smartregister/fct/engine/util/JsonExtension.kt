@@ -58,7 +58,7 @@ fun String.prettyJson(indent: Int? = null): String {
             )
         )
         .create()
-    val jsonParser = JsonParser.parseString(this).asJsonObject
+    val jsonParser = JsonParser.parseString(this)
     return gson.toJson(jsonParser)
 }
 
@@ -72,6 +72,6 @@ fun String.compactJson(): String {
             FormattingStyle.COMPACT
         )
         .create()
-    val jsonParser = JsonParser.parseString(this).asJsonObject
+    val jsonParser = JsonParser.parseString(this)
     return gson.toJson(jsonParser)
 }

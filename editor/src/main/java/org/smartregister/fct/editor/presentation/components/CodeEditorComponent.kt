@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -57,15 +58,17 @@ class CodeEditorComponent(
     }
 
     fun setText(text: String) {
-        if (text.trim().isNotEmpty()) {
-            setTextField(
-                TextFieldValue(
-                    AnnotatedString(text),
-                    selection = TextRange(0, 0)
+        componentScope.launch(Dispatchers.IO) {
+            if (text.trim().isNotEmpty()) {
+                setTextField(
+                    TextFieldValue(
+                        AnnotatedString(text),
+                        selection = TextRange(0, 0)
+                    )
                 )
-            )
-        } else {
-            setTextField(TextFieldValue(text))
+            } else {
+                setTextField(TextFieldValue(text))
+            }
         }
     }
 

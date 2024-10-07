@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Ease
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -13,8 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -30,10 +33,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.dp
 import org.smartregister.fct.adb.domain.model.DeviceInfo
 import org.smartregister.fct.aurora.AuroraIconPack
@@ -73,6 +79,7 @@ private fun BatteryIndicator(
 ) {
     Box(Modifier.size(280.dp)) {
         BatteryProgressBar(deviceInfo)
+        TemperatureIndicator(deviceInfo)
     }
 }
 
@@ -162,6 +169,68 @@ private fun BatteryProgressBar(
         modifier = Modifier.align(Alignment.BottomCenter),
         text = "Battery",
         style = typography.titleMedium
+    )
+}
+
+context(BoxScope)
+@Composable
+private fun TemperatureIndicator(
+    deviceInfo: DeviceInfo
+) {
+
+    val baseColor = colorScheme.surface
+    val anyPoweredSource = deviceInfo.batteryAndOtherInfo.anyPoweredSource()
+    val animBatteryLevel by animateIntAsState(
+        targetValue = deviceInfo.batteryAndOtherInfo.level,
+        animationSpec = tween(
+            durationMillis = 1000,
+            easing = Ease
+        )
+    )
+
+    val gradientBrush = remember {
+        Brush.sweepGradient(
+            *arrayOf(
+                0f to Color(0xffe00000),
+                0.2f to Color(0xffff1515),
+                0.21f to Color(0xffffb102),
+                0.55f to Color(0xffffb102),
+                0.56f to Color(0xff1797ff),
+                0.7f to Color(0xff1797ff),
+                0.8f to Color(0xff178bff),
+                0.95f to Color(0xff1759ff),
+                1f to Color(0xffe00000),
+
+            )
+        )
+    }
+
+
+    Canvas(Modifier.width(70.dp).height(70.dp)
+        .offset(y = -(30.dp))
+        .align(Alignment.BottomCenter)
+    ) {
+
+            val rect = Rect(Offset.Zero, size)
+            rotate(135f, rect.center) {
+                drawArc(
+                    startAngle = 0f,
+                    sweepAngle = 270f,
+                    brush = gradientBrush,
+                    useCenter = false,
+                    style = Stroke(
+                        width = 6f,
+                        cap = StrokeCap.Round,
+                        join = StrokeJoin.Round
+                    ),
+                )
+            }
+    }
+
+    Text(
+        modifier = Modifier.align(Alignment.BottomCenter).offset(y = -(55.dp)),
+        text = "${String.format("%.1f", deviceInfo.batteryAndOtherInfo.getCelsiusTemperature())}℃",
+        style = typography.titleSmall
     )
 }
 

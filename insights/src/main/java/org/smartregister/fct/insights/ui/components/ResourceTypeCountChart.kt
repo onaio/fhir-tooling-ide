@@ -83,119 +83,126 @@ internal fun ResourceTypeCountChart(insights: Insights, onRefresh: () -> Unit) {
             style = typography.titleMedium
         )
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentWidth(unbounded = true, align = Alignment.Start)
-                .onPointerEvent(PointerEventType.Scroll) {
-                    val scrollX = (it.changes.first().scrollDelta.x.toInt() * 30).inv()
-                    boardOffsetX = (boardOffsetX + scrollX).coerceIn(minBoardOffsetX, 0f)
-                }
-
-        ) {
-
-            Box (
+        if (insights.hasEnoughResourceTypeCount()) {
+            Box(
                 modifier = Modifier
-                    .offset(x = boardOffsetX.dp)
-                    .width(boardWidth.pxToDp())
-                    .fillMaxHeight()
+                    .fillMaxSize()
+                    .wrapContentWidth(unbounded = true, align = Alignment.Start)
+                    .onPointerEvent(PointerEventType.Scroll) {
+                        val scrollX = (it.changes.first().scrollDelta.x.toInt() * 30).inv()
+                        boardOffsetX = (boardOffsetX + scrollX).coerceIn(minBoardOffsetX, 0f)
+                    }
+
             ) {
 
-                val fontFamilyResolver = LocalFontFamilyResolver.current
-                val density = LocalDensity.current
-                val layoutDirection = LocalLayoutDirection.current
-                val textColor = colorScheme.onSurface
-                val textStyle = remember { TextStyle() }
+                Box (
+                    modifier = Modifier
+                        .offset(x = boardOffsetX.dp)
+                        .width(boardWidth.pxToDp())
+                        .fillMaxHeight()
+                ) {
 
-                val textLayoutResultMap = remember(appSettingManager.appSetting.isDarkTheme) {
-                    mutableStateMapOf<String, TextConfig>().apply {
-                        insights.resourceTypeCount.entries.forEach {
-                            val keyTextMeasurer = TextMeasurer(fontFamilyResolver, density, layoutDirection)
-                            val valueTextMeasurer = TextMeasurer(fontFamilyResolver, density, layoutDirection)
-                            put(it.key, TextConfig(
-                                keyTextMeasurer = keyTextMeasurer,
-                                keyTextLayoutResult = keyTextMeasurer.measure(ellipsisKey(it.key), textStyle),
-                                valueTextMeasurer = valueTextMeasurer,
-                                valueTextLayoutResult = valueTextMeasurer.measure(it.value.toString(), textStyle),
-                            ))
+                    val fontFamilyResolver = LocalFontFamilyResolver.current
+                    val density = LocalDensity.current
+                    val layoutDirection = LocalLayoutDirection.current
+                    val textColor = colorScheme.onSurface
+                    val textStyle = remember { TextStyle() }
+
+                    val textLayoutResultMap = remember(appSettingManager.appSetting.isDarkTheme) {
+                        mutableStateMapOf<String, TextConfig>().apply {
+                            insights.resourceTypeCount.entries.forEach {
+                                val keyTextMeasurer = TextMeasurer(fontFamilyResolver, density, layoutDirection)
+                                val valueTextMeasurer = TextMeasurer(fontFamilyResolver, density, layoutDirection)
+                                put(it.key, TextConfig(
+                                    keyTextMeasurer = keyTextMeasurer,
+                                    keyTextLayoutResult = keyTextMeasurer.measure(ellipsisKey(it.key), textStyle),
+                                    valueTextMeasurer = valueTextMeasurer,
+                                    valueTextLayoutResult = valueTextMeasurer.measure(it.value.toString(), textStyle),
+                                ))
+                            }
                         }
                     }
-                }
 
-                Canvas(Modifier.fillMaxSize()) {
+                    Canvas(Modifier.fillMaxSize()) {
 
-                    translate(top = bound.y) {
-                        repeat(6) {
-                            drawPath(
-                                path = getBaseLinePath(it, bound),
-                                color = chartBaseLineColor,
-                                style = Stroke(
-                                    width = 1f,
-                                )
-                            )
-                        }
-
-                        insights.resourceTypeCount.entries.forEachIndexed { index, entry ->
-
-
-                            val x = (index + 1) * 100f + bound.x
-                            val bottomY = 5 * bound.height / 6
-                            val topY = bottomY - (entry.value.toFloat() / maxCount.toFloat() * bottomY)
-
-                            drawPath(
-                                path = Path().apply {
-                                    //val x = index * 100f + bound.x + 50f
-                                    //val y = 5 * bound.height / 6
-                                    moveTo(x, bottomY)
-                                    lineTo(x, topY)
-                                },
-                                color = columnColor,
-                                style = Stroke(
-                                    width = columnWidth,
-                                )
-                            )
-
-                            translate(x - textLayoutResultMap[entry.key]!!.valueTextLayoutResult.size.width / 2f, topY -30) {
-                                drawText(
-                                    textMeasurer = textLayoutResultMap[entry.key]!!.valueTextMeasurer,
-                                    text = "${entry.value}",
-                                    style = TextStyle(
-                                        color = textColor
+                        translate(top = bound.y) {
+                            repeat(6) {
+                                drawPath(
+                                    path = getBaseLinePath(it, bound),
+                                    color = chartBaseLineColor,
+                                    style = Stroke(
+                                        width = 1f,
                                     )
                                 )
                             }
 
-                            val valueTextSize = textLayoutResultMap[entry.key]!!.keyTextLayoutResult.size
-                            val rect = Rect(0f, 0f, valueTextSize.width.toFloat(), valueTextSize.height.toFloat())
-                            translate(x - valueTextSize.width.toFloat() , bottomY + 10f) {
-                                rotate(-45f, rect.topRight) {
+                            insights.resourceTypeCount.entries.forEachIndexed { index, entry ->
+
+
+                                val x = (index + 1) * 100f + bound.x
+                                val bottomY = 5 * bound.height / 6
+                                val topY = bottomY - (entry.value.toFloat() / maxCount.toFloat() * bottomY)
+
+                                drawPath(
+                                    path = Path().apply {
+                                        //val x = index * 100f + bound.x + 50f
+                                        //val y = 5 * bound.height / 6
+                                        moveTo(x, bottomY)
+                                        lineTo(x, topY)
+                                    },
+                                    color = columnColor,
+                                    style = Stroke(
+                                        width = columnWidth,
+                                    )
+                                )
+
+                                translate(x - textLayoutResultMap[entry.key]!!.valueTextLayoutResult.size.width / 2f, topY -30) {
                                     drawText(
-                                        textMeasurer = textLayoutResultMap[entry.key]!!.keyTextMeasurer,
-                                        text = ellipsisKey(entry.key),
+                                        textMeasurer = textLayoutResultMap[entry.key]!!.valueTextMeasurer,
+                                        text = "${entry.value}",
                                         style = TextStyle(
                                             color = textColor
                                         )
                                     )
                                 }
+
+                                val valueTextSize = textLayoutResultMap[entry.key]!!.keyTextLayoutResult.size
+                                val rect = Rect(0f, 0f, valueTextSize.width.toFloat(), valueTextSize.height.toFloat())
+                                translate(x - valueTextSize.width.toFloat() , bottomY + 10f) {
+                                    rotate(-45f, rect.topRight) {
+                                        drawText(
+                                            textMeasurer = textLayoutResultMap[entry.key]!!.keyTextMeasurer,
+                                            text = ellipsisKey(entry.key),
+                                            style = TextStyle(
+                                                color = textColor
+                                            )
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
+
+                    repeat(6) {
+                        Text(
+                            modifier = Modifier
+                                .width(boundDelta.pxToDp())
+                                .padding(end = 6.dp)
+                                .offset(
+                                    y = (it * bound.height / 6 + bound.y - 12f).pxToDp()
+                                ),
+                            text = "${maxCount - (maxCount / 5 * it )}",
+                            textAlign = TextAlign.End
+                        )
+                    }
                 }
 
-                repeat(6) {
-                    Text(
-                        modifier = Modifier
-                            .width(boundDelta.pxToDp())
-                            .padding(end = 6.dp)
-                            .offset(
-                                y = (it * bound.height / 6 + bound.y - 12f).pxToDp()
-                            ),
-                        text = "${maxCount - (maxCount / 5 * it )}",
-                        textAlign = TextAlign.End
-                    )
-                }
             }
-
+        } else {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = "Not enough data available to visualize chart",
+            )
         }
 
         Box(Modifier.align(Alignment.TopEnd).padding(top = 12.dp, end = 12.dp)) {
