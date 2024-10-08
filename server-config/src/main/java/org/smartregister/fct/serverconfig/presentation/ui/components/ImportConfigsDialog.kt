@@ -25,7 +25,7 @@ internal fun ServerConfigPanelComponent.ImportConfigsDialog() {
         componentContext = this,
         title = "Import Server Configs",
         fileType = FileType.Json,
-        onFileContent = { _, fileContent ->
+        onFileContent = { _, _, fileContent ->
             (state as ImportDialogState.ImportFileDialog).component.loadConfigs(fileContent)
         }
     )

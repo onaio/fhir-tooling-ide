@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.smartregister.fct.common.presentation.component.RootComponent
+import org.smartregister.fct.cql.presentation.component.CQLScreenComponent
+import org.smartregister.fct.cql.presentation.ui.screen.CQLScreen
 import org.smartregister.fct.dashboard.ui.components.DashboardScreenComponent
 import org.smartregister.fct.dashboard.ui.presentation.screen.DashboardScreen
 import org.smartregister.fct.device_database.ui.components.DeviceDatabaseScreenComponent
@@ -30,6 +32,7 @@ fun MainRoot(component: RootComponent) {
         is DashboardScreenComponent -> DashboardScreen(contextComponent)
         is StructureMapScreenComponent -> StructureMapScreen(contextComponent)
         is WorkflowScreenComponent -> WorkflowScreen(contextComponent)
+        is CQLScreenComponent -> CQLScreen(contextComponent)
         is FileManagerScreenComponent -> FileManagerScreen(contextComponent)
         is FhirmanScreenComponent -> FhirmanScreen(contextComponent)
         is DeviceDatabaseScreenComponent -> DeviceDatabaseScreen(contextComponent)

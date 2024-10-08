@@ -58,17 +58,15 @@ class CodeEditorComponent(
     }
 
     fun setText(text: String) {
-        componentScope.launch(Dispatchers.IO) {
-            if (text.trim().isNotEmpty()) {
-                setTextField(
-                    TextFieldValue(
-                        AnnotatedString(text),
-                        selection = TextRange(0, 0)
-                    )
+        if (text.trim().isNotEmpty()) {
+            setTextField(
+                TextFieldValue(
+                    AnnotatedString(text),
+                    selection = TextRange(0, 0)
                 )
-            } else {
-                setTextField(TextFieldValue(text))
-            }
+            )
+        } else {
+            setTextField(TextFieldValue(text))
         }
     }
 

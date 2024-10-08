@@ -40,6 +40,7 @@ import org.smartregister.fct.common.CommonModuleSetup
 import org.smartregister.fct.common.data.locals.LocalRootComponent
 import org.smartregister.fct.common.data.locals.LocalSnackbarHost
 import org.smartregister.fct.common.data.locals.LocalSubWindowManager
+import org.smartregister.fct.cql.CQLModuleSetup
 import org.smartregister.fct.engine.EngineModuleSetup
 import org.smartregister.fct.fm.FileManagerModuleSetup
 import org.smartregister.fct.pm.PMModuleSetup
@@ -169,6 +170,7 @@ private fun initSubModules(scope: CoroutineScope, loaded: () -> Unit) {
             ApiClientModuleSetup(),
             RuleModuleSetup(),
             WorkflowModuleSetup(),
+            CQLModuleSetup(),
         ).map {
             scope.async(Dispatchers.Default) {
                 it.setup()

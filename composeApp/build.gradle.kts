@@ -37,6 +37,7 @@ kotlin {
             implementation(project(":rules"))
             implementation(project(":workflow"))
             implementation(project(":base64"))
+            implementation(project(":cql"))
         }
 
         desktopMain.dependencies {

@@ -11,6 +11,8 @@ import okio.Path
 import okio.Path.Companion.toPath
 import org.apache.commons.io.FileUtils
 import org.smartregister.fct.engine.util.componentScope
+import org.smartregister.fct.fm.data.datasource.InAppFileSystem
+import org.smartregister.fct.fm.data.enums.FileSystemType
 import org.smartregister.fct.fm.domain.datasource.FileSystem
 import org.smartregister.fct.fm.domain.model.ContextMenu
 import org.smartregister.fct.fm.domain.model.FileManagerMode
@@ -30,7 +32,11 @@ internal abstract class FileManagerComponent(
     private val showHiddenFile = MutableStateFlow(false)
     protected val okioFileSystem = okio.FileSystem.SYSTEM
     private val activeDir = MutableStateFlow(
-        mode.activeDirPath?.toPath() ?: fileSystem.defaultActivePath()
+        if (fileSystem is InAppFileSystem) {
+            fileSystem.defaultActivePath()
+        } else {
+            mode.activeDirPath?.toPath() ?: fileSystem.defaultActivePath()
+        }
     )
     private val activeDirContent = MutableStateFlow(getFilteredPathList(activeDir.value))
 
@@ -105,10 +111,17 @@ internal abstract class FileManagerComponent(
                 val pathSelected = mode.onPathSelected
 
                 fileSelected?.let {
-                    fileSelected(path.parent?.toNioPath()?.absolutePathString() ?: "", FileUtils.readFileToString(path.toFile(), Charset.defaultCharset()))
+                    fileSelected(
+                        if (fileSystem is InAppFileSystem) FileSystemType.App else FileSystemType.System,
+                        path.parent?.toNioPath()?.absolutePathString() ?: "",
+                        FileUtils.readFileToString(path.toFile(), Charset.defaultCharset()))
                 }
 
-                pathSelected?.invoke(path.parent?.toNioPath()?.absolutePathString() ?: "", path.toString())
+                pathSelected?.invoke(
+                    if (fileSystem is InAppFileSystem) FileSystemType.App else FileSystemType.System,
+                    path.parent?.toNioPath()?.absolutePathString() ?: "",
+                    path.toString()
+                )
             }
 
             return Result.success(Unit)

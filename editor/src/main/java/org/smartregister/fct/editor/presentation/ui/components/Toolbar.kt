@@ -31,6 +31,7 @@ import org.smartregister.fct.device_database.ui.presentation.dialog.rememberDBDa
 import org.smartregister.fct.editor.presentation.components.CodeEditorComponent
 import org.smartregister.fct.editor.util.EditorConfig
 import org.smartregister.fct.engine.data.enums.FileType
+import org.smartregister.fct.fm.data.enums.FileSystemType
 import org.smartregister.fct.fm.presentation.ui.dialog.rememberFileProviderDialog
 
 
@@ -136,8 +137,10 @@ private fun ImportFromFileSystem(
     val fileProviderDialog = rememberFileProviderDialog(
         componentContext = component,
         title = "Import",
-        onFileContent = { dirPath, fileContent ->
-            EditorConfig.activePath = dirPath
+        onFileContent = { fileSystemType, dirPath, fileContent ->
+            if (fileSystemType == FileSystemType.System) {
+                EditorConfig.activePath = dirPath
+            }
             if (fetchFileImport != null) {
                 fetchFileImport(fileContent)
             } else {

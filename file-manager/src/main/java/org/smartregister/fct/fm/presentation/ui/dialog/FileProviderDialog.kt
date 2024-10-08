@@ -7,6 +7,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.Tabs
 import org.smartregister.fct.common.data.controller.DialogController
 import org.smartregister.fct.common.presentation.ui.dialog.rememberDialog
 import org.smartregister.fct.engine.data.enums.FileType
+import org.smartregister.fct.fm.data.enums.FileSystemType
 import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.presentation.ui.components.InAppFileManager
 import org.smartregister.fct.fm.presentation.ui.components.SystemFileManager
@@ -17,8 +18,8 @@ fun rememberFileProviderDialog(
     title: String = "File Provider",
     fileType: FileType? = null,
     onDismiss: ((DialogController<String>) -> Unit)? = null,
-    onFilePath: ((String, String) -> Unit)? = null,
-    onFileContent: ((String, String) -> Unit)? = null
+    onFilePath: ((FileSystemType, String, String) -> Unit)? = null,
+    onFileContent: ((FileSystemType, String, String) -> Unit)? = null
 ): DialogController<String> {
 
     val dialogController = rememberDialog(
@@ -45,8 +46,8 @@ fun rememberFileProviderDialog(
 private fun FileProviderDialog(
     defaultDirPath: String? = null,
     fileType: FileType? = null,
-    onFilePath: ((String, String) -> Unit)? = null,
-    onFileContent: ((String, String) -> Unit)? = null,
+    onFilePath: ((FileSystemType, String, String) -> Unit)? = null,
+    onFileContent: ((FileSystemType, String, String) -> Unit)? = null,
     fileProviderController: DialogController<String>,
     componentContext: ComponentContext
 ) {
@@ -55,17 +56,17 @@ private fun FileProviderDialog(
     val labelInAppFileManager = "In App File Manager"
 
     val onFileSelected = onFileContent?.let {
-        val listener: (String, String) -> Unit = { dirPath, fileContent ->
+        val listener: (FileSystemType, String, String) -> Unit = { fileSystemType, dirPath, fileContent ->
             fileProviderController.hide()
-            onFileContent.invoke(dirPath, fileContent)
+            onFileContent.invoke(fileSystemType, dirPath, fileContent)
         }
         listener
     }
 
     val onPathSelected = onFilePath?.let {
-        val listener: (String, String) -> Unit = { dirPath, filePath ->
+        val listener: (FileSystemType, String, String) -> Unit = { fileSystemType, dirPath, filePath ->
             fileProviderController.hide()
-            onFilePath.invoke(dirPath, filePath)
+            onFilePath.invoke(fileSystemType, dirPath, filePath)
         }
         listener
     }
