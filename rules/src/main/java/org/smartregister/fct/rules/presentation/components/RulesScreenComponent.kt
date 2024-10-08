@@ -495,13 +495,16 @@ class RulesScreenComponent(componentContext: ComponentContext) :
     }
 
     private fun saveActiveWorkspaceInConfig() {
-        with(WorkspaceConfig) {
-            defaultBoardScale = _boardScaling.value
-            defaultBoardOffset = _boardOffset.value
-            workspace = _activeWorkspace.value?.copy(
-                dataSources = _dataSourceWidgets.value,
-                rules = _ruleWidgets.value
-            )
+        componentScope.launch {
+            with(WorkspaceConfig) {
+                defaultBoardScale = _boardScaling.value
+                defaultBoardOffset = _boardOffset.value
+                workspace = _activeWorkspace.value?.copy(
+                    dataSources = _dataSourceWidgets.value,
+                    rules = _ruleWidgets.value
+                )
+            }
+            saveWorkspace()
         }
     }
 
