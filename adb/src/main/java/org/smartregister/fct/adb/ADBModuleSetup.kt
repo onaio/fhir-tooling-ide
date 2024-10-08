@@ -15,7 +15,7 @@ import org.smartregister.fct.logger.model.LogFilter
 
 class ADBModuleSetup : ModuleSetup {
 
-    private val adbModule = module {
+    private val adbModule = module(createdAtStart = true) {
         single<ShellProgram> { KScriptShellProgram() }
         single<ADBController> { ADBController(get()) }
     }

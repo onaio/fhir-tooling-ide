@@ -17,7 +17,7 @@ import org.smartregister.fct.pm.domain.usecase.UpdatePackage
 
 class PMModuleSetup : ModuleSetup {
 
-    private val pmModule = module {
+    private val pmModule = module(createdAtStart = true) {
         single<PackageDataSource> { SqlDelightPackageDataSource(Database.getDatabase().packageInfoDaoQueries) }
         single<PackageRepository> { SqlDelightPackageRepository(get()) }
         single<GetAllPackages> { GetAllPackages(get()) }
