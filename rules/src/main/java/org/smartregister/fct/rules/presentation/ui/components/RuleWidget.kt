@@ -62,7 +62,7 @@ import org.smartregister.fct.rules.util.appendBold
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun RuleWidget(
+internal fun RuleWidget(
     component: RulesScreenComponent,
     boardProperty: BoardProperty
 ) {

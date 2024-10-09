@@ -1,13 +1,11 @@
-package org.smartregister.fct.adb.data.shell
+package org.smartregister.fct.shell.program
 
-import org.smartregister.fct.adb.domain.program.ShellProgram
 import org.smartregister.fct.shell.evalBash
 
 class KScriptShellProgram : ShellProgram {
 
     @Synchronized
     override fun run(command: String): Result<String> {
-        //val asyncResult = CoroutineScope(Dispatchers.IO).async {
         return try {
             val evalBash = evalBash(command)
             val result = evalBash.getOrThrow()
@@ -26,7 +24,5 @@ class KScriptShellProgram : ShellProgram {
         } catch (t: Throwable) {
             Result.failure(t)
         }
-        /*}
-        return asyncResult.await()*/
     }
 }

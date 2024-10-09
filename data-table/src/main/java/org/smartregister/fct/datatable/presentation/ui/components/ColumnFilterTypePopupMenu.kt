@@ -27,7 +27,7 @@ import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
 
 context (ConstraintLayoutScope)
 @Composable
-fun ColumnFilterTypePopupMenu(
+internal fun ColumnFilterTypePopupMenu(
     modifier: Modifier = Modifier,
     controller: DataTableController,
     typeRef: ConstrainedLayoutReference,

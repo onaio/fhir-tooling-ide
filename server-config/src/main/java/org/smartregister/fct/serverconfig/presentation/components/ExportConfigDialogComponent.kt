@@ -6,7 +6,7 @@ import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.engine.util.encodeJson
 import org.smartregister.fct.serverconfig.domain.model.ExportDialogState
 
-class ExportConfigDialogComponent(
+internal class ExportConfigDialogComponent(
     serverConfigPanelComponent: ServerConfigPanelComponent,
 ) : KoinComponent, ConfigDialogComponent(serverConfigPanelComponent) {
 

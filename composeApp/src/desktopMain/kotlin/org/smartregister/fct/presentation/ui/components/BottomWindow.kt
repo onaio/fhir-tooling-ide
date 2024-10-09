@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.smartregister.fct.common.data.enums.BottomWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
-import org.smartregister.fct.logcat.ui.LogcatWindow
+import org.smartregister.fct.logcat.ui.view.LogcatWindow
 import org.smartregister.fct.logger.FCTLogger
 
 @Composable

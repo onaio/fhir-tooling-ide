@@ -21,7 +21,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.VerticalSlider
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 
 @Composable
-fun BoxScope.BoardScaleSlider(component: RulesScreenComponent) {
+internal fun BoxScope.BoardScaleSlider(component: RulesScreenComponent) {
 
     Column(
         modifier = Modifier.align(Alignment.CenterEnd).padding(end = 12.dp),

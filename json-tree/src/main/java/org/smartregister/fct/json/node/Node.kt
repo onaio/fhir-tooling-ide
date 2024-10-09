@@ -37,7 +37,7 @@ class LeafNode<T> internal constructor(
 ) : Node<T>,
     SelectableNode by SelectableNodeHandler()
 
-class BranchNode<T> internal constructor(
+internal class BranchNode<T> internal constructor(
     override val content: T,
     override val depth: Int,
     override val key: String = randomUUID,

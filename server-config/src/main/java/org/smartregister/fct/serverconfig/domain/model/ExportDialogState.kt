@@ -3,7 +3,7 @@ package org.smartregister.fct.serverconfig.domain.model
 import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.serverconfig.presentation.components.ExportConfigDialogComponent
 
-sealed class ExportDialogState {
+internal sealed class ExportDialogState {
 
     data object Idle : ExportDialogState()
 

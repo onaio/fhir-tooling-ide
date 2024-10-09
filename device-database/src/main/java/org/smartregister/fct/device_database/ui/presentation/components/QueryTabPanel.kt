@@ -12,7 +12,7 @@ import org.smartregister.fct.common.presentation.ui.container.Aurora
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 
 @Composable
-fun QueryTabPanel(
+internal fun QueryTabPanel(
     tabComponent: QueryTabComponent,
     componentContext: ComponentContext,
     defaultQuery: String? = null,

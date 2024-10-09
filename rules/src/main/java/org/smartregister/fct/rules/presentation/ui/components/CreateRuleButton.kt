@@ -9,7 +9,7 @@ import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewRuleDialog
 
 @Composable
-fun CreateRuleButton(
+internal fun CreateRuleButton(
     component: RulesScreenComponent
 ) {
 

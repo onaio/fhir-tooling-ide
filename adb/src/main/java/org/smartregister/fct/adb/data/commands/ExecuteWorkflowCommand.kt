@@ -2,7 +2,7 @@ package org.smartregister.fct.adb.data.commands
 
 import org.json.JSONObject
 
-class ExecuteWorkflowCommand(packageId: String, arg: String) : ContentCommand(packageId, arg) {
+internal class ExecuteWorkflowCommand(packageId: String, arg: String) : ContentCommand(packageId, arg) {
 
     override fun getMethodName(): String {
         return "execute_workflow"

@@ -2,7 +2,7 @@ package org.smartregister.fct.adb.domain.program
 
 import org.smartregister.fct.adb.domain.model.CommandResult
 
-interface ADBCommand<T> {
+internal interface ADBCommand<T> {
 
     fun process(response: String, dependentResult: List<CommandResult<*>>): Result<T>
     fun build(): List<String>

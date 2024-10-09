@@ -6,7 +6,7 @@ import org.smartregister.fct.engine.domain.model.PackageInfo
 import org.smartregister.fct.pm.domain.datasource.PackageDataSource
 import org.smartregister.fct.pm.domain.repository.PackageRepository
 
-class SqlDelightPackageRepository(private val dataSource: PackageDataSource) : PackageRepository {
+internal class SqlDelightPackageRepository(private val dataSource: PackageDataSource) : PackageRepository {
     override fun getAllPackages(device: Device, filter: List<String>): Flow<List<PackageInfo>> =
         dataSource.getAllPackages(device, filter)
 

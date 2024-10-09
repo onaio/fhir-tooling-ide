@@ -12,7 +12,7 @@ import org.smartregister.fct.common.data.enums.RightWindowState
 import org.smartregister.fct.common.data.manager.SubWindowManager
 import org.smartregister.fct.device.ui.DeviceManagerWindow
 import org.smartregister.fct.logger.FCTLogger
-import org.smartregister.fct.pm.ui.PackageManagerWindow
+import org.smartregister.fct.pm.ui.view.PackageManagerWindow
 
 @Composable
 fun RightWindow(subWindowManager: SubWindowManager) {

@@ -9,7 +9,7 @@ import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewDataSourceDialog
 
 @Composable
-fun CreateDataSourceButton(
+internal fun CreateDataSourceButton(
     component: RulesScreenComponent
 ) {
     val newSourceDialog = rememberNewDataSourceDialog { widget, isEdit ->

@@ -1,4 +1,4 @@
-package org.smartregister.fct.insights.ui.components
+package org.smartregister.fct.insights.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

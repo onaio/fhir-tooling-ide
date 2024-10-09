@@ -14,7 +14,7 @@ import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.serverconfig.domain.model.ExportDialogState
 import org.smartregister.fct.serverconfig.domain.model.ImportDialogState
 
-class ServerConfigPanelComponent(
+internal class ServerConfigPanelComponent(
     private val componentContext: ComponentContext
 ) : KoinComponent, ComponentContext by componentContext {
 

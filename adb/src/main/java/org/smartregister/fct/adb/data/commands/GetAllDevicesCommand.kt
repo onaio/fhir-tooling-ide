@@ -6,7 +6,7 @@ import org.smartregister.fct.adb.domain.program.ADBCommand
 import org.smartregister.fct.adb.utils.CommandConstants
 import org.smartregister.fct.adb.utils.resultAsCommandException
 
-class GetAllDevicesCommand : ADBCommand<List<Device>> {
+internal class GetAllDevicesCommand : ADBCommand<List<Device>> {
 
     override fun process(response: String, dependentResult: List<CommandResult<*>>): Result<List<Device>> {
         return response

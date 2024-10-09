@@ -49,7 +49,7 @@ import org.smartregister.fct.logger.FCTLogger
  * Immunization.Reaction
  */
 
-class TransformSupportServices(private val simpleWorkerContext: SimpleWorkerContext) :
+internal class TransformSupportServices(private val simpleWorkerContext: SimpleWorkerContext) :
   ITransformerServices {
 
   private val outputs: MutableList<Base> = mutableListOf()

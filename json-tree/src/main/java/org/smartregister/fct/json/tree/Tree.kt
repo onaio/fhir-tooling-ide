@@ -31,7 +31,7 @@ class Tree<T> internal constructor(
     SelectableTree<T> by SelectableTreeHandler(nodes)
 
 @Composable
-fun <T> Tree(
+internal fun <T> Tree(
     key: Any? = null,
     content: @Composable TreeScope.() -> Unit
 ): Tree<T> {

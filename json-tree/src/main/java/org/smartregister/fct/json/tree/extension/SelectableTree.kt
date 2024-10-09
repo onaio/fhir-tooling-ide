@@ -4,7 +4,7 @@ import org.smartregister.fct.json.node.BranchNode
 import org.smartregister.fct.json.node.LeafNode
 import org.smartregister.fct.json.node.Node
 
-interface SelectableTree<T> {
+internal interface SelectableTree<T> {
 
     val selectedNodes: List<Node<T>>
 

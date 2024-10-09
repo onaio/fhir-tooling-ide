@@ -45,7 +45,7 @@ import java.awt.event.MouseWheelEvent
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Board(
+internal fun Board(
     component: RulesScreenComponent,
     content: @Composable BoxScope.(BoardProperty) -> Unit
 ) {

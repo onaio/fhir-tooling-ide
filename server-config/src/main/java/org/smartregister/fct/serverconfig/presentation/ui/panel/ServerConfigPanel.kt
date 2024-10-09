@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import org.smartregister.fct.aurora.presentation.ui.components.CloseableTab
 import org.smartregister.fct.aurora.presentation.ui.components.ScrollableTabRow
@@ -20,60 +22,66 @@ import org.smartregister.fct.serverconfig.presentation.ui.components.ImportConfi
 import org.smartregister.fct.serverconfig.presentation.ui.components.ImportExportContent
 import org.smartregister.fct.serverconfig.presentation.ui.components.MultiItemFloatingActionButton
 
-context (ServerConfigPanelComponent)
 @Composable
-fun ServerConfigPanel() {
+fun ServerConfigPanel(componentContext: ComponentContext) {
 
-    val activeTabIndex by activeTabIndex.subscribeAsState()
-    val serverConfigList by tabComponents.subscribeAsState()
-    val deleteConfigDialog = deleteConfigDialog()
-    val titleDialogController = titleDialogController()
-
-    Column {
-
-        if (serverConfigList.isNotEmpty()) {
-
-            ScrollableTabRow(
-                modifier = Modifier.fillMaxWidth(),
-                selectedTabIndex = activeTabIndex,
-            ) {
-                serverConfigList
-                    .map { it.serverConfig }
-                    .forEachIndexed { index, item ->
-                        CloseableTab(
-                            index = index,
-                            item = item,
-                            title = { it.title },
-                            selected = index == activeTabIndex,
-                            onClick = {
-                                changeTab(it)
-                            },
-                            onClose = {
-                                deleteConfigDialog.show(
-                                    title = "Delete Config",
-                                    message = "Are you sure you want to delete ${item.title} config?",
-                                    data = index
-                                )
-                            }
-                        )
-                    }
-            }
-
-            Box(Modifier.fillMaxSize()) {
-                with(serverConfigList[activeTabIndex]) {
-                    ImportExportContent()
-                }
-                MultiItemFloatingActionButton(titleDialogController)
-            }
-        } else {
-            CreateOrImportConfig(
-                titleDialogController = titleDialogController
-            )
-        }
+    val component = remember {
+        ServerConfigPanelComponent(componentContext)
     }
 
-    ExportConfigsDialog()
-    ImportConfigsDialog()
+    with (component) {
+        val activeTabIndex by activeTabIndex.subscribeAsState()
+        val serverConfigList by tabComponents.subscribeAsState()
+        val deleteConfigDialog = deleteConfigDialog()
+        val titleDialogController = titleDialogController()
+
+        Column {
+
+            if (serverConfigList.isNotEmpty()) {
+
+                ScrollableTabRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedTabIndex = activeTabIndex,
+                ) {
+                    serverConfigList
+                        .map { it.serverConfig }
+                        .forEachIndexed { index, item ->
+                            CloseableTab(
+                                index = index,
+                                item = item,
+                                title = { it.title },
+                                selected = index == activeTabIndex,
+                                onClick = {
+                                    changeTab(it)
+                                },
+                                onClose = {
+                                    deleteConfigDialog.show(
+                                        title = "Delete Config",
+                                        message = "Are you sure you want to delete ${item.title} config?",
+                                        data = index
+                                    )
+                                }
+                            )
+                        }
+                }
+
+                Box(Modifier.fillMaxSize()) {
+                    with(serverConfigList[activeTabIndex]) {
+                        ImportExportContent()
+                    }
+                    MultiItemFloatingActionButton(titleDialogController)
+                }
+            } else {
+                CreateOrImportConfig(
+                    titleDialogController = titleDialogController
+                )
+            }
+        }
+
+        ExportConfigsDialog()
+        ImportConfigsDialog()
+    }
+
 }
 
 context (ServerConfigPanelComponent)

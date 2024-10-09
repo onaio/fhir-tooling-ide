@@ -16,7 +16,7 @@ import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.presentation.components.SystemFileManagerComponent
 
 @Composable
-fun SystemFileManager(
+internal fun SystemFileManager(
     componentContext: ComponentContext,
     mode: FileManagerMode = FileManagerMode.Edit()
 ) {

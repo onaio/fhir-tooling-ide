@@ -3,7 +3,7 @@ package org.smartregister.fct.json.tree.extension
 import org.smartregister.fct.json.node.BranchNode
 import org.smartregister.fct.json.node.Node
 
-interface ExpandableTree<T> {
+internal interface ExpandableTree<T> {
 
     fun toggleExpansion(node: Node<T>)
 

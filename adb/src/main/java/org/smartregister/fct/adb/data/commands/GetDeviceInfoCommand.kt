@@ -13,7 +13,7 @@ import org.smartregister.fct.engine.util.Platform
 import org.smartregister.fct.engine.util.PlatformType
 import org.smartregister.fct.logger.FCTLogger
 
-class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
+internal class GetDeviceInfoCommand : ADBCommand<DeviceInfo> {
 
     private val commandArgs: String
 

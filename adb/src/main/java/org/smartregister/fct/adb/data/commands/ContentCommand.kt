@@ -8,7 +8,7 @@ import org.smartregister.fct.engine.util.decompress
 import org.smartregister.fct.engine.util.replaceLast
 import org.smartregister.fct.logger.FCTLogger
 
-abstract class ContentCommand(
+internal abstract class ContentCommand(
     private val packageId: String,
     private val arg: String
 ) : ADBCommand<JSONObject> {

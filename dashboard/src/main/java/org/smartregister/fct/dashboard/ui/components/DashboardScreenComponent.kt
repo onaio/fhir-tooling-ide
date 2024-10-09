@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import org.smartregister.fct.common.presentation.component.ScreenComponent
 import org.smartregister.fct.common.util.windowTitle
 import org.smartregister.fct.engine.util.componentScope
-import org.smartregister.fct.insights.ui.components.InsightsComponent
+import org.smartregister.fct.insights.presentation.components.InsightsComponent
 
 class DashboardScreenComponent(componentContext: ComponentContext) : ScreenComponent,
     ComponentContext by componentContext

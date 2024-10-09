@@ -1,4 +1,4 @@
-package org.smartregister.fct.insights.ui.presentation.view
+package org.smartregister.fct.insights.presentation.ui.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +14,10 @@ import org.smartregister.fct.adb.domain.usecase.DeviceManager
 import org.smartregister.fct.aurora.presentation.ui.components.CardWidget
 import org.smartregister.fct.aurora.presentation.ui.components.LinearIndicator
 import org.smartregister.fct.common.presentation.ui.container.Aurora
-import org.smartregister.fct.insights.ui.components.InsightDetail
-import org.smartregister.fct.insights.ui.components.InsightFetchFailed
-import org.smartregister.fct.insights.ui.components.InsightsComponent
-import org.smartregister.fct.insights.ui.components.ResourceTypeCountChart
+import org.smartregister.fct.insights.presentation.ui.components.InsightDetail
+import org.smartregister.fct.insights.presentation.ui.components.InsightFetchFailed
+import org.smartregister.fct.insights.presentation.components.InsightsComponent
+import org.smartregister.fct.insights.presentation.ui.components.ResourceTypeCountChart
 
 @Composable
 fun AllInsights(component: InsightsComponent) {

@@ -17,7 +17,7 @@ import okio.Path
 import org.jetbrains.compose.resources.DrawableResource
 
 
-fun Path.getFileTypeImage() : DrawableResource {
+internal fun Path.getFileTypeImage() : DrawableResource {
 
     return when {
         toFile().isDirectory && !toFile().isHidden -> Res.drawable.folder

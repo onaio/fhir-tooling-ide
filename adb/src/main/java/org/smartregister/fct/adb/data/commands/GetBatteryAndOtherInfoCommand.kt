@@ -8,7 +8,7 @@ import org.smartregister.fct.adb.utils.takeIfNotError
 import org.smartregister.fct.engine.util.Platform
 import org.smartregister.fct.engine.util.PlatformType
 
-class GetBatteryAndOtherInfoCommand : ADBCommand<Map<String, String>> {
+internal class GetBatteryAndOtherInfoCommand : ADBCommand<Map<String, String>> {
 
     override fun process(
         response: String,

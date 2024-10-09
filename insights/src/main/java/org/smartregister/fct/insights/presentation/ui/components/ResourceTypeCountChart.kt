@@ -1,4 +1,4 @@
-package org.smartregister.fct.insights.ui.components
+package org.smartregister.fct.insights.presentation.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -118,7 +118,8 @@ internal fun ResourceTypeCountChart(insights: Insights, onRefresh: () -> Unit) {
                                     keyTextLayoutResult = keyTextMeasurer.measure(ellipsisKey(it.key), textStyle),
                                     valueTextMeasurer = valueTextMeasurer,
                                     valueTextLayoutResult = valueTextMeasurer.measure(it.value.toString(), textStyle),
-                                ))
+                                )
+                                )
                             }
                         }
                     }

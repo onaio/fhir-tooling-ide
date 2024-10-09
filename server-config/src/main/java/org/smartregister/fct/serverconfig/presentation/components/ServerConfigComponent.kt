@@ -14,7 +14,7 @@ import org.smartregister.fct.engine.domain.model.ServerConfig
 import org.smartregister.fct.engine.util.componentScope
 import org.smartregister.fct.serverconfig.domain.model.VerifyConfigState
 
-class ServerConfigComponent(
+internal class ServerConfigComponent(
     componentContext: ComponentContext,
     val serverConfig: ServerConfig,
 ) : KoinComponent, ComponentContext by componentContext {

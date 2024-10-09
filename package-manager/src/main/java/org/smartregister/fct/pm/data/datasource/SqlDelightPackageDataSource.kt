@@ -13,7 +13,7 @@ import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.pm.domain.datasource.PackageDataSource
 import sqldelight.PackageInfoDaoQueries
 
-class SqlDelightPackageDataSource(private val packageInfoDao: PackageInfoDaoQueries) : PackageDataSource {
+internal class SqlDelightPackageDataSource(private val packageInfoDao: PackageInfoDaoQueries) : PackageDataSource {
 
     override fun getAllPackages(device: Device, filter: List<String>): Flow<List<PackageInfo>> {
         return flow {

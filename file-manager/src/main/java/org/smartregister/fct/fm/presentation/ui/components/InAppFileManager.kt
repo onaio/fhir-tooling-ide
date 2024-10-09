@@ -20,7 +20,7 @@ import org.smartregister.fct.fm.domain.model.FileManagerMode
 import org.smartregister.fct.fm.presentation.components.InAppFileManagerComponent
 
 @Composable
-fun InAppFileManager(
+internal fun InAppFileManager(
     componentContext: ComponentContext,
     mode: FileManagerMode = FileManagerMode.Edit()
 ) {

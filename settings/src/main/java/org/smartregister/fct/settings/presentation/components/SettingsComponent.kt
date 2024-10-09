@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import org.smartregister.fct.settings.domain.model.Setting
 
-class SettingsComponent(
+internal class SettingsComponent(
     componentContext: ComponentContext,
     activeSetting: Setting
 ) : ComponentContext by componentContext {

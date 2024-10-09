@@ -8,7 +8,7 @@ import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewWorkspaceDialog
 
 @Composable
-fun CreateNewWorkspaceButton(
+internal fun CreateNewWorkspaceButton(
     component: RulesScreenComponent
 ) {
 

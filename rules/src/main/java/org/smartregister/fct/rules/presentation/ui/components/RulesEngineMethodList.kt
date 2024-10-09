@@ -44,7 +44,7 @@ import org.smartregister.fct.rules.util.RulesEngineMethods
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun RulesEngineMethodList() {
+internal fun RulesEngineMethodList() {
 
     var expanded by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }

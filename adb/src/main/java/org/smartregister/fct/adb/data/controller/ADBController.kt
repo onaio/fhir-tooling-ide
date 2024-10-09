@@ -5,11 +5,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import org.smartregister.fct.adb.domain.model.CommandResult
 import org.smartregister.fct.adb.domain.program.ADBCommand
-import org.smartregister.fct.adb.domain.program.ShellProgram
+import org.smartregister.fct.shell.program.ShellProgram
 import org.smartregister.fct.logger.FCTLogger
 
 @Suppress("UNCHECKED_CAST")
-class ADBController(private val shellProgram: ShellProgram) {
+internal class ADBController(private val shellProgram: ShellProgram) {
 
     suspend fun <T> executeCommand(
         command: ADBCommand<T>,

@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.smartregister.fct.adb.domain.model.Device
 import org.smartregister.fct.engine.domain.model.PackageInfo
 
-interface PackageDataSource {
+internal interface PackageDataSource {
 
     fun getAllPackages(device: Device, filter: List<String>): Flow<List<PackageInfo>>
     fun getSavedPackages() : Flow<List<PackageInfo>>

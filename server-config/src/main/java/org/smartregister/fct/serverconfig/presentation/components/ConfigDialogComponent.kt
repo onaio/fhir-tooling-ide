@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import org.smartregister.fct.engine.domain.model.ServerConfig
 
-abstract class ConfigDialogComponent(
+internal abstract class ConfigDialogComponent(
     protected val serverConfigPanelComponent: ServerConfigPanelComponent
 ) : ComponentContext by serverConfigPanelComponent {
 

@@ -6,8 +6,8 @@ import org.smartregister.fct.adb.data.commands.GetAllDevicesCommand
 import org.smartregister.fct.adb.data.commands.GetBatteryAndOtherInfoCommand
 import org.smartregister.fct.adb.data.commands.GetDeviceInfoCommand
 import org.smartregister.fct.adb.data.controller.ADBController
-import org.smartregister.fct.adb.data.shell.KScriptShellProgram
-import org.smartregister.fct.adb.domain.program.ShellProgram
+import org.smartregister.fct.shell.program.KScriptShellProgram
+import org.smartregister.fct.shell.program.ShellProgram
 import org.smartregister.fct.engine.setup.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.logger.model.Log

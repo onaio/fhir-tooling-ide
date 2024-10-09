@@ -11,7 +11,7 @@ import org.smartregister.fct.engine.util.uuid
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.serverconfig.domain.model.ImportDialogState
 
-class ImportConfigDialogComponent(
+internal class ImportConfigDialogComponent(
     serverConfigPanelComponent: ServerConfigPanelComponent
 ) : KoinComponent, ConfigDialogComponent(serverConfigPanelComponent) {
 

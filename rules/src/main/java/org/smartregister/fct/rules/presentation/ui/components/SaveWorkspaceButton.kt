@@ -10,7 +10,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.TooltipPosition
 import org.smartregister.fct.rules.presentation.components.RulesScreenComponent
 
 @Composable
-fun SaveWorkspaceButton(
+internal fun SaveWorkspaceButton(
     component: RulesScreenComponent
 ) {
 

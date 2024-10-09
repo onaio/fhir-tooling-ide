@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import org.smartregister.fct.engine.util.encodeJson
 
 @Serializable
-data class QueryRequest(
+internal data class QueryRequest(
     val database: String,
     val query: String,
     val sortColumn: String? = null,

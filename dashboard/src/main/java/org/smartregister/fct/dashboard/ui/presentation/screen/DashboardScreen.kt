@@ -12,7 +12,7 @@ import org.smartregister.fct.aurora.presentation.ui.components.CardWidget
 import org.smartregister.fct.dashboard.ui.components.DashboardScreenComponent
 import org.smartregister.fct.dashboard.ui.presentation.components.DeviceInfo
 import org.smartregister.fct.dashboard.ui.presentation.components.FhirResourcesList
-import org.smartregister.fct.insights.ui.presentation.view.AllInsights
+import org.smartregister.fct.insights.presentation.ui.view.AllInsights
 
 @Composable
 fun DashboardScreen(component: DashboardScreenComponent) {

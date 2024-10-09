@@ -2,7 +2,7 @@ package org.smartregister.fct.adb.domain.model
 
 import org.smartregister.fct.adb.domain.program.ADBCommand
 
-data class CommandResult<T>(
+internal data class CommandResult<T>(
     val command: ADBCommand<T>,
     val result: Result<*>
 )

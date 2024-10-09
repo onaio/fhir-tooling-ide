@@ -6,7 +6,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 
-data class BashResult(
+data class BashResult internal constructor(
     val exitCode: Int,
     val stdout: Iterable<String>,
     val stderr: Iterable<String>

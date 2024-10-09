@@ -1,4 +1,4 @@
-package org.smartregister.fct.insights.ui.components
+package org.smartregister.fct.insights.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.flow.MutableStateFlow

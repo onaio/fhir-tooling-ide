@@ -1,4 +1,4 @@
-package org.smartregister.fct.pm.ui
+package org.smartregister.fct.pm.ui.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

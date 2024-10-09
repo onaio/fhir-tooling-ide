@@ -26,7 +26,7 @@ import org.smartregister.fct.rules.presentation.ui.dialog.rememberNewDataSourceD
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DataSourceWidget(
+internal fun DataSourceWidget(
     component: RulesScreenComponent,
     boardProperty: BoardProperty
 ) {

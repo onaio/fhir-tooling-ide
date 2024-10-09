@@ -13,7 +13,7 @@ import org.smartregister.fct.apiclient.util.asOperationOutcome
 import org.smartregister.fct.logger.FCTLogger
 import java.lang.reflect.Type
 
-class OperationOutcomeTypeAdapter : JsonSerializer<OperationOutcome>,
+internal class OperationOutcomeTypeAdapter : JsonSerializer<OperationOutcome>,
     JsonDeserializer<OperationOutcome> {
 
     override fun serialize(
