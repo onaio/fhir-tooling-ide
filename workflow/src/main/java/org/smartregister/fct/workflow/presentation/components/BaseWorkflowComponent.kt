@@ -1,6 +1,7 @@
 package org.smartregister.fct.workflow.presentation.components
 
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +26,8 @@ import org.smartregister.fct.engine.util.prettyJson
 import org.smartregister.fct.fm.util.FileUtil
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.sm.data.transformation.SMTransformService
+import org.smartregister.fct.workflow.data.enums.WorkflowType
+import org.smartregister.fct.workflow.data.generator.LiteWorkflowGenerator
 import org.smartregister.fct.workflow.domain.model.Workflow
 import org.smartregister.fct.workflow.domain.model.WorkflowRequest
 import org.smartregister.fct.workflow.domain.model.WorkflowResponse
@@ -37,6 +40,7 @@ internal abstract class BaseWorkflowComponent(
 ) : KoinComponent, ComponentContext by screenComponent {
 
     private val transformService: SMTransformService by inject()
+    private val liteWorkflowGenerator: LiteWorkflowGenerator by inject()
 
     internal val codeEditorComponent =
         CodeEditorComponent(screenComponent, fileType = FileType.Json)
@@ -163,15 +167,8 @@ internal abstract class BaseWorkflowComponent(
     }
 
     internal fun execute() {
-        componentScope.launch {
+        componentScope.launch(Dispatchers.Default) {
             try {
-
-                val device = DeviceManager.getActiveDevice()
-
-                if (device == null) {
-                    screenComponent.showError("No device selected")
-                    return@launch
-                }
 
                 // save open workflow file
                 saveOpenedWorkflowFile()
@@ -179,15 +176,13 @@ internal abstract class BaseWorkflowComponent(
                 // show loader
                 screenComponent.showLoader(true)
 
-                val planDefinition = FileUtil.readFile(workflow.config.planDefinitionPath.toPath())
+                val planDefinition = FileUtil
+                    .readFile(workflow.config.planDefinitionPath.toPath())
+                    .decodeResourceFromString<PlanDefinition>()
 
-                // check plan-def text is valid plan-def resource
-                planDefinition.decodeResourceFromString<PlanDefinition>()
-
-                val subject = FileUtil.readFile(workflow.config.subjectPath.toPath())
-
-                // check subject is valid fhir resource
-                subject.decodeResourceFromString<Resource>()
+                val subject = FileUtil
+                    .readFile(workflow.config.subjectPath.toPath())
+                    .decodeResourceFromString<Resource>()
 
                 val resources = mutableListOf<String>()
                 workflow.config.otherResourcesPath.forEach { path ->
@@ -220,53 +215,79 @@ internal abstract class BaseWorkflowComponent(
                     }
                 }
 
-                // execute workflow
-                val result = device.executeWorkflow(
-                    WorkflowRequest(
-                        type = workflow.type,
-                        planDefinition = planDefinition,
-                        subject = subject,
-                        otherResource = resources
-                    ).encodeJson()
-                )
+                // generate workflow
+                val response = when(workflow.type) {
+
+                    WorkflowType.Lite -> {
+
+                        // intentional delayed local process is very fast
+                        delay(500)
+
+                        liteWorkflowGenerator.generate(
+                            planDefinition = planDefinition,
+                            subject = subject,
+                            otherResource = resources
+                        )
+                    }
+
+                    WorkflowType.Apply -> {
+
+                        val device = DeviceManager.getActiveDevice()
+
+                        if (device == null) {
+                            screenComponent.showError("No device selected")
+                            return@launch
+                        }
+
+                        val result = device.executeWorkflow(
+                            WorkflowRequest(
+                                type = workflow.type,
+                                planDefinition = planDefinition.encodeResourceToString(),
+                                subject = subject.encodeResourceToString(),
+                                otherResource = resources
+                            ).encodeJson()
+                        )
+
+                        if (result.isFailure) {
+                            throw result.exceptionOrNull()!!
+                        }
+
+                        result.getOrThrow().toString().decodeJson<WorkflowResponse>()
+                    }
+                }
 
                 // hide loader
                 screenComponent.showLoader(false)
 
-                if (result.isSuccess) {
-                    val response = result.getOrThrow().toString().decodeJson<WorkflowResponse>()
-                    if (response.error == null) {
-                        screenComponent.setWorkflowResult(
-                            response.result
-                                .map { it.decodeResourceFromString<Resource>() }
-                                .let {
-                                    Bundle().apply {
+                //val response = result.getOrThrow().toString().decodeJson<WorkflowResponse>()
+                if (response.error == null) {
+                    screenComponent.setWorkflowResult(
+                        response.result
+                            .map { it.decodeResourceFromString<Resource>() }
+                            .let {
+                                Bundle().apply {
 
-                                        resources
-                                            .map { it.decodeResourceFromString<Resource>() }
-                                            .filterIsInstance<StructureMap>()
-                                            .forEach { smResource ->
-                                                addEntry().apply {
-                                                    setResource(smResource)
-                                                }
-                                            }
-
-                                        it.forEach { resource ->
+                                    resources
+                                        .map { it.decodeResourceFromString<Resource>() }
+                                        .filterIsInstance<StructureMap>()
+                                        .forEach { smResource ->
                                             addEntry().apply {
-                                                setResource(resource)
+                                                setResource(smResource)
                                             }
+                                        }
+
+                                    it.forEach { resource ->
+                                        addEntry().apply {
+                                            setResource(resource)
                                         }
                                     }
                                 }
+                            }
 
-                        )
-                    } else {
-                        FCTLogger.e(response.error)
-                        screenComponent.showError(response.error)
-                    }
+                    )
                 } else {
-                    FCTLogger.e(result.exceptionOrNull())
-                    screenComponent.showError(result.exceptionOrNull()?.message)
+                    FCTLogger.e(response.error)
+                    screenComponent.showError(response.error)
                 }
 
             } catch (ex: Exception) {

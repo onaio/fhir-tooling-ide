@@ -7,39 +7,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.context.SimpleWorkerContext
 import org.hl7.fhir.r4.model.Bundle
-import org.hl7.fhir.r4.model.Parameters
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.utils.StructureMapUtilities
-import org.hl7.fhir.utilities.npm.FilesystemPackageCacheManager
+import org.smartregister.fct.engine.data.helper.TransformSupportServices
 import org.smartregister.fct.engine.util.decodeResourceFromString
 import org.smartregister.fct.logger.FCTLogger
-import org.smartregister.fct.sm.data.helper.TransformSupportServices
 
-class SMTransformService {
+class SMTransformService internal constructor(
+    private val transformSupportServices: TransformSupportServices,
+    private val simpleWorkerContext: SimpleWorkerContext,
+) {
 
-    private lateinit var packageCacheManager: FilesystemPackageCacheManager
-    private lateinit var contextR4: SimpleWorkerContext
-    private lateinit var transformSupportServices: StructureMapUtilities.ITransformerServices
     private lateinit var structureMapUtilities: StructureMapUtilities
     private lateinit var jsonParser: IParser
 
     suspend fun init() = withContext(Dispatchers.IO) {
-        packageCacheManager = FilesystemPackageCacheManager(true)
-
-        contextR4 = SimpleWorkerContext.fromPackage(
-            packageCacheManager.loadPackage(
-                "hl7.fhir.r4.core",
-                "4.0.1"
-            )
-        ).apply {
-            setExpansionProfile(Parameters())
-            isCanRunWithoutTerminology = true
-        }
-
-        transformSupportServices = TransformSupportServices(contextR4)
-
-        structureMapUtilities = StructureMapUtilities(contextR4, transformSupportServices)
-
+        structureMapUtilities = StructureMapUtilities(simpleWorkerContext, transformSupportServices)
         jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
     }
 
@@ -57,7 +40,7 @@ class SMTransformService {
                 val clazz = source.decodeResourceFromString<Resource>().javaClass
                 val baseElement = jsonParser.parseResource(clazz, source)
                 structureMapUtilities.transform(
-                    contextR4,
+                    simpleWorkerContext,
                     baseElement,
                     structureMap,
                     targetResource

@@ -8,9 +8,12 @@ import org.smartregister.fct.device_database.ui.components.QueryTabBaseComponent
 import org.smartregister.fct.device_database.ui.components.QueryTabComponent
 import org.smartregister.fct.device_database.ui.components.TableTabComponent
 
-internal object DeviceDBConfigPersistence {
+object DeviceDBConfigPersistence {
 
-    val controller = TabsControllerImpl(
+    const val RESOURCE_DB = "resources.db"
+    const val KNOWLEDGE_DB = "knowledge.db"
+
+    internal val controller = TabsControllerImpl(
         items = listOf<QueryTabBaseComponent>(),
         title = { index, tab ->
             when (tab) {
@@ -24,23 +27,23 @@ internal object DeviceDBConfigPersistence {
 
     val listOfDB = listOf(
         DBInfo(
-            name = "resources.db",
+            name = RESOURCE_DB,
             label = "Resource"
         ),
         DBInfo(
-            name = "knowledge.db",
+            name = KNOWLEDGE_DB,
             label = "Knowledge"
         )
     )
 
-    var sidePanelDBInfo: DBInfo = listOfDB[0]
+    internal var sidePanelDBInfo: DBInfo = listOfDB[0]
 
-    val tablesMap = mutableMapOf<String, List<TableInfo>>(
+    internal val tablesMap = mutableMapOf<String, List<TableInfo>>(
         Pair(listOfDB[0].name, listOf()),
         Pair(listOfDB[1].name, listOf()),
     )
 
-    fun addNewTab(queryTabBaseComponent: QueryTabBaseComponent) {
+    internal fun addNewTab(queryTabBaseComponent: QueryTabBaseComponent) {
         controller.add(queryTabBaseComponent)
     }
 }
