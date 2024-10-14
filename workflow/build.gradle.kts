@@ -23,4 +23,5 @@ dependencies {
     implementation(project(":device-database"))
     implementation(project(":structure-map"))
     implementation(project(":editor"))
+    implementation(project(":data-table"))
 }

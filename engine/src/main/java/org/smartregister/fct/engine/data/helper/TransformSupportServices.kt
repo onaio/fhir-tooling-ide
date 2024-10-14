@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.smartregister.fct.sm.data.helper
+package org.smartregister.fct.engine.data.helper
 
 import org.hl7.fhir.exceptions.FHIRException
 import org.hl7.fhir.r4.context.SimpleWorkerContext
@@ -49,7 +49,7 @@ import org.smartregister.fct.logger.FCTLogger
  * Immunization.Reaction
  */
 
-internal class TransformSupportServices(private val simpleWorkerContext: SimpleWorkerContext) :
+class TransformSupportServices(val simpleWorkerContext: SimpleWorkerContext) :
   ITransformerServices {
 
   private val outputs: MutableList<Base> = mutableListOf()

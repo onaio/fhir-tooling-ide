@@ -25,7 +25,7 @@ class SMModuleSetup : ModuleSetup {
         single<CreateNewSM> { CreateNewSM(get()) }
         single<UpdateSM> { UpdateSM(get()) }
         single<DeleteSM> { DeleteSM(get()) }
-        single<SMTransformService> { SMTransformService() }
+        single<SMTransformService> { SMTransformService(get(), get()) }
     }
 
     override suspend fun setup() {

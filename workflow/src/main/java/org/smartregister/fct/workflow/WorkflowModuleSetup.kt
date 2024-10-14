@@ -6,6 +6,7 @@ import org.smartregister.fct.database.Database
 import org.smartregister.fct.engine.setup.ModuleSetup
 import org.smartregister.fct.logger.FCTLogger
 import org.smartregister.fct.workflow.data.datasource.WorkflowSqlDelightDataSource
+import org.smartregister.fct.workflow.data.generator.LiteWorkflowGenerator
 import org.smartregister.fct.workflow.data.respository.WorkflowSqlDelightRepository
 import org.smartregister.fct.workflow.domain.datasource.WorkflowDataSource
 import org.smartregister.fct.workflow.domain.repository.WorkflowRepository
@@ -16,13 +17,14 @@ import org.smartregister.fct.workflow.domain.usecase.UpdateWorkflow
 
 class WorkflowModuleSetup : ModuleSetup {
 
-    private val workflowModule = module(createdAtStart = true) {
+    private val workflowModule = module(createdAtStart = false) {
         single<WorkflowDataSource> { WorkflowSqlDelightDataSource(Database.getDatabase().workflowDaoQueries) }
         single<WorkflowRepository> { WorkflowSqlDelightRepository(get()) }
         single<GetAllWorkflow> { GetAllWorkflow(get()) }
         single<CreateNewWorkflow> { CreateNewWorkflow(get()) }
         single<UpdateWorkflow> { UpdateWorkflow(get()) }
         single<DeleteWorkflow> { DeleteWorkflow(get()) }
+        single<LiteWorkflowGenerator> { LiteWorkflowGenerator(get(), get()) }
     }
 
     override suspend fun setup() {

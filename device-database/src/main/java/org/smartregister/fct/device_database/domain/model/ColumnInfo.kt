@@ -1,6 +1,6 @@
 package org.smartregister.fct.device_database.domain.model
 
-internal data class ColumnInfo(
+data class ColumnInfo internal constructor(
     val name: String,
     val type: String,
     val hasPrimaryKey: Boolean,

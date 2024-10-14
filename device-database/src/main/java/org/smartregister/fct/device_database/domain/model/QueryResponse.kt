@@ -8,7 +8,7 @@ import org.smartregister.fct.datatable.domain.model.DataColumn
 import org.smartregister.fct.datatable.domain.model.DataFilterTypeColumn
 import org.smartregister.fct.datatable.domain.model.DataRow
 
-internal data class QueryResponse(
+data class QueryResponse(
     val count: Int = 0,
     val columns: List<DTColumn> = listOf(),
     val data: List<DataRow> = listOf(),
